@@ -1,5 +1,5 @@
-const { withContentlayer } = require('next-contentlayer')
-const withPlugins = require('next-compose-plugins')
+import { withContentlayer } from 'next-contentlayer'
+import withPlugins from 'next-compose-plugins'
 
 // https://securityheaders.com
 const ContentSecurityPolicy = `
@@ -52,7 +52,7 @@ const securityHeaders = [
   }
 ]
 
-module.exports = withPlugins([withContentlayer()], {
+export default withPlugins([withContentlayer()], {
   poweredByHeader: false,
   trailingSlash: true,
   reactStrictMode: true,
