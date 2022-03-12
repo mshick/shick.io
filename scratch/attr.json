@@ -1,0 +1,24 @@
+{
+    "type": "mdxJsxAttribute",
+    "name": "src",
+    "value": {
+        "type": "mdxJsxAttributeValueExpression",
+        "value": "__0___posts_cute_cat_jpg__",
+        "data": {
+            "estree": {
+                "type": "Program",
+                "sourceType": "module",
+                "comments": [],
+                "body": [
+                    {
+                        "type": "ExpressionStatement",
+                        "expression": {
+                            "type": "Identifier",
+                            "name": "__0___posts_cute_cat_jpg__"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

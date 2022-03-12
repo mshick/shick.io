@@ -2,18 +2,18 @@ import { useMDXComponent } from 'next-contentlayer/hooks'
 import { allPosts } from '.contentlayer/generated'
 import type { Post } from '.contentlayer/generated'
 import PostLayout from 'components/Post'
+import { components } from 'components/mdx'
 
 type PostProps = {
   post: Post
 }
 
 export default function Post({ post }: PostProps) {
-  console.log(post)
   const Component = useMDXComponent(post.body.code)
 
   return (
     <PostLayout {...post}>
-      <Component />
+      <Component components={components} />
     </PostLayout>
   )
 }

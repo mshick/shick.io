@@ -1,0 +1,277 @@
+{
+    "type": "root",
+    "children": [
+        {
+            "type": "mdxjsEsm",
+            "data": {
+                "estree": {
+                    "type": "Program",
+                    "sourceType": "module",
+                    "body": [
+                        {
+                            "type": "ImportDeclaration",
+                            "source": {
+                                "type": "Literal",
+                                "value": "./posts/cute-cat.jpg",
+                                "raw": "\"./posts/cute-cat.jpg\""
+                            },
+                            "specifiers": [
+                                {
+                                    "type": "ImportDefaultSpecifier",
+                                    "local": {
+                                        "type": "Identifier",
+                                        "name": "__0___posts_cute_cat_jpg__"
+                                    }
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "text",
+            "value": "\n"
+        },
+        {
+            "type": "mdxjsEsm",
+            "value": "",
+            "data": {
+                "estree": {
+                    "type": "Program",
+                    "sourceType": "module",
+                    "body": [
+                        {
+                            "type": "ExportNamedDeclaration",
+                            "source": null,
+                            "specifiers": [],
+                            "declaration": {
+                                "type": "VariableDeclaration",
+                                "kind": "const",
+                                "declarations": [
+                                    {
+                                        "type": "VariableDeclarator",
+                                        "id": {
+                                            "type": "Identifier",
+                                            "name": "frontmatter"
+                                        },
+                                        "init": {
+                                            "type": "ObjectExpression",
+                                            "properties": [
+                                                {
+                                                    "type": "Property",
+                                                    "method": false,
+                                                    "shorthand": false,
+                                                    "computed": false,
+                                                    "kind": "init",
+                                                    "key": {
+                                                        "type": "Literal",
+                                                        "value": "title",
+                                                        "raw": "\"title\""
+                                                    },
+                                                    "value": {
+                                                        "type": "Literal",
+                                                        "value": "Hello World",
+                                                        "raw": "\"Hello World\""
+                                                    }
+                                                },
+                                                {
+                                                    "type": "Property",
+                                                    "method": false,
+                                                    "shorthand": false,
+                                                    "computed": false,
+                                                    "kind": "init",
+                                                    "key": {
+                                                        "type": "Literal",
+                                                        "value": "publishedAt",
+                                                        "raw": "\"publishedAt\""
+                                                    },
+                                                    "value": {
+                                                        "type": "Literal",
+                                                        "value": "February 4, 2022",
+                                                        "raw": "\"February 4, 2022\""
+                                                    }
+                                                },
+                                                {
+                                                    "type": "Property",
+                                                    "method": false,
+                                                    "shorthand": false,
+                                                    "computed": false,
+                                                    "kind": "init",
+                                                    "key": {
+                                                        "type": "Literal",
+                                                        "value": "excerpt",
+                                                        "raw": "\"excerpt\""
+                                                    },
+                                                    "value": {
+                                                        "type": "Literal",
+                                                        "value": "Foo bar.",
+                                                        "raw": "\"Foo bar.\""
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            }
+        },
+        {
+            "type": "text",
+            "value": "\n"
+        },
+        {
+            "type": "element",
+            "tagName": "p",
+            "properties": {},
+            "children": [
+                {
+                    "type": "text",
+                    "value": "Hello world!",
+                    "position": {
+                        "start": {
+                            "line": 7,
+                            "column": 1,
+                            "offset": 82
+                        },
+                        "end": {
+                            "line": 7,
+                            "column": 13,
+                            "offset": 94
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "start": {
+                    "line": 7,
+                    "column": 1,
+                    "offset": 82
+                },
+                "end": {
+                    "line": 7,
+                    "column": 13,
+                    "offset": 94
+                }
+            }
+        },
+        {
+            "type": "text",
+            "value": "\n"
+        },
+        {
+            "type": "element",
+            "tagName": "p",
+            "properties": {},
+            "children": [
+                {
+                    "type": "mdxJsxTextElement",
+                    "name": "img",
+                    "children": [],
+                    "attributes": [
+                        {
+                            "type": "mdxJsxAttribute",
+                            "name": "alt",
+                            "value": "Very cute kittens"
+                        },
+                        {
+                            "type": "mdxJsxAttribute",
+                            "name": "src",
+                            "value": {
+                                "type": "mdxJsxAttributeValueExpression",
+                                "value": "__0___posts_cute_cat_jpg__",
+                                "data": {
+                                    "estree": {
+                                        "type": "Program",
+                                        "sourceType": "module",
+                                        "comments": [],
+                                        "body": [
+                                            {
+                                                "type": "ExpressionStatement",
+                                                "expression": {
+                                                    "type": "Identifier",
+                                                    "name": "__0___posts_cute_cat_jpg__"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "type": "mdxJsxAttribute",
+                            "name": "title",
+                            "value": "Meow!"
+                        }
+                    ]
+                }
+            ],
+            "position": {
+                "start": {
+                    "line": 9,
+                    "column": 1,
+                    "offset": 96
+                },
+                "end": {
+                    "line": 9,
+                    "column": 51,
+                    "offset": 146
+                }
+            }
+        },
+        {
+            "type": "text",
+            "value": "\n"
+        },
+        {
+            "type": "element",
+            "tagName": "p",
+            "properties": {},
+            "children": [
+                {
+                    "type": "text",
+                    "value": "After...",
+                    "position": {
+                        "start": {
+                            "line": 11,
+                            "column": 1,
+                            "offset": 148
+                        },
+                        "end": {
+                            "line": 11,
+                            "column": 9,
+                            "offset": 156
+                        }
+                    }
+                }
+            ],
+            "position": {
+                "start": {
+                    "line": 11,
+                    "column": 1,
+                    "offset": 148
+                },
+                "end": {
+                    "line": 11,
+                    "column": 9,
+                    "offset": 156
+                }
+            }
+        }
+    ],
+    "position": {
+        "start": {
+            "line": 1,
+            "column": 1,
+            "offset": 0
+        },
+        "end": {
+            "line": 12,
+            "column": 1,
+            "offset": 157
+        }
+    }
+}

@@ -1,0 +1,28 @@
+import Document, { Html, Head, Main, NextScript } from 'next/document'
+import { theme } from 'lib/theme'
+
+class MyDocument extends Document {
+  render() {
+    return (
+      <Html>
+        <Head>
+          <link
+            href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap"
+            rel="stylesheet"
+          />
+          <meta
+            name="msapplication-TileColor"
+            content={theme.colors.primary as string}
+          />
+          <meta name="theme-color" content={theme.colors.primary as string} />
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    )
+  }
+}
+
+export default MyDocument
