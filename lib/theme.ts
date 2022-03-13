@@ -5,14 +5,15 @@ import { lighten } from '@theme-ui/color'
 const sidebarWidth = 260
 
 export const theme: Theme = {
+  breakpoints: ['320px', '480px', '768px', '1024px'],
   borderWidths: [0, 1, 4],
   colors: {
-    text: '#ffffff',
-    background: '#282a36',
-    muted: '#8394ca',
+    text: '#000000',
+    background: '#ffffff',
+    muted: '#333333',
     highlight: '#5a6084',
     surface: '#323442',
-    primary: '#ff79c6',
+    primary: '#333333',
     secondary: '#8be9fd',
     success: '#50fa7b',
     error: '#ff5555',
@@ -46,6 +47,7 @@ export const theme: Theme = {
     container: {
       margin: '0 auto',
       maxWidth: 1200,
+      px: [4, 16, 32, 64, 128],
     },
     page: {
       flexDirection: 'column',
@@ -56,8 +58,6 @@ export const theme: Theme = {
       display: 'block',
       // ml: [0, 0, 0, sidebarWidth],
       ml: [0],
-      px: [3, 4],
-      py: 6,
       transition: '.3s ease-in-out margin-left',
     },
     header: {
@@ -67,13 +67,10 @@ export const theme: Theme = {
         `${theme.borderWidths[1]}px solid ${theme.colors.surface}`,
       display: 'flex',
       justifyContent: 'space-between',
-      height: (theme) => `${theme.space[5]}px`,
-      // ml: [0, 0, 0, sidebarWidth],
+      height: (theme) => `${theme.space[4]}px`,
+      marginTop: 20,
       ml: [0],
       overflow: 'hidden',
-      position: 'fixed',
-      px: [3, 4],
-      // width: ['100%', '100%', '100%', `calc(100% - ${sidebarWidth}px)`],
       width: ['100%'],
       zIndex: 997,
     },
@@ -117,12 +114,11 @@ export const theme: Theme = {
       },
     },
     h1: {
-      variant: 'text.specialHeading',
+      variant: 'text.heading',
       color: 'primary',
-      fontSize: 3,
     },
     h2: {
-      variant: 'text.specialHeading',
+      variant: 'text.heading',
       color: 'primary',
     },
     h3: {
@@ -401,12 +397,12 @@ export const theme: Theme = {
       variant: 'styles.a',
       fontWeight: 'body',
       ':before': {
-        pr: [2, 2, 2, 0],
-        content: [`"-"`, `"-"`, `"-"`, `""`],
+        pr: [0],
+        content: [`"["`],
       },
       ':after': {
-        pl: [0, 0, 0, 2],
-        content: [`""`, `""`, `""`, `"-"`],
+        pl: [0],
+        content: [`"]"`],
       },
       ':hover': {
         color: 'text',
@@ -420,6 +416,21 @@ export const theme: Theme = {
   },
 
   text: {
+    default: {
+      fontFmaily: 'body',
+      fontWeight: 'body',
+      fontSize: 1,
+      mt: 0,
+      mb: 0,
+    },
+    body: {
+      fontFmaily: 'body',
+      fontWeight: 'heading',
+      fontSize: 2,
+      p: 0,
+      m: 0,
+      lineHeight: 'body',
+    },
     heading: {
       fontFamily: 'heading',
       fontWeight: 'heading',
@@ -446,6 +457,7 @@ export const theme: Theme = {
   },
 
   images: {
+    default: {},
     avatar: {},
   },
 

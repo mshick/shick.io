@@ -1,21 +1,13 @@
-import { useMDXComponent } from 'next-contentlayer/hooks'
 import { allPosts } from '.contentlayer/generated'
 import type { Post } from '.contentlayer/generated'
-import PostLayout from 'components/Post'
-import { components } from 'components/mdx'
+import { ArticleLayout } from 'components/layout/article'
 
 type PostProps = {
   post: Post
 }
 
 export default function Post({ post }: PostProps) {
-  const Component = useMDXComponent(post.body.code)
-
-  return (
-    <PostLayout {...post}>
-      <Component components={components} />
-    </PostLayout>
-  )
+  return <ArticleLayout article={post} />
 }
 
 export async function getStaticPaths() {

@@ -56,6 +56,9 @@ module.exports = withPlugins([withContentlayer()], {
   poweredByHeader: false,
   trailingSlash: true,
   reactStrictMode: true,
+  images: {
+    domains: ['github.com'],
+  },
   async headers() {
     return [
       {
