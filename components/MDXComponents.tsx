@@ -1,11 +1,12 @@
 import type { ComponentMap } from 'mdx-bundler/client'
 import { components as themeUi } from 'theme-ui'
-import { Image } from './Image'
-import { Link } from './Link'
+import Image from './Image'
+import Link from './Link'
 
-export const components: ComponentMap = {
+const MDXComponents: ComponentMap = {
   ...themeUi,
   a: Link,
+  // @ts-expect-error
   img: Image,
   code: (props) => {
     return <code {...props} />
@@ -14,3 +15,5 @@ export const components: ComponentMap = {
     return <pre {...props} />
   },
 }
+
+export default MDXComponents

@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react'
-import { Container, Box, MenuButton, Close } from 'theme-ui'
+import { Container, Box, Close } from 'theme-ui'
 import { transparentize } from '@theme-ui/color'
 import { Navigation } from './Navigation'
 import {
@@ -9,7 +9,7 @@ import {
 
 const sidebarWidth = 260
 
-export const Main = ({ children }: PropsWithChildren<{}>) => {
+export default function Main({ children }: PropsWithChildren<{}>) {
   const dispatch = useAppDispatchContext()
   const { isNavOpen } = useAppStateContext()
   return (

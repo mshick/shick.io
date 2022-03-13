@@ -17,10 +17,12 @@
     "@theme-ui/prism": "^0.13.1",
     "contentlayer": "^0.1.2",
     "date-fns": "^2.28.0",
+    "mdx-bundler": "^8.0.1",
     "next": "^12.1.1-canary.9",
     "next-compose-plugins": "^2.2.1",
     "next-contentlayer": "^0.1.2",
     "next-seo": "^5.1.0",
+    "preact": "^10.6.6",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "reading-time": "^1.5.0",
@@ -45,5 +47,26 @@
     "eslint-plugin-prettier": "^4.0.0",
     "prettier": "^2.5.1",
     "typescript": "^4.6.2"
+  },
+  "prettier": {
+    "endOfLine": "lf",
+    "trailingComma": "es5",
+    "printWidth": 80,
+    "singleQuote": true,
+    "semi": false,
+    "tabWidth": 2,
+    "arrowParens": "always",
+    "proseWrap": "always",
+    "overrides": [
+      {
+        "files": [
+          "*.md",
+          "*.mdx"
+        ],
+        "options": {
+          "proseWrap": "always"
+        }
+      }
+    ]
   }
 }

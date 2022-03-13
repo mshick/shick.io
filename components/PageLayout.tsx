@@ -1,24 +1,16 @@
+import type { PropsWithChildren } from 'react'
 import type { Page } from '.contentlayer/generated'
 import { AppProvider } from 'components/context/app-context'
-import { Seo } from '../Seo'
-import { SourceArticle } from '../source/source-article'
+import Seo from './Seo'
+import Main from './Main'
+import SourceArticle from './source/source-article'
 import { siteUrl } from 'lib/config'
 
-export const PageLayout = ({
-  page: {
-    body,
-    excerpt,
-    title,
-    tags,
-    isPrivate,
-    author,
-    image,
-    publishedAt,
-    updatedAt,
-  },
-}: {
-  page: Page
-}) => {
+export default function PageLayout({
+  children,
+  title,
+  description,
+}: PropsWithChildren<{ title?: string; description?: string }>) {
   // const getSeoImage = () => {
   //   if (featuredImage) {
   //     return `${siteUrl}${featuredImage.childImageSharp.gatsbyImageData.images.fallback.src}`
@@ -38,7 +30,7 @@ export const PageLayout = ({
 
   return (
     <AppProvider>
-      <Seo
+      {/* <Seo
         title={title}
         openGraph={{
           title,
@@ -60,19 +52,8 @@ export const PageLayout = ({
               ]
             : null,
         }}
-      />
-      <SourceArticle
-        title={title}
-        tags={tags}
-        publishedAt={publishedAt}
-        updatedAt={updatedAt}
-        author={author}
-        isPrivate={isPrivate}
-        image={image}
-        // featuredImageUrl={featuredImageUrl}
-        // embedded={transformImages(combinedEmbedded)}
-        body={body}
-      />
+      /> */}
+      <Main>{children}</Main>
     </AppProvider>
   )
 }

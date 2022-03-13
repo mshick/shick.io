@@ -10,21 +10,21 @@ export const Navigation = () => {
         label: 'Home',
         position: 0,
       },
-      slug: '/',
+      slug: '',
     },
     {
       navigation: {
         label: 'Articles',
         position: 1,
       },
-      slug: '/posts',
+      slug: 'articles',
     },
     {
       navigation: {
         label: 'About',
         position: 2,
       },
-      slug: '/about',
+      slug: 'about',
     },
   ]
 

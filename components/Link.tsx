@@ -1,7 +1,7 @@
 import NextLink from 'next/link'
 import { Link as ThemeUILink } from 'theme-ui'
 
-export const Link = ({ href, children, ...rest }) => {
+export default function Link({ href, children, ...rest }) {
   if (href.match(/^(http|https):/g)) {
     return (
       <ThemeUILink href={href} target="_blank" rel="noopener" {...rest}>

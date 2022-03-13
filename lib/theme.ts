@@ -1,5 +1,5 @@
 import type { Theme } from 'theme-ui'
-import codeTheme from '@theme-ui/prism/presets/night-owl.json'
+import codeTheme from '@theme-ui/prism/presets/duotone-light.json'
 import { lighten } from '@theme-ui/color'
 
 const sidebarWidth = 260
@@ -12,7 +12,7 @@ export const theme: Theme = {
     background: '#ffffff',
     muted: '#333333',
     highlight: '#5a6084',
-    surface: '#323442',
+    surface: lighten('primary', 0.75),
     primary: '#333333',
     secondary: '#8be9fd',
     success: '#50fa7b',
@@ -34,7 +34,7 @@ export const theme: Theme = {
     heading: 1.125,
   },
   fontSizes: [12, 16, 18, 28],
-  space: [0, 4, 8, 16, 32, 48, 64],
+  space: [0, 4, 8, 16, 24, 32, 40],
   shadows: [
     `0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)`,
     `0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)`,
@@ -67,7 +67,7 @@ export const theme: Theme = {
         `${theme.borderWidths[1]}px solid ${theme.colors.surface}`,
       display: 'flex',
       justifyContent: 'space-between',
-      height: (theme) => `${theme.space[4]}px`,
+      height: (theme) => `${theme.space[6]}px`,
       marginTop: 20,
       ml: [0],
       overflow: 'hidden',
@@ -99,9 +99,11 @@ export const theme: Theme = {
       pre: {
         ...codeTheme,
         fontFamily: 'code',
-        borderRadius: 0,
+        borderRadius: 10,
+        borderColor: 'secondary',
+        borderWidth: 1,
+        borderStyle: 'solid',
         overflow: 'auto',
-        fontSize: '13px',
         p: 3,
         my: '48px!important',
       },
@@ -411,6 +413,13 @@ export const theme: Theme = {
       '&[aria-current="page"]': {
         color: 'text',
         pointerEvents: 'none',
+      },
+    },
+    unstyled: {
+      textDecoration: 'none',
+      color: 'text',
+      ':visited': {
+        color: 'text',
       },
     },
   },

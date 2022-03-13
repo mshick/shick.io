@@ -26,7 +26,7 @@ const { zonedTimeToUtc } = dateFns
 
 const baseDir = process.cwd()
 const timezone = assertEnv('TIMEZONE', 'America/New_York')
-const contentDir = assertEnv('CONTENT_DIR', 'content')
+const contentDir = assertEnv('CONTENT_DIR', 'data')
 const esbuildOutdir = `${baseDir}/public`
 const esbuildPublicPath = '/'
 const esbuildImagesDir = 'images'
@@ -34,7 +34,7 @@ const esbuildImagesDir = 'images'
 const Image = defineNestedType(() => ({
   name: 'Image',
   fields: {
-    url: { type: 'string', required: true },
+    url: { type: 'string', required: false },
     title: { type: 'string', required: false },
     alt: { type: 'string', required: false },
     caption: { type: 'string', required: false },
@@ -68,7 +68,7 @@ const computedFields: ComputedFields = {
     type: 'json',
     resolve: (doc) => readingTime(sanitizeMdx(doc.body.raw)),
   },
-  excerpt: { type: 'markdown', resolve: (doc) => getExcerpt(doc.body.raw) },
+  excerpt: { type: 'json', resolve: (doc) => getExcerpt(doc.body.raw) },
   slug: {
     type: 'string',
     resolve: (doc) => doc._raw.sourceFileName.replace(/\.mdx/, ''),
@@ -131,10 +131,6 @@ const computedFields: ComputedFields = {
       )
     },
   },
-  // image: {
-  //   type: 'nested',
-  //   resolve: doc => (doc.image ? { ...doc.image, url: getImagePublicPath(doc.image.url) } : doc.image)
-  // },
 }
 
 export const Page = defineDocumentType(() => ({
@@ -152,20 +148,20 @@ export const Page = defineDocumentType(() => ({
   },
 }))
 
-export const Post = defineDocumentType(() => ({
-  name: 'Post',
-  filePathPattern: 'posts/*.mdx',
+export const Article = defineDocumentType(() => ({
+  name: 'Article',
+  filePathPattern: 'articles/*.mdx',
   contentType: 'mdx',
   fields: {
     ...fieldDefs,
-    pinned: { type: 'boolean', required: true, default: false },
+    pinned: { type: 'boolean', default: false },
   },
   computedFields,
 }))
 
 export default makeSource({
   contentDirPath: 'data',
-  documentTypes: [Post, Page],
+  documentTypes: [Article, Page],
   mdx: {
     remarkPlugins: [remarkMdxImages, remarkGfm, remarkFootnotes],
     rehypePlugins: [

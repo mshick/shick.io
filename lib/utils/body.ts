@@ -1,5 +1,7 @@
 import type { ReadTimeResults } from 'reading-time'
+import type { MDX } from 'contentlayer/core'
 import readingTime from 'reading-time'
+import { bundleMDX } from 'mdx-bundler'
 
 export const sanitizeMdx = (content: string) =>
   content
@@ -14,14 +16,19 @@ export const sanitizeMdx = (content: string) =>
     .replace(/^\s*\n/gm, '\n') // Strip lines with just spaces
     .trimStart()
 
-export function getExcerpt(content: string): string {
+export async function getExcerpt(content: string): Promise<MDX> {
   const excerpt = sanitizeMdx(content)
     .split('```', 1)[0] // Ignore anything after the first code block.
     .trimStart()
     .split(/\n\n/, 2) // Take first two paragraphs
     .join('\n\n')
 
-  return excerpt
+  const mdx = await bundleMDX({ source: excerpt })
+
+  return {
+    raw: excerpt,
+    code: mdx.code,
+  }
 }
 
 const readingTimeCache = {}

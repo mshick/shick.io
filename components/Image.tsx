@@ -6,14 +6,14 @@ export interface ImageProps extends NextImageProps {
   variant?: string
 }
 
-export const Image = ({
+export default function Image({
   src,
   layout,
   variant,
   width,
   height,
   ...props
-}: ImageProps) => {
+}: ImageProps) {
   if (width && height) {
     return (
       <Box variant={`images.${variant ?? 'default'}`}>

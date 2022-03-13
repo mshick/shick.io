@@ -1,13 +1,11 @@
 import { allPages } from '.contentlayer/generated'
-import type { Page } from '.contentlayer/generated'
-import { PageLayout } from 'components/layout/page'
+import { InferGetStaticPropsType } from 'next'
+import ArticleLayout from 'components/ArticleLayout'
 
-type PageProps = {
-  page: Page
-}
-
-export default function Page({ page }: PageProps) {
-  return <PageLayout page={page} />
+export default function Page({
+  page,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  return <ArticleLayout article={page} />
 }
 
 export async function getStaticPaths() {
