@@ -1,8 +1,10 @@
+import type { InferGetStaticPropsType } from 'next'
 import { allArticles } from '.contentlayer/generated'
-import type { Article } from '.contentlayer/generated'
-import ArticleLayout from 'components/ArticleLayout'
+import ArticleLayout from 'layouts/article'
 
-export default function Article({ article }: { article: Article }) {
+export default function Article({
+  article,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   return <ArticleLayout article={article} />
 }
 

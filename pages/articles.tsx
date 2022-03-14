@@ -1,7 +1,7 @@
-import { allArticles } from '.contentlayer/generated'
-import PageLayout from 'components/PageLayout'
-import { InferGetStaticPropsType } from 'next'
+import type { InferGetStaticPropsType } from 'next'
 import { Flex, Box } from 'theme-ui'
+import { allArticles } from '.contentlayer/generated'
+import PageLayout from 'layouts/page'
 import ArticleListItem from 'components/ArticleListItem'
 import { pick } from 'lib/utils/content'
 
@@ -9,7 +9,7 @@ export default function ArticlesPage({
   articles,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <PageLayout title="Articles">
+    <PageLayout seo={{ title: 'Articles' }}>
       <Flex
         as="ul"
         sx={{ flexDirection: 'column', m: 0, p: 0, listStyleType: 'none' }}

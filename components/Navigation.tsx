@@ -3,7 +3,7 @@ import { Box, NavLink, Flex } from 'theme-ui'
 import NextLink from 'next/link'
 import { Logo } from './Logo'
 
-export const Navigation = () => {
+export default function Navigation() {
   const pages = [
     {
       navigation: {

@@ -1,6 +1,6 @@
 import { allPages } from '.contentlayer/generated'
 import { InferGetStaticPropsType } from 'next'
-import ArticleLayout from 'components/ArticleLayout'
+import ArticleLayout from 'layouts/article'
 
 export default function Page({
   page,

@@ -1,4 +1,5 @@
 import type { Theme } from 'theme-ui'
+import type { Property } from 'csstype'
 import codeTheme from '@theme-ui/prism/presets/duotone-light.json'
 import { lighten } from '@theme-ui/color'
 
@@ -12,7 +13,7 @@ export const theme: Theme = {
     background: '#ffffff',
     muted: '#333333',
     highlight: '#5a6084',
-    surface: lighten('primary', 0.75),
+    surface: lighten('primary', 0.75) as unknown as Property.Color,
     primary: '#333333',
     secondary: '#8be9fd',
     success: '#50fa7b',
@@ -31,7 +32,7 @@ export const theme: Theme = {
   },
   lineHeights: {
     body: 1.75,
-    heading: 1.125,
+    heading: 2,
   },
   fontSizes: [12, 16, 18, 28],
   space: [0, 4, 8, 16, 24, 32, 40],
@@ -46,8 +47,8 @@ export const theme: Theme = {
   layout: {
     container: {
       margin: '0 auto',
-      maxWidth: 1200,
-      px: [4, 16, 32, 64, 128],
+      maxWidth: 960,
+      px: [4, 16, 48, 96, 128],
     },
     page: {
       flexDirection: 'column',
@@ -99,10 +100,11 @@ export const theme: Theme = {
       pre: {
         ...codeTheme,
         fontFamily: 'code',
+        backgroundColor: '#faf8f575',
         borderRadius: 10,
-        borderColor: 'secondary',
+        borderColor: 'surface',
         borderWidth: 1,
-        borderStyle: 'solid',
+        borderStyle: 'dashed',
         overflow: 'auto',
         p: 3,
         my: '48px!important',
@@ -197,7 +199,7 @@ export const theme: Theme = {
         tr: {
           th: {
             border: (theme) =>
-              `${theme.borderWidths[1]}px solid ${theme.colors.surface}`,
+              `${theme.borderWidths[1]}px dashed ${theme.colors.surface}`,
             padding: (theme) => `${theme.space[2]}px ${theme.space[3]}px`,
           },
         },
@@ -213,7 +215,7 @@ export const theme: Theme = {
           td: {
             padding: (theme) => `${theme.space[2]}px ${theme.space[3]}px`,
             border: (theme) =>
-              `${theme.borderWidths[1]}px solid ${theme.colors.surface}`,
+              `${theme.borderWidths[1]}px dashed ${theme.colors.surface}`,
           },
         },
       },
@@ -440,27 +442,25 @@ export const theme: Theme = {
       m: 0,
       lineHeight: 'body',
     },
+    article: {
+      title: {
+        fontFmaily: 'body',
+        fontWeight: 'heading',
+        fontSize: 2,
+        p: 0,
+        m: 0,
+        lineHeight: 'heading',
+      },
+    },
     heading: {
       fontFamily: 'heading',
       fontWeight: 'heading',
       fontSize: 2,
       mt: 0,
-      mb: 3,
+      pt: 4,
+      mb: 4,
       a: {
         color: 'inherit',
-      },
-    },
-    specialHeading: {
-      variant: 'text.heading',
-      '::before': {
-        content: `'→'`,
-        color: 'success',
-        mr: 2,
-      },
-      '::after': {
-        content: `'()'`,
-        color: 'secondary',
-        ml: 1,
       },
     },
   },

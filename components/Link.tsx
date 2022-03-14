@@ -4,7 +4,12 @@ import { Link as ThemeUILink } from 'theme-ui'
 export default function Link({ href, children, ...rest }) {
   if (href.match(/^(http|https):/g)) {
     return (
-      <ThemeUILink href={href} target="_blank" rel="noopener" {...rest}>
+      <ThemeUILink
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        {...rest}
+      >
         {children}
       </ThemeUILink>
     )

@@ -6,16 +6,17 @@ import {
 } from 'contentlayer/source-files'
 import path from 'path'
 import dateFns from 'date-fns-tz'
-import readingTime from 'reading-time'
 import remarkGfm from 'remark-gfm'
 import remarkFootnotes from 'remark-footnotes'
 import { remarkMdxImages } from 'remark-mdx-images'
+import remarkUnwrapImages from 'remark-unwrap-images'
+import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import rehypeImgSize from './lib/rehype-img-size'
 import rehypeSlug from 'rehype-slug'
 import rehypeCodeTitles from 'rehype-code-titles'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypePrism from 'rehype-prism-plus'
-import { sanitizeMdx, getExcerpt } from './lib/utils/body'
+import { getReadingTimeCached, getExcerpt } from './lib/utils/fields'
 import {
   getGitInfoCached,
   createDateWithGitFallbackGetter,
@@ -66,9 +67,12 @@ const getDateWithFallback = createDateWithGitFallbackGetter(
 const computedFields: ComputedFields = {
   readingTime: {
     type: 'json',
-    resolve: (doc) => readingTime(sanitizeMdx(doc.body.raw)),
+    resolve: (doc) => getReadingTimeCached(doc),
   },
-  excerpt: { type: 'json', resolve: (doc) => getExcerpt(doc.body.raw) },
+  excerpt: {
+    type: 'string',
+    resolve: (doc) => getExcerpt(doc),
+  },
   slug: {
     type: 'string',
     resolve: (doc) => doc._raw.sourceFileName.replace(/\.mdx/, ''),
@@ -140,12 +144,7 @@ export const Page = defineDocumentType(() => ({
   fields: {
     ...fieldDefs,
   },
-  computedFields: {
-    slug: {
-      type: 'string',
-      resolve: (doc) => doc._raw.sourceFileName.replace(/\.mdx/, ''),
-    },
-  },
+  computedFields,
 }))
 
 export const Article = defineDocumentType(() => ({
@@ -163,7 +162,13 @@ export default makeSource({
   contentDirPath: 'data',
   documentTypes: [Article, Page],
   mdx: {
-    remarkPlugins: [remarkMdxImages, remarkGfm, remarkFootnotes],
+    remarkPlugins: [
+      remarkUnwrapImages,
+      remarkMdxImages,
+      remarkGfm,
+      remarkFootnotes,
+      remarkSqueezeParagraphs,
+    ],
     rehypePlugins: [
       rehypeSlug,
       rehypeCodeTitles,

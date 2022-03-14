@@ -5,8 +5,8 @@ import { useMDXComponent } from 'next-contentlayer/hooks'
 import { Heading, Badge, Text, Box, Alert, Grid } from 'theme-ui'
 import { mix } from '@theme-ui/color'
 import { format } from 'date-fns'
-import ImageComponent from '../Image'
-import components from '../MDXComponents'
+import Main from './Main'
+import components from './MDXComponents'
 
 const formatDate = (date) => format(new Date(date), 'd-MMM-u')
 
@@ -34,9 +34,8 @@ export default function SourceArticle({
   readingTime,
 }: SourceArticleProps) {
   const Component = useMDXComponent(body.code)
-  console.log({ author })
   return (
-    <Fragment>
+    <Main>
       {isPrivate && (
         <Fragment>
           <Alert variant="error" sx={{ mb: 4 }}>
@@ -65,7 +64,7 @@ export default function SourceArticle({
         </Grid>
 
         <Box sx={{ textAlign: 'center' }}>
-          <Heading as="h1" variant="text.body">
+          <Heading as="h1" variant="text.article.title">
             {title}
           </Heading>
         </Box>
@@ -97,6 +96,6 @@ export default function SourceArticle({
           <Text>{author}</Text>
         </Box>
       ) : null}
-    </Fragment>
+    </Main>
   )
 }

@@ -1,26 +1,15 @@
-import type { Article } from '.contentlayer/generated'
-import { AppProvider } from 'components/context/app-context'
-import Article from './Article'
+import type { Article, Page } from '.contentlayer/generated'
 import { siteUrl } from 'lib/config'
-import Seo from './Seo'
-import Main from './Main'
+import PageLayout from './page'
+import ArticleContent from 'components/ArticleContent'
 
 export default function ArticleLayout({
-  article: {
-    body,
-    excerpt,
-    title,
-    tags,
-    isPrivate,
-    author,
-    image,
-    readingTime,
-    publishedAt,
-    updatedAt,
-  },
+  article,
 }: {
-  article: Article
+  article: Article | Page
 }) {
+  const { title, image, excerpt, tags, publishedAt, updatedAt } = article
+
   // const getSeoImage = () => {
   //   if (featuredImage) {
   //     return `${siteUrl}${featuredImage.childImageSharp.gatsbyImageData.images.fallback.src}`
@@ -39,10 +28,10 @@ export default function ArticleLayout({
   // ].filter(n => n)
 
   return (
-    <AppProvider>
-      <Seo
-        title={title}
-        openGraph={{
+    <PageLayout
+      seo={{
+        title,
+        openGraph: {
           title,
           description: excerpt,
           type: 'article',
@@ -61,23 +50,10 @@ export default function ArticleLayout({
                 },
               ]
             : null,
-        }}
-      />
-      <Main>
-        <Article
-          title={title}
-          tags={tags}
-          publishedAt={publishedAt}
-          updatedAt={updatedAt}
-          author={author}
-          isPrivate={isPrivate}
-          image={image}
-          // featuredImageUrl={featuredImageUrl}
-          // embedded={transformImages(combinedEmbedded)}
-          body={body}
-          readingTime={readingTime}
-        />
-      </Main>
-    </AppProvider>
+        },
+      }}
+    >
+      <ArticleContent {...article} />
+    </PageLayout>
   )
 }
