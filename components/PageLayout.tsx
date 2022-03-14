@@ -1,9 +1,9 @@
 import type { PropsWithChildren } from 'react'
 import type { Page } from '.contentlayer/generated'
-import { AppProvider } from 'components/context/app-context'
+import { AppProvider } from 'contexts/app-context'
 import Seo from './Seo'
 import Main from './Main'
-import SourceArticle from './source/source-article'
+import SourceArticle from './ArticleContent'
 import { siteUrl } from 'lib/config'
 
 export default function PageLayout({
