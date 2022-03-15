@@ -4,33 +4,26 @@ import {
   defineNestedType,
   makeSource,
 } from 'contentlayer/source-files'
-import path from 'path'
-import dateFns from 'date-fns-tz'
 import remarkGfm from 'remark-gfm'
 import remarkFootnotes from 'remark-footnotes'
 import { remarkMdxImages } from 'remark-mdx-images'
 import remarkUnwrapImages from 'remark-unwrap-images'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
-import rehypeImgSize from './lib/rehype-img-size'
+import rehypeImgSize from './lib/rehype/rehype-img-size'
 import rehypeSlug from 'rehype-slug'
 import rehypeCodeTitles from 'rehype-code-titles'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypePrism from 'rehype-prism-plus'
-import { getReadingTimeCached, getExcerpt } from './lib/utils/fields'
 import {
-  getGitInfoCached,
-  createDateWithGitFallbackGetter,
-} from './lib/utils/git'
-import { assertEnv } from './lib/utils/env'
-
-const { zonedTimeToUtc } = dateFns
-
-const baseDir = process.cwd()
-const timezone = assertEnv('TIMEZONE', 'America/New_York')
-const contentDir = assertEnv('CONTENT_DIR', 'data')
-const esbuildOutdir = `${baseDir}/public`
-const esbuildPublicPath = '/'
-const esbuildImagesDir = 'images'
+  getReadingTime,
+  getExcerpt,
+  getUpdatedBy,
+  getUpdatedByEmail,
+  getUpdatedAt,
+  getPublishedAt,
+  getSlug,
+} from './lib/utils/fields'
+import { baseDir } from './lib/config'
 
 const Image = defineNestedType(() => ({
   name: 'Image',
@@ -54,85 +47,39 @@ const fieldDefs: FieldDefs = {
   tags: { type: 'list', of: { type: 'string' }, required: false, default: [] },
 }
 
-function getContentPath(sourceFilePath: string): string {
-  return path.join(contentDir, sourceFilePath)
-}
-
-const getDateWithFallback = createDateWithGitFallbackGetter(
-  baseDir,
-  contentDir,
-  timezone
-)
-
 const computedFields: ComputedFields = {
   readingTime: {
     type: 'json',
-    resolve: (doc) => getReadingTimeCached(doc),
+    resolve: getReadingTime,
   },
   excerpt: {
     type: 'string',
-    resolve: (doc) => getExcerpt(doc),
+    resolve: getExcerpt,
   },
   slug: {
     type: 'string',
-    resolve: (doc) => doc._raw.sourceFileName.replace(/\.mdx/, ''),
-  },
-  createdAt: {
-    type: 'date',
-    resolve: async (doc) =>
-      await getDateWithFallback(doc.createdAt, doc._raw.sourceFilePath),
+    resolve: getSlug,
   },
   updatedAt: {
     type: 'date',
-    resolve: async (doc) =>
-      await getDateWithFallback(doc.updatedAt, doc._raw.sourceFilePath),
+    resolve: getUpdatedAt,
   },
   publishedAt: {
     type: 'date',
-    resolve: (doc) =>
-      doc.publishedAt
-        ? zonedTimeToUtc(doc.publishedAt, timezone).toISOString()
-        : '',
+    resolve: getPublishedAt,
   },
   updatedBy: {
     type: 'string',
-    resolve: async (doc) => {
-      return (
-        (
-          await getGitInfoCached(
-            baseDir,
-            getContentPath(doc._raw.sourceFilePath)
-          )
-        ).latestAuthorName ?? ''
-      )
-    },
+    resolve: getUpdatedBy,
   },
   updatedByEmail: {
     type: 'string',
-    resolve: async (doc) => {
-      return (
-        (
-          await getGitInfoCached(
-            baseDir,
-            getContentPath(doc._raw.sourceFilePath)
-          )
-        ).latestAuthorEmail ?? ''
-      )
-    },
+    resolve: getUpdatedByEmail,
   },
   author: {
     type: 'string',
     resolve: async (doc) => {
-      return (
-        doc.author ??
-        (
-          await getGitInfoCached(
-            baseDir,
-            path.join(contentDir, doc._raw.sourceFilePath)
-          )
-        ).latestAuthorName ??
-        ''
-      )
+      return doc.author ?? (await getUpdatedBy(doc))
     },
   },
 }
@@ -185,8 +132,8 @@ export default makeSource({
     ],
     esbuildOptions: (options) => {
       options.platform = 'node'
-      options.outdir = esbuildOutdir
-      options.assetNames = `${esbuildImagesDir}/[dir]/[name]`
+      options.outdir = `${baseDir}/public`
+      options.assetNames = `images/[dir]/[name]`
       options.loader = {
         ...options.loader,
         '.png': 'file',
@@ -196,7 +143,7 @@ export default makeSource({
         '.webp': 'file',
         '.gif': 'file',
       }
-      options.publicPath = esbuildPublicPath
+      options.publicPath = '/'
       options.write = true
       return options
     },

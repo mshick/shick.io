@@ -1,8 +1,18 @@
+import { allPages } from '.contentlayer/generated'
+import { InferGetStaticPropsType } from 'next'
+import { useMDXComponent } from 'next-contentlayer/hooks'
 import PageLayout from 'layouts/page'
+import components from 'components/MDXComponents'
 
-export default function Home() {
+export default function HomePage({
+  page,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
+  const Component = useMDXComponent(page.body.code)
+
   return (
     <PageLayout seo={{ title: 'Create Next App' }}>
+      <Component components={components} />
+
       <h1>
         Welcome to <a href="https://nextjs.org">Next.js!</a>
       </h1>
@@ -34,4 +44,9 @@ export default function Home() {
       </div>
     </PageLayout>
   )
+}
+
+export async function getStaticProps() {
+  const page = allPages.find((page) => page.slug === 'index')
+  return { props: { page } }
 }

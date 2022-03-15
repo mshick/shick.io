@@ -1,3 +1,9 @@
+## Notes
+
+- Apple Music played tracks: https://developer.apple.com/documentation/applemusicapi/get_recently_played_tracks
+- Design inspiration: https://datatracker.ietf.org/doc/html/rfc6570
+- Code inspiration: https://leerob.io/blog
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

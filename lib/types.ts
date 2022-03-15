@@ -8,9 +8,9 @@ export type PropsWithCallableChildren<P, Q> = P & {
 }
 
 export type GitInfo = {
-  latestAuthorName: string | null
-  latestAuthorEmail: string | null
-  latestDate: string | null
+  latestAuthorName: string
+  latestAuthorEmail: string
+  latestDate: string
 }
 
 export type SourceDate = {

@@ -1,5 +1,20 @@
 import type { DefaultSeoProps } from 'next-seo'
 
+export const nodeEnv = process.env.NODE_ENV ?? 'development'
+
+export const baseDir = process.cwd()
+
+export const logLevel = process.env.NEXT_PUBLIC_LOG_LEVEL ?? 'info'
+export const logDestination =
+  process.env.NEXT_PUBLIC_LOG_DESTINATION ?? 'stdout'
+
+export const logflareApiKey = process.env.NEXT_PUBLIC_LOGFLARE_API_KEY ?? ''
+export const logflareSourceToken =
+  process.env.NEXT_PUBLIC_LOGFLARE_SOURCE_TOKEN ?? ''
+
+export const timezone = process.env.TIMEZONE ?? 'America/New_York'
+export const contentDir = process.env.CONTENT_DIR ?? 'data'
+
 export const siteName = 'Michael Shick'
 export const siteDescription = 'My personal site.'
 export const siteUrl = 'https://www.shick.us'
@@ -36,3 +51,5 @@ export const seo: DefaultSeoProps = {
     cardType: 'summary_large_image',
   },
 }
+
+export const commitSha = process.env.VERCEL_GITHUB_COMMIT_SHA ?? ''
