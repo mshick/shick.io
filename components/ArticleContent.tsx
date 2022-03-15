@@ -52,6 +52,16 @@ export default function SourceArticle({
                 {readingTime.text}
               </Text>
             ) : null}
+
+            {tags
+              ? tags.map((tag) => {
+                  return (
+                    <Text key={tag} as="div">
+                      {tag}
+                    </Text>
+                  )
+                })
+              : null}
           </Box>
 
           <Box sx={{ textAlign: 'right' }}>
