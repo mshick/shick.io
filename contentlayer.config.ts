@@ -14,6 +14,7 @@ import rehypeSlug from 'rehype-slug'
 import rehypeCodeTitles from 'rehype-code-titles'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypePrism from 'rehype-prism-plus'
+import { omit } from '@contentlayer/utils'
 import {
   getReadingTime,
   getExcerpt,
@@ -22,6 +23,8 @@ import {
   getUpdatedAt,
   getPublishedAt,
   getSlug,
+  getPath,
+  getTags,
 } from './lib/utils/fields'
 import { baseDir } from './lib/config'
 
@@ -35,16 +38,24 @@ const Image = defineNestedType(() => ({
   },
 }))
 
-const fieldDefs: FieldDefs = {
-  isPrivate: { type: 'boolean', required: false, default: false },
-  title: { type: 'string', required: true },
-  createdAt: { type: 'string', required: false },
-  updatedAt: { type: 'string', required: false },
-  publishedAt: { type: 'string', required: true },
-  excerpt: { type: 'string', required: false },
+const Tag = defineNestedType(() => ({
+  name: 'Tag',
+  fields: {
+    name: { type: 'string', required: true },
+    path: { type: 'string', required: true },
+  },
+}))
+
+const fields: FieldDefs = {
   author: { type: 'string', required: false },
+  excerpt: { type: 'string', required: false },
   image: { type: 'nested', of: Image, required: false },
-  tags: { type: 'list', of: { type: 'string' }, required: false, default: [] },
+  isPrivate: { type: 'boolean', required: false, default: false },
+  pinned: { type: 'boolean', default: false },
+  publishedAt: { type: 'string', required: true },
+  tags: { type: 'list', of: { type: 'string' }, required: false },
+  title: { type: 'string', required: true },
+  updatedAt: { type: 'string', required: false },
 }
 
 const computedFields: ComputedFields = {
@@ -59,6 +70,10 @@ const computedFields: ComputedFields = {
   slug: {
     type: 'string',
     resolve: getSlug,
+  },
+  path: {
+    type: 'string',
+    resolve: getPath,
   },
   updatedAt: {
     type: 'date',
@@ -82,26 +97,25 @@ const computedFields: ComputedFields = {
       return doc.author ?? (await getUpdatedBy(doc))
     },
   },
+  tags: {
+    type: 'json',
+    resolve: getTags,
+  },
 }
 
 export const Page = defineDocumentType(() => ({
   name: 'Page',
   filePathPattern: 'pages/*.mdx',
   contentType: 'mdx',
-  fields: {
-    ...fieldDefs,
-  },
-  computedFields,
+  fields: omit(fields, ['pinned']),
+  computedFields: omit(computedFields, ['readingTime']),
 }))
 
 export const Article = defineDocumentType(() => ({
   name: 'Article',
   filePathPattern: 'articles/*.mdx',
   contentType: 'mdx',
-  fields: {
-    ...fieldDefs,
-    pinned: { type: 'boolean', default: false },
-  },
+  fields,
   computedFields,
 }))
 

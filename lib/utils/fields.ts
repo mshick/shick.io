@@ -1,5 +1,6 @@
 import type { ReadTimeResults } from 'reading-time'
 import type { LocalDocument } from 'contentlayer/source-files'
+import type { Tag } from '../types'
 import path from 'path'
 import readingTime from 'reading-time'
 import dateFns from 'date-fns-tz'
@@ -12,7 +13,9 @@ import remarkMdxRemoveImports from 'remark-mdx-remove-imports'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import { getGitInfo } from './git'
 import { baseDir, contentDir, timezone } from '../config'
+import { getContentPath } from './content'
 import remarkTruncate from '../remark/remark-truncate'
+import slug from 'slug'
 
 const { zonedTimeToUtc } = dateFns
 
@@ -96,5 +99,22 @@ export function getPublishedAt(doc: LocalDocument): string {
 }
 
 export function getSlug(doc: LocalDocument): string {
-  return doc._raw.sourceFileName.replace(/\.mdx/, '')
+  return slug(doc._raw.sourceFileName.replace(/\.mdx/, ''))
+}
+
+export function getPath(doc: LocalDocument): string {
+  const { sourceFileDir } = doc._raw
+  return getContentPath(sourceFileDir, getSlug(doc))
+}
+
+export function getTags(doc: LocalDocument): Tag[] {
+  const tags: string[] = doc.tags?.array() ?? []
+  return tags.map((tag) => {
+    const tagSlug = slug(tag)
+    return {
+      name: tag,
+      path: getContentPath('tags', tagSlug),
+      slug: tagSlug,
+    }
+  })
 }

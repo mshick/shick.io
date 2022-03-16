@@ -1,4 +1,5 @@
 import type { InferGetStaticPropsType } from 'next'
+import type { Article } from 'lib/types'
 import { allArticles } from '.contentlayer/generated'
 import ArticleLayout from 'layouts/article'
 
@@ -16,6 +17,8 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const article = allArticles.find((article) => article.slug === params.slug)
+  const article = (allArticles as unknown as Article[]).find(
+    (article) => article.slug === params.slug
+  )
   return { props: { article } }
 }

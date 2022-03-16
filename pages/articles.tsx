@@ -1,9 +1,9 @@
 import type { InferGetStaticPropsType } from 'next'
 import { Flex, Box } from 'theme-ui'
+import { pick } from '@contentlayer/utils'
 import { allArticles } from '.contentlayer/generated'
 import PageLayout from 'layouts/page'
 import ArticleListItem from 'components/ArticleListItem'
-import { pick } from 'lib/utils/content'
 
 export default function ArticlesPage({
   articles,
@@ -27,7 +27,7 @@ export default function ArticlesPage({
 export async function getStaticProps({ params }) {
   const articles = allArticles
     .map((article) =>
-      pick(article, ['slug', 'title', 'excerpt', 'publishedAt'])
+      pick(article, ['slug', 'path', 'title', 'excerpt', 'publishedAt'])
     )
     .sort(
       (a, b) =>

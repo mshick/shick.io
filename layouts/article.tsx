@@ -1,4 +1,4 @@
-import type { Article, Page } from '.contentlayer/generated'
+import type { Article, Page } from 'lib/types'
 import { siteUrl } from 'lib/config'
 import PageLayout from './page'
 import ArticleContent from 'components/ArticleContent'
@@ -38,7 +38,7 @@ export default function ArticleLayout({
           article: {
             publishedTime: publishedAt,
             modifiedTime: updatedAt,
-            tags,
+            tags: tags.map((tag) => tag.name),
           },
           images: image
             ? [

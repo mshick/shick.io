@@ -1,7 +1,19 @@
-import { Text } from 'theme-ui'
+import { Text, Heading } from 'theme-ui'
 
-export const Logo = () => (
-  <Text as="h2" variant="default">
-    [Michael Shick]
-  </Text>
-)
+export default function Logo() {
+  return (
+    <Heading>
+      <Text
+        variant="default"
+        sx={{
+          display: 'inline',
+          background: '#A321AD',
+          color: 'white',
+          userSelect: 'none',
+        }}
+      >
+        michael shick
+      </Text>
+    </Heading>
+  )
+}

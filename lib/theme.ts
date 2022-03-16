@@ -19,6 +19,7 @@ export const theme: Theme = {
     success: '#50fa7b',
     error: '#ff5555',
     black: '#000000',
+    link: '#0000EE',
   },
   fonts: {
     body: 'Inconsolata, monospace',
@@ -424,6 +425,20 @@ export const theme: Theme = {
         color: 'text',
       },
     },
+    tag: {
+      mr: 2,
+      color: 'text',
+      textDecoration: 'none',
+      ':before': {
+        pr: [0],
+        content: [`"#"`],
+      },
+      ':hover': {
+        backgroundColor: 'link',
+        color: 'white',
+        transition: 'all .2s linear',
+      },
+    },
   },
 
   text: {
@@ -433,6 +448,9 @@ export const theme: Theme = {
       fontSize: 1,
       mt: 0,
       mb: 0,
+    },
+    tag: {
+      color: 'green',
     },
     body: {
       fontFmaily: 'body',

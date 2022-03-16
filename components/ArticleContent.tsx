@@ -1,18 +1,20 @@
 import type { Image, MDX } from '.contentlayer/generated'
 import type { ReadTimeResults } from 'reading-time'
+import type { Tag } from 'lib/types'
 import React, { Fragment } from 'react'
 import { useMDXComponent } from 'next-contentlayer/hooks'
 import { Heading, Badge, Text, Box, Alert, Grid } from 'theme-ui'
 import { mix } from '@theme-ui/color'
 import { format } from 'date-fns'
 import Main from './Main'
+import Link from './Link'
 import components from './MDXComponents'
 
 const formatDate = (date) => format(new Date(date), 'd-MMM-u')
 
 export type SourceArticleProps = {
   title: string
-  tags: string[]
+  tags: Tag[]
   publishedAt: string
   updatedAt: string
   author: string
@@ -47,21 +49,25 @@ export default function SourceArticle({
       <Box sx={{ mb: 5 }}>
         <Grid columns={[2]} sx={{ my: 2 }}>
           <Box sx={{ textAlign: 'left' }}>
+            {tags ? (
+              <Box as="ul" sx={{ p: 0, listStyle: 'none' }}>
+                {tags.map((tag) => {
+                  return (
+                    <Box as="li" key={tag.name} sx={{ display: 'inline' }}>
+                      <Link href={tag.path} variant="tag">
+                        {tag.name}
+                      </Link>
+                    </Box>
+                  )
+                })}
+              </Box>
+            ) : null}
+
             {readingTime ? (
               <Text as="div" sx={{ color: 'muted', mt: '2px' }}>
                 {readingTime.text}
               </Text>
             ) : null}
-
-            {tags
-              ? tags.map((tag) => {
-                  return (
-                    <Text key={tag} as="div">
-                      {tag}
-                    </Text>
-                  )
-                })
-              : null}
           </Box>
 
           <Box sx={{ textAlign: 'right' }}>
@@ -82,7 +88,7 @@ export default function SourceArticle({
 
       <Component components={components} />
 
-      {tags ? (
+      {/* {tags ? (
         <Box sx={{ mb: 3 }}>
           {tags.map((tag, index: number) => (
             <Badge
@@ -99,7 +105,7 @@ export default function SourceArticle({
             </Badge>
           ))}
         </Box>
-      ) : null}
+      ) : null} */}
 
       {author ? (
         <Box>

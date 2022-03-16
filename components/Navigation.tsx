@@ -1,7 +1,6 @@
 import { Fragment } from 'react'
 import { Box, NavLink, Flex } from 'theme-ui'
 import NextLink from 'next/link'
-import { Logo } from './Logo'
 
 export default function Navigation() {
   const pages = [
@@ -75,21 +74,6 @@ export default function Navigation() {
             )
           })}
         </Flex>
-      </Box>
-
-      <Box
-        sx={{
-          alignItems: 'center',
-          display: 'flex',
-          justifyContent: [
-            'flex-start',
-            'flex-start',
-            'flex-start',
-            'flex-end',
-          ],
-        }}
-      >
-        {/* <Logo /> */}
       </Box>
     </Fragment>
   )
