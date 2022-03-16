@@ -35,7 +35,7 @@ export const theme: Theme = {
     body: 1.75,
     heading: 2,
   },
-  fontSizes: [12, 16, 18, 28],
+  fontSizes: [16, 20, 24, 28],
   space: [0, 4, 8, 16, 24, 32, 40],
   shadows: [
     `0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)`,

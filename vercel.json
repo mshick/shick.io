@@ -4,19 +4,19 @@
   "headers": [],
   "redirects": [
     {
-      "source": "/michael-shick-2022.pdf",
+      "source": "/michael-shick-2022.pdf/",
       "destination": "https://read.cv/mshick"
     },
     {
-      "source": "/resume",
+      "source": "/resume/",
       "destination": "https://read.cv/mshick"
     },
     {
-      "source": "/30",
+      "source": "/30/",
       "destination": "https://calendly.com/michaelshick/30min"
     },
     {
-      "source": "/15",
+      "source": "/15/",
       "destination": "https://calendly.com/michaelshick/15min"
     }
   ]
