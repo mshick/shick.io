@@ -1,3 +1,4 @@
+import type { Page } from 'lib/types'
 import { allPages } from '.contentlayer/generated'
 import { InferGetStaticPropsType } from 'next'
 import ArticleLayout from 'layouts/article'
@@ -9,6 +10,8 @@ export default function AboutPage({
 }
 
 export async function getStaticProps() {
-  const page = allPages.find((page) => page.slug === 'about')
+  const page = (allPages as unknown as Page[]).find(
+    (page) => page.slug === 'about'
+  )
   return { props: { page } }
 }
