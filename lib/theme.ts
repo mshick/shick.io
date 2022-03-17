@@ -1,7 +1,7 @@
 import type { Theme } from 'theme-ui'
 import type { Property } from 'csstype'
 import codeTheme from '@theme-ui/prism/presets/duotone-light.json'
-import { lighten } from '@theme-ui/color'
+import { lighten, darken } from '@theme-ui/color'
 
 const sidebarWidth = 260
 
@@ -9,11 +9,11 @@ export const theme: Theme = {
   breakpoints: ['320px', '480px', '768px', '1024px'],
   borderWidths: [0, 1, 4],
   colors: {
-    text: '#000000',
-    background: '#ffffff',
+    text: '#111111',
+    background: '#fefefe',
     muted: '#333333',
     highlight: '#5a6084',
-    surface: lighten('primary', 0.75) as unknown as Property.Color,
+    surface: lighten('primary', 0.7) as unknown as Property.Color,
     primary: '#333333',
     secondary: '#8be9fd',
     success: '#50fa7b',
@@ -36,7 +36,7 @@ export const theme: Theme = {
     heading: 2,
   },
   fontSizes: [16, 20, 25, 40],
-  space: [0, 4, 8, 16, 24, 32, 50],
+  space: [0, 4, 8, 16, 24, 32, 60],
   shadows: [
     `0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)`,
     `0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)`,
@@ -97,6 +97,12 @@ export const theme: Theme = {
       mt: 0,
       mb: 0,
     },
+    excerpt: {
+      p: {
+        mt: 0,
+        mb: 3,
+      },
+    },
   },
 
   styles: {
@@ -116,7 +122,7 @@ export const theme: Theme = {
         ...codeTheme,
         fontSize: 0,
         fontFamily: 'code',
-        backgroundColor: '#faf8f575',
+        backgroundColor: 'background',
         borderRadius: 10,
         borderColor: 'surface',
         borderWidth: 1,
@@ -124,6 +130,21 @@ export const theme: Theme = {
         overflow: 'auto',
         p: 3,
         my: 3,
+      },
+      '.rehype-code-title': {
+        backgroundColor: darken('background', 0.05),
+        p: 2,
+        m: 0,
+        borderTopLeftRadius: 10,
+        borderTopRightRadius: 10,
+        fontSize: 0,
+        fontWeight: 'bold',
+      },
+      '.rehype-code-title+pre': {
+        mt: 0,
+        borderTopLeftRadius: 0,
+        borderTopRightRadius: 0,
+        borderTopWidth: 0,
       },
       '.hidden': {
         display: 'none',
@@ -142,6 +163,11 @@ export const theme: Theme = {
     h1: {
       variant: 'text.heading',
       color: 'primary',
+      mt: 6,
+      mb: 2,
+      p: 0,
+      fontSize: 3,
+      lineHeight: 'body',
     },
     h2: {
       variant: 'text.heading',
@@ -444,6 +470,13 @@ export const theme: Theme = {
         color: 'text',
         pointerEvents: 'none',
       },
+      ':active': {
+        textDecoration: 'none',
+      },
+      ':focus': {
+        textDecoration: 'none',
+        boxShadow: 'none',
+      },
     },
     unstyled: {
       textDecoration: 'none',
@@ -453,7 +486,7 @@ export const theme: Theme = {
       },
     },
     tag: {
-      mr: 2,
+      ml: 2,
       color: 'text',
       textDecoration: 'none',
       ':before': {

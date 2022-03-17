@@ -1,5 +1,5 @@
 import type { Article } from '.contentlayer/generated'
-import { Heading } from 'theme-ui'
+import { Heading, Box } from 'theme-ui'
 import Link from './Link'
 
 export default function ArticleListItem({
@@ -9,8 +9,10 @@ export default function ArticleListItem({
 }: Pick<Article, 'title' | 'excerpt' | 'path'>) {
   return (
     <Link href={path} variant="unstyled">
-      <Heading>{title}</Heading>
-      <div dangerouslySetInnerHTML={{ __html: excerpt }} />
+      <Heading sx={{ mb: 0 }}>{title}</Heading>
+      <Box variant="layout.excerpt">
+        <div dangerouslySetInnerHTML={{ __html: excerpt }} />
+      </Box>
     </Link>
   )
 }

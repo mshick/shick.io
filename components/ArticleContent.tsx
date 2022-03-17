@@ -3,7 +3,7 @@ import type { ReadTimeResults } from 'reading-time'
 import type { Tag } from 'lib/types'
 import React, { Fragment } from 'react'
 import { useMDXComponent } from 'next-contentlayer/hooks'
-import { Heading, Badge, Text, Box, Alert, Grid } from 'theme-ui'
+import { Heading, Badge, Text, Box, Alert, Grid, Paragraph } from 'theme-ui'
 import { mix } from '@theme-ui/color'
 import { format } from 'date-fns'
 import Main from './Main'
@@ -12,7 +12,7 @@ import components from './MDXComponents'
 
 const formatDate = (date) => format(new Date(date), 'd-MMM-u')
 
-export type SourceArticleProps = {
+export type ArticleContentProps = {
   title: string
   tags: Tag[]
   publishedAt: string
@@ -24,7 +24,7 @@ export type SourceArticleProps = {
   readingTime?: ReadTimeResults
 }
 
-export default function SourceArticle({
+export default function ArticleContent({
   title,
   tags,
   publishedAt,
@@ -34,7 +34,7 @@ export default function SourceArticle({
   image,
   body,
   readingTime,
-}: SourceArticleProps) {
+}: ArticleContentProps) {
   const Component = useMDXComponent(body.code)
   return (
     <Fragment>
@@ -47,43 +47,72 @@ export default function SourceArticle({
       )}
 
       <Box sx={{ mb: 5 }}>
-        <Grid columns={[2]} sx={{ my: 2 }}>
-          <Box sx={{ textAlign: 'left' }}>
+        <Grid columns={[3]} sx={{ my: 2 }}>
+          {readingTime ? (
+            <Box>
+              <Text as="div" sx={{ color: 'muted' }}>
+                {readingTime.text}
+              </Text>
+            </Box>
+          ) : (
+            <Box></Box>
+          )}
+
+          <Box sx={{ textAlign: 'center' }}>
             {publishedAt && (
-              <Text sx={{ color: 'muted', mt: '2px' }}>
+              <Text as="span" sx={{ color: 'muted', mt: '2px' }}>
                 <time dateTime={publishedAt}>{formatDate(publishedAt)}</time>
               </Text>
             )}
-
-            {tags ? (
-              <Box
-                as="ul"
-                sx={{ p: 0, listStyle: 'none', display: 'inline', ml: 4 }}
-              >
-                {tags.map((tag) => {
-                  return (
-                    <Box as="li" key={tag.name} sx={{ display: 'inline' }}>
-                      <Link href={tag.path} variant="tag">
-                        {tag.name}
-                      </Link>
-                    </Box>
-                  )
-                })}
-              </Box>
-            ) : null}
-
-            {readingTime ? (
-              <Text as="div" sx={{ color: 'muted', mt: '2px' }}>
-                {readingTime.text}
-              </Text>
-            ) : null}
           </Box>
+
+          {tags ? (
+            <Box
+              as="ul"
+              sx={{
+                p: 0,
+                listStyle: 'none',
+                display: 'inline',
+                ml: 4,
+                mr: 0,
+                textAlign: 'right',
+              }}
+            >
+              {tags.map((tag) => {
+                return (
+                  <Box as="li" key={tag.name} sx={{ display: 'inline' }}>
+                    <Link href={tag.path} variant="tag">
+                      {tag.name}
+                    </Link>
+                  </Box>
+                )
+              })}
+            </Box>
+          ) : null}
         </Grid>
 
         <Box sx={{ textAlign: 'left', mt: 5 }}>
-          <Heading as="h1" variant="text.article.title">
+          <Heading
+            as="h1"
+            variant="styles.h1"
+            sx={{ lineHeight: 1.3, maxWidth: ['100%', '100%', '100%', '80%'] }}
+          >
             {title}
           </Heading>
+
+          {author ? (
+            <Paragraph
+              sx={{
+                fontStyle: 'italic',
+                mt: 2,
+                mb: 3,
+                fontSize: 2,
+                lineHeight: 'body',
+              }}
+            >
+              {author}
+            </Paragraph>
+          ) : null}
         </Box>
       </Box>
 
@@ -107,12 +136,6 @@ export default function SourceArticle({
           ))}
         </Box>
       ) : null} */}
-
-      {author ? (
-        <Box>
-          <Text>{author}</Text>
-        </Box>
-      ) : null}
     </Fragment>
   )
 }
