@@ -26,7 +26,7 @@ export const siteDescription = 'My personal site.'
 export const siteUrl = 'https://www.shick.us'
 
 export const seo: DefaultSeoProps = {
-  titleTemplate: `%s ⊆ ${siteName}`,
+  titleTemplate: `%s _ ${siteName}`,
   defaultTitle: siteName,
   description: siteDescription,
   canonical: siteUrl,

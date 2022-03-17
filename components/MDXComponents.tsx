@@ -1,5 +1,5 @@
 import type { ComponentMap } from 'mdx-bundler/client'
-import { components as themeUi } from 'theme-ui'
+import { Box, components as themeUi } from 'theme-ui'
 import Image from './Image'
 import Link from './Link'
 
@@ -13,6 +13,9 @@ const MDXComponents: ComponentMap = {
   },
   pre: (props) => {
     return <pre {...props} />
+  },
+  section: ({ ref, ...props }) => {
+    return <Box as="section" variant="styles.section" {...props} />
   },
 }
 

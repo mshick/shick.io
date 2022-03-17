@@ -37,7 +37,7 @@ export default function SourceArticle({
 }: SourceArticleProps) {
   const Component = useMDXComponent(body.code)
   return (
-    <Main>
+    <Fragment>
       {isPrivate && (
         <Fragment>
           <Alert variant="error" sx={{ mb: 4 }}>
@@ -49,8 +49,17 @@ export default function SourceArticle({
       <Box sx={{ mb: 5 }}>
         <Grid columns={[2]} sx={{ my: 2 }}>
           <Box sx={{ textAlign: 'left' }}>
+            {publishedAt && (
+              <Text sx={{ color: 'muted', mt: '2px' }}>
+                <time dateTime={publishedAt}>{formatDate(publishedAt)}</time>
+              </Text>
+            )}
+
             {tags ? (
-              <Box as="ul" sx={{ p: 0, listStyle: 'none' }}>
+              <Box
+                as="ul"
+                sx={{ p: 0, listStyle: 'none', display: 'inline', ml: 4 }}
+              >
                 {tags.map((tag) => {
                   return (
                     <Box as="li" key={tag.name} sx={{ display: 'inline' }}>
@@ -69,17 +78,9 @@ export default function SourceArticle({
               </Text>
             ) : null}
           </Box>
-
-          <Box sx={{ textAlign: 'right' }}>
-            {publishedAt && (
-              <Text as="div" sx={{ color: 'muted', mt: '2px' }}>
-                {formatDate(publishedAt)}
-              </Text>
-            )}
-          </Box>
         </Grid>
 
-        <Box sx={{ textAlign: 'center' }}>
+        <Box sx={{ textAlign: 'left', mt: 5 }}>
           <Heading as="h1" variant="text.article.title">
             {title}
           </Heading>
@@ -112,6 +113,6 @@ export default function SourceArticle({
           <Text>{author}</Text>
         </Box>
       ) : null}
-    </Main>
+    </Fragment>
   )
 }

@@ -9,6 +9,8 @@ import remarkFootnotes from 'remark-footnotes'
 import { remarkMdxImages } from 'remark-mdx-images'
 import remarkUnwrapImages from 'remark-unwrap-images'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
+import remarkSectionize from './lib/remark/remark-sectionize'
+import remarkInitialHeading from './lib/remark/remark-initial-heading'
 import rehypeImgSize from './lib/rehype/rehype-img-size'
 import rehypeSlug from 'rehype-slug'
 import rehypeCodeTitles from 'rehype-code-titles'
@@ -129,6 +131,8 @@ export default makeSource({
       remarkGfm,
       remarkFootnotes,
       remarkSqueezeParagraphs,
+      remarkInitialHeading,
+      remarkSectionize,
     ],
     rehypePlugins: [
       rehypeSlug,

@@ -1,3 +1,5 @@
+// import 'lib/styles.css'
+
 import React from 'react'
 import { ThemeProvider } from 'theme-ui'
 import { DefaultSeo } from 'next-seo'

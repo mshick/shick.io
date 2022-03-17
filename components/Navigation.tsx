@@ -9,39 +9,23 @@ export default function Navigation() {
         label: 'Home',
         position: 0,
       },
-      slug: '',
+      path: '/',
     },
     {
       navigation: {
         label: 'Articles',
         position: 1,
       },
-      slug: 'articles',
+      path: '/articles',
     },
     {
       navigation: {
         label: 'About',
         position: 2,
       },
-      slug: 'about',
+      path: '/about',
     },
   ]
-
-  const sortedPages = pages.sort((a, b) => {
-    if (a.slug === '/') {
-      return -1
-    }
-
-    if (a.navigation.position < b.navigation.position) {
-      return -1
-    }
-
-    if (a.navigation.position > b.navigation.position) {
-      return 1
-    }
-
-    return 0
-  })
 
   return (
     <Fragment>
@@ -53,10 +37,10 @@ export default function Navigation() {
             p: 0,
           }}
         >
-          {sortedPages?.map((item, index) => {
+          {pages?.map((item, index) => {
             const {
               navigation: { label },
-              slug,
+              path,
             } = item
 
             return (
@@ -67,7 +51,7 @@ export default function Navigation() {
                   marginRight: 30,
                 }}
               >
-                <NextLink href={`/${slug}`} passHref>
+                <NextLink href={path} passHref>
                   <NavLink>{label}</NavLink>
                 </NextLink>
               </Box>

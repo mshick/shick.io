@@ -32,11 +32,11 @@ export const theme: Theme = {
     bold: 700,
   },
   lineHeights: {
-    body: 1.75,
+    body: 1.5,
     heading: 2,
   },
-  fontSizes: [16, 20, 24, 28],
-  space: [0, 4, 8, 16, 24, 32, 40],
+  fontSizes: [16, 20, 25, 40],
+  space: [0, 4, 8, 16, 24, 32, 50],
   shadows: [
     `0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)`,
     `0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)`,
@@ -49,7 +49,9 @@ export const theme: Theme = {
     container: {
       margin: '0 auto',
       maxWidth: 960,
-      px: [4, 16, 48, 96, 128],
+      // px: [4, 16, 48, 96, 128],
+      pl: [4, 5, 6],
+      pr: [4, 5, 6],
     },
     page: {
       flexDirection: 'column',
@@ -84,10 +86,22 @@ export const theme: Theme = {
       width: sidebarWidth,
       zIndex: 999,
     },
+    logo: {
+      display: 'inline',
+      background: 'link',
+      color: 'white',
+      userSelect: 'none',
+      fontFmaily: 'body',
+      fontWeight: 'body',
+      fontSize: 1,
+      mt: 0,
+      mb: 0,
+    },
   },
 
   styles: {
     root: {
+      minWidth: '320px',
       fontFamily: 'body',
       fontWeight: 'body',
       fontSize: 1,
@@ -100,6 +114,7 @@ export const theme: Theme = {
       },
       pre: {
         ...codeTheme,
+        fontSize: 0,
         fontFamily: 'code',
         backgroundColor: '#faf8f575',
         borderRadius: 10,
@@ -108,7 +123,10 @@ export const theme: Theme = {
         borderStyle: 'dashed',
         overflow: 'auto',
         p: 3,
-        my: '48px!important',
+        my: 3,
+      },
+      '.hidden': {
+        display: 'none',
       },
     },
     focus: {
@@ -118,6 +136,9 @@ export const theme: Theme = {
         boxShadow: (theme) => `0 2px 0 0 ${theme.colors.primary}`,
       },
     },
+    section: {
+      py: 3,
+    },
     h1: {
       variant: 'text.heading',
       color: 'primary',
@@ -125,22 +146,26 @@ export const theme: Theme = {
     h2: {
       variant: 'text.heading',
       color: 'primary',
+      fontSize: '30px',
+      fontStyle: 'italic',
     },
     h3: {
       variant: 'text.heading',
-      color: 'secondary',
+      color: 'primary',
+      fontSize: '25px',
+      fontStyle: 'italic',
     },
     h4: {
       variant: 'text.heading',
-      color: 'text',
+      color: 'primary',
     },
     h5: {
       variant: 'text.heading',
-      color: 'success',
+      color: 'primary',
     },
     h6: {
       variant: 'text.heading',
-      color: 'error',
+      color: 'primary',
     },
     p: {
       mt: 0,
@@ -167,7 +192,7 @@ export const theme: Theme = {
 
     hr: {
       border: 0,
-      borderBottom: '1px solid',
+      borderBottom: '1px dashed',
       borderColor: 'muted',
     },
     ol: {
@@ -401,6 +426,7 @@ export const theme: Theme = {
     nav: {
       variant: 'styles.a',
       fontWeight: 'body',
+      display: 'inline',
       ':before': {
         pr: [0],
         content: [`"["`],
@@ -410,8 +436,9 @@ export const theme: Theme = {
         content: [`"]"`],
       },
       ':hover': {
-        color: 'text',
-        transition: '.2s linear color',
+        backgroundColor: 'link',
+        color: 'white',
+        transition: 'all .2s linear',
       },
       '&[aria-current="page"]': {
         color: 'text',
@@ -464,10 +491,13 @@ export const theme: Theme = {
       title: {
         fontFmaily: 'body',
         fontWeight: 'heading',
-        fontSize: 2,
+        fontSize: 3,
         p: 0,
         m: 0,
-        lineHeight: 'heading',
+        lineHeight: 'body',
+        maxWidth: ['100%', '100%', '100%', '80%'],
+        // textAlign: 'center',
+        // mx: 'auto',
       },
     },
     heading: {

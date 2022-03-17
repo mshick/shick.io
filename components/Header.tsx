@@ -6,7 +6,9 @@ export default function Header() {
   return (
     <Box as="header" variant="layout.header">
       <Navigation />
-      <Logo />
+      <Box sx={{ display: ['none', 'none', 'block'] }}>
+        <Logo />
+      </Box>
     </Box>
   )
 }
