@@ -50,7 +50,7 @@ export default function ArticleContent({
         <Grid columns={[3]} sx={{ my: 2 }}>
           {readingTime ? (
             <Box>
-              <Text as="div" sx={{ color: 'muted' }}>
+              <Text as="div" sx={{ color: 'muted', fontSize: 0 }}>
                 {readingTime.text}
               </Text>
             </Box>
@@ -60,7 +60,7 @@ export default function ArticleContent({
 
           <Box sx={{ textAlign: 'center' }}>
             {publishedAt && (
-              <Text as="span" sx={{ color: 'muted', mt: '2px' }}>
+              <Text as="span" sx={{ color: 'muted', mt: '2px', fontSize: 0 }}>
                 <time dateTime={publishedAt}>{formatDate(publishedAt)}</time>
               </Text>
             )}
@@ -80,7 +80,11 @@ export default function ArticleContent({
             >
               {tags.map((tag) => {
                 return (
-                  <Box as="li" key={tag.name} sx={{ display: 'inline' }}>
+                  <Box
+                    as="li"
+                    key={tag.name}
+                    sx={{ display: 'inline', fontSize: 0 }}
+                  >
                     <Link href={tag.path} variant="tag">
                       {tag.name}
                     </Link>

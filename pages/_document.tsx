@@ -7,8 +7,32 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <link
-            href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&display=swap"
-            rel="stylesheet"
+            rel="preload"
+            href="/fonts/bitstream-vera-sans-mono-regular.woff2"
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
+          />
+          <link
+            rel="preload"
+            href="/fonts/bitstream-vera-sans-mono-italic.woff2"
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
+          />
+          <link
+            rel="preload"
+            href="/fonts/bitstream-vera-sans-mono-bold.woff2"
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
+          />
+          <link
+            rel="preload"
+            href="/fonts/bitstream-vera-sans-mono-bold-italic.woff2"
+            as="font"
+            type="font/woff2"
+            crossOrigin="anonymous"
           />
           <meta
             name="msapplication-TileColor"

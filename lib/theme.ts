@@ -22,8 +22,8 @@ export const theme: Theme = {
     link: '#0000EE',
   },
   fonts: {
-    body: 'Inconsolata, monospace',
-    heading: 'Inconsolata, monospace',
+    body: '"Bitstream Vera Sans Mono", monospace',
+    heading: '"Bitstream Vera Sans Mono", monospace',
     code: 'monospace',
   },
   fontWeights: {
@@ -32,10 +32,10 @@ export const theme: Theme = {
     bold: 700,
   },
   lineHeights: {
-    body: 1.5,
-    heading: 2,
+    body: 1.8,
+    heading: 1,
   },
-  fontSizes: [16, 20, 25, 40],
+  fontSizes: [14, 16, 22, 32, 40],
   space: [0, 4, 8, 16, 24, 32, 60],
   shadows: [
     `0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)`,
@@ -166,19 +166,19 @@ export const theme: Theme = {
       mt: 6,
       mb: 2,
       p: 0,
-      fontSize: 3,
+      fontSize: 4,
       lineHeight: 'body',
     },
     h2: {
       variant: 'text.heading',
       color: 'primary',
-      fontSize: '30px',
+      fontSize: 3,
       fontStyle: 'italic',
     },
     h3: {
       variant: 'text.heading',
       color: 'primary',
-      fontSize: '25px',
+      fontSize: 2,
       fontStyle: 'italic',
     },
     h4: {
@@ -536,9 +536,9 @@ export const theme: Theme = {
     heading: {
       fontFamily: 'heading',
       fontWeight: 'heading',
+      lineHeight: 'heading',
       fontSize: 2,
-      mt: 0,
-      pt: 4,
+      mt: 5,
       mb: 4,
       a: {
         color: 'inherit',
