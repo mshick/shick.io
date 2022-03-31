@@ -5,7 +5,7 @@ const withPlugins = require('next-compose-plugins')
 const ContentSecurityPolicy = `
   default-src 'self';
   script-src 'self' 'unsafe-eval' 'unsafe-inline';
-  child-src *.google.com;
+  child-src *.google.com *.youtube.com;
   style-src 'self' 'unsafe-inline' *.googleapis.com;
   img-src * blob: data:;
   media-src 'none';

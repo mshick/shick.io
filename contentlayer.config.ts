@@ -9,8 +9,12 @@ import remarkFootnotes from 'remark-footnotes'
 import { remarkMdxImages } from 'remark-mdx-images'
 import remarkUnwrapImages from 'remark-unwrap-images'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
-import remarkSectionize from './lib/remark/remark-sectionize'
+import remarkSectionize from 'remark-sectionize'
+import remarkDirective from 'remark-directive'
+import remarkFigure from './lib/remark/remark-figure'
 import remarkInitialHeading from './lib/remark/remark-initial-heading'
+import { citePlugin } from '@benrbray/remark-cite'
+import remarkYoutube from './lib/remark/remark-youtube'
 import rehypeImgSize from './lib/rehype/rehype-img-size'
 import rehypeSlug from 'rehype-slug'
 import rehypeCodeTitles from 'rehype-code-titles'
@@ -126,18 +130,22 @@ export default makeSource({
   documentTypes: [Article, Page],
   mdx: {
     remarkPlugins: [
+      remarkDirective,
+      remarkFigure,
+      remarkYoutube,
       remarkUnwrapImages,
       remarkMdxImages,
-      remarkGfm,
-      remarkFootnotes,
-      remarkSqueezeParagraphs,
-      remarkInitialHeading,
-      remarkSectionize,
+      // remarkGfm,
+      // [citePlugin, {}],
+      // remarkFootnotes,
+      // remarkSqueezeParagraphs,
+      // remarkInitialHeading,
+      // remarkSectionize,
     ],
     rehypePlugins: [
-      rehypeSlug,
-      rehypeCodeTitles,
-      [rehypePrism, { ignoreMissing: true }],
+      // rehypeSlug,
+      // rehypeCodeTitles,
+      // [rehypePrism, { ignoreMissing: true }],
       [rehypeImgSize, { dir: `data` }],
       [
         rehypeAutolinkHeadings,

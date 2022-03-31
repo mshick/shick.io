@@ -24,7 +24,7 @@ export const theme: Theme = {
   fonts: {
     body: '"Bitstream Vera Sans Mono", monospace',
     heading: '"Bitstream Vera Sans Mono", monospace',
-    code: 'monospace',
+    code: '"Bitstream Vera Sans Mono", monospace',
   },
   fontWeights: {
     body: 400,

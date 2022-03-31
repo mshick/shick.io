@@ -1,10 +1,27 @@
-import { findAfter } from 'unist-util-find-after'
 import { visitParents } from 'unist-util-visit-parents'
 
-const MAX_HEADING_DEPTH = 6
+function addInitialHeading(node, ancestors) {
+  const start = node
+  const parent = ancestors[ancestors.length - 1]
+  const startIndex = parent.children.indexOf(start)
 
-export default function remarkInitialHeading() {
-  return transform
+  const heading = {
+    type: 'heading',
+    depth: 2,
+    children: [
+      {
+        type: 'text',
+        value: 'Introduction',
+      },
+    ],
+    data: {
+      hProperties: {
+        className: 'hidden',
+      },
+    },
+  }
+
+  parent.children.splice(startIndex, 0, heading)
 }
 
 function transform(tree) {
@@ -34,26 +51,6 @@ function transform(tree) {
   )
 }
 
-function addInitialHeading(node, ancestors) {
-  const start = node
-  const parent = ancestors[ancestors.length - 1]
-  const startIndex = parent.children.indexOf(start)
-
-  const heading = {
-    type: 'heading',
-    depth: 2,
-    children: [
-      {
-        type: 'text',
-        value: 'Introduction',
-      },
-    ],
-    data: {
-      hProperties: {
-        className: 'hidden',
-      },
-    },
-  }
-
-  parent.children.splice(startIndex, 0, heading)
+export default function remarkInitialHeading() {
+  return transform
 }

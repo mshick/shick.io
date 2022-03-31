@@ -3,10 +3,6 @@ import { visitParents } from 'unist-util-visit-parents'
 
 const MAX_HEADING_DEPTH = 2
 
-export default function remarkSectionize() {
-  return transform
-}
-
 function transform(tree) {
   for (let depth = MAX_HEADING_DEPTH; depth > 0; depth--) {
     visitParents(
@@ -44,4 +40,8 @@ function sectionize(node, ancestors) {
   }
 
   parent.children.splice(startIndex, section.children.length, section)
+}
+
+export default function remarkSectionize() {
+  return transform
 }
