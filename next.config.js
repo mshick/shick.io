@@ -57,6 +57,9 @@ module.exports = withPlugins([withContentlayer()], {
   poweredByHeader: false,
   trailingSlash: true,
   reactStrictMode: true,
+  compiler: {
+    styledComponents: true,
+  },
   images: {
     domains: ['github.com'],
   },
