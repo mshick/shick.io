@@ -36,7 +36,7 @@ export const theme: Theme = {
     heading: 1,
   },
   fontSizes: [14, 16, 22, 32, 40],
-  space: [0, 4, 8, 16, 24, 32, 60],
+  space: [0, 4, 8, 16, 24, 32, 60, 72],
   shadows: [
     `0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)`,
     `0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)`,
@@ -115,6 +115,7 @@ export const theme: Theme = {
       'input:-webkit-autofill:first-line': {
         color: (theme) => `${theme.colors.primary}!important`,
       },
+      counterReset: 'sidenote-counter',
       a: {
         variant: 'styles.focus',
       },
@@ -130,6 +131,7 @@ export const theme: Theme = {
         overflow: 'auto',
         p: 3,
         my: 3,
+        width: '70%',
       },
       '.rehype-code-title': {
         backgroundColor: darken('background', 0.05),
@@ -148,6 +150,58 @@ export const theme: Theme = {
       },
       '.hidden': {
         display: 'none',
+      },
+      'label.margin-toggle:not(.sidenote-number)': {
+        display: 'none',
+      },
+      'label.sidenote-number': {
+        display: 'inline-block',
+        maxHeight: '2rem',
+      },
+      '.sidenote-number::after': {
+        content: 'counter(sidenote-counter)',
+        fontSize: '0.7rem',
+        top: '-0.5rem',
+        left: '0.1rem',
+        position: 'relative',
+        verticalAlign: 'baseline',
+      },
+      '.sidenote-number': {
+        counterIncrement: 'sidenote-counter',
+      },
+      '.sidenote::before': {
+        content: 'counter(sidenote-counter)',
+        fontSize: '0.7rem',
+        top: '-0.5rem',
+        position: 'relative',
+        verticalAlign: 'baseline',
+      },
+      'input.margin-toggle': {
+        display: 'none',
+      },
+      '.marginnote': {
+        float: 'right',
+        clear: 'right',
+        marginRight: '-60%',
+        width: '50%',
+        marginTop: '0.3rem',
+        marginBottom: 0,
+        fontSize: 0,
+        lineHeight: 1.3,
+        verticalAlign: 'baseline',
+        position: 'relative',
+      },
+      '.sidenote': {
+        float: 'right',
+        clear: 'right',
+        marginRight: '-60%',
+        width: '50%',
+        marginTop: '0.3rem',
+        marginBottom: 0,
+        fontSize: 0,
+        lineHeight: 1.3,
+        verticalAlign: 'baseline',
+        position: 'relative',
       },
     },
     focus: {
@@ -168,30 +222,36 @@ export const theme: Theme = {
       p: 0,
       fontSize: 4,
       lineHeight: 'body',
+      width: '70%',
     },
     h2: {
       variant: 'text.heading',
       color: 'primary',
       fontSize: 3,
       fontStyle: 'italic',
+      width: '70%',
     },
     h3: {
       variant: 'text.heading',
       color: 'primary',
       fontSize: 2,
       fontStyle: 'italic',
+      width: '70%',
     },
     h4: {
       variant: 'text.heading',
       color: 'primary',
+      width: '70%',
     },
     h5: {
       variant: 'text.heading',
       color: 'primary',
+      width: '70%',
     },
     h6: {
       variant: 'text.heading',
       color: 'primary',
+      width: '70%',
     },
     p: {
       mt: 0,
@@ -199,6 +259,7 @@ export const theme: Theme = {
       code: {
         variant: 'styles.code',
       },
+      width: '70%',
     },
     small: {
       color: 'muted',
@@ -272,7 +333,20 @@ export const theme: Theme = {
         },
       },
     },
+    epigraph: {
+      mb: 7,
+      mt: 7,
+      blockquote: {
+        borderLeftWidth: 0,
+        fontStyle: 'italic',
+        fontSize: 0,
+        footer: {
+          fontStyle: 'normal',
+        },
+      },
+    },
     blockquote: {
+      width: '70%',
       borderRadius: 0,
       borderLeftColor: 'muted',
       borderLeftStyle: 'solid',
@@ -284,6 +358,28 @@ export const theme: Theme = {
       p: {
         p: 3,
         mb: 0,
+        width: '100%',
+      },
+      footer: {
+        textAlign: 'right',
+      },
+    },
+    figure: {
+      width: '70%',
+      '&.fullwidth': {
+        width: '100%',
+      },
+      ':not(&.fullwidth) figcaption': {
+        float: 'right',
+        clear: 'right',
+        marginRight: '-60%',
+        width: '50%',
+        marginTop: '0.3rem',
+        marginBottom: 0,
+        fontSize: 0,
+        lineHeight: 1.3,
+        verticalAlign: 'baseline',
+        position: 'relative',
       },
     },
     progress: {

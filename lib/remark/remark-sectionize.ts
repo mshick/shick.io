@@ -1,17 +1,7 @@
 import { findAfter } from 'unist-util-find-after'
 import { visitParents } from 'unist-util-visit-parents'
 
-const MAX_HEADING_DEPTH = 2
-
-function transform(tree) {
-  for (let depth = MAX_HEADING_DEPTH; depth > 0; depth--) {
-    visitParents(
-      tree,
-      (node) => node.type === 'heading' && node.depth === depth,
-      sectionize
-    )
-  }
-}
+const MAX_HEADING_DEPTH = 6
 
 function sectionize(node, ancestors) {
   const start = node
@@ -42,6 +32,15 @@ function sectionize(node, ancestors) {
   parent.children.splice(startIndex, section.children.length, section)
 }
 
-export default function remarkSectionize() {
-  return transform
+export default function remarkSectionize(options) {
+  const maxHeadingDepth = options.maxHeadingDepth ?? MAX_HEADING_DEPTH
+  return (tree) => {
+    for (let depth = maxHeadingDepth; depth > 0; depth--) {
+      visitParents(
+        tree,
+        (node) => node.type === 'heading' && node.depth === depth,
+        sectionize
+      )
+    }
+  }
 }

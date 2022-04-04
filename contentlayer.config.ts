@@ -4,23 +4,27 @@ import {
   defineNestedType,
   makeSource,
 } from 'contentlayer/source-files'
+import { omit } from '@contentlayer/utils'
 import remarkGfm from 'remark-gfm'
-import remarkFootnotes from 'remark-footnotes'
+import remarkSidenotes from './lib/remark/remark-sidenotes'
+import remarkDirectiveRehype from 'remark-directive-rehype'
 import { remarkMdxImages } from 'remark-mdx-images'
 import remarkUnwrapImages from 'remark-unwrap-images'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
-import remarkSectionize from 'remark-sectionize'
 import remarkDirective from 'remark-directive'
-import remarkFigure from './lib/remark/remark-figure'
-import remarkInitialHeading from './lib/remark/remark-initial-heading'
-import { citePlugin } from '@benrbray/remark-cite'
-import remarkYoutube from './lib/remark/remark-youtube'
-import rehypeImgSize from './lib/rehype/rehype-img-size'
+import remarkGemoji from 'remark-gemoji'
 import rehypeSlug from 'rehype-slug'
 import rehypeCodeTitles from 'rehype-code-titles'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypePrism from 'rehype-prism-plus'
-import { omit } from '@contentlayer/utils'
+import remarkInitialHeading from './lib/remark/remark-initial-heading'
+import remarkSectionize from './lib/remark/remark-sectionize'
+import remarkFigure from './lib/remark/remark-figure'
+import remarkNewthought from './lib/remark/remark-newthought'
+import remarkFooter from './lib/remark/remark-footer'
+import remarkYoutube from './lib/remark/remark-youtube'
+import remarkEpigraph from './lib/remark/remark-epigraph'
+import rehypeImgSize from './lib/rehype/rehype-img-size'
 import {
   getReadingTime,
   getExcerpt,
@@ -130,22 +134,26 @@ export default makeSource({
   documentTypes: [Article, Page],
   mdx: {
     remarkPlugins: [
+      remarkGemoji,
       remarkDirective,
-      remarkFigure,
+      remarkDirectiveRehype,
       remarkYoutube,
       remarkUnwrapImages,
+      remarkFigure,
+      remarkFooter,
+      remarkNewthought,
+      remarkGfm,
+      remarkSidenotes,
+      remarkSqueezeParagraphs,
+      remarkInitialHeading,
+      [remarkSectionize, { maxHeadingDepth: 2 }],
+      remarkEpigraph,
       remarkMdxImages,
-      // remarkGfm,
-      // [citePlugin, {}],
-      // remarkFootnotes,
-      // remarkSqueezeParagraphs,
-      // remarkInitialHeading,
-      // remarkSectionize,
     ],
     rehypePlugins: [
-      // rehypeSlug,
-      // rehypeCodeTitles,
-      // [rehypePrism, { ignoreMissing: true }],
+      rehypeSlug,
+      rehypeCodeTitles,
+      [rehypePrism, { ignoreMissing: true }],
       [rehypeImgSize, { dir: `data` }],
       [
         rehypeAutolinkHeadings,

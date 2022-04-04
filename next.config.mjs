@@ -1,5 +1,4 @@
-const { withContentlayer } = require('next-contentlayer')
-const withPlugins = require('next-compose-plugins')
+import { withContentlayer } from 'next-contentlayer'
 
 // https://securityheaders.com
 const ContentSecurityPolicy = `
@@ -52,7 +51,7 @@ const securityHeaders = [
   },
 ]
 
-module.exports = withPlugins([withContentlayer()], {
+export default withContentlayer({
   swcMinify: true,
   poweredByHeader: false,
   trailingSlash: true,
@@ -72,6 +71,10 @@ module.exports = withPlugins([withContentlayer()], {
     ]
   },
   webpack: (config, { dev, isServer }) => {
+    config.infrastructureLogging = {
+      level: 'error',
+    }
+
     // Replace React with Preact only in client production build
     if (!dev && !isServer) {
       Object.assign(config.resolve.alias, {

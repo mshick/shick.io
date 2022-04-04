@@ -6,6 +6,8 @@
 - Index of sites linked to: https://blog.jim-nielsen.com/about/
 - Tufte CSS: https://github.com/luhmann/tufte-markdown/blob/master/examples/md/tufte.md
 - https://edwardtufte.github.io/tufte-css/
+- https://nulliq.dev/posts/vector-angle-1/
+- https://github.com/panr/hugo-theme-terminal
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 

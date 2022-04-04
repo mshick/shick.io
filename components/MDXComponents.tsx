@@ -2,7 +2,6 @@ import type { ComponentMap } from 'mdx-bundler/client'
 import { Box, components as themeUi } from 'theme-ui'
 import Image from './Image'
 import Link from './Link'
-import Blockquote from './Blockquote'
 
 const MDXComponents: ComponentMap = {
   ...themeUi,
@@ -18,10 +17,12 @@ const MDXComponents: ComponentMap = {
   section: ({ ref, ...props }) => {
     return <Box as="section" variant="styles.section" {...props} />
   },
-  Blockquote,
-  figure: (props) => {
-    console.log('figure', props)
-    return <figure {...props} />
+  figure: ({ ref, ...props }) => {
+    return <Box as="figure" variant="styles.figure" {...props} />
+  },
+  div: ({ ref, className, ...props }) => {
+    // Upgrade classes to theme styles
+    return <Box as="div" variant={`styles.${className}`} {...props} />
   },
 }
 
