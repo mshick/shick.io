@@ -10,7 +10,7 @@ import Main from './Main'
 import Link from './Link'
 import components from './MDXComponents'
 
-const formatDate = (date) => format(new Date(date), 'd-MMM-u')
+const formatDate = (date) => format(new Date(date), 'yyyy-MM-dd')
 
 export type ArticleContentProps = {
   title: string
@@ -46,54 +46,47 @@ export default function ArticleContent({
         </Fragment>
       )}
 
-      <Box sx={{ mb: 5 }}>
-        <Grid columns={[3]} sx={{ my: 2 }}>
+      <Box sx={{ mb: 5, mt: 2 }}>
+        <Box sx={{ textAlign: 'left' }}>
+          <Text sx={{ color: 'muted', fontSize: 0 }}>
+            <time dateTime={publishedAt}>{formatDate(publishedAt)}</time>
+          </Text>
+          <Text sx={{ color: 'muted', ml: 2, fontSize: 0 }}>
+            <time dateTime={updatedAt}>[Updated: {formatDate(updatedAt)}]</time>
+          </Text>
+          <Text sx={{ m: 2 }}>/</Text>
           {readingTime ? (
-            <Box>
-              <Text as="div" sx={{ color: 'muted', fontSize: 0 }}>
-                {readingTime.text}
-              </Text>
-            </Box>
-          ) : (
-            <Box></Box>
-          )}
-
-          <Box sx={{ textAlign: 'center' }}>
-            {publishedAt && (
-              <Text as="span" sx={{ color: 'muted', mt: '2px', fontSize: 0 }}>
-                <time dateTime={publishedAt}>{formatDate(publishedAt)}</time>
-              </Text>
-            )}
-          </Box>
-
-          {tags ? (
-            <Box
-              as="ul"
-              sx={{
-                p: 0,
-                listStyle: 'none',
-                display: 'inline',
-                ml: 4,
-                mr: 0,
-                textAlign: 'right',
-              }}
-            >
-              {tags.map((tag) => {
-                return (
-                  <Box
-                    as="li"
-                    key={tag.name}
-                    sx={{ display: 'inline', fontSize: 0 }}
-                  >
-                    <Link href={tag.path} variant="tag">
-                      {tag.name}
-                    </Link>
-                  </Box>
-                )
-              })}
-            </Box>
+            <Text sx={{ color: 'muted', fontSize: 0 }}>{readingTime.text}</Text>
           ) : null}
-        </Grid>
+        </Box>
+
+        {tags ? (
+          <Box
+            as="ul"
+            sx={{
+              p: 0,
+              listStyle: 'none',
+              display: 'inline',
+              ml: 0,
+              mr: 0,
+              textAlign: 'right',
+            }}
+          >
+            {tags.map((tag) => {
+              return (
+                <Box
+                  as="li"
+                  key={tag.slug}
+                  sx={{ display: 'inline', m: 0, fontSize: 0 }}
+                >
+                  <Link href={tag.path} variant="tag">
+                    {tag.slug}
+                  </Link>
+                </Box>
+              )
+            })}
+          </Box>
+        ) : null}
 
         <Box sx={{ textAlign: 'left', mt: 5 }}>
           <Heading

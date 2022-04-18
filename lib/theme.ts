@@ -6,12 +6,13 @@ import { lighten, darken } from '@theme-ui/color'
 const sidebarWidth = 260
 
 export const theme: Theme = {
-  breakpoints: ['320px', '480px', '768px', '1024px'],
+  breakpoints: ['768px', '1024px'],
   borderWidths: [0, 1, 4],
   colors: {
     text: '#111111',
     background: '#fefefe',
-    muted: '#333333',
+    muted: lighten('text', 0.2) as unknown as Property.Color,
+    extramuted: lighten('text', 0.5) as unknown as Property.Color,
     highlight: '#5a6084',
     surface: lighten('primary', 0.7) as unknown as Property.Color,
     primary: '#333333',
@@ -48,10 +49,10 @@ export const theme: Theme = {
   layout: {
     container: {
       margin: '0 auto',
-      maxWidth: 960,
+      maxWidth: 1024,
       // px: [4, 16, 48, 96, 128],
-      pl: [4, 5, 6],
-      pr: [4, 5, 6],
+      pl: [6],
+      pr: [6],
     },
     page: {
       flexDirection: 'column',
@@ -131,7 +132,7 @@ export const theme: Theme = {
         overflow: 'auto',
         p: 3,
         my: 3,
-        width: '70%',
+        width: ['100%', '70%'],
       },
       '.rehype-code-title': {
         backgroundColor: darken('background', 0.05),
@@ -152,7 +153,7 @@ export const theme: Theme = {
         display: 'none',
       },
       'label.margin-toggle:not(.sidenote-number)': {
-        display: 'none',
+        display: ['inline', 'none'],
       },
       'label.sidenote-number': {
         display: 'inline-block',
@@ -169,17 +170,14 @@ export const theme: Theme = {
       '.sidenote-number': {
         counterIncrement: 'sidenote-counter',
       },
-      '.sidenote::before': {
+      '.sidenote-definition::before': {
         content: 'counter(sidenote-counter)',
         fontSize: '0.7rem',
         top: '-0.5rem',
         position: 'relative',
         verticalAlign: 'baseline',
       },
-      'input.margin-toggle': {
-        display: 'none',
-      },
-      '.marginnote': {
+      '.marginnote-definition': {
         float: 'right',
         clear: 'right',
         marginRight: '-60%',
@@ -190,8 +188,9 @@ export const theme: Theme = {
         lineHeight: 1.3,
         verticalAlign: 'baseline',
         position: 'relative',
+        display: ['none', 'none', 'none', 'block'],
       },
-      '.sidenote': {
+      '.sidenote-definition': {
         float: 'right',
         clear: 'right',
         marginRight: '-60%',
@@ -200,6 +199,30 @@ export const theme: Theme = {
         marginBottom: 0,
         fontSize: 0,
         lineHeight: 1.3,
+        verticalAlign: 'baseline',
+        position: 'relative',
+        display: ['none', 'block'],
+      },
+      'input.margin-toggle': {
+        display: 'none',
+      },
+      '.margin-toggle:checked + .sidenote-definition': {
+        display: 'block',
+        float: 'left',
+        left: '1rem',
+        clear: 'both',
+        width: '95%',
+        margin: '1rem 2.5%',
+        verticalAlign: 'baseline',
+        position: 'relative',
+      },
+      '.margin-toggle:checked + .marginnote-definition': {
+        display: 'block',
+        float: 'left',
+        left: '1rem',
+        clear: 'both',
+        width: '95%',
+        margin: '1rem 2.5%',
         verticalAlign: 'baseline',
         position: 'relative',
       },
@@ -222,36 +245,36 @@ export const theme: Theme = {
       p: 0,
       fontSize: 4,
       lineHeight: 'body',
-      width: '70%',
+      width: ['100%', '70%'],
     },
     h2: {
       variant: 'text.heading',
       color: 'primary',
       fontSize: 3,
       fontStyle: 'italic',
-      width: '70%',
+      width: ['100%', '70%'],
     },
     h3: {
       variant: 'text.heading',
       color: 'primary',
       fontSize: 2,
       fontStyle: 'italic',
-      width: '70%',
+      width: ['100%', '70%'],
     },
     h4: {
       variant: 'text.heading',
       color: 'primary',
-      width: '70%',
+      width: ['100%', '70%'],
     },
     h5: {
       variant: 'text.heading',
       color: 'primary',
-      width: '70%',
+      width: ['100%', '70%'],
     },
     h6: {
       variant: 'text.heading',
       color: 'primary',
-      width: '70%',
+      width: ['100%', '70%'],
     },
     p: {
       mt: 0,
@@ -259,7 +282,7 @@ export const theme: Theme = {
       code: {
         variant: 'styles.code',
       },
-      width: '70%',
+      width: ['100%', '70%'],
     },
     small: {
       color: 'muted',
@@ -346,7 +369,7 @@ export const theme: Theme = {
       },
     },
     blockquote: {
-      width: '70%',
+      width: ['100%', '70%'],
       borderRadius: 0,
       borderLeftColor: 'muted',
       borderLeftStyle: 'solid',
@@ -365,7 +388,7 @@ export const theme: Theme = {
       },
     },
     figure: {
-      width: '70%',
+      width: ['100%', '70%'],
       '&.fullwidth': {
         width: '100%',
       },
@@ -582,8 +605,9 @@ export const theme: Theme = {
       },
     },
     tag: {
-      ml: 2,
-      color: 'text',
+      ml: 0,
+      mr: 2,
+      color: 'extramuted',
       textDecoration: 'none',
       ':before': {
         pr: [0],
@@ -624,7 +648,7 @@ export const theme: Theme = {
         p: 0,
         m: 0,
         lineHeight: 'body',
-        maxWidth: ['100%', '100%', '100%', '80%'],
+        maxWidth: ['100%', '80%'],
         // textAlign: 'center',
         // mx: 'auto',
       },

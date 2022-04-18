@@ -24,6 +24,7 @@ export const logflareSourceToken =
 export const siteName = 'Michael Shick'
 export const siteDescription = 'My personal site.'
 export const siteUrl = 'https://www.shick.us'
+export const githubRepo = 'https://github.com/mshick/shick.io'
 
 export const seo: DefaultSeoProps = {
   titleTemplate: `%s _ ${siteName}`,
