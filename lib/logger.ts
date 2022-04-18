@@ -1,13 +1,13 @@
-import type { LoggerOptions, DestinationStream } from 'pino'
+import type { DestinationStream, LoggerOptions } from 'pino'
 import pino from 'pino'
 import { logflarePinoVercel } from 'pino-logflare'
 import {
-  nodeEnv,
+  commitSha,
+  logDestination,
   logflareApiKey,
   logflareSourceToken,
   logLevel,
-  logDestination,
-  commitSha,
+  nodeEnv
 } from './config'
 
 const config: LoggerOptions = {
@@ -21,7 +21,6 @@ const config: LoggerOptions = {
 let destination: DestinationStream
 
 if (logDestination === 'logflare') {
-  console.log(logDestination)
   const { stream, send } = logflarePinoVercel({
     apiKey: logflareApiKey,
     sourceToken: logflareSourceToken,

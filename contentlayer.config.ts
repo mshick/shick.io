@@ -1,42 +1,35 @@
-import type { FieldDefs, ComputedFields } from 'contentlayer/source-files'
+import { omit } from '@contentlayer/utils'
+import type { ComputedFields, FieldDefs } from 'contentlayer/source-files'
 import {
   defineDocumentType,
   defineNestedType,
-  makeSource,
+  makeSource
 } from 'contentlayer/source-files'
-import { omit } from '@contentlayer/utils'
-import remarkGfm from 'remark-gfm'
-import remarkSidenotes from './lib/remark/remark-sidenotes'
-import remarkDirectiveRehype from 'remark-directive-rehype'
-import { remarkMdxImages } from 'remark-mdx-images'
-import remarkUnwrapImages from 'remark-unwrap-images'
-import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
-import remarkDirective from 'remark-directive'
-import remarkGemoji from 'remark-gemoji'
-import rehypeSlug from 'rehype-slug'
-import rehypeCodeTitles from 'rehype-code-titles'
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'
+import rehypeCodeTitles from 'rehype-code-titles'
 import rehypePrism from 'rehype-prism-plus'
-import remarkInitialHeading from './lib/remark/remark-initial-heading'
-import remarkSectionize from './lib/remark/remark-sectionize'
-import remarkFigure from './lib/remark/remark-figure'
-import remarkNewthought from './lib/remark/remark-newthought'
-import remarkFooter from './lib/remark/remark-footer'
-import remarkYoutube from './lib/remark/remark-youtube'
-import remarkEpigraph from './lib/remark/remark-epigraph'
-import rehypeImgSize from './lib/rehype/rehype-img-size'
-import {
-  getReadingTime,
-  getExcerpt,
-  getUpdatedBy,
-  getUpdatedByEmail,
-  getUpdatedAt,
-  getPublishedAt,
-  getSlug,
-  getPath,
-  getTags,
-} from './lib/utils/fields'
+import rehypeSlug from 'rehype-slug'
+import remarkDirective from 'remark-directive'
+import remarkDirectiveRehype from 'remark-directive-rehype'
+import remarkGemoji from 'remark-gemoji'
+import remarkGfm from 'remark-gfm'
+import { remarkMdxImages } from 'remark-mdx-images'
+import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
+import remarkUnwrapImages from 'remark-unwrap-images'
 import { baseDir } from './lib/config'
+import rehypeImgSize from './lib/rehype/rehype-img-size'
+import remarkEpigraph from './lib/remark/remark-epigraph'
+import remarkFigure from './lib/remark/remark-figure'
+import remarkFooter from './lib/remark/remark-footer'
+import remarkInitialHeading from './lib/remark/remark-initial-heading'
+import remarkNewthought from './lib/remark/remark-newthought'
+import remarkSectionize from './lib/remark/remark-sectionize'
+import remarkSidenotes from './lib/remark/remark-sidenotes'
+import remarkYoutube from './lib/remark/remark-youtube'
+import {
+  getExcerpt, getPath, getPublishedAt, getReadingTime, getSlug, getTags, getUpdatedAt, getUpdatedBy,
+  getUpdatedByEmail
+} from './lib/utils/fields'
 
 const Image = defineNestedType(() => ({
   name: 'Image',
