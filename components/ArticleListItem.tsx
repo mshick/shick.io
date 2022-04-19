@@ -5,7 +5,7 @@ import Link from './Link'
 export default function ArticleListItem({
   title,
   excerpt,
-  path,
+  path
 }: Pick<Article, 'title' | 'excerpt' | 'path'>) {
   return (
     <Link href={path} variant="unstyled">

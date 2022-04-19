@@ -4,7 +4,7 @@ import { allArticles } from '.contentlayer/generated'
 import ArticleLayout from 'layouts/article'
 
 export default function Article({
-  article,
+  article
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return <ArticleLayout article={article} />
 }
@@ -12,7 +12,7 @@ export default function Article({
 export async function getStaticPaths() {
   return {
     paths: allArticles.map((article) => ({ params: { slug: article.slug } })),
-    fallback: false,
+    fallback: false
   }
 }
 

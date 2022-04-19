@@ -11,7 +11,7 @@ const transform: Transformer = (tree) => {
       data.hName = 'span'
       data.hProperties = {
         ...(data.hProperties as {}),
-        className: ['newthought'],
+        className: ['newthought']
       }
     }
   )

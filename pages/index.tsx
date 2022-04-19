@@ -5,7 +5,7 @@ import PageLayout from 'layouts/page'
 import components from 'components/MDXComponents'
 
 export default function HomePage({
-  page,
+  page
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const Component = useMDXComponent(page.body.code)
 

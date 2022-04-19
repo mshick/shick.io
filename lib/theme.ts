@@ -20,21 +20,21 @@ export const theme: Theme = {
     success: '#50fa7b',
     error: '#ff5555',
     black: '#000000',
-    link: '#0000EE',
+    link: '#0000EE'
   },
   fonts: {
     body: '"Bitstream Vera Sans Mono", monospace',
     heading: '"Bitstream Vera Sans Mono", monospace',
-    code: '"Bitstream Vera Sans Mono", monospace',
+    code: '"Bitstream Vera Sans Mono", monospace'
   },
   fontWeights: {
     body: 400,
     heading: 700,
-    bold: 700,
+    bold: 700
   },
   lineHeights: {
     body: 1.8,
-    heading: 1,
+    heading: 1
   },
   fontSizes: [14, 16, 22, 32, 40],
   space: [0, 4, 8, 16, 24, 32, 60, 72],
@@ -43,7 +43,7 @@ export const theme: Theme = {
     `0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23)`,
     `0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23)`,
     `0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)`,
-    `0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)`,
+    `0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22)`
   ],
 
   layout: {
@@ -52,18 +52,18 @@ export const theme: Theme = {
       maxWidth: 1024,
       // px: [4, 16, 48, 96, 128],
       pl: [6],
-      pr: [6],
+      pr: [6]
     },
     page: {
       flexDirection: 'column',
       minHeight: '100vh',
-      width: '100%',
+      width: '100%'
     },
     main: {
       display: 'block',
       // ml: [0, 0, 0, sidebarWidth],
       ml: [0],
-      transition: '.3s ease-in-out margin-left',
+      transition: '.3s ease-in-out margin-left'
     },
     header: {
       alignItems: 'center',
@@ -77,7 +77,7 @@ export const theme: Theme = {
       ml: [0],
       overflow: 'hidden',
       width: ['100%'],
-      zIndex: 997,
+      zIndex: 997
     },
     sidebar: {
       backgroundColor: 'background',
@@ -85,7 +85,7 @@ export const theme: Theme = {
       position: 'fixed',
       transition: '.3s ease-in-out left',
       width: sidebarWidth,
-      zIndex: 999,
+      zIndex: 999
     },
     logo: {
       display: 'inline',
@@ -96,14 +96,14 @@ export const theme: Theme = {
       fontWeight: 'body',
       fontSize: 1,
       mt: 0,
-      mb: 0,
+      mb: 0
     },
     excerpt: {
       p: {
         mt: 0,
-        mb: 3,
-      },
-    },
+        mb: 3
+      }
+    }
   },
 
   styles: {
@@ -114,11 +114,11 @@ export const theme: Theme = {
       fontSize: 1,
       lineHeight: 'body',
       'input:-webkit-autofill:first-line': {
-        color: (theme) => `${theme.colors.primary}!important`,
+        color: (theme) => `${theme.colors.primary}!important`
       },
       counterReset: 'sidenote-counter',
       a: {
-        variant: 'styles.focus',
+        variant: 'styles.focus'
       },
       pre: {
         ...codeTheme,
@@ -132,7 +132,7 @@ export const theme: Theme = {
         overflow: 'auto',
         p: 3,
         my: 3,
-        width: ['100%', '70%'],
+        width: ['100%', '70%']
       },
       '.rehype-code-title': {
         backgroundColor: darken('background', 0.05),
@@ -141,23 +141,23 @@ export const theme: Theme = {
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
         fontSize: 0,
-        fontWeight: 'bold',
+        fontWeight: 'bold'
       },
       '.rehype-code-title+pre': {
         mt: 0,
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0,
-        borderTopWidth: 0,
+        borderTopWidth: 0
       },
       '.hidden': {
-        display: 'none',
+        display: 'none'
       },
       'label.margin-toggle:not(.sidenote-number)': {
-        display: ['inline', 'none'],
+        display: ['inline', 'none']
       },
       'label.sidenote-number': {
         display: 'inline-block',
-        maxHeight: '2rem',
+        maxHeight: '2rem'
       },
       '.sidenote-number::after': {
         content: 'counter(sidenote-counter)',
@@ -165,17 +165,17 @@ export const theme: Theme = {
         top: '-0.5rem',
         left: '0.1rem',
         position: 'relative',
-        verticalAlign: 'baseline',
+        verticalAlign: 'baseline'
       },
       '.sidenote-number': {
-        counterIncrement: 'sidenote-counter',
+        counterIncrement: 'sidenote-counter'
       },
       '.sidenote-definition::before': {
         content: 'counter(sidenote-counter)',
         fontSize: '0.7rem',
         top: '-0.5rem',
         position: 'relative',
-        verticalAlign: 'baseline',
+        verticalAlign: 'baseline'
       },
       '.marginnote-definition': {
         float: 'right',
@@ -188,7 +188,7 @@ export const theme: Theme = {
         lineHeight: 1.3,
         verticalAlign: 'baseline',
         position: 'relative',
-        display: ['none', 'none', 'none', 'block'],
+        display: ['none', 'none', 'none', 'block']
       },
       '.sidenote-definition': {
         float: 'right',
@@ -201,10 +201,10 @@ export const theme: Theme = {
         lineHeight: 1.3,
         verticalAlign: 'baseline',
         position: 'relative',
-        display: ['none', 'block'],
+        display: ['none', 'block']
       },
       'input.margin-toggle': {
-        display: 'none',
+        display: 'none'
       },
       '.margin-toggle:checked + .sidenote-definition': {
         display: 'block',
@@ -214,7 +214,7 @@ export const theme: Theme = {
         width: '95%',
         margin: '1rem 2.5%',
         verticalAlign: 'baseline',
-        position: 'relative',
+        position: 'relative'
       },
       '.margin-toggle:checked + .marginnote-definition': {
         display: 'block',
@@ -224,18 +224,18 @@ export const theme: Theme = {
         width: '95%',
         margin: '1rem 2.5%',
         verticalAlign: 'baseline',
-        position: 'relative',
-      },
+        position: 'relative'
+      }
     },
     focus: {
       transition: '.2s linear box-shadow',
       ':focus': {
         outline: 'none',
-        boxShadow: (theme) => `0 2px 0 0 ${theme.colors.primary}`,
-      },
+        boxShadow: (theme) => `0 2px 0 0 ${theme.colors.primary}`
+      }
     },
     section: {
-      py: 3,
+      py: 3
     },
     h1: {
       variant: 'text.heading',
@@ -245,86 +245,86 @@ export const theme: Theme = {
       p: 0,
       fontSize: 4,
       lineHeight: 'body',
-      width: ['100%', '70%'],
+      width: ['100%', '70%']
     },
     h2: {
       variant: 'text.heading',
       color: 'primary',
       fontSize: 3,
       fontStyle: 'italic',
-      width: ['100%', '70%'],
+      width: ['100%', '70%']
     },
     h3: {
       variant: 'text.heading',
       color: 'primary',
       fontSize: 2,
       fontStyle: 'italic',
-      width: ['100%', '70%'],
+      width: ['100%', '70%']
     },
     h4: {
       variant: 'text.heading',
       color: 'primary',
-      width: ['100%', '70%'],
+      width: ['100%', '70%']
     },
     h5: {
       variant: 'text.heading',
       color: 'primary',
-      width: ['100%', '70%'],
+      width: ['100%', '70%']
     },
     h6: {
       variant: 'text.heading',
       color: 'primary',
-      width: ['100%', '70%'],
+      width: ['100%', '70%']
     },
     p: {
       mt: 0,
       mb: 3,
       code: {
-        variant: 'styles.code',
+        variant: 'styles.code'
       },
-      width: ['100%', '70%'],
+      width: ['100%', '70%']
     },
     small: {
       color: 'muted',
-      fontSize: 0,
+      fontSize: 0
     },
     a: {
       color: 'muted',
-      variant: 'styles.focus',
+      variant: 'styles.focus'
     },
     code: {
       fontFamily: 'code',
       color: 'inherit',
       backgroundColor: 'surface',
       fontSize: '13px',
-      p: 1,
+      p: 1
     },
 
     hr: {
       border: 0,
       borderBottom: '1px dashed',
-      borderColor: 'muted',
+      borderColor: 'muted'
     },
     ol: {
       mt: 0,
       mb: 3,
-      pl: 4,
+      pl: 4
     },
     ul: {
       mt: 0,
       mb: 3,
       // special case so ul lines up with ol
       pl: '24px',
-      listStyle: 'square',
+      listStyle: 'square'
     },
     li: {
       mb: 1,
       code: {
-        variant: 'styles.code',
+        variant: 'styles.code'
       },
       pre: {
-        variant: 'styles.pre',
-      },
+        variant: 'styles.pre'
+      }
     },
     table: {
       borderCollapse: 'collapse',
@@ -336,25 +336,25 @@ export const theme: Theme = {
           th: {
             border: (theme) =>
               `${theme.borderWidths[1]}px dashed ${theme.colors.surface}`,
-            padding: (theme) => `${theme.space[2]}px ${theme.space[3]}px`,
-          },
+            padding: (theme) => `${theme.space[2]}px ${theme.space[3]}px`
+          }
         },
         td: {
-          color: '#666',
-        },
+          color: '#666'
+        }
       },
       tbody: {
         'tr:nth-of-type(even)': {
-          backgroundColor: lighten('background', 0.01),
+          backgroundColor: lighten('background', 0.01)
         },
         tr: {
           td: {
             padding: (theme) => `${theme.space[2]}px ${theme.space[3]}px`,
             border: (theme) =>
-              `${theme.borderWidths[1]}px dashed ${theme.colors.surface}`,
-          },
-        },
-      },
+              `${theme.borderWidths[1]}px dashed ${theme.colors.surface}`
+          }
+        }
+      }
     },
     epigraph: {
       mb: 7,
@@ -364,9 +364,9 @@ export const theme: Theme = {
         fontStyle: 'italic',
         fontSize: 0,
         footer: {
-          fontStyle: 'normal',
-        },
-      },
+          fontStyle: 'normal'
+        }
+      }
     },
     blockquote: {
       width: ['100%', '70%'],
@@ -381,16 +381,16 @@ export const theme: Theme = {
       p: {
         p: 3,
         mb: 0,
-        width: '100%',
+        width: '100%'
       },
       footer: {
-        textAlign: 'right',
-      },
+        textAlign: 'right'
+      }
     },
     figure: {
       width: ['100%', '70%'],
       '&.fullwidth': {
-        width: '100%',
+        width: '100%'
       },
       ':not(&.fullwidth) figcaption': {
         float: 'right',
@@ -402,56 +402,56 @@ export const theme: Theme = {
         fontSize: 0,
         lineHeight: 1.3,
         verticalAlign: 'baseline',
-        position: 'relative',
-      },
+        position: 'relative'
+      }
     },
     progress: {
       primary: {
         backgroundColor: 'surface',
-        color: 'primary',
+        color: 'primary'
       },
       secondary: {
         backgroundColor: 'surface',
-        color: 'secondary',
+        color: 'secondary'
       },
       success: {
         backgroundColor: 'surface',
-        color: 'success',
+        color: 'success'
       },
       error: {
         backgroundColor: 'surface',
-        color: 'error',
-      },
+        color: 'error'
+      }
     },
     donut: {
       primary: {
-        color: 'primary',
+        color: 'primary'
       },
       secondary: {
-        color: 'secondary',
+        color: 'secondary'
       },
       success: {
-        color: 'success',
+        color: 'success'
       },
       error: {
-        color: 'error',
-      },
+        color: 'error'
+      }
     },
 
     spinner: {
       primary: {
-        color: 'primary',
+        color: 'primary'
       },
       secondary: {
-        color: 'secondary',
+        color: 'secondary'
       },
       success: {
-        color: 'success',
+        color: 'success'
       },
       error: {
-        color: 'error',
-      },
-    },
+        color: 'error'
+      }
+    }
   },
 
   // components
@@ -462,22 +462,22 @@ export const theme: Theme = {
       px: 3,
       py: 2,
       color: 'text',
-      backgroundColor: 'primary',
+      backgroundColor: 'primary'
     },
     secondary: {
       variant: 'alerts.primary',
       color: 'background',
-      backgroundColor: 'secondary',
+      backgroundColor: 'secondary'
     },
     success: {
       variant: 'alerts.primary',
       color: 'background',
-      backgroundColor: 'success',
+      backgroundColor: 'success'
     },
     error: {
       variant: 'alerts.primary',
-      backgroundColor: 'error',
-    },
+      backgroundColor: 'error'
+    }
   },
 
   badges: {
@@ -490,23 +490,23 @@ export const theme: Theme = {
       borderStyle: 'solid',
       backgroundColor: 'transparent',
       px: 2,
-      py: 1,
+      py: 1
     },
     secondary: {
       variant: 'badges.primary',
       color: 'secondary',
-      borderColor: 'secondary',
+      borderColor: 'secondary'
     },
     success: {
       variant: 'badges.primary',
       color: 'success',
-      borderColor: 'success',
+      borderColor: 'success'
     },
     error: {
       variant: 'badges.primary',
       color: 'error',
-      borderColor: 'error',
-    },
+      borderColor: 'error'
+    }
   },
 
   buttons: {
@@ -514,8 +514,8 @@ export const theme: Theme = {
       ':focus': {
         outline: 'none',
         transition: '.2s linear box-shadow',
-        boxShadow: (theme) => `0 0 0 2px ${theme.colors.muted}`,
-      },
+        boxShadow: (theme) => `0 0 0 2px ${theme.colors.muted}`
+      }
     },
     primary: {
       borderRadius: 0,
@@ -523,48 +523,48 @@ export const theme: Theme = {
       minWidth: 120,
       px: 3,
       py: 2,
-      variant: 'buttons.focus',
+      variant: 'buttons.focus'
     },
     secondary: {
       variant: 'buttons.primary',
       color: 'background',
-      backgroundColor: 'secondary',
+      backgroundColor: 'secondary'
     },
     success: {
       variant: 'buttons.primary',
       color: 'background',
-      backgroundColor: 'success',
+      backgroundColor: 'success'
     },
     error: {
       variant: 'buttons.primary',
-      backgroundColor: 'error',
+      backgroundColor: 'error'
     },
     ghost: {
       variant: 'buttons.primary',
-      backgroundColor: 'background',
+      backgroundColor: 'background'
     },
     icon: {
       cursor: 'pointer',
       borderRadius: 0,
-      variant: 'buttons.focus',
+      variant: 'buttons.focus'
     },
     close: {
       cursor: 'pointer',
       borderRadius: 0,
-      variant: 'buttons.focus',
+      variant: 'buttons.focus'
     },
     menu: {
       cursor: 'pointer',
       borderRadius: 0,
-      variant: 'buttons.focus',
-    },
+      variant: 'buttons.focus'
+    }
   },
 
   cards: {
     primary: {
       boxShadow: 0,
-      backgroundColor: 'surface',
-    },
+      backgroundColor: 'surface'
+    }
   },
 
   links: {
@@ -574,35 +574,35 @@ export const theme: Theme = {
       display: 'inline',
       ':before': {
         pr: [0],
-        content: [`"["`],
+        content: [`"["`]
       },
       ':after': {
         pl: [0],
-        content: [`"]"`],
+        content: [`"]"`]
       },
       ':hover': {
         backgroundColor: 'link',
         color: 'white',
-        transition: 'all .2s linear',
+        transition: 'all .2s linear'
       },
       '&[aria-current="page"]': {
         color: 'text',
-        pointerEvents: 'none',
+        pointerEvents: 'none'
       },
       ':active': {
-        textDecoration: 'none',
+        textDecoration: 'none'
       },
       ':focus': {
         textDecoration: 'none',
-        boxShadow: 'none',
-      },
+        boxShadow: 'none'
+      }
     },
     unstyled: {
       textDecoration: 'none',
       color: 'text',
       ':visited': {
-        color: 'text',
-      },
+        color: 'text'
+      }
     },
     tag: {
       ml: 0,
@@ -611,14 +611,14 @@ export const theme: Theme = {
       textDecoration: 'none',
       ':before': {
         pr: [0],
-        content: [`"#"`],
+        content: [`"#"`]
       },
       ':hover': {
         backgroundColor: 'link',
         color: 'white',
-        transition: 'all .2s linear',
-      },
-    },
+        transition: 'all .2s linear'
+      }
+    }
   },
 
   text: {
@@ -627,10 +627,10 @@ export const theme: Theme = {
       fontWeight: 'body',
       fontSize: 1,
       mt: 0,
-      mb: 0,
+      mb: 0
     },
     tag: {
-      color: 'green',
+      color: 'green'
     },
     body: {
       fontFmaily: 'body',
@@ -638,7 +638,7 @@ export const theme: Theme = {
       fontSize: 2,
       p: 0,
       m: 0,
-      lineHeight: 'body',
+      lineHeight: 'body'
     },
     article: {
       title: {
@@ -648,10 +648,10 @@ export const theme: Theme = {
         p: 0,
         m: 0,
         lineHeight: 'body',
-        maxWidth: ['100%', '80%'],
+        maxWidth: ['100%', '80%']
         // textAlign: 'center',
         // mx: 'auto',
-      },
+      }
     },
     heading: {
       fontFamily: 'heading',
@@ -661,72 +661,72 @@ export const theme: Theme = {
       mt: 5,
       mb: 4,
       a: {
-        color: 'inherit',
-      },
-    },
+        color: 'inherit'
+      }
+    }
   },
 
   images: {
     default: {},
-    avatar: {},
+    avatar: {}
   },
 
   forms: {
     label: {
-      fontWeight: 'bold',
+      fontWeight: 'bold'
     },
     input: {
       borderRadius: 0,
       borderColor: 'muted',
-      variant: 'styles.focus',
+      variant: 'styles.focus'
     },
     select: {
       borderRadius: 0,
       borderColor: 'muted',
-      variant: 'styles.focus',
+      variant: 'styles.focus'
     },
     textarea: {
       borderRadius: 0,
       borderColor: 'muted',
-      variant: 'styles.focus',
+      variant: 'styles.focus'
     },
     slider: {
-      backgroundColor: 'muted',
+      backgroundColor: 'muted'
     },
     radio: {
       color: 'muted',
-      backgroundColor: 'background',
+      backgroundColor: 'background'
     },
     checkbox: {
       color: 'muted',
-      backgroundColor: 'background',
-    },
+      backgroundColor: 'background'
+    }
   },
 
   sizes: {
-    container: {},
+    container: {}
   },
 
   messages: {
     default: {
       borderRadius: 0,
-      backgroundColor: 'surface',
+      backgroundColor: 'surface'
     },
     primary: {
       variant: 'messages.default',
-      borderLeftColor: 'primary',
+      borderLeftColor: 'primary'
     },
     secondary: {
       variant: 'messages.default',
-      borderLeftColor: 'secondary',
+      borderLeftColor: 'secondary'
     },
     success: {
       variant: 'messages.default',
-      borderLeftColor: 'success',
+      borderLeftColor: 'success'
     },
     error: {
       variant: 'messages.default',
-      borderLeftColor: 'error',
-    },
-  },
+      borderLeftColor: 'error'
+    }
+  }
 }

@@ -25,7 +25,7 @@ export default function myRemarkPlugin() {
           height: 200,
           frameBorder: 0,
           allow: 'picture-in-picture',
-          allowFullScreen: true,
+          allowFullScreen: true
         }
       }
     })

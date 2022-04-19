@@ -74,7 +74,7 @@ function addSizeAttributes(
           node.attributes.push({
             type: 'mdxJsxAttribute',
             name: 'height',
-            value: String(dimensions.height),
+            value: String(dimensions.height)
           })
         }
 
@@ -82,7 +82,7 @@ function addSizeAttributes(
           node.attributes.push({
             type: 'mdxJsxAttribute',
             name: 'width',
-            value: String(dimensions.width),
+            value: String(dimensions.width)
           })
         }
 
@@ -90,7 +90,7 @@ function addSizeAttributes(
           node.attributes.push({
             type: 'mdxJsxAttribute',
             name: 'type',
-            value: dimensions.type,
+            value: dimensions.type
           })
         }
       }

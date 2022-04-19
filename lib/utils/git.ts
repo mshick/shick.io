@@ -14,8 +14,8 @@ export async function getGitInfo(
     format: {
       date: `%ai`,
       authorName: `%an`,
-      authorEmail: '%ae',
-    },
+      authorEmail: '%ae'
+    }
   }
 
   try {
@@ -24,14 +24,14 @@ export async function getGitInfo(
     return {
       latestAuthorName: latest?.authorName ?? '',
       latestAuthorEmail: latest?.authorEmail ?? '',
-      latestDate: latest?.date ?? '',
+      latestDate: latest?.date ?? ''
     }
   } catch (e) {
     logger.debug(e, `${filePath} not found in repo`)
     return {
       latestAuthorName: '',
       latestAuthorEmail: '',
-      latestDate: '',
+      latestDate: ''
     }
   }
 }

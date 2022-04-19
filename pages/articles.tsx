@@ -6,7 +6,7 @@ import PageLayout from 'layouts/page'
 import ArticleListItem from 'components/ArticleListItem'
 
 export default function ArticlesPage({
-  articles,
+  articles
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <PageLayout seo={{ title: 'Articles' }}>

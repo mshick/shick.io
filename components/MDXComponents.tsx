@@ -23,7 +23,7 @@ const MDXComponents: ComponentMap = {
   div: ({ ref, className, ...props }) => {
     // Upgrade classes to theme styles
     return <Box as="div" variant={`styles.${className}`} {...props} />
-  },
+  }
 }
 
 export default MDXComponents

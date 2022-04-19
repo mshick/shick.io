@@ -33,7 +33,7 @@ export default function ArticleContent({
   isPrivate,
   image,
   body,
-  readingTime,
+  readingTime
 }: ArticleContentProps) {
   const Component = useMDXComponent(body.code)
   return (
@@ -69,7 +69,7 @@ export default function ArticleContent({
               display: 'inline',
               ml: 0,
               mr: 0,
-              textAlign: 'right',
+              textAlign: 'right'
             }}
           >
             {tags.map((tag) => {
@@ -104,7 +104,7 @@ export default function ArticleContent({
                 mt: 2,
                 mb: 3,
                 fontSize: 2,
-                lineHeight: 'body',
+                lineHeight: 'body'
               }}
             >
               {author}

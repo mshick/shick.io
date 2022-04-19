@@ -15,7 +15,7 @@ export default function Sidebar() {
         //   isNavOpen ? '0px' : `-${sidebarWidth}px`,
         //   '0px'
         // ]
-        left: [isNavOpen ? '0px' : `-${sidebarWidth}px`],
+        left: [isNavOpen ? '0px' : `-${sidebarWidth}px`]
       }}
     >
       <Box
@@ -31,7 +31,7 @@ export default function Sidebar() {
           // ],
           left: [`${isNavOpen ? 0 : `-${sidebarWidth}px`}`],
           transition: '.3s ease-in-out left',
-          position: 'relative',
+          position: 'relative'
         }}
       >
         Sidebar!

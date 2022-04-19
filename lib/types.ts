@@ -1,6 +1,6 @@
 import type {
   Article as IArticle,
-  Page as IPage,
+  Page as IPage
 } from '.contentlayer/generated/types'
 import type { ReadTimeResults } from 'reading-time'
 import type { ReactElement } from 'react'

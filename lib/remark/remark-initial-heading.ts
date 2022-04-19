@@ -11,14 +11,14 @@ function addInitialHeading(node, ancestors) {
     children: [
       {
         type: 'text',
-        value: 'Introduction',
-      },
+        value: 'Introduction'
+      }
     ],
     data: {
       hProperties: {
-        className: 'hidden',
-      },
-    },
+        className: 'hidden'
+      }
+    }
   }
 
   parent.children.splice(startIndex, 0, heading)

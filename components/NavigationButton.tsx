@@ -2,7 +2,7 @@ import { Box, Close } from 'theme-ui'
 import { transparentize } from '@theme-ui/color'
 import {
   useAppDispatchContext,
-  useAppStateContext,
+  useAppStateContext
 } from '../contexts/app-context'
 
 export default function NavigationButton() {
@@ -31,8 +31,8 @@ export default function NavigationButton() {
         zIndex: 998,
         ':focus': {
           outline: 'none',
-          backgroundColor: transparentize('black', 0.4),
-        },
+          backgroundColor: transparentize('black', 0.4)
+        }
       }}
       onClick={() => dispatch({ type: 'closeNav' })}
       onKeyDown={(event) =>

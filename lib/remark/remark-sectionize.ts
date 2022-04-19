@@ -25,8 +25,8 @@ function sectionize(node, ancestors) {
     depth: depth,
     children: between,
     data: {
-      hName: 'section',
-    },
+      hName: 'section'
+    }
   }
 
   parent.children.splice(startIndex, section.children.length, section)

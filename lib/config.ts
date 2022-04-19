@@ -8,7 +8,7 @@ export const contentDir = process.env.CONTENT_DIR ?? 'data'
 export const contentTypePathMap = {
   pages: '/',
   articles: '/articles',
-  tags: '/tags',
+  tags: '/tags'
 }
 
 export const timezone = process.env.TIMEZONE ?? 'America/New_York'
@@ -35,28 +35,28 @@ export const seo: DefaultSeoProps = {
     {
       rel: 'icon',
       type: 'image/x-icon',
-      href: '/favicon.ico',
+      href: '/favicon.ico'
     },
     {
       rel: 'icon',
       type: 'image/png',
-      href: '/favicon.png',
+      href: '/favicon.png'
     },
     {
       rel: 'manifest',
-      href: '/manifest.json',
-    },
+      href: '/manifest.json'
+    }
   ],
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    site_name: siteName,
+    site_name: siteName
   },
   twitter: {
     handle: '@michaelshick',
     site: '@michaelshick',
-    cardType: 'summary_large_image',
-  },
+    cardType: 'summary_large_image'
+  }
 }
 
 export const commitSha = process.env.VERCEL_GITHUB_COMMIT_SHA ?? ''

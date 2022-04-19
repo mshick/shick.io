@@ -23,7 +23,7 @@ const transform: Transformer = (tree) => {
         ) {
           return {
             ...g,
-            [currentGroupStart]: [...(g[currentGroupStart] ?? []), n],
+            [currentGroupStart]: [...(g[currentGroupStart] ?? []), n]
           }
         }
         currentGroupStart = i + 1
@@ -39,8 +39,8 @@ const transform: Transformer = (tree) => {
             type: 'containerDirective',
             children: captionNodes,
             data: {
-              hName: 'figcaption',
-            },
+              hName: 'figcaption'
+            }
           }
 
           node.children.splice(

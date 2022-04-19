@@ -2,7 +2,7 @@ import type {
   PhrasingContent,
   Parent,
   FootnoteReference,
-  FootnoteDefinition,
+  FootnoteDefinition
 } from 'mdast'
 import type { Transformer } from 'unified'
 import { visit } from 'unist-util-visit'
@@ -25,7 +25,7 @@ function getReplacement({
   notesAst,
   identifier,
   referenceCount,
-  marginnoteLabel,
+  marginnoteLabel
 }): PhrasingContent {
   const inputId = generateInputId(isMarginNote, identifier, referenceCount)
   const labelCls = `margin-toggle ${isMarginNote ? '' : 'sidenote-number'}`
@@ -42,8 +42,8 @@ function getReplacement({
           identifier,
           data: {
             hName: 'label',
-            hProperties: { for: inputId, className: [labelCls] },
-          },
+            hProperties: { for: inputId, className: [labelCls] }
+          }
         },
         [u('text', labelSymbol)]
       ) as PhrasingContent,
@@ -54,9 +54,9 @@ function getReplacement({
           hProperties: {
             type: 'checkbox',
             id: inputId,
-            className: ['margin-toggle'],
-          },
-        },
+            className: ['margin-toggle']
+          }
+        }
       }) as unknown as PhrasingContent,
       u(
         `${noteTypeCls}Definition`,
@@ -64,11 +64,11 @@ function getReplacement({
           identifier,
           data: {
             hName: 'span',
-            hProperties: { className: [`${noteTypeCls}-definition`] },
-          },
+            hProperties: { className: [`${noteTypeCls}-definition`] }
+          }
         },
         notesAst
-      ) as PhrasingContent,
+      ) as PhrasingContent
     ]
   ) as PhrasingContent
 }
@@ -113,7 +113,7 @@ function getTransformer(settings): Transformer {
             notesAst,
             identifier,
             referenceCount,
-            ...settings,
+            ...settings
           })
         )
       }
@@ -140,7 +140,7 @@ function getTransformer(settings): Transformer {
             notesAst,
             identifier,
             referenceCount,
-            ...settings,
+            ...settings
           })
         )
       }
@@ -155,7 +155,7 @@ export default function remarkSidenotes(
   options = { marginnoteLabel: MARGINNOTE_LABEL }
 ) {
   const settings = {
-    marginnoteLabel: options.marginnoteLabel || MARGINNOTE_LABEL,
+    marginnoteLabel: options.marginnoteLabel || MARGINNOTE_LABEL
   }
 
   return getTransformer(settings)

@@ -7,24 +7,24 @@ export default function Navigation() {
     {
       navigation: {
         label: 'Home',
-        position: 0,
+        position: 0
       },
-      path: '/',
+      path: '/'
     },
     {
       navigation: {
         label: 'Articles',
-        position: 1,
+        position: 1
       },
-      path: '/articles',
+      path: '/articles'
     },
     {
       navigation: {
         label: 'About',
-        position: 2,
+        position: 2
       },
-      path: '/about',
-    },
+      path: '/about'
+    }
   ]
 
   return (
@@ -34,13 +34,13 @@ export default function Navigation() {
           as="ul"
           sx={{
             listStyle: 'none',
-            p: 0,
+            p: 0
           }}
         >
           {pages?.map((item, index) => {
             const {
               navigation: { label },
-              path,
+              path
             } = item
 
             return (
@@ -48,7 +48,7 @@ export default function Navigation() {
                 key={index}
                 as="li"
                 sx={{
-                  marginRight: 30,
+                  marginRight: 30
                 }}
               >
                 <NextLink href={path} passHref>

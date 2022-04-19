@@ -9,7 +9,7 @@ import { siteUrl } from 'lib/config'
 export default function PageLayout({
   children,
   title,
-  description,
+  description
 }: PropsWithChildren<{ title?: string; description?: string }>) {
   // const getSeoImage = () => {
   //   if (featuredImage) {

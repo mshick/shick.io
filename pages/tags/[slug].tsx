@@ -7,7 +7,7 @@ import PageLayout from 'layouts/page'
 import ArticleListItem from 'components/ArticleListItem'
 
 export default function TagPage({
-  documents,
+  documents
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <PageLayout seo={{ title: 'Tagged' }}>
@@ -32,7 +32,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false,
+    fallback: false
   }
 }
 

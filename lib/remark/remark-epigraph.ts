@@ -44,9 +44,9 @@ const transform: Transformer = (tree) => {
         data: {
           hName: 'div',
           hProperties: {
-            className: ['epigraph'],
-          },
-        },
+            className: ['epigraph']
+          }
+        }
       }
 
       node.children.splice(startIndex, epigraph.children.length, epigraph)

@@ -1,21 +1,21 @@
-import type { ReadTimeResults } from 'reading-time'
 import type { LocalDocument } from 'contentlayer/source-files'
-import type { Tag } from '../types'
-import path from 'path'
-import readingTime from 'reading-time'
 import dateFns from 'date-fns-tz'
+import path from 'path'
+import type { ReadTimeResults } from 'reading-time'
+import readingTime from 'reading-time'
 import { remark } from 'remark'
-import remarkParse from 'remark-parse'
 import remarkHtml from 'remark-html'
-import remarkUnlink from 'remark-unlink'
 import remarkMdx from 'remark-mdx'
 import remarkMdxRemoveImports from 'remark-mdx-remove-imports'
+import remarkParse from 'remark-parse'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
-import { getGitInfo } from './git'
-import { baseDir, contentDir, timezone } from '../config'
-import { getContentPath } from './content'
-import remarkTruncate from '../remark/remark-truncate'
+import remarkUnlink from 'remark-unlink'
 import slug from 'slug'
+import { baseDir, contentDir, timezone } from '../config'
+import remarkTruncate from '../remark/remark-truncate'
+import type { Tag } from '../types'
+import { getContentPath } from './content'
+import { getGitInfo } from './git'
 
 const { zonedTimeToUtc } = dateFns
 
@@ -114,7 +114,7 @@ export function getTags(doc: LocalDocument): Tag[] {
     return {
       name: tag,
       path: getContentPath('tags', tagSlug),
-      slug: tagSlug,
+      slug: tagSlug
     }
   })
 }

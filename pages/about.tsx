@@ -4,7 +4,7 @@ import { InferGetStaticPropsType } from 'next'
 import ArticleLayout from 'layouts/article'
 
 export default function AboutPage({
-  page,
+  page
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return <ArticleLayout article={page} />
 }
