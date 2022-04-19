@@ -1,5 +1,5 @@
 import { Box } from 'theme-ui'
-import { useAppDispatchContext, useAppStateContext } from 'contexts/app-context'
+import { useAppStateContext } from '../contexts/app-context'
 
 const sidebarWidth = 260
 

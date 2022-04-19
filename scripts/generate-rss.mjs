@@ -6,7 +6,7 @@ async function generate() {
   const feed = new RSS({
     title: 'Lee Robinson',
     site_url: 'https://leerob.io',
-    feed_url: 'https://leerob.io/feed.xml',
+    feed_url: 'https://leerob.io/feed.xml'
   })
 
   allBlogs.map((post) => {
@@ -14,7 +14,7 @@ async function generate() {
       title: post.title,
       url: `https://leerob.io/blog/${post.slug}`,
       date: post.publishedAt,
-      description: post.summary,
+      description: post.summary
     })
   })
 

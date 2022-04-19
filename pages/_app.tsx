@@ -1,9 +1,9 @@
+import GlobalStyles from 'components/components/GlobalStyles'
+import { seo } from 'lib/config'
+import { theme } from 'lib/theme'
+import { DefaultSeo } from 'next-seo'
 import React from 'react'
 import { ThemeProvider } from 'theme-ui'
-import { DefaultSeo } from 'next-seo'
-import { theme } from 'lib/theme'
-import { seo } from 'lib/config'
-import GlobalStyles from 'components/GlobalStyles'
 
 export default function App({ Component, pageProps }) {
   return (

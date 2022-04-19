@@ -1,6 +1,5 @@
 import { Box } from 'theme-ui'
 import Navigation from './Navigation'
-import Logo from './Logo'
 
 export default function Header() {
   return (

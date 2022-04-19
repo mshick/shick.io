@@ -1,7 +1,7 @@
-import type { InferGetStaticPropsType } from 'next'
-import type { Article } from 'lib/types'
 import { allArticles } from '.contentlayer/generated'
-import ArticleLayout from 'layouts/article'
+import ArticleLayout from 'components/layouts/article'
+import type { Article } from 'lib/types'
+import type { InferGetStaticPropsType } from 'next'
 
 export default function Article({
   article

@@ -1,9 +1,9 @@
-import type { Transformer } from 'unified'
-import type { ContainerDirective } from 'mdast-util-directive'
-import type { BlockContent } from 'mdast'
-import { visit } from 'unist-util-visit'
-import { h } from 'hastscript'
+import h from 'hastscript'
 import isEmpty from 'lodash-es/isEmpty.js'
+import type { BlockContent } from 'mdast'
+import type { ContainerDirective } from 'mdast-util-directive'
+import type { Transformer } from 'unified'
+import { visit } from 'unist-util-visit'
 
 const transform: Transformer = (tree) => {
   visit(

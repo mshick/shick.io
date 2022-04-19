@@ -1,5 +1,5 @@
 import { allPages } from '.contentlayer/generated'
-import ArticleLayout from 'layouts/article'
+import ArticleLayout from 'components/layouts/article'
 import logger from 'lib/logger'
 import type { Page } from 'lib/types'
 import { InferGetStaticPropsType } from 'next'

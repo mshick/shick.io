@@ -1,6 +1,6 @@
+import h from 'hastscript'
 import type { Transformer } from 'unified'
 import { visit } from 'unist-util-visit'
-import { h } from 'hastscript'
 import { isDirective } from './types'
 
 export default function remarkDirectiveTag(): Transformer {

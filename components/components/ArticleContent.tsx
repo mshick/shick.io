@@ -1,12 +1,10 @@
 import type { Image, MDX } from '.contentlayer/generated'
-import type { ReadTimeResults } from 'reading-time'
-import type { Tag } from 'lib/types'
-import React, { Fragment } from 'react'
-import { useMDXComponent } from 'next-contentlayer/hooks'
-import { Heading, Badge, Text, Box, Alert, Grid, Paragraph } from 'theme-ui'
-import { mix } from '@theme-ui/color'
 import { format } from 'date-fns'
-import Main from './Main'
+import type { Tag } from 'lib/types'
+import { useMDXComponent } from 'next-contentlayer/hooks'
+import React, { Fragment } from 'react'
+import type { ReadTimeResults } from 'reading-time'
+import { Alert, Box, Heading, Paragraph, Text } from 'theme-ui'
 import Link from './Link'
 import components from './MDXComponents'
 
@@ -16,8 +14,8 @@ export type ArticleContentProps = {
   title: string
   tags: Tag[]
   publishedAt: string
-  updatedAt: string
-  author: string
+  updatedAt?: string
+  author?: string
   isPrivate: boolean
   image?: Image
   body: MDX

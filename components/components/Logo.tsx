@@ -1,4 +1,4 @@
-import { Text, Heading } from 'theme-ui'
+import { Heading, Text } from 'theme-ui'
 
 export default function Logo() {
   return (

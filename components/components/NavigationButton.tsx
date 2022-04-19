@@ -1,5 +1,5 @@
-import { Box, Close } from 'theme-ui'
 import { transparentize } from '@theme-ui/color'
+import { Box, Close } from 'theme-ui'
 import {
   useAppDispatchContext,
   useAppStateContext

@@ -1,9 +1,9 @@
-import type { InferGetStaticPropsType } from 'next'
-import { Flex, Box } from 'theme-ui'
-import { pick } from '@contentlayer/utils'
 import { allArticles } from '.contentlayer/generated'
-import PageLayout from 'layouts/page'
-import ArticleListItem from 'components/ArticleListItem'
+import { pick } from '@contentlayer/utils'
+import ArticleListItem from 'components/components/ArticleListItem'
+import PageLayout from 'components/layouts/page'
+import type { InferGetStaticPropsType } from 'next'
+import { Box, Flex } from 'theme-ui'
 
 export default function ArticlesPage({
   articles

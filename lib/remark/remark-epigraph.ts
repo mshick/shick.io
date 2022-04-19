@@ -1,8 +1,8 @@
+import type { BlockContent } from 'mdast'
 import type { Transformer } from 'unified'
 import type { Node } from 'unist'
-import type { BlockContent } from 'mdast'
-import { isParentNode } from './types'
 import { visit } from 'unist-util-visit'
+import { isParentNode } from './types'
 
 /**
  * Find sections, from remark-sectionize, and then mark blockquotes that

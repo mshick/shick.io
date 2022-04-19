@@ -1,13 +1,13 @@
 import type {
-  PhrasingContent,
-  Parent,
+  FootnoteDefinition,
   FootnoteReference,
-  FootnoteDefinition
+  Parent,
+  PhrasingContent
 } from 'mdast'
 import type { Transformer } from 'unified'
-import { visit } from 'unist-util-visit'
-import select from 'unist-util-select'
 import { u } from 'unist-builder'
+import select from 'unist-util-select'
+import { visit } from 'unist-util-visit'
 
 // Need to use the unicode escape sequence for ⊕ / Circled Plus due to later sanitization
 const MARGINNOTE_LABEL = `\u2295`

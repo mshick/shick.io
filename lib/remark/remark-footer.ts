@@ -1,7 +1,7 @@
-import type { Transformer } from 'unified'
+import h from 'hastscript'
 import type { ContainerDirective, LeafDirective } from 'mdast-util-directive'
+import type { Transformer } from 'unified'
 import { visit } from 'unist-util-visit'
-import { h } from 'hastscript'
 
 const transform: Transformer = (tree) => {
   visit(

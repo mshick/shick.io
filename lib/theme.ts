@@ -1,7 +1,7 @@
-import type { Theme } from 'theme-ui'
-import type { Property } from 'csstype'
+import { darken, lighten } from '@theme-ui/color'
 import codeTheme from '@theme-ui/prism/presets/duotone-light.json'
-import { lighten, darken } from '@theme-ui/color'
+import type { Property } from 'csstype'
+import type { Theme } from 'theme-ui'
 
 const sidebarWidth = 260
 

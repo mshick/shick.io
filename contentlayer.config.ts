@@ -27,7 +27,14 @@ import remarkSectionize from './lib/remark/remark-sectionize'
 import remarkSidenotes from './lib/remark/remark-sidenotes'
 import remarkYoutube from './lib/remark/remark-youtube'
 import {
-  getExcerpt, getPath, getPublishedAt, getReadingTime, getSlug, getTags, getUpdatedAt, getUpdatedBy,
+  getExcerpt,
+  getPath,
+  getPublishedAt,
+  getReadingTime,
+  getSlug,
+  getTags,
+  getUpdatedAt,
+  getUpdatedBy,
   getUpdatedByEmail
 } from './lib/utils/fields'
 
@@ -37,16 +44,16 @@ const Image = defineNestedType(() => ({
     url: { type: 'string', required: false },
     title: { type: 'string', required: false },
     alt: { type: 'string', required: false },
-    caption: { type: 'string', required: false },
-  },
+    caption: { type: 'string', required: false }
+  }
 }))
 
 const Tag = defineNestedType(() => ({
   name: 'Tag',
   fields: {
     name: { type: 'string', required: true },
-    path: { type: 'string', required: true },
-  },
+    path: { type: 'string', required: true }
+  }
 }))
 
 const fields: FieldDefs = {
@@ -58,52 +65,52 @@ const fields: FieldDefs = {
   publishedAt: { type: 'string', required: true },
   tags: { type: 'list', of: { type: 'string' }, required: false },
   title: { type: 'string', required: true },
-  updatedAt: { type: 'string', required: false },
+  updatedAt: { type: 'string', required: false }
 }
 
 const computedFields: ComputedFields = {
   readingTime: {
     type: 'json',
-    resolve: getReadingTime,
+    resolve: getReadingTime
   },
   excerpt: {
     type: 'string',
-    resolve: getExcerpt,
+    resolve: getExcerpt
   },
   slug: {
     type: 'string',
-    resolve: getSlug,
+    resolve: getSlug
   },
   path: {
     type: 'string',
-    resolve: getPath,
+    resolve: getPath
   },
   updatedAt: {
     type: 'date',
-    resolve: getUpdatedAt,
+    resolve: getUpdatedAt
   },
   publishedAt: {
     type: 'date',
-    resolve: getPublishedAt,
+    resolve: getPublishedAt
   },
   updatedBy: {
     type: 'string',
-    resolve: getUpdatedBy,
+    resolve: getUpdatedBy
   },
   updatedByEmail: {
     type: 'string',
-    resolve: getUpdatedByEmail,
+    resolve: getUpdatedByEmail
   },
   author: {
     type: 'string',
     resolve: async (doc) => {
       return doc.author ?? (await getUpdatedBy(doc))
-    },
+    }
   },
   tags: {
     type: 'json',
-    resolve: getTags,
-  },
+    resolve: getTags
+  }
 }
 
 export const Page = defineDocumentType(() => ({
@@ -111,7 +118,7 @@ export const Page = defineDocumentType(() => ({
   filePathPattern: 'pages/*.mdx',
   contentType: 'mdx',
   fields: omit(fields, ['pinned']),
-  computedFields: omit(computedFields, ['readingTime']),
+  computedFields: omit(computedFields, ['readingTime'])
 }))
 
 export const Article = defineDocumentType(() => ({
@@ -119,7 +126,7 @@ export const Article = defineDocumentType(() => ({
   filePathPattern: 'articles/*.mdx',
   contentType: 'mdx',
   fields,
-  computedFields,
+  computedFields
 }))
 
 export default makeSource({
@@ -141,7 +148,7 @@ export default makeSource({
       remarkInitialHeading,
       [remarkSectionize, { maxHeadingDepth: 2 }],
       remarkEpigraph,
-      remarkMdxImages,
+      remarkMdxImages
     ],
     rehypePlugins: [
       rehypeSlug,
@@ -152,10 +159,10 @@ export default makeSource({
         rehypeAutolinkHeadings,
         {
           properties: {
-            className: ['anchor'],
-          },
-        },
-      ],
+            className: ['anchor']
+          }
+        }
+      ]
     ],
     esbuildOptions: (options) => {
       options.platform = 'node'
@@ -168,11 +175,11 @@ export default makeSource({
         '.jpeg': 'file',
         '.svg': 'file',
         '.webp': 'file',
-        '.gif': 'file',
+        '.gif': 'file'
       }
       options.publicPath = '/'
       options.write = true
       return options
-    },
-  },
+    }
+  }
 })

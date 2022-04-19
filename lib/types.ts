@@ -2,9 +2,9 @@ import type {
   Article as IArticle,
   Page as IPage
 } from '.contentlayer/generated/types'
-import type { ReadTimeResults } from 'reading-time'
 import type { ReactElement } from 'react'
-import { RequireAtLeastOne, Merge } from 'type-fest'
+import type { ReadTimeResults } from 'reading-time'
+import { Merge, RequireAtLeastOne } from 'type-fest'
 
 type Renderable = number | string | ReactElement | Renderable[]
 

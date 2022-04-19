@@ -1,7 +1,7 @@
+import sizeOf from 'image-size'
 import path from 'path'
 import type { Node } from 'unist-util-visit'
 import { visit } from 'unist-util-visit'
-import sizeOf from 'image-size'
 
 /**
  * Handles:
@@ -107,7 +107,6 @@ function createImageSizeTransformer(dir: string) {
         collectImportIdentifiers(node, importIdentifierMap)
       }
 
-      // @ts-expect-error
       if (node.type === 'mdxJsxTextElement' && node.name === 'img') {
         addSizeAttributes(node, importIdentifierMap, dir)
       }

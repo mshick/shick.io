@@ -1,6 +1,6 @@
-import type { GitInfo } from '../types'
 import git from 'simple-git'
 import logger from '../logger'
+import type { GitInfo } from '../types'
 
 export async function getGitInfo(
   repoFolder: string,

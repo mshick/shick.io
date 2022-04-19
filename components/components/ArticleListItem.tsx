@@ -1,5 +1,5 @@
 import type { Article } from '.contentlayer/generated'
-import { Heading, Box } from 'theme-ui'
+import { Box, Heading } from 'theme-ui'
 import Link from './Link'
 
 export default function ArticleListItem({

@@ -1,16 +1,15 @@
-import type { PropsWithChildren } from 'react'
-import type { Page } from '.contentlayer/generated'
-import { AppProvider } from 'contexts/app-context'
-import Seo from './Seo'
-import Main from './Main'
-import SourceArticle from './ArticleContent'
 import { siteUrl } from 'lib/config'
+import type { Article, Page } from 'lib/types'
+import ArticleContent from '../components/ArticleContent'
+import PageLayout from './page'
 
-export default function PageLayout({
-  children,
-  title,
-  description
-}: PropsWithChildren<{ title?: string; description?: string }>) {
+export default function ArticleLayout({
+  article
+}: {
+  article: Article | Page
+}) {
+  const { title, image, excerpt, tags, publishedAt, updatedAt } = article
+
   // const getSeoImage = () => {
   //   if (featuredImage) {
   //     return `${siteUrl}${featuredImage.childImageSharp.gatsbyImageData.images.fallback.src}`
@@ -29,17 +28,17 @@ export default function PageLayout({
   // ].filter(n => n)
 
   return (
-    <AppProvider>
-      {/* <Seo
-        title={title}
-        openGraph={{
+    <PageLayout
+      seo={{
+        title,
+        openGraph: {
           title,
           description: excerpt,
           type: 'article',
           article: {
             publishedTime: publishedAt,
             modifiedTime: updatedAt,
-            tags,
+            tags: tags.map((tag) => tag.name)
           },
           images: image
             ? [
@@ -47,13 +46,14 @@ export default function PageLayout({
                   url: new URL(image.url, siteUrl).href,
                   width: 850,
                   height: 650,
-                  alt: image.alt ?? image.title ?? title,
-                },
+                  alt: image.alt ?? image.title ?? title
+                }
               ]
-            : null,
-        }}
-      /> */}
-      <Main>{children}</Main>
-    </AppProvider>
+            : null
+        }
+      }}
+    >
+      <ArticleContent {...article} />
+    </PageLayout>
   )
 }

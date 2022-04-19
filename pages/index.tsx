@@ -1,8 +1,8 @@
 import { allPages } from '.contentlayer/generated'
+import components from 'components/components/MDXComponents'
+import PageLayout from 'components/layouts/page'
 import { InferGetStaticPropsType } from 'next'
 import { useMDXComponent } from 'next-contentlayer/hooks'
-import PageLayout from 'layouts/page'
-import components from 'components/MDXComponents'
 
 export default function HomePage({
   page

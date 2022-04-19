@@ -1,6 +1,6 @@
-import { Fragment } from 'react'
-import { Box, NavLink, Flex } from 'theme-ui'
 import NextLink from 'next/link'
+import { Fragment } from 'react'
+import { Box, Flex, NavLink } from 'theme-ui'
 
 export default function Navigation() {
   const pages = [

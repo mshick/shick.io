@@ -1,16 +1,16 @@
-import type { PropsWithChildren } from 'react'
 import type { NextSeoProps } from 'next-seo'
+import type { PropsWithChildren } from 'react'
 import { Container } from 'theme-ui'
-import { AppProvider } from 'contexts/app-context'
-import Seo from 'components/Seo'
-import Header from 'components/Header'
-import Sidebar from 'components/Sidebar'
-import NavigationButton from 'components/NavigationButton'
-import Main from 'components/Main'
+import Header from '../components/Header'
+import Main from '../components/Main'
+import NavigationButton from '../components/NavigationButton'
+import Seo from '../components/Seo'
+import Sidebar from '../components/Sidebar'
+import { AppProvider } from '../contexts/app-context'
 
 export default function PageLayout({
   children,
-  seo,
+  seo
 }: PropsWithChildren<{ seo: NextSeoProps }>) {
   return (
     <AppProvider>
