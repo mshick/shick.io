@@ -107,6 +107,7 @@ function createImageSizeTransformer(dir: string) {
         collectImportIdentifiers(node, importIdentifierMap)
       }
 
+      // @ts-expect-error
       if (node.type === 'mdxJsxTextElement' && node.name === 'img') {
         addSizeAttributes(node, importIdentifierMap, dir)
       }

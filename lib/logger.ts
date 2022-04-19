@@ -1,7 +1,6 @@
-import type { DestinationStream, LoggerOptions } from 'pino'
+import type { Logger, LoggerOptions } from 'pino'
 import pino from 'pino'
 import { logflarePinoVercel } from 'pino-logflare'
-import pretty from 'pino-pretty'
 import {
   commitSha,
   logDestination,
@@ -19,7 +18,7 @@ const config: LoggerOptions = {
   }
 }
 
-let destination: DestinationStream
+let logger: Logger
 
 if (logDestination === 'logflare') {
   const { stream, send } = logflarePinoVercel({
@@ -32,11 +31,9 @@ if (logDestination === 'logflare') {
       send
     }
   }
-  destination = stream
+  logger = pino(config, stream)
 } else {
-  destination = pretty({
-    colorize: true
-  })
+  logger = pino(config)
 }
 
-export default pino(config, destination)
+export default logger
