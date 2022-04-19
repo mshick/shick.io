@@ -10,7 +10,9 @@ export default function AboutPage({
   return (
     <>
       <ArticleLayout article={page} />
-      <button onClick={() => logger.info('logging from client!')} />
+      <button onClick={() => logger.info('logging from client!')}>
+        Press Me
+      </button>
     </>
   )
 }

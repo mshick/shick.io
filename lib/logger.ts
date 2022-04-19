@@ -1,6 +1,6 @@
 import type { Logger, LoggerOptions } from 'pino'
 import pino from 'pino'
-import { logflarePinoVercel } from 'pino-logflare'
+import { createPinoBrowserSend, createWriteStream } from 'pino-logflare'
 import {
   commitSha,
   logDestination,
@@ -21,18 +21,28 @@ const config: LoggerOptions = {
 let logger: Logger
 
 if (logDestination === 'logflare') {
-  const { stream, send } = logflarePinoVercel({
+  // create pino-logflare stream
+  const stream = createWriteStream({
     apiKey: logflareApiKey,
     sourceToken: logflareSourceToken
   })
+
+  // create pino-logflare browser stream
+  const send = createPinoBrowserSend({
+    apiKey: logflareApiKey,
+    sourceToken: logflareSourceToken
+  })
+
   config.browser = {
     transmit: {
       level: logLevel,
       send
     }
   }
+
   logger = pino(config, stream)
 } else {
+  config.prettyPrint = { colorize: true }
   logger = pino(config)
 }
 
