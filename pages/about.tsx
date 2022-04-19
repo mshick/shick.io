@@ -1,12 +1,18 @@
-import type { Page } from 'lib/types'
 import { allPages } from '.contentlayer/generated'
-import { InferGetStaticPropsType } from 'next'
 import ArticleLayout from 'layouts/article'
+import logger from 'lib/logger'
+import type { Page } from 'lib/types'
+import { InferGetStaticPropsType } from 'next'
 
 export default function AboutPage({
   page
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  return <ArticleLayout article={page} />
+  return (
+    <>
+      <ArticleLayout article={page} />
+      <button onClick={() => logger.info('logging from client!')} />
+    </>
+  )
 }
 
 export async function getStaticProps() {
