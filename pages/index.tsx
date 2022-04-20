@@ -10,7 +10,7 @@ export default function HomePage({
   const Component = useMDXComponent(page.body.code)
 
   return (
-    <PageLayout seo={{ title: '' }}>
+    <PageLayout>
       <Component components={components} />
     </PageLayout>
   )

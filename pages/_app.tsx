@@ -1,3 +1,4 @@
+import ErrorBoundary from 'components/components/ErrorBoundary'
 import GlobalStyles from 'components/components/GlobalStyles'
 import { seo } from 'lib/config'
 import { theme } from 'lib/theme'
@@ -7,10 +8,12 @@ import { ThemeProvider } from 'theme-ui'
 
 export default function App({ Component, pageProps }) {
   return (
-    <ThemeProvider theme={theme}>
-      <DefaultSeo {...seo} />
-      <GlobalStyles />
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider theme={theme}>
+        <DefaultSeo {...seo} />
+        <GlobalStyles />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </ErrorBoundary>
   )
 }

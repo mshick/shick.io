@@ -14,6 +14,7 @@
     "@contentlayer/utils": "^0.2.4",
     "@emotion/react": "^11.9.0",
     "@mdx-js/react": "^1.6.22",
+    "@stefanprobst/next-error-boundary": "^3.0.2",
     "@theme-ui/color": "^0.14.2",
     "@theme-ui/prism": "^0.14.2",
     "@types/lodash-es": "^4.17.6",

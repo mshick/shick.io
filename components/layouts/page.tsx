@@ -11,7 +11,7 @@ import { AppProvider } from '../contexts/app-context'
 export default function PageLayout({
   children,
   seo
-}: PropsWithChildren<{ seo: NextSeoProps }>) {
+}: PropsWithChildren<{ seo?: NextSeoProps }>) {
   return (
     <AppProvider>
       <Seo {...seo} />
