@@ -1,5 +1,5 @@
-import { Literal, Parent, PhrasingContent } from 'mdast'
 import { Properties } from 'hast'
+import { Parent, PhrasingContent } from 'mdast'
 
 export interface SidenoteReference extends Parent {
   type: 'sidenoteReference'
@@ -34,20 +34,4 @@ declare module 'mdast' {
     sidenoteReference: SidenoteReference
     sidenoteDefinition: SidenoteDefinition
   }
-
-  // interface BlockContentMap {
-  //   mdxFlowExpression: MdxFlowExpression
-  // }
 }
-
-// declare module 'hast' {
-//   interface RootContentMap {
-//     mdxTextExpression: MdxTextExpression
-//     mdxFlowExpression: MdxFlowExpression
-//   }
-
-//   interface ElementContentMap {
-//     mdxFlowExpression: MdxFlowExpression
-//     mdxFlowExpression: MdxFlowExpression
-//   }
-// }

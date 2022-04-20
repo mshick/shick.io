@@ -1,4 +1,4 @@
-import h from 'hastscript'
+import { h } from 'hastscript'
 import type { Transformer } from 'unified'
 import { visit } from 'unist-util-visit'
 import { isDirective } from './types'

@@ -26,7 +26,6 @@ if (logDestination === 'logflare') {
     sourceToken: logflareSourceToken
   })
 
-  // create pino-logflare browser stream
   const send = createPinoBrowserSend({
     apiKey: logflareApiKey,
     sourceToken: logflareSourceToken
@@ -41,7 +40,7 @@ if (logDestination === 'logflare') {
 
   logger = pino(config, stream)
 } else {
-  config.prettyPrint = { colorize: true }
+  config.transport = { target: 'pino-pretty', options: { colorize: true } }
   logger = pino(config)
 }
 

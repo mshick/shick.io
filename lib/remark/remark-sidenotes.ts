@@ -6,7 +6,7 @@ import type {
 } from 'mdast'
 import type { Transformer } from 'unified'
 import { u } from 'unist-builder'
-import select from 'unist-util-select'
+import { select } from 'unist-util-select'
 import { visit } from 'unist-util-visit'
 
 // Need to use the unicode escape sequence for ⊕ / Circled Plus due to later sanitization
@@ -89,21 +89,20 @@ function getTransformer(settings): Transformer {
         const { identifier } = node
 
         const target = select(
-          tree,
-          `footnoteDefinition[identifier=${identifier}]`
-        )
+          `footnoteDefinition[identifier=${identifier}]`,
+          tree
+        ) as FootnoteDefinition
 
-        if (!target.length) {
+        if (!target) {
           throw new Error('No coresponding note found')
         }
 
         const isMarginNote = !isNumericString(identifier)
 
         const notesAst =
-          target[0].children.length &&
-          target[0].children[0].type === 'paragraph'
-            ? target[0].children[0].children
-            : target[0].children
+          target.children.length && target.children[0].type === 'paragraph'
+            ? target.children[0].children
+            : target.children
 
         parent.children.splice(
           index,

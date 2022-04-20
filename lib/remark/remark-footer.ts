@@ -1,4 +1,4 @@
-import h from 'hastscript'
+import { h } from 'hastscript'
 import type { ContainerDirective, LeafDirective } from 'mdast-util-directive'
 import type { Transformer } from 'unified'
 import { visit } from 'unist-util-visit'
