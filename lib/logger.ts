@@ -21,7 +21,6 @@ const config: LoggerOptions = {
 let logger: Logger
 
 if (logDestination === 'logflare') {
-  // create pino-logflare stream
   const stream = createWriteStream({
     apiKey: logflareApiKey,
     sourceToken: logflareSourceToken

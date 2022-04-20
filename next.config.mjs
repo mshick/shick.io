@@ -52,7 +52,8 @@ const securityHeaders = [
 ]
 
 export default withContentlayer({
-  swcMinify: true,
+  // Breaks pino-logflare
+  // swcMinify: true,
   poweredByHeader: false,
   trailingSlash: true,
   reactStrictMode: true,
