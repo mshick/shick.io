@@ -1,18 +1,18 @@
 import { writeFileSync } from 'fs'
 import RSS from 'rss'
-import { allBlogs } from '../.contentlayer/generated/allBlogs.mjs'
+import { allArticles } from '../.contentlayer/generated'
 
 async function generate() {
   const feed = new RSS({
-    title: 'Lee Robinson',
-    site_url: 'https://leerob.io',
-    feed_url: 'https://leerob.io/feed.xml'
+    title: 'Michael Shick',
+    site_url: 'https://shick.io',
+    feed_url: 'https://shick.io/feed.xml'
   })
 
-  allBlogs.map((post) => {
+  allArticles.map((post) => {
     feed.item({
       title: post.title,
-      url: `https://leerob.io/blog/${post.slug}`,
+      url: `https://shick.io/articles/${post.slug}`,
       date: post.publishedAt,
       description: post.summary
     })

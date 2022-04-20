@@ -3,7 +3,10 @@ import type { DefaultSeoProps } from 'next-seo'
 export const nodeEnv = process.env.NODE_ENV ?? 'development'
 
 export const baseDir = process.cwd()
-export const contentDir = process.env.CONTENT_DIR ?? 'data'
+export const publicDirPath = 'public'
+export const publicDir = `${baseDir}/${publicDirPath}`
+export const contentDirPath = process.env.CONTENT_DIR ?? 'content'
+export const contentDir = `${baseDir}/${contentDirPath}`
 
 export const contentTypePathMap = {
   pages: '/',

@@ -4,7 +4,7 @@ import PageLayout from 'components/layouts/page'
 import { InferGetStaticPropsType } from 'next'
 import { useMDXComponent } from 'next-contentlayer/hooks'
 
-export default function HomePage({
+export default function IndexPage({
   page
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const Component = useMDXComponent(page.body.code)

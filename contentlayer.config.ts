@@ -16,7 +16,7 @@ import remarkGfm from 'remark-gfm'
 import { remarkMdxImages } from 'remark-mdx-images'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import remarkUnwrapImages from 'remark-unwrap-images'
-import { baseDir } from './lib/config'
+import { contentDirPath, publicDir } from './lib/config'
 import rehypeImgSize from './lib/rehype/rehype-img-size'
 import remarkEpigraph from './lib/remark/remark-epigraph'
 import remarkFigure from './lib/remark/remark-figure'
@@ -115,7 +115,7 @@ const computedFields: ComputedFields = {
 
 export const Page = defineDocumentType(() => ({
   name: 'Page',
-  filePathPattern: 'pages/*.mdx',
+  filePathPattern: 'pages__*.mdx',
   contentType: 'mdx',
   fields: omit(fields, ['pinned']),
   computedFields: omit(computedFields, ['readingTime'])
@@ -123,14 +123,14 @@ export const Page = defineDocumentType(() => ({
 
 export const Article = defineDocumentType(() => ({
   name: 'Article',
-  filePathPattern: 'articles/*.mdx',
+  filePathPattern: 'articles__*.mdx',
   contentType: 'mdx',
   fields,
   computedFields
 }))
 
 export default makeSource({
-  contentDirPath: 'data',
+  contentDirPath: contentDirPath,
   documentTypes: [Article, Page],
   mdx: {
     remarkPlugins: [
@@ -154,7 +154,7 @@ export default makeSource({
       rehypeSlug,
       rehypeCodeTitles,
       [rehypePrism, { ignoreMissing: true }],
-      [rehypeImgSize, { dir: `data` }],
+      [rehypeImgSize, { dir: contentDirPath }],
       [
         rehypeAutolinkHeadings,
         {
@@ -166,7 +166,7 @@ export default makeSource({
     ],
     esbuildOptions: (options) => {
       options.platform = 'node'
-      options.outdir = `${baseDir}/public`
+      options.outdir = publicDir
       options.assetNames = `images/[dir]/[name]`
       options.loader = {
         ...options.loader,

@@ -11,7 +11,7 @@ import remarkParse from 'remark-parse'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import remarkUnlink from 'remark-unlink'
 import slug from 'slug'
-import { baseDir, contentDir, timezone } from '../config'
+import { baseDir, contentDirPath, timezone } from '../config'
 import remarkTruncate from '../remark/remark-truncate'
 import type { Tag } from '../types'
 import { getContentPath } from './content'
@@ -57,7 +57,7 @@ export async function getUpdatedBy(doc: LocalDocument): Promise<string> {
   if (!gitInfoCache[doc._id]) {
     gitInfoCache[doc._id] = await getGitInfo(
       baseDir,
-      path.join(contentDir, doc._raw.sourceFilePath)
+      path.join(contentDirPath, doc._raw.sourceFilePath)
     )
   }
   return gitInfoCache[doc._id].latestAuthorName
@@ -67,7 +67,7 @@ export async function getUpdatedByEmail(doc: LocalDocument): Promise<string> {
   if (!gitInfoCache[doc._id]) {
     gitInfoCache[doc._id] = await getGitInfo(
       baseDir,
-      path.join(contentDir, doc._raw.sourceFilePath)
+      path.join(contentDirPath, doc._raw.sourceFilePath)
     )
   }
   return gitInfoCache[doc._id].latestAuthorEmail
@@ -77,7 +77,7 @@ export async function getUpdatedAt(doc: LocalDocument): Promise<string> {
   if (!gitInfoCache[doc._id]) {
     gitInfoCache[doc._id] = await getGitInfo(
       baseDir,
-      path.join(contentDir, doc._raw.sourceFilePath)
+      path.join(contentDirPath, doc._raw.sourceFilePath)
     )
   }
 
@@ -99,12 +99,17 @@ export function getPublishedAt(doc: LocalDocument): string {
 }
 
 export function getSlug(doc: LocalDocument): string {
-  return slug(doc._raw.sourceFileName.replace(/\.mdx/, ''))
+  // TODO Unfortunate logic, until we can set a bundler cwd per mdx file
+  const fileName = doc._raw.sourceFileName.split('__')
+  return slug((fileName[1] ?? fileName[0]).replace(/\.mdx/, ''))
 }
 
 export function getPath(doc: LocalDocument): string {
-  const { sourceFileDir } = doc._raw
-  return getContentPath(sourceFileDir, getSlug(doc))
+  // TODO Unfortunate logic, until we can set a bundler cwd per mdx file
+  const fileName = doc._raw.sourceFileName.split('__')
+  const contentDir =
+    fileName.length === 2 && fileName[0] !== 'pages' ? fileName[0] : ''
+  return getContentPath(contentDir, getSlug(doc))
 }
 
 export function getTags(doc: LocalDocument): Tag[] {
