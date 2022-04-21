@@ -25,6 +25,7 @@ import remarkInitialHeading from './lib/remark/remark-initial-heading'
 import remarkNewthought from './lib/remark/remark-newthought'
 import remarkSectionize from './lib/remark/remark-sectionize'
 import remarkSidenotes from './lib/remark/remark-sidenotes'
+import remarkWrapImages from './lib/remark/remark-wrap-images'
 import remarkYoutube from './lib/remark/remark-youtube'
 import {
   getExcerpt,
@@ -139,6 +140,7 @@ export default makeSource({
       remarkDirectiveRehype,
       remarkYoutube,
       remarkUnwrapImages,
+      remarkWrapImages,
       remarkFigure,
       remarkFooter,
       remarkNewthought,

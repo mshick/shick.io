@@ -49,22 +49,13 @@ export const theme: Theme = {
   layout: {
     container: {
       boxSizing: 'initial',
-      maxWidth: 1280,
-      width: ['84%', '87.5%'],
+      maxWidth: 1024,
+      width: ['84%', '75%'],
       pl: ['8%', '12.5%'],
-      pr: ['8%', 0],
+      pr: ['8%', '12.5%'],
       mx: 'auto',
       my: 2
     },
-    // container: {
-    //   boxSizing: 'initial',
-    //   maxWidth: 1280,
-    //   width: ['84%', '75%'],
-    //   pl: ['8%', '12.5%'],
-    //   pr: ['8%', '12.5%'],
-    //   mx: 'auto',
-    //   my: 2
-    // },
     page: {
       flexDirection: 'column',
       minHeight: '100vh',
@@ -87,7 +78,9 @@ export const theme: Theme = {
       overflow: 'hidden',
       width: ['100%'],
       zIndex: 997,
-      pr: [0, '12.5%']
+      pr: [0, '12.5%'],
+      borderBottom: (theme) =>
+        `${theme.borderWidths[1]}px solid ${theme.colors.surface}`
     },
     sidebar: {
       backgroundColor: 'background',
@@ -118,14 +111,6 @@ export const theme: Theme = {
 
   styles: {
     root: {
-      // body: {
-      //   maxWidth: 1400,
-      //   width: '87.5%',
-      //   pl: '12.5%',
-      //   pr: 0,
-      //   mx: 'auto',
-      //   my: 2
-      // },
       minWidth: '320px',
       fontFamily: 'body',
       fontWeight: 'body',
@@ -150,7 +135,7 @@ export const theme: Theme = {
         overflow: 'auto',
         p: 3,
         my: 3,
-        width: ['100%', '55%']
+        width: ['100%', '67.5%']
       },
       '.rehype-code-title': {
         backgroundColor: darken('background', 0.05),
@@ -159,9 +144,10 @@ export const theme: Theme = {
         borderTopLeftRadius: 10,
         borderTopRightRadius: 10,
         fontSize: 1,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        width: ['100%', '67.5%']
       },
-      '.rehype-code-title+pre': {
+      '.rehype-code-title + pre': {
         mt: 0,
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0,
@@ -200,10 +186,10 @@ export const theme: Theme = {
         fontSize: '0.8rem',
         left: ['1rem', 0],
         lineHeight: 1.6,
-        margin: ['1rem 2.5%', '0.3rem -55% 0 0'],
+        margin: ['1rem 2.5%', '0.3rem -50% 0 0'],
         position: 'relative',
         verticalAlign: 'baseline',
-        width: ['95%', '45%']
+        width: ['95%', '40%']
       },
       'label.margin-toggle': {
         cursor: ['pointer', 'default'],
@@ -224,10 +210,10 @@ export const theme: Theme = {
         fontSize: '0.8rem',
         left: ['1rem', 0],
         lineHeight: 1.6,
-        margin: ['1rem 2.5%', '0.3rem -55% 0 0'],
+        margin: ['1rem 2.5%', '0.3rem -50% 0 0'],
         position: 'relative',
         verticalAlign: 'baseline',
-        width: ['95%', '45%']
+        width: ['95%', '40%']
       },
       'label.margin-toggle': {
         display: ['inline', 'none'],
@@ -274,7 +260,7 @@ export const theme: Theme = {
       p: 0,
       fontSize: 5,
       lineHeight: 'body',
-      width: ['100%', '55%']
+      width: ['100%', '67.5%']
     },
     h2: {
       variant: 'text.heading',
@@ -282,29 +268,29 @@ export const theme: Theme = {
       fontSize: 4,
       lineHeight: 1.4,
       fontStyle: 'italic',
-      width: ['100%', '55%']
+      width: ['100%', '67.5%']
     },
     h3: {
       variant: 'text.heading',
       color: 'primary',
       fontSize: 3,
       fontStyle: 'italic',
-      width: ['100%', '55%']
+      width: ['100%', '67.5%']
     },
     h4: {
       variant: 'text.heading',
       color: 'primary',
-      width: ['100%', '55%']
+      width: ['100%', '67.5%']
     },
     h5: {
       variant: 'text.heading',
       color: 'primary',
-      width: ['100%', '55%']
+      width: ['100%', '67.5%']
     },
     h6: {
       variant: 'text.heading',
       color: 'primary',
-      width: ['100%', '55%']
+      width: ['100%', '67.5%']
     },
     p: {
       mt: 0,
@@ -312,7 +298,7 @@ export const theme: Theme = {
       code: {
         variant: 'styles.code'
       },
-      width: ['100%', '55%']
+      width: ['100%', '67.5%']
     },
     small: {
       color: 'muted',
@@ -387,7 +373,7 @@ export const theme: Theme = {
       }
     },
     blockquote: {
-      width: ['100%', '55%'],
+      width: ['100%', '67.5%'],
       borderRadius: 0,
       borderLeftColor: 'muted',
       borderLeftStyle: 'solid',
@@ -409,7 +395,7 @@ export const theme: Theme = {
     },
     iframeWrapper: {
       variant: 'styles.figure',
-      maxWidth: ['100%', '55%'],
+      maxWidth: ['100%', '67.5%'],
       position: 'relative',
       paddingBottom: '56.25%',
       paddingTop: '25px',
@@ -439,8 +425,8 @@ export const theme: Theme = {
     },
     figure: {
       display: ['block', 'grid'],
-      gridTemplateColumns: '55% 24%',
-      columnGap: '6%',
+      gridTemplateColumns: '67.5% 23.5%',
+      columnGap: '6.5%',
       maxWidth: '100%',
       mb: 3,
       figcaption: {

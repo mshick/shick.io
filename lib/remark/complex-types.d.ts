@@ -32,7 +32,16 @@ export interface IframeWrapper extends Parent {
   type: 'iframeWrapper'
   children: PhrasingContent[]
   data?: {
-    hName: string
+    hName: 'figure'
+    hProperties: Properties
+  } & Parent['data']
+}
+
+export interface Figure extends Parent {
+  type: 'figure'
+  children: PhrasingContent[]
+  data?: {
+    hName: 'figure'
     hProperties: Properties
   } & Parent['data']
 }
@@ -43,5 +52,6 @@ declare module 'mdast' {
     sidenoteReference: SidenoteReference
     sidenoteDefinition: SidenoteDefinition
     iframeWrapper: IframeWrapper
+    figure: Figure
   }
 }
