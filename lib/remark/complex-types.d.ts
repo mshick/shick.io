@@ -28,10 +28,20 @@ export interface Sidenote extends Parent {
   } & Parent['data']
 }
 
+export interface IframeWrapper extends Parent {
+  type: 'iframeWrapper'
+  children: PhrasingContent[]
+  data?: {
+    hName: string
+    hProperties: Properties
+  } & Parent['data']
+}
+
 declare module 'mdast' {
   interface StaticPhrasingContentMap {
     sidenote: Sidenote
     sidenoteReference: SidenoteReference
     sidenoteDefinition: SidenoteDefinition
+    iframeWrapper: IframeWrapper
   }
 }

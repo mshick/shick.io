@@ -1,6 +1,6 @@
 import type { NextSeoProps } from 'next-seo'
 import type { PropsWithChildren } from 'react'
-import { Container } from 'theme-ui'
+import { Box, Container } from 'theme-ui'
 import Header from '../components/Header'
 import Main from '../components/Main'
 import NavigationButton from '../components/NavigationButton'
@@ -19,7 +19,9 @@ export default function PageLayout({
         <Header />
         <Sidebar />
         <NavigationButton />
-        <Main>{children}</Main>
+        <Box sx={{ pr: '12.5%' }}>
+          <Main>{children}</Main>
+        </Box>
       </Container>
     </AppProvider>
   )

@@ -17,12 +17,37 @@ const MDXComponents: ComponentMap = {
   section: ({ ref, ...props }) => {
     return <Box as="section" variant="styles.section" {...props} />
   },
-  figure: ({ ref, ...props }) => {
-    return <Box as="figure" variant="styles.figure" {...props} />
+  figure: ({ ref, className, ...props }) => {
+    if (className === 'iframe-wrapper') {
+      return <Box as="figure" variant="styles.iframeWrapper" {...props} />
+    }
+
+    if (className === 'fullwidth') {
+      return <Box as="figure" variant="styles.fullwidth" {...props} />
+    }
+
+    return (
+      <Box
+        as="figure"
+        variant="styles.figure"
+        className={className}
+        {...props}
+      />
+    )
   },
   div: ({ ref, className, ...props }) => {
-    // Upgrade classes to theme styles
-    return <Box as="div" variant={`styles.${className}`} {...props} />
+    if (className === 'epigraph') {
+      return <Box as="div" variant="styles.epigraph" {...props} />
+    }
+
+    return <div className={className} {...props} />
+  },
+  span: ({ ref, className, ...props }) => {
+    if (['sidenote', 'marginnote', 'newthought'].includes(className)) {
+      return <Box as="span" variant={`styles.${className}`} {...props} />
+    }
+
+    return <span className={className} {...props} />
   }
 }
 

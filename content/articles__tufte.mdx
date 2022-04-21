@@ -1,5 +1,5 @@
 ---
-title: Tufte
+title: Tufte CSS
 publishedAt: '2022-04-01'
 excerpt: 'Tufte CSS.'
 tags: 
@@ -7,8 +7,6 @@ tags:
   - some other
   - tags
 ---
-
-DEMO MATERIAL! NOT MINE!
 
 Tufte CSS provides tools to style web articles using the ideas demonstrated by
 Edward Tufte's books and handouts. Tufte's style is known for its simplicity,
@@ -283,6 +281,18 @@ Figurative map of the successive losses of the French Army in the Russian
 campaign, 1812-1813
 
 :::
+
+One obstacle to creating elegant figures on the web is the difficulty of handling different screen sizes, especially on the fly. Embedded iframe elements are particularly troublesome. For these instances we provide a helper class, `iframe-wrapper`, the most common use for which is probably YouTube videos, e.g.
+
+```html
+<figure class="iframe-wrapper">
+  <iframe width="853" height="480" src="https://www.youtube.com/embed/YslQ2625TR4" frameborder="0" allowfullscreen></iframe>
+</figure>
+```
+
+::youtube[iPhone resolution]{#YslQ2625TR4}
+
+You can use this class on a div instead of a figure, with slightly different results but the same general effect. Experiment and choose depending on your application.
 
 ## Code
 
