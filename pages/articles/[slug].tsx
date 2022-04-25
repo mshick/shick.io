@@ -6,6 +6,7 @@ import type { InferGetStaticPropsType } from 'next'
 export default function Article({
   article
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  // @ts-expect-error
   return <ArticleLayout article={article} />
 }
 

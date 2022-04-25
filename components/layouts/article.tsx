@@ -1,5 +1,5 @@
 import { siteUrl } from 'lib/config'
-import type { Article, Page } from 'lib/types'
+import type { Article } from 'lib/types'
 import { Container } from 'theme-ui'
 import ArticleContent from '../components/ArticleContent'
 import ArticleFooter from '../components/ArticleFooter'
@@ -11,11 +11,7 @@ import Seo from '../components/Seo'
 import Sidebar from '../components/Sidebar'
 import { AppProvider } from '../contexts/app-context'
 
-export default function ArticleLayout({
-  article
-}: {
-  article: Article | Page
-}) {
+export default function ArticleLayout({ article }: { article: Article }) {
   const { title, image, excerpt, tags, publishedAt, updatedAt } = article
 
   // const getSeoImage = () => {

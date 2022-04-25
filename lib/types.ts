@@ -47,7 +47,12 @@ export type Tag = {
 // Overrides for broken contentlayer types
 export type Article = Merge<
   IArticle,
-  { tags: Tag[]; readingTime: ReadTimeResults }
+  {
+    tags: Tag[]
+    readingTime: ReadTimeResults
+    previous?: Pick<IArticle, 'title' | 'path'>
+    next?: Pick<IArticle, 'title' | 'path'>
+  }
 >
 export type Page = Merge<IPage, { tags: Tag[] }>
 export type DocumentTypes = Article | Page

@@ -1,21 +1,28 @@
 import { allDocuments } from '.contentlayer/generated'
 import { pick } from '@contentlayer/utils'
 import PageLayout from 'components/layouts/page'
-import { DocumentTypes } from 'lib/types'
+import type { DocumentTypes, Tag } from 'lib/types'
 import map from 'lodash-es/map'
 import sortBy from 'lodash-es/sortBy'
-import toPairs from 'lodash-es/toPairs'
 import type { InferGetStaticPropsType } from 'next'
 import { Box, Heading } from 'theme-ui'
 
+type TagEntry = {
+  tag: Tag
+  docs: Pick<
+    DocumentTypes,
+    'slug' | 'path' | 'title' | 'excerpt' | 'publishedAt' | 'tags'
+  >[]
+}
+
 export default function TagsPage({
-  docsByTags
+  tags
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
     <PageLayout seo={{ title: 'tags' }}>
-      <Heading as="h1">Tags ({docsByTags.length})</Heading>
+      <Heading as="h1">Tags ({tags.length})</Heading>
       <Box as="ul" sx={{ columnCount: 2, m: 0, p: 0, listStyle: 'none' }}>
-        {map(docsByTags, ([slug, { tag, docs }]) => (
+        {map(tags, ({ tag, docs }) => (
           <Box as="li" key={tag.slug}>
             #{tag.slug} ({docs.length})
           </Box>
@@ -26,35 +33,36 @@ export default function TagsPage({
 }
 
 export async function getStaticProps({ params }) {
-  const docsByTags = (allDocuments as unknown as DocumentTypes[]).reduce(
-    (prev, doc) => {
-      const d = pick(doc, [
-        'slug',
-        'path',
-        'title',
-        'excerpt',
-        'publishedAt',
-        'tags'
-      ])
+  const tagsByTags = (allDocuments as unknown as DocumentTypes[]).reduce<{
+    [k: string]: TagEntry
+  }>((prev, doc) => {
+    const d = pick(doc, [
+      'slug',
+      'path',
+      'title',
+      'excerpt',
+      'publishedAt',
+      'tags'
+    ])
 
-      if (!d.tags) {
-        return prev
+    if (!d.tags) {
+      return prev
+    }
+
+    const tags = d.tags.reduce((p, t) => {
+      p[t.slug] = {
+        tag: t,
+        docs: [...(p[t.slug]?.docs ?? []), d]
       }
+      return p
+    }, prev)
 
-      const tags = d.tags.reduce((p, t) => {
-        p[t.slug] = {
-          tag: t,
-          docs: [...(p[t.slug]?.docs ?? []), d]
-        }
-        return p
-      }, prev)
+    return tags
+  }, {})
 
-      return tags
-    },
-    {}
-  )
+  const tags = sortBy(Object.values(tagsByTags), (t) => t.tag.slug)
 
   return {
-    props: { docsByTags: sortBy(toPairs(docsByTags), ([slug]) => slug) }
+    props: { tags }
   }
 }
