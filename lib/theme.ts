@@ -74,13 +74,24 @@ export const theme: Theme = {
       justifyContent: 'space-between',
       height: (theme) => `${theme.space[6]}px`,
       marginTop: 20,
-      ml: [0],
+      ml: 0,
       overflow: 'hidden',
-      width: ['100%'],
+      width: '100%',
       zIndex: 997,
-      pr: [0, '12.5%'],
       borderBottom: (theme) =>
-        `${theme.borderWidths[1]}px solid ${theme.colors.surface}`
+        `${theme.borderWidths[1]}px dashed ${theme.colors.surface}`
+    },
+    articleFooter: {
+      borderTop: (theme) =>
+        `${theme.borderWidths[1]}px dashed ${theme.colors.surface}`,
+      py: 4
+    },
+    footer: {
+      borderTop: (theme) =>
+        `${theme.borderWidths[1]}px dashed ${theme.colors.surface}`,
+      pt: 20,
+      pb: 40,
+      textAlign: 'center'
     },
     sidebar: {
       backgroundColor: 'background',
@@ -227,27 +238,9 @@ export const theme: Theme = {
         display: 'block'
       }
     },
-    epigraph: {
-      mb: 7,
-      mt: 7,
-      blockquote: {
-        borderLeftWidth: 0,
-        fontStyle: 'italic',
-        footer: {
-          fontStyle: 'normal'
-        }
-      }
-    },
     newthought: {
       fontVariant: 'small-caps',
       fontSize: 3
-    },
-    focus: {
-      transition: '.2s linear box-shadow',
-      ':focus': {
-        outline: 'none',
-        boxShadow: (theme) => `0 2px 0 0 ${theme.colors.primary}`
-      }
     },
     section: {
       py: 3
@@ -305,8 +298,16 @@ export const theme: Theme = {
       fontSize: 1
     },
     a: {
-      color: 'muted',
-      variant: 'styles.focus'
+      ':link, :visited': {
+        color: 'inherit',
+        textDecoration: 'underline',
+        textDecorationSkipInk: 'auto'
+      },
+      ':link::selection, :visited::selection': {
+        background: 'highlight',
+        color: 'white',
+        textShadow: 'none'
+      }
     },
     code: {
       fontFamily: 'code',
@@ -315,23 +316,56 @@ export const theme: Theme = {
       fontSize: '13px',
       p: 1
     },
-
+    qrcode: {
+      fontFamily: 'code',
+      py: 2,
+      mb: 3,
+      pre: {
+        border: 0,
+        borderRadius: 0,
+        color: 'primary',
+        p: 0,
+        lineHeight: 1.1
+      }
+    },
     hr: {
       border: 0,
       borderBottom: '1px dashed',
       borderColor: 'muted'
     },
     ol: {
+      position: 'relative',
+      listStyle: 'none',
       mt: 0,
       mb: 3,
-      pl: 4
+      p: 0,
+      ml: '28px',
+      li: {
+        counterIncrement: 'li',
+        '::before': {
+          content: 'counter(li)',
+          color: 'inherit',
+          position: 'absolute',
+          left: '-20px'
+        }
+      }
     },
     ul: {
+      position: 'relative',
+      listStyle: 'none',
       mt: 0,
       mb: 3,
-      // special case so ul lines up with ol
-      pl: '24px',
-      listStyle: 'square'
+      p: 0,
+      ml: '28px',
+      li: {
+        counterIncrement: 'li',
+        '::before': {
+          content: '"*"',
+          color: 'inherit',
+          position: 'absolute',
+          left: '-20px'
+        }
+      }
     },
     li: {
       mb: 1,
@@ -341,6 +375,12 @@ export const theme: Theme = {
       pre: {
         variant: 'styles.pre'
       }
+
+      // content: "-";
+      // position: absolute;
+      // left: -20px;
+      // color: #ffa86a;
+      // color: var(--accent);
     },
     table: {
       borderCollapse: 'collapse',
@@ -374,23 +414,45 @@ export const theme: Theme = {
     },
     blockquote: {
       width: ['100%', '67.5%'],
-      borderRadius: 0,
-      borderLeftColor: 'muted',
-      borderLeftStyle: 'solid',
-      borderLeftWidth: 2,
+      // borderRadius: 0,
+      // borderLeftColor: 'muted',
+      // borderLeftStyle: 'solid',
+      // borderLeftWidth: 2,
+      position: 'relative',
       fontSize: 1,
       mt: 0,
       ml: 2,
       mb: 3,
       mr: 0,
+      px: 3,
       p: {
-        p: 3,
-        mb: 0,
         width: '100%'
+      },
+      'p:first-of-type::before': {
+        content: '">"',
+        display: 'block',
+        position: 'absolute',
+        left: '-8px',
+        color: 'inherit'
       },
       footer: {
         fontSize: 0,
         textAlign: 'right'
+      }
+    },
+    epigraph: {
+      mb: 7,
+      mt: 7,
+      blockquote: {
+        mb: 5,
+        borderLeftWidth: 0,
+        fontStyle: 'italic',
+        'p:first-of-type::before': {
+          content: 'none'
+        },
+        footer: {
+          fontStyle: 'normal'
+        }
       }
     },
     iframeWrapper: {
@@ -603,8 +665,12 @@ export const theme: Theme = {
   links: {
     nav: {
       variant: 'styles.a',
+
       fontWeight: 'body',
       display: 'inline',
+      ':link': {
+        textDecoration: 'none'
+      },
       ':before': {
         pr: [0],
         content: [`"["`]

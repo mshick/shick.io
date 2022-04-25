@@ -2,6 +2,8 @@ import { siteUrl } from 'lib/config'
 import type { Article, Page } from 'lib/types'
 import { Container } from 'theme-ui'
 import ArticleContent from '../components/ArticleContent'
+import ArticleFooter from '../components/ArticleFooter'
+import Footer from '../components/Footer'
 import Header from '../components/Header'
 import Main from '../components/Main'
 import NavigationButton from '../components/NavigationButton'
@@ -66,7 +68,14 @@ export default function ArticleLayout({
         <NavigationButton />
         <Main>
           <ArticleContent {...article} />
+          <ArticleFooter
+            shareUrl={article.shareUrl}
+            editUrl={article.editUrl}
+            previous={article.previous}
+            next={article.next}
+          />
         </Main>
+        <Footer />
       </Container>
     </AppProvider>
   )

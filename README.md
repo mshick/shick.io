@@ -8,6 +8,13 @@
 - https://edwardtufte.github.io/tufte-css/
 - https://nulliq.dev/posts/vector-angle-1/
 - https://github.com/panr/hugo-theme-terminal
+- https://j3s.sh
+
+
+https://matrix.to/#/@mshick:matrix.org
+https://discordapp.com/users/312396147073220619
+
+
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 

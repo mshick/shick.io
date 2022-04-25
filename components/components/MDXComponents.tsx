@@ -48,6 +48,9 @@ const MDXComponents: ComponentMap = {
     }
 
     return <span className={className} {...props} />
+  },
+  qrcode: ({ children }) => {
+    return <Box variant="styles.qrcode">{children}</Box>
   }
 }
 

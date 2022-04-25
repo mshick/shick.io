@@ -24,13 +24,16 @@ export const logflareApiKey = process.env.NEXT_PUBLIC_LOGFLARE_API_KEY ?? ''
 export const logflareSourceToken =
   process.env.NEXT_PUBLIC_LOGFLARE_SOURCE_TOKEN ?? ''
 
-export const siteName = 'Michael Shick'
+export const siteName = 'michael_shick'
 export const siteDescription = 'My personal site.'
-export const siteUrl = 'https://www.shick.us'
-export const githubRepo = 'https://github.com/mshick/shick.io'
+export const siteUrl =
+  process.env.NEXT_PUBLIC_VERCEL_URL ?? 'https://www.shick.io'
+
+export const siteTitleStyle =
+  process.env.NEXT_PUBLIC_SITE_TITLE_STYLE ?? 'snakeCase'
 
 export const seo: DefaultSeoProps = {
-  titleTemplate: `%s _ ${siteName}`,
+  titleTemplate: `%s__${siteName}`,
   defaultTitle: siteName,
   description: siteDescription,
   canonical: siteUrl,

@@ -28,10 +28,12 @@ import remarkSidenotes from './lib/remark/remark-sidenotes'
 import remarkWrapImages from './lib/remark/remark-wrap-images'
 import remarkYoutube from './lib/remark/remark-youtube'
 import {
+  getEditUrl,
   getExcerpt,
   getPath,
   getPublishedAt,
   getReadingTime,
+  getShareUrl,
   getSlug,
   getTags,
   getUpdatedAt,
@@ -111,6 +113,14 @@ const computedFields: ComputedFields = {
   tags: {
     type: 'json',
     resolve: getTags
+  },
+  editUrl: {
+    type: 'string',
+    resolve: getEditUrl
+  },
+  shareUrl: {
+    type: 'string',
+    resolve: getShareUrl
   }
 }
 

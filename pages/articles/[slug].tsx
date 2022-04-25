@@ -1,6 +1,6 @@
 import { allArticles } from '.contentlayer/generated'
 import ArticleLayout from 'components/layouts/article'
-import type { Article } from 'lib/types'
+import orderBy from 'lodash-es/orderBy'
 import type { InferGetStaticPropsType } from 'next'
 
 export default function Article({
@@ -17,8 +17,26 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const article = (allArticles as unknown as Article[]).find(
+  const orderedArticles = orderBy(allArticles, ['updatedAt'], ['asc'])
+
+  const articleIndex = orderedArticles.findIndex(
     (article) => article.slug === params.slug
   )
+  const article = {
+    ...orderedArticles[articleIndex],
+    previous: orderedArticles[articleIndex - 1]
+      ? {
+          path: orderedArticles[articleIndex - 1].path,
+          title: orderedArticles[articleIndex - 1].title
+        }
+      : null,
+    next: orderedArticles[articleIndex + 1]
+      ? {
+          path: orderedArticles[articleIndex + 1].path,
+          title: orderedArticles[articleIndex + 1].title
+        }
+      : null
+  }
+
   return { props: { article } }
 }

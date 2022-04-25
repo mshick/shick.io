@@ -11,11 +11,11 @@ import remarkParse from 'remark-parse'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import remarkUnlink from 'remark-unlink'
 import slug from 'slug'
-import { baseDir, contentDirPath, timezone } from '../config'
+import { baseDir, contentDirPath, siteUrl, timezone } from '../config'
 import remarkTruncate from '../remark/remark-truncate'
 import type { Tag } from '../types'
 import { getContentPath } from './content'
-import { getGitInfo } from './git'
+import { getGitConfig, getGitFileInfo } from './git'
 
 const { zonedTimeToUtc } = dateFns
 
@@ -51,37 +51,39 @@ export function getReadingTime(doc: LocalDocument): ReadTimeResults {
   return readingTimeCache[doc._id]
 }
 
-const gitInfoCache = {}
+const gitCache = {
+  __config: null
+}
 
 export async function getUpdatedBy(doc: LocalDocument): Promise<string> {
-  if (!gitInfoCache[doc._id]) {
-    gitInfoCache[doc._id] = await getGitInfo(
+  if (!gitCache[doc._id]) {
+    gitCache[doc._id] = await getGitFileInfo(
       baseDir,
       path.join(contentDirPath, doc._raw.sourceFilePath)
     )
   }
-  return gitInfoCache[doc._id].latestAuthorName
+  return gitCache[doc._id].latestAuthorName
 }
 
 export async function getUpdatedByEmail(doc: LocalDocument): Promise<string> {
-  if (!gitInfoCache[doc._id]) {
-    gitInfoCache[doc._id] = await getGitInfo(
+  if (!gitCache[doc._id]) {
+    gitCache[doc._id] = await getGitFileInfo(
       baseDir,
       path.join(contentDirPath, doc._raw.sourceFilePath)
     )
   }
-  return gitInfoCache[doc._id].latestAuthorEmail
+  return gitCache[doc._id].latestAuthorEmail
 }
 
 export async function getUpdatedAt(doc: LocalDocument): Promise<string> {
-  if (!gitInfoCache[doc._id]) {
-    gitInfoCache[doc._id] = await getGitInfo(
+  if (!gitCache[doc._id]) {
+    gitCache[doc._id] = await getGitFileInfo(
       baseDir,
       path.join(contentDirPath, doc._raw.sourceFilePath)
     )
   }
 
-  const { latestDate } = gitInfoCache[doc._id]
+  const { latestDate } = gitCache[doc._id]
 
   const date = doc.updatedAt
     ? zonedTimeToUtc(doc.updatedAt, timezone)
@@ -115,11 +117,26 @@ export function getPath(doc: LocalDocument): string {
 export function getTags(doc: LocalDocument): Tag[] {
   const tags: string[] = doc.tags?.array() ?? []
   return tags.map((tag) => {
-    const tagSlug = slug(tag)
+    const tagSlug = slug(tag, { replacement: '_' })
     return {
       name: tag,
       path: getContentPath('tags', tagSlug),
       slug: tagSlug
     }
   })
+}
+
+export async function getEditUrl(doc: LocalDocument): Promise<string> {
+  if (!gitCache.__config) {
+    gitCache.__config = await getGitConfig(baseDir)
+  }
+  const { originUrl, defaultBranch } = gitCache.__config
+  const { sourceFilePath } = doc._raw
+
+  return `${originUrl}/edit/${defaultBranch}/${contentDirPath}/${sourceFilePath}`
+}
+
+export function getShareUrl(doc: LocalDocument): string {
+  const path = getPath(doc)
+  return new URL(path, siteUrl).href
 }

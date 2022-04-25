@@ -6,21 +6,21 @@ export default function Navigation() {
   const pages = [
     {
       navigation: {
-        label: 'Home',
+        label: 'home',
         position: 0
       },
       path: '/'
     },
     {
       navigation: {
-        label: 'Articles',
+        label: 'articles',
         position: 1
       },
       path: '/articles'
     },
     {
       navigation: {
-        label: 'About',
+        label: 'about',
         position: 2
       },
       path: '/about'

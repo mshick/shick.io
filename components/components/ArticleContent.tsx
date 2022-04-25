@@ -2,7 +2,7 @@ import type { Image, MDX } from '.contentlayer/generated'
 import { format } from 'date-fns'
 import type { Tag } from 'lib/types'
 import { useMDXComponent } from 'next-contentlayer/hooks'
-import React, { Fragment } from 'react'
+import { Fragment } from 'react'
 import type { ReadTimeResults } from 'reading-time'
 import { Alert, Box, Heading, Paragraph, Text } from 'theme-ui'
 import Link from './Link'
@@ -35,13 +35,11 @@ export default function ArticleContent({
 }: ArticleContentProps) {
   const Component = useMDXComponent(body.code)
   return (
-    <Fragment>
+    <Box as="article">
       {isPrivate && (
-        <Fragment>
-          <Alert variant="error" sx={{ mb: 4 }}>
-            This is a private post
-          </Alert>
-        </Fragment>
+        <Alert variant="error" sx={{ mb: 4 }}>
+          This is a private post
+        </Alert>
       )}
 
       <Box sx={{ mb: 5, mt: 2 }}>
@@ -50,11 +48,15 @@ export default function ArticleContent({
             <time dateTime={publishedAt}>{formatDate(publishedAt)}</time>
           </Text>
           <Text sx={{ color: 'muted', ml: 2, fontSize: 0 }}>
-            <time dateTime={updatedAt}>[Updated: {formatDate(updatedAt)}]</time>
+            <time dateTime={updatedAt}>[updated: {formatDate(updatedAt)}]</time>
           </Text>
-          <Text sx={{ m: 2 }}>/</Text>
           {readingTime ? (
-            <Text sx={{ color: 'muted', fontSize: 0 }}>{readingTime.text}</Text>
+            <Fragment>
+              <Text sx={{ m: 2 }}>/</Text>
+              <Text sx={{ color: 'muted', fontSize: 0 }}>
+                {readingTime.text}
+              </Text>
+            </Fragment>
           ) : null}
         </Box>
 
@@ -112,25 +114,6 @@ export default function ArticleContent({
       </Box>
 
       <Component components={components} />
-
-      {/* {tags ? (
-        <Box sx={{ mb: 3 }}>
-          {tags.map((tag, index: number) => (
-            <Badge
-              key={index}
-              variant="primary"
-              sx={{
-                mb: 2,
-                mr: 2,
-                color: mix('muted', 'primary', index / tags.length),
-                borderColor: mix('muted', 'primary', index / tags.length),
-              }}
-            >
-              {tag}
-            </Badge>
-          ))}
-        </Box>
-      ) : null} */}
-    </Fragment>
+    </Box>
   )
 }

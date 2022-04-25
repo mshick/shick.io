@@ -12,10 +12,15 @@ export type PropsWithCallableChildren<P, Q> = P & {
   children: (arg: Q) => Renderable | undefined
 }
 
-export type GitInfo = {
+export type GitFileInfo = {
   latestAuthorName: string
   latestAuthorEmail: string
   latestDate: string
+}
+
+export type GitConfig = {
+  originUrl: string
+  defaultBranch: string
 }
 
 export type SourceDate = {

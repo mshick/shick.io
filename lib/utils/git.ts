@@ -1,11 +1,12 @@
+import isString from 'lodash-es/isString.js'
 import git from 'simple-git'
 import logger from '../logger'
-import type { GitInfo } from '../types'
+import type { GitConfig, GitFileInfo } from '../types'
 
-export async function getGitInfo(
+export async function getGitFileInfo(
   repoFolder: string,
   filePath: string
-): Promise<GitInfo> {
+): Promise<GitFileInfo> {
   const gitRepo = git(repoFolder)
 
   const logOptions = {
@@ -33,5 +34,20 @@ export async function getGitInfo(
       latestAuthorEmail: '',
       latestDate: ''
     }
+  }
+}
+
+export async function getGitConfig(repoDir: string): Promise<GitConfig> {
+  const gitRepo = git(repoDir)
+
+  const config = await gitRepo.getConfig('remote.origin.url')
+  const remotes = await gitRepo.remote(['show', 'origin'])
+  const defaultBranch = isString(remotes)
+    ? remotes.replace('\n', '').match(/HEAD branch: (.+)/)[1]
+    : 'main'
+
+  return {
+    originUrl: config.value,
+    defaultBranch
   }
 }

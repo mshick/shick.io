@@ -9,7 +9,7 @@ export default function ArticlesPage({
   articles
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <PageLayout seo={{ title: 'Articles' }}>
+    <PageLayout seo={{ title: 'articles' }}>
       <Flex
         as="ul"
         sx={{ flexDirection: 'column', m: 0, p: 0, listStyleType: 'none' }}
