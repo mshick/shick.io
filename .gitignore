@@ -37,8 +37,5 @@ yarn-error.log*
 # contentlayer
 .contentlayer
 
-# vscode
-.vscode
-
 # typescript
 *.tsbuildinfo

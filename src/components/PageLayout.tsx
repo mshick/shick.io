@@ -1,5 +1,4 @@
 import type { PropsWithChildren } from 'react'
-import { AppProvider } from '../contexts/app-context'
 import Main from './Main'
 
 export default function PageLayout({
@@ -25,7 +24,7 @@ export default function PageLayout({
   // ].filter(n => n)
 
   return (
-    <AppProvider>
+    <>
       {/* <Seo
         title={title}
         openGraph={{
@@ -50,6 +49,6 @@ export default function PageLayout({
         }}
       /> */}
       <Main>{children}</Main>
-    </AppProvider>
+    </>
   )
 }

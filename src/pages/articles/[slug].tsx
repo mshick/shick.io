@@ -1,5 +1,5 @@
-import { allArticles } from '.contentlayer/generated'
-import ArticleLayout from 'components/layouts/article'
+import { allArticles } from 'contentlayer/generated'
+import ArticleLayout from 'layouts/Article'
 import orderBy from 'lodash-es/orderBy'
 import type { InferGetStaticPropsType } from 'next'
 

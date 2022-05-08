@@ -1,7 +1,4 @@
-import type {
-  Article as IArticle,
-  Page as IPage
-} from '.contentlayer/generated/types'
+import type { Article as IArticle, Page as IPage } from 'contentlayer/generated'
 import type { ReactElement } from 'react'
 import type { ReadTimeResults } from 'reading-time'
 import { Merge, RequireAtLeastOne } from 'type-fest'

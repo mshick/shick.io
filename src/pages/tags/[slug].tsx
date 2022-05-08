@@ -1,10 +1,10 @@
-import { allDocuments } from '.contentlayer/generated'
 import { pick } from '@contentlayer/utils'
-import ArticleListItem from 'components/components/ArticleListItem'
-import PageLayout from 'components/layouts/page'
-import type { DocumentTypes } from 'lib/types'
+import ArticleListItem from 'components/ArticleListItem'
+import { allDocuments } from 'contentlayer/generated'
+import PageLayout from 'layouts/Page'
 import type { InferGetStaticPropsType } from 'next'
 import { Box, Flex } from 'theme-ui'
+import type { DocumentTypes } from 'types'
 
 export default function TagPage({
   documents

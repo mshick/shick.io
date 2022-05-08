@@ -1,7 +1,7 @@
 import isString from 'lodash-es/isString.js'
 import git from 'simple-git'
+import type { GitConfig, GitFileInfo } from '../../types'
 import logger from '../logger'
-import type { GitConfig, GitFileInfo } from '../types'
 
 export async function getGitFileInfo(
   repoFolder: string,

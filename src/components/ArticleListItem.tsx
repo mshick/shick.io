@@ -1,4 +1,4 @@
-import type { Article } from '.contentlayer/generated'
+import type { Article } from 'contentlayer/generated'
 import { Box, Heading } from 'theme-ui'
 import Link from './Link'
 

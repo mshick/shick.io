@@ -1,11 +1,11 @@
-import { allDocuments } from '.contentlayer/generated'
 import { pick } from '@contentlayer/utils'
-import PageLayout from 'components/layouts/page'
-import type { DocumentTypes, Tag } from 'lib/types'
+import { allDocuments } from 'contentlayer/generated'
+import PageLayout from 'layouts/Page'
 import map from 'lodash-es/map'
 import sortBy from 'lodash-es/sortBy'
 import type { InferGetStaticPropsType } from 'next'
 import { Box, Heading } from 'theme-ui'
+import type { DocumentTypes, Tag } from 'types'
 
 type TagEntry = {
   tag: Tag

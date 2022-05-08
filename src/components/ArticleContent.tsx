@@ -1,10 +1,10 @@
-import type { Image, MDX } from '.contentlayer/generated'
+import type { Image, MDX } from 'contentlayer/generated'
 import { format } from 'date-fns'
-import type { Tag } from 'lib/types'
 import { useMDXComponent } from 'next-contentlayer/hooks'
 import { Fragment } from 'react'
 import type { ReadTimeResults } from 'reading-time'
 import { Alert, Box, Heading, Paragraph, Text } from 'theme-ui'
+import type { Tag } from 'types'
 import Link from './Link'
 import components from './MDXComponents'
 

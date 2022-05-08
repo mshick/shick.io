@@ -1,15 +1,13 @@
+import ArticleContent from 'components/ArticleContent'
+import ArticleFooter from 'components/ArticleFooter'
+import Footer from 'components/Footer'
+import Header from 'components/Header'
+import Main from 'components/Main'
+import Seo from 'components/Seo'
+import Sidebar from 'components/Sidebar'
 import { siteUrl } from 'lib/config'
-import type { Article } from 'lib/types'
 import { Container } from 'theme-ui'
-import ArticleContent from '../components/ArticleContent'
-import ArticleFooter from '../components/ArticleFooter'
-import Footer from '../components/Footer'
-import Header from '../components/Header'
-import Main from '../components/Main'
-import NavigationButton from '../components/NavigationButton'
-import Seo from '../components/Seo'
-import Sidebar from '../components/Sidebar'
-import { AppProvider } from '../contexts/app-context'
+import type { Article } from 'types'
 
 export default function ArticleLayout({ article }: { article: Article }) {
   const { title, image, excerpt, tags, publishedAt, updatedAt } = article
@@ -32,7 +30,7 @@ export default function ArticleLayout({ article }: { article: Article }) {
   // ].filter(n => n)
 
   return (
-    <AppProvider>
+    <>
       <Seo
         {...{
           title,
@@ -61,7 +59,6 @@ export default function ArticleLayout({ article }: { article: Article }) {
       <Container>
         <Header />
         <Sidebar />
-        <NavigationButton />
         <Main>
           <ArticleContent {...article} />
           <ArticleFooter
@@ -73,6 +70,6 @@ export default function ArticleLayout({ article }: { article: Article }) {
         </Main>
         <Footer />
       </Container>
-    </AppProvider>
+    </>
   )
 }

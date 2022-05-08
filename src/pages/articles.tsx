@@ -1,7 +1,7 @@
-import { allArticles } from '.contentlayer/generated'
 import { pick } from '@contentlayer/utils'
-import ArticleListItem from 'components/components/ArticleListItem'
-import PageLayout from 'components/layouts/page'
+import ArticleListItem from 'components/ArticleListItem'
+import { allArticles } from 'contentlayer/generated'
+import PageLayout from 'layouts/Page'
 import type { InferGetStaticPropsType } from 'next'
 import { Box, Flex } from 'theme-ui'
 

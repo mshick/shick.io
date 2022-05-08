@@ -16,17 +16,17 @@ import remarkGfm from 'remark-gfm'
 import { remarkMdxImages } from 'remark-mdx-images'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import remarkUnwrapImages from 'remark-unwrap-images'
-import { contentDirPath, publicDir } from './lib/config'
-import rehypeImgSize from './lib/rehype/rehype-img-size'
-import remarkEpigraph from './lib/remark/remark-epigraph'
-import remarkFigure from './lib/remark/remark-figure'
-import remarkFooter from './lib/remark/remark-footer'
-import remarkInitialHeading from './lib/remark/remark-initial-heading'
-import remarkNewthought from './lib/remark/remark-newthought'
-import remarkSectionize from './lib/remark/remark-sectionize'
-import remarkSidenotes from './lib/remark/remark-sidenotes'
-import remarkWrapImages from './lib/remark/remark-wrap-images'
-import remarkYoutube from './lib/remark/remark-youtube'
+import { contentDirPath, publicDir } from './src/lib/config'
+import rehypeImgSize from './src/lib/rehype/rehype-img-size'
+import remarkEpigraph from './src/lib/remark/remark-epigraph'
+import remarkFigure from './src/lib/remark/remark-figure'
+import remarkFooter from './src/lib/remark/remark-footer'
+import remarkInitialHeading from './src/lib/remark/remark-initial-heading'
+import remarkNewthought from './src/lib/remark/remark-newthought'
+import remarkSectionize from './src/lib/remark/remark-sectionize'
+import remarkSidenotes from './src/lib/remark/remark-sidenotes'
+import remarkWrapImages from './src/lib/remark/remark-wrap-images'
+import remarkYoutube from './src/lib/remark/remark-youtube'
 import {
   getEditUrl,
   getExcerpt,
@@ -39,7 +39,7 @@ import {
   getUpdatedAt,
   getUpdatedBy,
   getUpdatedByEmail
-} from './lib/utils/fields'
+} from './src/lib/utils/fields'
 
 const Image = defineNestedType(() => ({
   name: 'Image',

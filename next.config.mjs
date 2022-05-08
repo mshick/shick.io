@@ -68,6 +68,51 @@ export default withContentlayer({
       {
         source: '/(.*)',
         headers: securityHeaders
+      },
+      {
+        source: '/_next/image(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
+      },
+      {
+        source: '/fonts/bitstream-vera-sans-mono-regular.woff2',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
+      },
+      {
+        source: '/fonts/bitstream-vera-sans-mono-bold.woff2',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
+      },
+      {
+        source: '/fonts/bitstream-vera-sans-mono-italic.woff2',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
+      },
+      {
+        source: '/fonts/bitstream-vera-sans-mono-bold-italic.woff2',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
       }
     ]
   },
@@ -87,5 +132,8 @@ export default withContentlayer({
     }
 
     return config
+  },
+  eslint: {
+    dirs: ['.']
   }
 })

@@ -1,10 +1,12 @@
+import { useAtomValue } from 'jotai'
+import { isSidebarOpenAtom } from 'store'
 import { Box } from 'theme-ui'
-import { useAppStateContext } from '../contexts/app-context'
 
 const sidebarWidth = 260
 
 export default function Sidebar() {
-  const { isNavOpen } = useAppStateContext()
+  const isSidebarOpen = useAtomValue(isSidebarOpenAtom)
+
   return (
     <Box
       variant="layout.sidebar"
@@ -15,7 +17,7 @@ export default function Sidebar() {
         //   isNavOpen ? '0px' : `-${sidebarWidth}px`,
         //   '0px'
         // ]
-        left: [isNavOpen ? '0px' : `-${sidebarWidth}px`]
+        left: [isSidebarOpen ? '0px' : `-${sidebarWidth}px`]
       }}
     >
       <Box
@@ -29,7 +31,7 @@ export default function Sidebar() {
           //   `${isNavOpen ? 0 : `-${sidebarWidth}px`}`,
           //   0
           // ],
-          left: [`${isNavOpen ? 0 : `-${sidebarWidth}px`}`],
+          left: [`${isSidebarOpen ? 0 : `-${sidebarWidth}px`}`],
           transition: '.3s ease-in-out left',
           position: 'relative'
         }}
