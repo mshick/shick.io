@@ -1,7 +1,6 @@
 import git from 'simple-git'
-import { defaultBranch } from '../config'
 import logger from './logger'
-import { GitConfig, GitFileInfo } from './types'
+import { GitFileInfo } from './types'
 
 export async function getGitFileInfo(
   repoFolder: string,
@@ -34,15 +33,5 @@ export async function getGitFileInfo(
       latestAuthorEmail: '',
       latestDate: ''
     }
-  }
-}
-
-export async function getGitConfig(repoDir: string): Promise<GitConfig> {
-  const gitRepo = git(repoDir)
-  const config = await gitRepo.getConfig('remote.origin.url')
-
-  return {
-    originUrl: config.value,
-    defaultBranch
   }
 }

@@ -10,10 +10,17 @@ import remarkParse from 'remark-parse'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import remarkUnlink from 'remark-unlink'
 import slug from 'slug'
-import { baseDir, contentDirPath, siteUrl, timezone } from '../config'
+import {
+  baseDir,
+  contentDirPath,
+  defaultBranch,
+  githubRepo,
+  siteUrl,
+  timezone
+} from '../config'
 import remarkTruncate from '../lib/remark/remark-truncate'
 import { getContentPath } from './content'
-import { getGitConfig, getGitFileInfo } from './git'
+import { getGitFileInfo } from './git'
 import { Tag } from './types'
 
 const { zonedTimeToUtc } = dateFns
@@ -130,13 +137,8 @@ export function getTags(doc: LocalDocument): Tag[] {
 }
 
 export async function getEditUrl(doc: LocalDocument): Promise<string> {
-  if (!gitCache.__config) {
-    gitCache.__config = await getGitConfig(baseDir)
-  }
-  const { originUrl, defaultBranch } = gitCache.__config
   const { sourceFilePath } = doc._raw
-
-  return `${originUrl}/edit/${defaultBranch}/${contentDirPath}/${sourceFilePath}`
+  return `${githubRepo}/edit/${defaultBranch}/${contentDirPath}/${sourceFilePath}`
 }
 
 export function getShareUrl(doc: LocalDocument): string {
