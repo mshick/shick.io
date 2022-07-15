@@ -138,7 +138,7 @@ export function getTags(doc: LocalDocument): Tag[] {
 
 export async function getEditUrl(doc: LocalDocument): Promise<string> {
   const { sourceFilePath } = doc._raw
-  return `${githubRepo}/edit/${defaultBranch}/${contentDirPath}/${sourceFilePath}`
+  return `https://github.com/${githubRepo}/edit/${defaultBranch}/${contentDirPath}/${sourceFilePath}`
 }
 
 export function getShareUrl(doc: LocalDocument): string {
