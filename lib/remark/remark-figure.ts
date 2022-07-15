@@ -1,8 +1,8 @@
 import { h } from 'hastscript'
 import isEmpty from 'lodash-es/isEmpty.js'
-import type { BlockContent } from 'mdast'
-import type { ContainerDirective } from 'mdast-util-directive'
-import type { Transformer } from 'unified'
+import { BlockContent } from 'mdast'
+import { ContainerDirective } from 'mdast-util-directive'
+import { Transformer } from 'unified'
 import { visit } from 'unist-util-visit'
 
 const transform: Transformer = (tree) => {

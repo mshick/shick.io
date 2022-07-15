@@ -1,5 +1,5 @@
-import type { TextDirective } from 'mdast-util-directive'
-import type { Transformer } from 'unified'
+import { TextDirective } from 'mdast-util-directive'
+import { Transformer } from 'unified'
 import { visit } from 'unist-util-visit'
 
 const transform: Transformer = (tree) => {

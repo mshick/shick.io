@@ -1,9 +1,8 @@
-import type { Parent, PhrasingContent } from 'mdast'
-import type { Transformer } from 'unified'
+import { Parent, PhrasingContent } from 'mdast'
+import { Transformer } from 'unified'
 import { u } from 'unist-builder'
 import { visit } from 'unist-util-visit'
-import type { TreeNode } from './types'
-import { isDirective } from './types'
+import { isDirective, TreeNode } from './types'
 
 function getTransformer(): Transformer {
   return (tree, file) => {

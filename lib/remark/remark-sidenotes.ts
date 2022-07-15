@@ -1,10 +1,10 @@
-import type {
+import {
   FootnoteDefinition,
   FootnoteReference,
   Parent,
   PhrasingContent
 } from 'mdast'
-import type { Transformer } from 'unified'
+import { Transformer } from 'unified'
 import { u } from 'unist-builder'
 import { select } from 'unist-util-select'
 import { visit } from 'unist-util-visit'

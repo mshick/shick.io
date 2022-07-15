@@ -1,4 +1,4 @@
-import type { Transformer } from 'unified'
+import { Transformer } from 'unified'
 import { remove } from 'unist-util-remove'
 
 function transform(tree) {

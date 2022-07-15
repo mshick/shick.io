@@ -1,5 +1,5 @@
-import type { Parent, Literal, Node } from 'unist'
-import type { Directive } from 'mdast-util-directive'
+import { Directive } from 'mdast-util-directive'
+import { Literal, Node, Parent } from 'unist'
 
 export type TreeNode = Parent | Literal | Node
 

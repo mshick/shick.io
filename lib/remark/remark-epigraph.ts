@@ -1,6 +1,6 @@
-import type { BlockContent } from 'mdast'
-import type { Transformer } from 'unified'
-import type { Node } from 'unist'
+import { BlockContent } from 'mdast'
+import { Transformer } from 'unified'
+import { Node } from 'unist'
 import { visit } from 'unist-util-visit'
 import { isParentNode } from './types'
 

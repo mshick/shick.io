@@ -1,7 +1,7 @@
-import { defaultBranch } from 'config'
 import git from 'simple-git'
-import logger from '../logger'
-import { GitConfig, GitFileInfo } from '../types'
+import { defaultBranch } from './config'
+import logger from './logger'
+import { GitConfig, GitFileInfo } from './types'
 
 export async function getGitFileInfo(
   repoFolder: string,

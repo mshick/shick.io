@@ -8,7 +8,6 @@ export const isProduction =
   nodeEnv === 'production' || vercelEnv === 'production'
 export const isTest = process.env.NODE_ENV === 'test'
 
-export const defaultBranch = 'main'
 export const baseDir = process.cwd()
 export const publicDirPath = 'public'
 export const publicDir = `${baseDir}/${publicDirPath}`

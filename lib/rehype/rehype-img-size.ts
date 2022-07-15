@@ -1,7 +1,6 @@
 import sizeOf from 'image-size'
 import path from 'path'
-import type { Node } from 'unist-util-visit'
-import { visit } from 'unist-util-visit'
+import { Node, visit } from 'unist-util-visit'
 
 /**
  * Handles:
