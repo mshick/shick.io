@@ -163,7 +163,7 @@
     "npm": "8"
   },
   "overrides": {
-    "@contentlayer/core": "git+https://github.com/mshick/contentlayer.git#build"
+    "@contentlayer/core": "https://github.com/mshick/contentlayer/archive/refs/tags/v0.2.6-build.tar.gz"
   },
   "postcss": {
     "plugins": {
