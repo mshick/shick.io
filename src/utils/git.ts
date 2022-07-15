@@ -1,7 +1,7 @@
-import isString from 'lodash-es/isString.js'
+import { defaultBranch } from 'config'
 import git from 'simple-git'
 import logger from '../logger'
-import type { GitConfig, GitFileInfo } from '../types'
+import { GitConfig, GitFileInfo } from '../types'
 
 export async function getGitFileInfo(
   repoFolder: string,
@@ -39,12 +39,7 @@ export async function getGitFileInfo(
 
 export async function getGitConfig(repoDir: string): Promise<GitConfig> {
   const gitRepo = git(repoDir)
-
   const config = await gitRepo.getConfig('remote.origin.url')
-  const remotes = await gitRepo.remote(['show', 'origin'])
-  const defaultBranch = isString(remotes)
-    ? remotes.replace('\n', '').match(/HEAD branch: (.+)/)[1]
-    : 'main'
 
   return {
     originUrl: config.value,
