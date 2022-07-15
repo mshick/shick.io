@@ -165,6 +165,9 @@
   "overrides": {
     "contentlayer": {
       "@contentlayer/core": "mshick/contentlayer#build"
+    },
+    "next-contentlayer": {
+      "@contentlayer/core": "mshick/contentlayer#build"
     }
   },
   "postcss": {
