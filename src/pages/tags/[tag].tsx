@@ -12,7 +12,7 @@ export default function TagPage({
   documents
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <Layout seo={{ title: `tagged ${tag.name}` }}>
+    <Layout seo={{ title: `Tagged w/ ${tag.name}` }}>
       <div className="w-full mt-8 max-w-none">
         <DocumentList documents={documents}>
           {(document) => <DocumentListItem {...document} />}

@@ -252,7 +252,7 @@ like so:
 
 :::figure{.fullwidth}
 
-![Exports and Imports to and from Denmark & Norway from 1700 to 1780](https://edwardtufte.github.io/tufte-css/img/exports-imports.png)
+![Exports and Imports to and from Denmark & Norway from 1700 to 1780](./exports-imports.png)
 
 From Edward Tufte, _Visual Display of Quantitative Information_, page 92.
 

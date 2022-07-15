@@ -2,6 +2,7 @@ import { DefaultSeoProps } from 'next-seo'
 
 export const locale = process.env.NEXT_PUBLIC_LOCALE ?? 'en-US'
 
+export const commitSha = process.env.VERCEL_GITHUB_COMMIT_SHA ?? ''
 export const vercelEnv = process.env.VERCEL_ENV ?? 'development'
 export const isProduction = vercelEnv === 'production'
 export const isDevelopment = vercelEnv === 'development'
@@ -23,7 +24,7 @@ export const contentTypePathMap = {
 export const timezone = process.env.TIMEZONE ?? 'America/New_York'
 export const logLevel = process.env.NEXT_PUBLIC_LOG_LEVEL ?? 'info'
 
-export const siteName = 'michael_shick'
+export const siteName = 'Michael Shick'
 export const siteDescription = 'My personal site.'
 
 const vercelUrl =
@@ -36,12 +37,9 @@ export const siteUrl = isProduction
   ? envUrl
   : vercelUrl ?? 'http://localhost:3000'
 
-export const siteTitleStyle =
-  process.env.NEXT_PUBLIC_SITE_TITLE_STYLE ?? 'snakeCase'
-
 export const seo: DefaultSeoProps = {
-  titleTemplate: `%s__${siteName}`,
-  defaultTitle: siteName,
+  titleTemplate: `%s | ${siteName}`,
+  defaultTitle: `${siteName} | Software engineer, happy camper.`,
   description: siteDescription,
   canonical: siteUrl,
   additionalLinkTags: [
@@ -124,8 +122,6 @@ export const seo: DefaultSeoProps = {
     cardType: 'summary_large_image'
   }
 }
-
-export const commitSha = process.env.VERCEL_GITHUB_COMMIT_SHA ?? ''
 
 export const navigation = {
   items: [

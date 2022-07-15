@@ -101,15 +101,19 @@ export function getPublishedAt(doc: LocalDocument): string {
 
 export function getSlug(doc: LocalDocument): string {
   // TODO Unfortunate logic, until we can set a bundler cwd per mdx file
-  const fileName = doc._raw.sourceFileName.split('__')
-  return slug((fileName[1] ?? fileName[0]).replace(/\.mdx?/, ''))
+  // const fileName = doc._raw.sourceFileName.split('__')
+  // return slug((fileName[1] ?? fileName[0]).replace(/\.mdx?/, ''))
+  const fileName = path.basename(doc._raw.flattenedPath)
+  return slug(fileName)
 }
 
 export function getPath(doc: LocalDocument): string {
   // TODO Unfortunate logic, until we can set a bundler cwd per mdx file
-  const fileName = doc._raw.sourceFileName.split('__')
-  const contentDir =
-    fileName.length === 2 && fileName[0] !== 'pages' ? fileName[0] : ''
+  // const fileName = doc._raw.sourceFileName.split('__')
+  // const contentDir =
+  //   fileName.length === 2 && fileName[0] !== 'pages' ? fileName[0] : ''
+  // return getContentPath(contentDir, getSlug(doc))
+  const contentDir = doc._raw.flattenedPath.split('/')[0]
   return getContentPath(contentDir, getSlug(doc))
 }
 

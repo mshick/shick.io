@@ -10,7 +10,7 @@ export default function TagsPage({
   tags
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <Layout seo={{ title: 'articles' }}>
+    <Layout seo={{ title: 'Tags' }}>
       <div className="w-full mt-8 max-w-none">
         <h1>Tags ({tags.length})</h1>
         <TagList tags={tags}>

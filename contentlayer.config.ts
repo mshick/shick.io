@@ -31,7 +31,6 @@ import {
   getUpdatedBy,
   getUpdatedByEmail
 } from './lib/fields'
-import rehypeImgSize from './lib/rehype/rehype-img-size'
 import remarkEpigraph from './lib/remark/remark-epigraph'
 import remarkFigure from './lib/remark/remark-figure'
 import remarkFooter from './lib/remark/remark-footer'
@@ -128,7 +127,7 @@ const computedFields: ComputedFields = {
 
 export const Page = defineDocumentType(() => ({
   name: 'Page',
-  filePathPattern: 'pages__*.{md,mdx}',
+  filePathPattern: 'pages/**/*.{md,mdx}',
   contentType: 'mdx',
   fields: omit(fields, ['pinned']),
   computedFields: omit(computedFields, ['readingTime'])
@@ -136,7 +135,7 @@ export const Page = defineDocumentType(() => ({
 
 export const Article = defineDocumentType(() => ({
   name: 'Article',
-  filePathPattern: 'articles__*.{md,mdx}',
+  filePathPattern: 'articles/**/*.{md,mdx}',
   contentType: 'mdx',
   fields,
   computedFields
@@ -146,6 +145,7 @@ export default makeSource({
   contentDirPath: contentDirPath,
   documentTypes: [Article, Page],
   mdx: {
+    useRelativeCwd: true,
     remarkPlugins: [
       remarkGemoji,
       remarkDirective,
@@ -168,7 +168,7 @@ export default makeSource({
       rehypeSlug,
       rehypeCodeTitles,
       [rehypePrism, { ignoreMissing: true }],
-      [rehypeImgSize, { dir: contentDirPath }],
+      // [rehypeImgSize, { dir: contentDirPath }],
       [
         rehypeAutolinkHeadings,
         {
@@ -181,7 +181,7 @@ export default makeSource({
     esbuildOptions: (options) => {
       options.platform = 'node'
       options.outdir = publicDir
-      options.assetNames = `images/[dir]/[name]`
+      options.assetNames = `images/[name]-[hash]`
       options.loader = {
         ...options.loader,
         '.png': 'file',

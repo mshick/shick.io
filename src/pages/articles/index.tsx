@@ -10,7 +10,7 @@ export default function ArticlesPage({
   articles
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <Layout seo={{ title: 'articles' }}>
+    <Layout seo={{ title: 'Articles' }}>
       <div className="w-full mt-8 max-w-none">
         <DocumentList documents={articles}>
           {(document) => <DocumentListItem {...document} />}

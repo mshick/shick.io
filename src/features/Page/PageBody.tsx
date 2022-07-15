@@ -1,10 +1,10 @@
 import { components } from 'components/Mdx'
 import { useMDXComponent } from 'next-contentlayer/hooks'
-import { Article } from 'types'
+import { Page } from 'types'
 
-export type ArticleBodyProps = Pick<Article, 'body'>
+export type PageBodyProps = Pick<Page, 'body'>
 
-export function ArticleBody({ body }: ArticleBodyProps) {
+export function PageBody({ body }: PageBodyProps) {
   const Component = useMDXComponent(body.code)
   return (
     <div className="prose prose-high-contrast prose-tufte-sidenotes md:prose-tufte-sidenotes-lg dark:prose-invert">

@@ -1,19 +1,17 @@
 import { siteUrl } from 'config'
-import { allArticles } from 'contentlayer/generated'
-import { ArticleBody } from 'features/Article/ArticleBody'
-import { ArticleFooter } from 'features/Article/ArticleFooter'
-import { ArticleHeader } from 'features/Article/ArticleHeader'
-import { getArticle, getArticlePageParams } from 'features/Article/utils'
-import Layout from 'layouts/Article'
+import { allPages } from 'contentlayer/generated'
+import { PageBody } from 'features/Page/PageBody'
+import { getPagePageParams } from 'features/Page/utils'
+import Layout from 'layouts/Page'
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import { NextSeoProps } from 'next-seo'
-import { Article } from 'types'
+import { Page } from 'types'
 import { getSingle } from 'utils/types'
 
-export default function ArticlePage({
-  article
+export default function PagePage({
+  page
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const { title, image, excerpt, tags, publishedAt, updatedAt } = article
+  const { title, image, excerpt, tags, publishedAt, updatedAt } = page
 
   const seo: NextSeoProps = {
     title,
@@ -41,30 +39,28 @@ export default function ArticlePage({
 
   return (
     <Layout seo={seo}>
-      <div className="mb-8">
-        <ArticleHeader {...article} />
-      </div>
-      <ArticleBody {...article} />
-      <ArticleFooter {...article} />
+      <PageBody {...page} />
     </Layout>
   )
 }
 
 export async function getStaticPaths() {
   return {
-    paths: getArticlePageParams(allArticles as unknown as Article[]),
+    paths: getPagePageParams(allPages as unknown as Page[]),
     fallback: false
   }
 }
 
 export async function getStaticProps({ params }: GetStaticPropsContext) {
-  const slug = getSingle(params.article)
-  const article = getArticle(slug, allArticles as unknown as Article[])
+  const slug = getSingle(params.page)
+  const page = (allPages as unknown as Page[]).find(
+    (page) => page.slug === slug
+  )
 
   return {
-    notFound: !Boolean(article),
+    notFound: !Boolean(page),
     props: {
-      article
+      page
     }
   }
 }
