@@ -163,6 +163,7 @@
     "npm": "8"
   },
   "overrides": {
+    "@contentlayer/core": "mshick/contentlayer#build",
     "contentlayer": {
       "@contentlayer/core": "mshick/contentlayer#build"
     },
