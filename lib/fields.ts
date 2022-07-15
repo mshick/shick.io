@@ -14,6 +14,7 @@ import remarkTruncate from '../lib/remark/remark-truncate'
 import { baseDir, contentDirPath, siteUrl, timezone } from './config'
 import { getContentPath } from './content'
 import { getGitConfig, getGitFileInfo } from './git'
+import logger from './logger'
 import { Tag } from './types'
 
 const { zonedTimeToUtc } = dateFns
@@ -136,6 +137,11 @@ export async function getEditUrl(doc: LocalDocument): Promise<string> {
 }
 
 export function getShareUrl(doc: LocalDocument): string {
-  const path = getPath(doc)
-  return new URL(path, siteUrl).href
+  try {
+    const path = getPath(doc)
+    return new URL(path, siteUrl).href
+  } catch (e) {
+    logger.error(e, 'could not get share url')
+    return ''
+  }
 }
