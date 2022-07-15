@@ -9,7 +9,7 @@ export const isDevelopment = vercelEnv === 'development'
 export const isTest = process.env.NODE_ENV === 'test'
 
 export const githubRepo = process.env.GITHUB_REPO ?? 'mshick/shick.io'
-export const defaultBranch = process.env.GITHUB_REPO ?? 'main'
+export const defaultBranch = process.env.DEFAULT_BRANCH ?? 'main'
 
 export const baseDir = process.cwd()
 export const publicDirPath = 'public'
