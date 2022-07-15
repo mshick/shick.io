@@ -10,11 +10,10 @@ import remarkParse from 'remark-parse'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import remarkUnlink from 'remark-unlink'
 import slug from 'slug'
+import { baseDir, contentDirPath, siteUrl, timezone } from '../config'
 import remarkTruncate from '../lib/remark/remark-truncate'
-import { baseDir, contentDirPath, siteUrl, timezone } from './config'
 import { getContentPath } from './content'
 import { getGitConfig, getGitFileInfo } from './git'
-import logger from './logger'
 import { Tag } from './types'
 
 const { zonedTimeToUtc } = dateFns
@@ -137,12 +136,5 @@ export async function getEditUrl(doc: LocalDocument): Promise<string> {
 }
 
 export function getShareUrl(doc: LocalDocument): string {
-  try {
-    const path = getPath(doc)
-    logger.info({ path, siteUrl })
-    return new URL(path, siteUrl).href
-  } catch (e) {
-    logger.error('could not get share url')
-    return ''
-  }
+  return new URL(getPath(doc), siteUrl).href
 }

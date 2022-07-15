@@ -10,15 +10,16 @@
     "noEmit": true,
     "incremental": true,
     "esModuleInterop": true,
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
     "paths": {
-      "contentlayer/generated": ["../.contentlayer/generated"]
+      "contentlayer/generated": ["../.contentlayer/generated"],
+      "config": ["../config"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".contentlayer/generated"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".contentlayer/generated", "config"],
   "exclude": ["node_modules"]
 }

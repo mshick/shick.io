@@ -1,5 +1,5 @@
+import { commitSha, isDevelopment, logLevel, vercelEnv } from 'config'
 import pino, { LoggerOptions } from 'pino'
-import { commitSha, isProduction, logLevel, vercelEnv } from './config'
 
 const config: LoggerOptions = {
   level: logLevel,
@@ -9,7 +9,7 @@ const config: LoggerOptions = {
   }
 }
 
-if (!isProduction) {
+if (isDevelopment) {
   config.transport = {
     target: 'pino-pretty',
     options: { colorize: true }

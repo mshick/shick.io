@@ -1,13 +1,13 @@
-import type { DefaultSeoProps } from 'next-seo'
+import { DefaultSeoProps } from 'next-seo'
 
 export const locale = process.env.NEXT_PUBLIC_LOCALE ?? 'en-US'
 
-export const nodeEnv = process.env.NODE_ENV ?? 'development'
 export const vercelEnv = process.env.VERCEL_ENV ?? 'development'
-export const isProduction =
-  nodeEnv === 'production' || vercelEnv === 'production'
+export const isProduction = vercelEnv === 'production'
+export const isDevelopment = vercelEnv === 'development'
 export const isTest = process.env.NODE_ENV === 'test'
 
+export const defaultBranch = process.env.DEFAULT_BRANCH ?? 'main'
 export const baseDir = process.cwd()
 export const publicDirPath = 'public'
 export const publicDir = `${baseDir}/${publicDirPath}`
@@ -25,9 +25,16 @@ export const logLevel = process.env.NEXT_PUBLIC_LOG_LEVEL ?? 'info'
 
 export const siteName = 'michael_shick'
 export const siteDescription = 'My personal site.'
-export const siteUrl = process.env.NEXT_PUBLIC_VERCEL_URL
-  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-  : 'https://www.shick.io'
+
+const vercelUrl =
+  process.env.NEXT_PUBLIC_VERCEL_URL &&
+  `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+
+const envUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://shick.io'
+
+export const siteUrl = isProduction
+  ? envUrl
+  : vercelUrl ?? 'http://localhost:3000'
 
 export const siteTitleStyle =
   process.env.NEXT_PUBLIC_SITE_TITLE_STYLE ?? 'snakeCase'

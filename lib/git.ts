@@ -1,5 +1,5 @@
 import git from 'simple-git'
-import { defaultBranch } from './config'
+import { defaultBranch } from '../config'
 import logger from './logger'
 import { GitConfig, GitFileInfo } from './types'
 

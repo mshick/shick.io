@@ -17,7 +17,7 @@ import remarkGfm from 'remark-gfm'
 import { remarkMdxImages } from 'remark-mdx-images'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import remarkUnwrapImages from 'remark-unwrap-images'
-import { contentDirPath, publicDir } from './lib/config'
+import { contentDirPath, publicDir } from './config'
 import {
   getEditUrl,
   getExcerpt,
