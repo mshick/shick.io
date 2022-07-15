@@ -1,0 +1,22 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/michael-shick-2022.pdf/",
+      "destination": "https://read.cv/mshick"
+    },
+    {
+      "source": "/resume/",
+      "destination": "https://read.cv/mshick"
+    },
+    {
+      "source": "/30/",
+      "destination": "https://calendly.com/michaelshick/30min"
+    },
+    {
+      "source": "/15/",
+      "destination": "https://calendly.com/michaelshick/15min"
+    }
+  ]
+}
