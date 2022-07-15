@@ -1,5 +1,4 @@
 import { h } from 'hastscript'
-import isEmpty from 'lodash-es/isEmpty.js'
 import { BlockContent } from 'mdast'
 import { ContainerDirective } from 'mdast-util-directive'
 import { Transformer } from 'unified'
@@ -30,7 +29,7 @@ const transform: Transformer = (tree) => {
         return g
       }, {})
 
-      if (!isEmpty(groupedCaptions)) {
+      if (Object.entries(groupedCaptions).length > 0) {
         for (const [startIndex, captionNodes] of Object.entries(
           groupedCaptions
         )) {
