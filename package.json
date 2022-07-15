@@ -163,13 +163,7 @@
     "npm": "8"
   },
   "overrides": {
-    "@contentlayer/core": "mshick/contentlayer#build",
-    "contentlayer": {
-      "@contentlayer/core": "mshick/contentlayer#build"
-    },
-    "next-contentlayer": {
-      "@contentlayer/core": "mshick/contentlayer#build"
-    }
+    "@contentlayer/core": "https://github.com/mshick/contentlayer#build"
   },
   "postcss": {
     "plugins": {
