@@ -16,5 +16,6 @@ export const contentTypePathMap = {
 export const timezone = process.env.TIMEZONE ?? 'America/New_York'
 export const logLevel = process.env.NEXT_PUBLIC_LOG_LEVEL ?? 'info'
 export const commitSha = process.env.VERCEL_GITHUB_COMMIT_SHA ?? ''
-export const siteUrl =
-  process.env.NEXT_PUBLIC_VERCEL_URL ?? 'https://www.shick.io'
+export const siteUrl = process.env.NEXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  : 'https://www.shick.io'

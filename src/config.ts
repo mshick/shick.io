@@ -25,8 +25,9 @@ export const logLevel = process.env.NEXT_PUBLIC_LOG_LEVEL ?? 'info'
 
 export const siteName = 'michael_shick'
 export const siteDescription = 'My personal site.'
-export const siteUrl =
-  process.env.NEXT_PUBLIC_VERCEL_URL ?? 'https://www.shick.io'
+export const siteUrl = process.env.NEXT_PUBLIC_VERCEL_URL
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  : 'https://www.shick.io'
 
 export const siteTitleStyle =
   process.env.NEXT_PUBLIC_SITE_TITLE_STYLE ?? 'snakeCase'
