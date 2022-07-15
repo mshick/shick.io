@@ -139,9 +139,10 @@ export async function getEditUrl(doc: LocalDocument): Promise<string> {
 export function getShareUrl(doc: LocalDocument): string {
   try {
     const path = getPath(doc)
+    logger.info({ path, siteUrl })
     return new URL(path, siteUrl).href
   } catch (e) {
-    logger.error(e, 'could not get share url')
+    logger.error('could not get share url')
     return ''
   }
 }
