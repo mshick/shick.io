@@ -42,3 +42,6 @@ yarn-error.log*
 
 # Sentry
 .sentryclirc
+
+# generated files
+/src/generated/

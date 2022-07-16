@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { writeFileSync } from 'fs'
 import MiniSearch from 'minisearch'
-import { allDocuments } from '../.contentlayer/generated/index.mjs'
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { allArticles, allPages } from '../.contentlayer/generated/index.mjs'
 
 function generate() {
-  const docs = allDocuments.map((doc) => ({
+  const docs = [...allArticles, ...allPages].map((doc) => ({
     id: doc._id,
     title: doc.title,
     body: doc.body.raw,
@@ -21,6 +21,8 @@ function generate() {
   })
 
   miniSearch.addAll(docs)
+
+  mkdirSync('./src/generated', { recursive: true })
 
   writeFileSync(
     './src/generated/searchIndex.json',
