@@ -1,6 +1,7 @@
 import { LocalDocument } from 'contentlayer/source-files'
 import dateFns from 'date-fns-tz'
-import path from 'path'
+import path from 'node:path'
+import { format } from 'node:util'
 import readingTime, { ReadTimeResults } from 'reading-time'
 import { remark } from 'remark'
 import remarkHtml from 'remark-html'
@@ -14,8 +15,10 @@ import {
   baseDir,
   canonicalUrl,
   contentDirPath,
-  defaultBranch,
-  githubRepo,
+  editUrlPattern,
+  gitBaseUrl,
+  gitDefaultBranch,
+  gitRepo,
   isProduction,
   localDevUrl,
   timezone,
@@ -145,7 +148,13 @@ export function getTags(doc: LocalDocument): Tag[] {
 
 export async function getEditUrl(doc: LocalDocument): Promise<string> {
   const { sourceFilePath } = doc._raw
-  return `https://github.com/${githubRepo}/edit/${defaultBranch}/${contentDirPath}/${sourceFilePath}`
+  const formatted = format(
+    editUrlPattern,
+    `${contentDirPath}/${sourceFilePath}`
+  )
+  // console.log({ formatted }, 'foo')
+
+  return `${gitBaseUrl}/${gitRepo}/edit/${gitDefaultBranch}/${contentDirPath}/${sourceFilePath}`
 }
 
 export function getShareUrl(doc: LocalDocument): string {

@@ -56,9 +56,6 @@ seo:
     handle: '@michaelshick'
     site: '@michaelshick'
     cardType: summary_large_image
-repo:
-  path: mshick/shick.io
-  defaultBranch: main
 navigation:
   - label: home
     path: /

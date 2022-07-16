@@ -160,22 +160,6 @@ export const Config = defineDocumentType(() => ({
       type: 'string',
       required: true
     },
-    repo: {
-      type: 'nested',
-      of: defineNestedType(() => ({
-        name: 'Repo',
-        fields: {
-          name: {
-            type: 'string',
-            required: true
-          },
-          defaultBranch: {
-            type: 'string',
-            required: true
-          }
-        }
-      }))
-    },
     navigation: {
       type: 'list',
       required: true,
