@@ -1,5 +1,6 @@
 import Seo from 'components/Seo'
-import { navigation, siteName } from 'config'
+import { siteName } from 'config'
+import { navigation } from 'contentlayer/generated'
 import { SiteFooter } from 'features/Site/SiteFooter'
 import { SiteNavigation } from 'features/Site/SiteNavigation'
 import { NextSeoProps } from 'next-seo'

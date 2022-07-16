@@ -1,18 +1,19 @@
 import { pick } from '@contentlayer/utils'
 import Link from 'components/Link'
-import { allArticles } from 'contentlayer/generated'
+import { allArticles, allPages } from 'contentlayer/generated'
 import firstName from 'features/Ascii/firstName.txt'
 import lastName from 'features/Ascii/lastName.txt'
 import picture from 'features/Ascii/portrait.txt'
 import Layout from 'layouts/Page'
 import { InferGetStaticPropsType } from 'next'
-import { Article } from 'types'
+import { Article, Page } from 'types'
 
 export default function IndexPage({
+  page,
   featuredArticles
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   return (
-    <Layout>
+    <Layout seo={{ defaultTitle: page.title }}>
       <div className="flex flex-col-reverse sm:flex-row sm:gap-10 my-4">
         <div className="flex flex-col gap-4 items-center sm:items-start md:justify-center">
           <div className="flex flex-row gap-4 sm:flex-row sm:gap-2 sm:mx-0 text-[5px] sm:text-[6px] lg:text-[7px]">
@@ -63,6 +64,10 @@ export default function IndexPage({
 }
 
 export async function getStaticProps() {
+  const page = (allPages as unknown as Page[]).find(
+    (page) => page.slug === 'index'
+  )
+
   const featuredArticles = (allArticles as unknown as Article[])
     .map((doc) =>
       pick(doc, ['path', 'title', 'excerpt', 'publishedAt', 'featured'])
@@ -75,6 +80,7 @@ export async function getStaticProps() {
 
   return {
     props: {
+      page,
       featuredArticles
     }
   }

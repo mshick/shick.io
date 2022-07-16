@@ -141,9 +141,41 @@ export const Article = defineDocumentType(() => ({
   computedFields
 }))
 
+const NavigationItem = defineNestedType(() => ({
+  name: 'NavigationItem',
+  fields: {
+    label: {
+      type: 'string',
+      required: true
+    },
+    path: {
+      type: 'string',
+      required: true
+    },
+    current: {
+      type: 'boolean',
+      required: true
+    }
+  }
+}))
+
+export const Navigation = defineDocumentType(() => ({
+  name: 'Navigation',
+  filePathPattern: 'navigation.yaml',
+  isSingleton: true,
+  contentType: 'data',
+  fields: {
+    items: {
+      type: 'list',
+      of: NavigationItem,
+      required: true
+    }
+  }
+}))
+
 export default makeSource({
   contentDirPath: contentDirPath,
-  documentTypes: [Article, Page],
+  documentTypes: [Navigation, Article, Page],
   mdx: {
     useRelativeCwd: true,
     remarkPlugins: [
