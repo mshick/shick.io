@@ -34,7 +34,4 @@ export const contentTypePathMap = _contentTypePathMap
     }, {})
   : {}
 
-export const gitRepo = process.env.NEXT_PUBLIC_GIT_REPO
-export const gitBaseUrl = process.env.NEXT_PUBLIC_GIT_BASE_URL
-export const gitDefaultBranch = process.env.NEXT_PUBLIC_GIT_DEFAULT_BRANCH
 export const editUrlPattern = process.env.NEXT_PUBLIC_EDIT_URL_PATTERN

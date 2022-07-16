@@ -16,9 +16,6 @@ import {
   canonicalUrl,
   contentDirPath,
   editUrlPattern,
-  gitBaseUrl,
-  gitDefaultBranch,
-  gitRepo,
   isProduction,
   localDevUrl,
   timezone,
@@ -146,15 +143,11 @@ export function getTags(doc: LocalDocument): Tag[] {
   })
 }
 
-export async function getEditUrl(doc: LocalDocument): Promise<string> {
+export function getEditUrl(doc: LocalDocument): string {
   const { sourceFilePath } = doc._raw
-  const formatted = format(
-    editUrlPattern,
-    `${contentDirPath}/${sourceFilePath}`
-  )
-  // console.log({ formatted }, 'foo')
-
-  return `${gitBaseUrl}/${gitRepo}/edit/${gitDefaultBranch}/${contentDirPath}/${sourceFilePath}`
+  return editUrlPattern
+    ? format(editUrlPattern, `/${contentDirPath}/${sourceFilePath}`)
+    : ''
 }
 
 export function getShareUrl(doc: LocalDocument): string {
