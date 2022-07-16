@@ -1,5 +1,5 @@
 import Link from 'components/Link'
-import { DocumentTypes } from 'contentlayer/generated'
+import { DocumentTypes } from 'types'
 
 export type DocumentListItemProps = Pick<
   DocumentTypes,

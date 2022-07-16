@@ -77,28 +77,3 @@ export function SearchResults({
     </div>
   )
 }
-
-// items.map((item) => (
-//   <div
-//     key={item.path}
-//     className="py-2 px-4  group hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-700"
-//   >
-//     <Link
-//       href={item.path}
-//       onClick={onClickLink}
-//       className="block no-underline"
-//     >
-//       <div className="flex-auto">
-//         <h2 className="text-2xl font-bold group-hover:text-white ">
-//           {item.title}
-//         </h2>
-//         {item.excerpt && (
-//           <div
-//             className="-mt-4 prose text-gray-700 dark:text-gray-200 group-hover:text-white "
-//             dangerouslySetInnerHTML={{ __html: item.excerpt }}
-//           />
-//         )}
-//       </div>
-//     </Link>
-//   </div>
-// ))}

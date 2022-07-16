@@ -1,5 +1,4 @@
-import { siteUrl } from 'config'
-import { allPages } from 'contentlayer/generated'
+import { allPages, config } from 'contentlayer/generated'
 import { PageBody } from 'features/Page/PageBody'
 import { getPagePageParams } from 'features/Page/utils'
 import Layout from 'layouts/Page'
@@ -27,7 +26,7 @@ export default function PagePage({
       images: image
         ? [
             {
-              url: new URL(image.url, siteUrl).href,
+              url: new URL(image.url, config.siteUrl).href,
               width: 850,
               height: 650,
               alt: image.alt ?? image.title ?? title

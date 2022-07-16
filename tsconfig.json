@@ -17,9 +17,9 @@
     "jsx": "preserve",
     "paths": {
       "contentlayer/generated": ["../.contentlayer/generated"],
-      "config": ["../config"]
+      "env": ["../env"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".contentlayer/generated", "config"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".contentlayer/generated", "env"],
   "exclude": ["node_modules"]
 }

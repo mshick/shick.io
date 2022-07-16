@@ -1,6 +1,5 @@
 import Seo from 'components/Seo'
-import { siteName } from 'config'
-import { navigation } from 'contentlayer/generated'
+import { config } from 'contentlayer/generated'
 import { SiteFooter } from 'features/Site/SiteFooter'
 import { SiteNavigation } from 'features/Site/SiteNavigation'
 import { NextSeoProps } from 'next-seo'
@@ -19,13 +18,13 @@ export const LayoutDefault = ({
       <Seo {...seo} />
       <div className="flex flex-col items-start lg:w-[80%] lg:px-[10%] md:w-[84%] md:px-[8%] sm:w-[90%] sm:px-[5%] w-[94%] px-[3%] mx-auto">
         <div className="flex flex-col w-full box-border max-w-4xl mx-auto min-h-screen">
-          <SiteNavigation items={navigation.items} />
+          <SiteNavigation items={config.navigation} />
 
           <main id="content" className="w-full flex-grow">
             {children}
           </main>
 
-          <SiteFooter siteName={siteName} />
+          <SiteFooter siteName={config.siteName} />
         </div>
       </div>
     </>

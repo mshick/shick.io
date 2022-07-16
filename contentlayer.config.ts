@@ -17,7 +17,7 @@ import remarkGfm from 'remark-gfm'
 import { remarkMdxImages } from 'remark-mdx-images'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import remarkUnwrapImages from 'remark-unwrap-images'
-import { contentDirPath, publicDir } from './config'
+import { contentDirPath, publicDir } from './env'
 import {
   getEditUrl,
   getExcerpt,
@@ -25,6 +25,7 @@ import {
   getPublishedAt,
   getReadingTime,
   getShareUrl,
+  getSiteUrl,
   getSlug,
   getTags,
   getUpdatedAt,
@@ -141,41 +142,77 @@ export const Article = defineDocumentType(() => ({
   computedFields
 }))
 
-const NavigationItem = defineNestedType(() => ({
-  name: 'NavigationItem',
-  fields: {
-    label: {
-      type: 'string',
-      required: true
-    },
-    path: {
-      type: 'string',
-      required: true
-    },
-    current: {
-      type: 'boolean',
-      required: true
-    }
-  }
-}))
-
-export const Navigation = defineDocumentType(() => ({
-  name: 'Navigation',
-  filePathPattern: 'navigation.yaml',
+export const Config = defineDocumentType(() => ({
+  name: 'Config',
+  filePathPattern: 'config.yaml',
   isSingleton: true,
   contentType: 'data',
   fields: {
-    items: {
-      type: 'list',
-      of: NavigationItem,
+    siteName: {
+      type: 'string',
       required: true
+    },
+    siteDescription: {
+      type: 'string',
+      required: true
+    },
+    locale: {
+      type: 'string',
+      required: true
+    },
+    repo: {
+      type: 'nested',
+      of: defineNestedType(() => ({
+        name: 'Repo',
+        fields: {
+          name: {
+            type: 'string',
+            required: true
+          },
+          defaultBranch: {
+            type: 'string',
+            required: true
+          }
+        }
+      }))
+    },
+    navigation: {
+      type: 'list',
+      required: true,
+      of: defineNestedType(() => ({
+        name: 'NavigationItem',
+        fields: {
+          label: {
+            type: 'string',
+            required: true
+          },
+          path: {
+            type: 'string',
+            required: true
+          },
+          current: {
+            type: 'boolean',
+            required: true
+          }
+        }
+      }))
+    },
+    seo: {
+      type: 'json',
+      required: true
+    }
+  },
+  computedFields: {
+    siteUrl: {
+      type: 'string',
+      resolve: getSiteUrl
     }
   }
 }))
 
 export default makeSource({
   contentDirPath: contentDirPath,
-  documentTypes: [Navigation, Article, Page],
+  documentTypes: [Config, Article, Page],
   mdx: {
     useRelativeCwd: true,
     remarkPlugins: [

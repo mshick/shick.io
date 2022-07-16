@@ -1,5 +1,4 @@
-import { siteUrl } from 'config'
-import { allArticles } from 'contentlayer/generated'
+import { allArticles, config } from 'contentlayer/generated'
 import { ArticleBody } from 'features/Article/ArticleBody'
 import { ArticleFooter } from 'features/Article/ArticleFooter'
 import { ArticleHeader } from 'features/Article/ArticleHeader'
@@ -29,7 +28,7 @@ export default function ArticlePage({
       images: image
         ? [
             {
-              url: new URL(image.url, siteUrl).href,
+              url: new URL(image.url, config.siteUrl).href,
               width: 850,
               height: 650,
               alt: image.alt ?? image.title ?? title

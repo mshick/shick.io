@@ -12,12 +12,15 @@ import remarkUnlink from 'remark-unlink'
 import slug from 'slug'
 import {
   baseDir,
+  canonicalUrl,
   contentDirPath,
   defaultBranch,
   githubRepo,
-  siteUrl,
-  timezone
-} from '../config'
+  isProduction,
+  localDevUrl,
+  timezone,
+  vercelUrl
+} from '../env'
 import remarkTruncate from '../lib/remark/remark-truncate'
 import { getContentPath } from './content'
 import { getGitFileInfo } from './git'
@@ -40,6 +43,10 @@ export async function truncateBody(body: string) {
     .use(remarkHtml)
     .process(body)
   return String(html)
+}
+
+export function getSiteUrl(): string {
+  return isProduction ? canonicalUrl : vercelUrl ?? localDevUrl
 }
 
 export async function getExcerpt(doc: LocalDocument): Promise<string> {
@@ -142,5 +149,5 @@ export async function getEditUrl(doc: LocalDocument): Promise<string> {
 }
 
 export function getShareUrl(doc: LocalDocument): string {
-  return new URL(getPath(doc), siteUrl).href
+  return new URL(getPath(doc), getSiteUrl()).href
 }

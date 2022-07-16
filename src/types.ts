@@ -1,7 +1,11 @@
-import { Article as TArticle, Page as TPage } from 'contentlayer/generated'
+import {
+  Article as TArticle,
+  Config as TConfig,
+  Page as TPage
+} from 'contentlayer/generated'
 import { ReactElement } from 'react'
 import { ReadTimeResults } from 'reading-time'
-import { Merge } from 'type-fest'
+import { Merge, SetRequired } from 'type-fest'
 
 type Renderable = number | string | ReactElement | Renderable[]
 
@@ -15,9 +19,9 @@ export type Tag = {
   slug: string
 }
 
-// Overrides for broken contentlayer types
+// Overrides for incorrect contentlayer types
 export type Article = Merge<
-  TArticle,
+  SetRequired<TArticle, 'excerpt'>,
   {
     tags: Tag[]
     readingTime: ReadTimeResults
@@ -26,4 +30,9 @@ export type Article = Merge<
   }
 >
 export type Page = Merge<TPage, { tags: Tag[] }>
+
 export type DocumentTypes = Article | Page
+
+export type Config = SetRequired<TConfig, 'siteUrl'>
+
+export type SingletonTypes = Config

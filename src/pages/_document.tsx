@@ -1,4 +1,4 @@
-import { locale } from 'config'
+import { config } from 'contentlayer/generated'
 import Document, { Head, Html, Main, NextScript } from 'next/document'
 export default class CustomDocument extends Document {
   static async getInitialProps(ctx) {
@@ -8,7 +8,7 @@ export default class CustomDocument extends Document {
 
   render() {
     return (
-      <Html lang={locale}>
+      <Html lang={config.locale}>
         <Head />
         <body className="antialiased font-mono bg-white text-black dark:bg-black dark:text-white">
           <Main />

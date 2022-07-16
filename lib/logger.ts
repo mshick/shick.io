@@ -1,5 +1,5 @@
 import pino, { LoggerOptions } from 'pino'
-import { commitSha, isDevelopment, logLevel, vercelEnv } from '../config'
+import { commitSha, isDevelopment, logLevel, vercelEnv } from '../env'
 
 const config: LoggerOptions = {
   level: logLevel,
