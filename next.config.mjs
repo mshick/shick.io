@@ -54,8 +54,7 @@ const securityHeaders = [
 ]
 
 const config = {
-  // Breaks pino-logflare
-  // swcMinify: true,
+  swcMinify: true,
   poweredByHeader: false,
   trailingSlash: true,
   reactStrictMode: true,
@@ -118,7 +117,31 @@ const config = {
       }
     ]
   },
-  webpack: (config) => {
+  async redirects() {
+    return [
+      {
+        source: '/michael-shick-2022.pdf',
+        destination: 'https://read.cv/mshick',
+        permanent: false
+      },
+      {
+        source: '/resume',
+        destination: 'https://read.cv/mshick',
+        permanent: false
+      },
+      {
+        source: '/30',
+        destination: 'https://calendly.com/michaelshick/30min',
+        permanent: false
+      },
+      {
+        source: '/15',
+        destination: 'https://calendly.com/michaelshick/15min',
+        permanent: false
+      }
+    ]
+  },
+  webpack(config) {
     config.infrastructureLogging = {
       level: 'error'
     }
