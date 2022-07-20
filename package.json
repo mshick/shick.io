@@ -5,6 +5,7 @@
   "scripts": {
     "prebuild": "contentlayer build && npm run generate:search-index",
     "build": "next build",
+    "predev": "contentlayer build && npm run generate:search-index",
     "dev": "next dev",
     "generate:search-index": "./scripts/generate-search-index.mjs",
     "lint": "next lint",
