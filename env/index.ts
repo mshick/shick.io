@@ -35,3 +35,12 @@ export const contentTypePathMap = _contentTypePathMap
   : {}
 
 export const editUrlPattern = process.env.NEXT_PUBLIC_EDIT_URL_PATTERN
+
+// MusicKit
+export const musickitPrivateKey = process.env.MUSICKIT_PRIVATE_KEY.replace(
+  /\\n/g,
+  '\n'
+)
+export const musickitKeyId = process.env.MUSICKIT_KEY_ID
+export const musickitTeamId = process.env.MUSICKIT_TEAM_ID
+export const musickitMusicUserToken = process.env.MUSICKIT_MUSIC_USER_TOKEN

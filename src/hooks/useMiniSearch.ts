@@ -45,6 +45,7 @@ export function useMiniSearch({ searchOptions }: UseMiniSearchProps = {}): [
 
   useEffect(() => {
     async function loadSearchIndex() {
+      // @ts-ignore Generated file, may not be present during typechecking
       const { index } = await import('../generated/searchIndex.json')
       minisearch.current = MiniSearch.loadJSON<IndexedResult>(index, {
         fields: ['title', 'tags', 'excerpt', 'body'],

@@ -55,12 +55,8 @@ const securityHeaders = [
 
 const config = {
   swcMinify: true,
-  poweredByHeader: false,
   trailingSlash: true,
   reactStrictMode: true,
-  compiler: {
-    styledComponents: true
-  },
   images: {
     domains: ['github.com', 'edwardtufte.github.io']
   },
