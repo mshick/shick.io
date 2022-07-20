@@ -1,10 +1,8 @@
 import { createMusicKit } from 'lib/musickit/musickit'
 import { NextRequest } from 'next/server'
 
-const musickitPrivateKey = process.env.MUSICKIT_PRIVATE_KEY.replace(
-  /\\n/g,
-  '\n'
-)
+const _musickitPrivateKey = process.env.MUSICKIT_PRIVATE_KEY ?? ''
+const musickitPrivateKey = _musickitPrivateKey.replace(/\\n/g, '\n')
 const musickitKeyId = process.env.MUSICKIT_KEY_ID
 const musickitTeamId = process.env.MUSICKIT_TEAM_ID
 const musickitMusicUserToken = process.env.MUSICKIT_MUSIC_USER_TOKEN

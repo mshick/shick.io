@@ -1,6 +1,6 @@
 import { pick } from '@contentlayer/utils'
 import { Link } from 'components/Link'
-import { allDocuments } from 'contentlayer/generated'
+import { allArticles, allPages } from 'contentlayer/generated'
 import { TagEntry, TagList } from 'features/Tag/TagList'
 import Layout from 'layouts/Default'
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
@@ -26,7 +26,9 @@ export default function TagsPage({
 }
 
 export async function getStaticProps({}: GetStaticPropsContext) {
-  const tagsByTags = (allDocuments as unknown as DocumentTypes[])
+  const tagsByTags = (
+    [...allPages, ...allArticles] as unknown as DocumentTypes[]
+  )
     .map((doc) =>
       pick(doc, ['path', 'title', 'excerpt', 'publishedAt', 'tags'])
     )

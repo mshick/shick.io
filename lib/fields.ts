@@ -146,7 +146,7 @@ export function getTags(doc: LocalDocument): Tag[] {
 export function getEditUrl(doc: LocalDocument): string {
   const { sourceFilePath } = doc._raw
   return editUrlPattern
-    ? format(editUrlPattern, `/${contentDirPath}/${sourceFilePath}`)
+    ? format(editUrlPattern, `${contentDirPath}/${sourceFilePath}`)
     : ''
 }
 
