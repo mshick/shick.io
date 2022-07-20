@@ -13,7 +13,7 @@ export const config = {
 }
 
 export default async function handler(req: NextRequest) {
-  const { searchParams, pathname } = new URL(req.url)
+  const { pathname } = new URL(req.url)
   const method = pathname.match(/([^\/]+)\/?$/)[1]
 
   const musicKit = await createMusicKit({
@@ -28,17 +28,23 @@ export default async function handler(req: NextRequest) {
 
   switch (method) {
     case 'renew-token':
-      if (searchParams.get('renewSecret') === musickitRenewSecret) {
+      if (
+        req.headers.get('authorization') === `Bearer ${musickitRenewSecret}`
+      ) {
         results = await musicKit.renewMusicUserToken()
       } else {
-        results = { errors: [{ title: 'Invalid secret' }] }
+        results = { errors: [{ title: 'Unauthorized' }] }
         status = 401
       }
       break
 
     case 'recent-tracks':
-    default:
       results = await musicKit.getRecentlyPlayedTracks({ limit: 5 })
+      break
+
+    default:
+      results = { errors: [{ title: 'Not found' }] }
+      status = 404
   }
 
   return new Response(JSON.stringify(results), {
