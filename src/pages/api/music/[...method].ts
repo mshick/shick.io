@@ -6,7 +6,7 @@ const musickitPrivateKey = _musickitPrivateKey.replace(/\\n/g, '\n')
 const musickitKeyId = process.env.MUSICKIT_KEY_ID
 const musickitTeamId = process.env.MUSICKIT_TEAM_ID
 const musickitMusicUserToken = process.env.MUSICKIT_MUSIC_USER_TOKEN
-const musickitRenewSecret = process.env.MUSICKIT_RENEW_SECRET
+const apiSecret = process.env.API_SECRET
 
 export const config = {
   runtime: 'experimental-edge'
@@ -28,9 +28,7 @@ export default async function handler(req: NextRequest) {
 
   switch (method) {
     case 'renew-token':
-      if (
-        req.headers.get('authorization') === `Bearer ${musickitRenewSecret}`
-      ) {
+      if (req.headers.get('authorization') === `Bearer ${apiSecret}`) {
         results = await musicKit.renewMusicUserToken()
       } else {
         results = { errors: [{ title: 'Unauthorized' }] }
