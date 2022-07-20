@@ -7,6 +7,7 @@ const defaultTarget = 'production'
 const vercelApiBase = 'https://api.vercel.com'
 
 const argv = parser(process.argv.slice(2), {
+  boolean: ['debug'],
   configuration: {
     'boolean-negation': false
   }
@@ -138,6 +139,7 @@ async function main() {
     process.exit(1)
   }
 
+  const debug = argv['debug'] ?? process.env.DEBUG ?? false
   const envVarKey = argv['env-var'] ?? process.env.ENV_VAR_KEY ?? defaultEnvVar
   const target = argv['target'] ?? defaultTarget
   const noDeploy = argv['no-deploy'] ?? process.env.NO_DEPLOY ?? false
@@ -153,7 +155,7 @@ async function main() {
   const envVar = await requests.getEnvVarByKey({ key: envVarKey })
 
   if (envVar.value === musicUserToken) {
-    console.log('Token has not changed')
+    console.log('Token has not changed, renewal halted')
     process.exit(0)
   }
 
@@ -175,7 +177,13 @@ async function main() {
     target
   })
 
-  console.log(deploymentResult)
+  if (debug) {
+    console.debug(deploymentResult)
+  }
+
+  console.log(
+    `Deployment is ${deploymentResult.status} on target ${deploymentResult.target}`
+  )
   process.exit(0)
 }
 

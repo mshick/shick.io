@@ -3,7 +3,7 @@ name: Renew Music User Token (Weekly)
 on:
   schedule:
     # - cron: '0 0 * * 0' // Weekly
-    - cron: '*/2 * * * *'
+    - cron: '*/15 * * * *'
   workflow_dispatch:
 
 env:
