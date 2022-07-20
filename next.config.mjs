@@ -2,6 +2,8 @@ import { withSentryConfig } from '@sentry/nextjs'
 import withPlugins from 'next-compose-plugins'
 import { withContentlayer } from 'next-contentlayer'
 
+const isBuild = process.argv.includes('build')
+
 // https://securityheaders.com
 const ContentSecurityPolicy = `
   default-src 'self';
@@ -185,7 +187,7 @@ const config = {
 
 export default withPlugins(
   [
-    withContentlayer,
+    isBuild ? {} : withContentlayer,
     process.env.NEXT_PUBLIC_SENTRY_DSN
       ? (config) => withSentryConfig(config, { silent: true })
       : {}
