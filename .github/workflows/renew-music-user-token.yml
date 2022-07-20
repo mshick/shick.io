@@ -20,4 +20,7 @@ jobs:
           ENV_VAR_KEY: 'TEST_VARIABLE'
           SITE_TOKEN: ${{ secrets.SITE_TOKEN }}
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: ./scripts/renew-music-user-token.mjs
+        run: |
+          cd ./scripts/musickit
+          npm install
+          ./renew-music-user-token.js
