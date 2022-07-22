@@ -57,7 +57,6 @@ const securityHeaders = [
 
 const config = {
   swcMinify: true,
-  trailingSlash: true,
   reactStrictMode: true,
   images: {
     domains: ['github.com', 'edwardtufte.github.io']

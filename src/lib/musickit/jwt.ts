@@ -21,13 +21,15 @@ async function signJwt(
     .sign(ecPrivateKey)
 }
 
-export type JwtCredentials = {
+export type DeveloperKeyCredentials = {
   privateKey: string
   teamId: string
   keyId: string
 }
 
-export async function createJwt(credentials: JwtCredentials): Promise<string> {
+export async function createDeveloperKey(
+  credentials: DeveloperKeyCredentials
+): Promise<string> {
   if (
     !credentials ||
     !credentials.privateKey ||

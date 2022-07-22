@@ -13,7 +13,7 @@ export const config = {
 }
 
 export default async function handler(req: NextRequest) {
-  const { pathname } = new URL(req.url)
+  const { pathname, searchParams } = new URL(req.url)
   const method = pathname.match(/([^\/]+)\/?$/)[1]
 
   const musicKit = await createMusicKit({
@@ -37,7 +37,21 @@ export default async function handler(req: NextRequest) {
       break
 
     case 'recent-tracks':
-      results = await musicKit.getRecentlyPlayedTracks({ limit: 5 })
+      results = await musicKit.getRecentlyPlayedTracks(
+        Object.fromEntries(searchParams)
+      )
+      break
+
+    case 'heavy-rotation':
+      results = await musicKit.getHeavyRotationContent(
+        Object.fromEntries(searchParams)
+      )
+      break
+
+    case 'recently-added':
+      results = await musicKit.getRecentlyAddedResources(
+        Object.fromEntries(searchParams)
+      )
       break
 
     default:

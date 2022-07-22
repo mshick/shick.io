@@ -4,6 +4,7 @@ import { allArticles, allPages } from 'contentlayer/generated'
 import firstName from 'features/Ascii/firstName.txt'
 import lastName from 'features/Ascii/lastName.txt'
 import picture from 'features/Ascii/portrait.txt'
+import { NowPlaying } from 'features/Music/NowPlaying'
 import Layout from 'layouts/Page'
 import { InferGetStaticPropsType } from 'next'
 import { Article, Page } from 'types'
@@ -59,6 +60,8 @@ export default function IndexPage({
           </div>
         </div>
       </div>
+
+      <NowPlaying />
     </Layout>
   )
 }
