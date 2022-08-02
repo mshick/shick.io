@@ -1,6 +1,7 @@
 locale: en-US
 siteName: Michael Shick
 siteDescription: My personal site.
+showListeningTo: true
 seo:   
   additionalLinkTags:
     - rel: icon

@@ -29,3 +29,12 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with
    2. Get response with the new token, ensure it isn't shown in the action logs
    3. Using the vercel cli, (needs `.vercel` config to link the repo) update the `MUSICKIT_MUSIC_USER_TOKEN` env var.
    4. Trigger a new deployment.
+
+
+
+## Now Playing feature
+
+1. Every X minutes, request /now-playing
+2. /now-playing checks redis for the most recent item
+3. If there is an item, check the created time and the duration, if we're in the window return that item as the current item
+4. If we did not return, get the latest from Apple, store to redis, return

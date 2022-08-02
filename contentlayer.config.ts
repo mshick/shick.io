@@ -14,7 +14,7 @@ import remarkDirective from 'remark-directive'
 import remarkDirectiveRehype from 'remark-directive-rehype'
 import remarkGemoji from 'remark-gemoji'
 import remarkGfm from 'remark-gfm'
-import { remarkMdxImages } from 'remark-mdx-images'
+import remarkMdxImages from 'remark-mdx-images'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import remarkUnwrapImages from 'remark-unwrap-images'
 import { contentDirPath, publicDir } from './env'
@@ -184,6 +184,11 @@ export const Config = defineDocumentType(() => ({
     seo: {
       type: 'json',
       required: true
+    },
+    showListeningTo: {
+      type: 'boolean',
+      required: true,
+      default: false
     }
   },
   computedFields: {

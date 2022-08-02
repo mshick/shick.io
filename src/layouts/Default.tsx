@@ -24,7 +24,10 @@ export const LayoutDefault = ({
             {children}
           </main>
 
-          <SiteFooter siteName={config.siteName} />
+          <SiteFooter
+            siteName={config.siteName}
+            showListeningTo={config.showListeningTo}
+          />
         </div>
       </div>
     </>

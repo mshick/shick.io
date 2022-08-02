@@ -5,4 +5,6 @@ export const get = (url, options: RequestInit = {}) =>
       ...options.headers,
       'Content-Type': 'application/json'
     }
-  }).then((r) => r.json())
+  })
+    .then((r) => r.json())
+    .catch(() => [])

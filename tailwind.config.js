@@ -3,7 +3,7 @@ const { DEFAULT } = require('@tailwindcss/typography/src/styles')
 
 module.exports = {
   content: ['./src/**/*.{ts,tsx}'],
-  safelist: ['aspect-video'],
+  safelist: [],
   darkMode: 'class',
   theme: {
     screens: {
@@ -23,6 +23,22 @@ module.exports = {
       // => @media (min-width: 1536px) { ... }
     },
     extend: {
+      animation: {
+        marquee: 'marquee 30s linear infinite',
+        marquee2: 'marquee2 30s linear infinite'
+      },
+      keyframes: {
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '5%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-100%)' }
+        },
+        marquee2: {
+          '0%': { transform: 'translateX(100%)' },
+          '5%': { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(0%)' }
+        }
+      },
       fontFamily: {
         sans: ['Bitstream Vera Sans Mono', ...fontFamily.sans],
         mono: ['Bitstream Vera Sans Mono', ...fontFamily.mono]

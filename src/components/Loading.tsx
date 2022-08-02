@@ -1,4 +1,4 @@
-export const Loader = () => {
+export const Loading = () => {
   return (
     <div className="flex">
       <div className={`transition duration-200 ease-in-out`}>_</div>
@@ -8,4 +8,4 @@ export const Loader = () => {
   )
 }
 
-export default Loader
+export default Loading

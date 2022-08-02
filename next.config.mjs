@@ -1,8 +1,8 @@
 import { withSentryConfig } from '@sentry/nextjs'
-import withPlugins from 'next-compose-plugins'
 import { withContentlayer } from 'next-contentlayer'
 
 const isBuild = process.argv.includes('build')
+const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN
 
 // https://securityheaders.com
 const ContentSecurityPolicy = `
@@ -11,7 +11,7 @@ const ContentSecurityPolicy = `
   child-src *.google.com *.youtube.com;
   style-src 'self' 'unsafe-inline' *.googleapis.com;
   img-src * blob: data:;
-  media-src 'none';
+  media-src *;
   connect-src *;
   font-src 'self' fonts.gstatic.com
 `
@@ -55,7 +55,7 @@ const securityHeaders = [
   }
 ]
 
-const config = {
+const nextConfig = {
   swcMinify: true,
   reactStrictMode: true,
   images: {
@@ -178,18 +178,24 @@ const config = {
         }
       ]
     }
-  },
-  sentry: {
-    hideSourceMaps: true
   }
 }
 
+const withPlugins = (plugins, config) => () =>
+  plugins.reduce((acc, plugin) => plugin(acc), {
+    ...config
+  })
+
 export default withPlugins(
   [
-    isBuild ? {} : withContentlayer,
-    process.env.NEXT_PUBLIC_SENTRY_DSN
-      ? (config) => withSentryConfig(config, { silent: true })
-      : {}
+    isBuild ? (config) => config : withContentlayer,
+    sentryDsn
+      ? (config) =>
+          withSentryConfig(
+            { ...config, sentry: { hideSourceMaps: true } },
+            { silent: true }
+          )
+      : (config) => config
   ],
-  config
+  nextConfig
 )

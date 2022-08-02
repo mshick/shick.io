@@ -1,5 +1,5 @@
 import { DocumentSearchIcon, ExclamationIcon } from '@heroicons/react/outline'
-import Loader from 'components/Loader'
+import Loading from 'components/Loading'
 import { DocumentList } from 'features/Document/DocumentList'
 import { DocumentListItem } from 'features/Document/DocumentListItem'
 
@@ -33,7 +33,7 @@ export function SearchResults({
       <div className="flex flex-col w-full py-2 z-30">
         {isLoading && items.length === 0 && (
           <div className="p-8 flex items-center justify-center">
-            <Loader />
+            <Loading />
           </div>
         )}
 
