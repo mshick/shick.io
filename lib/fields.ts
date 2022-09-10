@@ -114,19 +114,11 @@ export function getPublishedAt(doc: LocalDocument): string {
 }
 
 export function getSlug(doc: LocalDocument): string {
-  // TODO Unfortunate logic, until we can set a bundler cwd per mdx file
-  // const fileName = doc._raw.sourceFileName.split('__')
-  // return slug((fileName[1] ?? fileName[0]).replace(/\.mdx?/, ''))
   const fileName = doc._raw.sourceFileName.replace(/\.mdx?/, '')
   return slug(fileName)
 }
 
 export function getPath(doc: LocalDocument): string {
-  // TODO Unfortunate logic, until we can set a bundler cwd per mdx file
-  // const fileName = doc._raw.sourceFileName.split('__')
-  // const contentDir =
-  //   fileName.length === 2 && fileName[0] !== 'pages' ? fileName[0] : ''
-  // return getContentPath(contentDir, getSlug(doc))
   const fileDir = doc._raw.sourceFileDir.split('/')[0]
   return getContentPath(fileDir, getSlug(doc))
 }
@@ -151,5 +143,12 @@ export function getEditUrl(doc: LocalDocument): string {
 }
 
 export function getShareUrl(doc: LocalDocument): string {
-  return new URL(getPath(doc), getSiteUrl()).href
+  console.log('getShareUrl-----------------')
+  console.log(getPath(doc), getSiteUrl())
+  try {
+    return new URL(getPath(doc), getSiteUrl()).href
+  } catch (e) {
+    console.log(e)
+    return ''
+  }
 }
