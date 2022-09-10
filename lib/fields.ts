@@ -143,12 +143,5 @@ export function getEditUrl(doc: LocalDocument): string {
 }
 
 export function getShareUrl(doc: LocalDocument): string {
-  console.log('getShareUrl-----------------')
-  console.log(getPath(doc), getSiteUrl())
-  try {
-    return new URL(getPath(doc), getSiteUrl()).href
-  } catch (e) {
-    console.log(e)
-    return ''
-  }
+  return new URL(getPath(doc), getSiteUrl()).href
 }
