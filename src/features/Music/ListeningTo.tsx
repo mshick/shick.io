@@ -1,7 +1,13 @@
 import { Popover } from '@headlessui/react'
 import { ChevronUpIcon } from '@heroicons/react/solid'
 import Loading from 'components/Loading'
-import { MutableRefObject, useCallback, useRef, useState } from 'react'
+import {
+  Fragment,
+  MutableRefObject,
+  useCallback,
+  useRef,
+  useState
+} from 'react'
 import useSWR from 'swr'
 import { get } from 'utils/fetcher'
 
@@ -78,20 +84,24 @@ function ListeningToTrack({
 
   return (
     <button
-      className="flex gap-2 hover:bg-blue-700 hover:text-white p-2"
+      className="w-full flex hover:bg-blue-700 hover:text-white p-2"
       onClick={togglePlay}
     >
-      {trackUrl && <span className="cursor-pointer">⏯</span>}
+      <div className="flex gap-2">
+        {trackUrl && <span className="cursor-pointer">⏯</span>}
 
-      {isActiveTrack && duration !== 0 && (
-        <span>
-          {elapsed}/{duration}
+        <span className="text-left">
+          {name} by {artistName}
         </span>
-      )}
+      </div>
 
-      <span className="text-left">
-        {name} by {artistName}
-      </span>
+      <div className="ml-auto w-12">
+        {isActiveTrack && duration !== 0 && (
+          <span>
+            {elapsed}/{duration}
+          </span>
+        )}
+      </div>
     </button>
   )
 }
@@ -123,10 +133,10 @@ export function ListeningTo({ limit }: ListeningToProps) {
   const { name, artistName } = mostRecentTrack.attributes
 
   return (
-    <Popover>
+    <Popover as={Fragment}>
       {({ open }) => (
         <div className="relative">
-          <Popover.Button className="flex gap-2">
+          <Popover.Button className="flex gap-2 text-sm max-w-[90%]">
             <div className="mr-2">♬♪♫</div>
 
             <div className="flex justify-between whitespace-nowrap overflow-x-hidden">
@@ -140,13 +150,12 @@ export function ListeningTo({ limit }: ListeningToProps) {
             <ChevronUpIcon
               className={`${
                 open ? 'rotate-180 transform' : ''
-              } h-6 w-6 text-black`}
+              } h-5 w-5 text-black dark:text-white`}
             />
           </Popover.Button>
-          <Popover.Panel className="absolute bottom-10 left-0 p-8 text-left bg-white dark:bg-black">
-            <div className="font-bold mb-2 pl-2">
-              Recent listens{' '}
-              <span className="text-xs">(courtesy of Apple Music)</span>
+          <Popover.Panel className="w-full absolute bottom-10 left-0 text-left dark:bg-black border-t-2 border-b-2 border-black dark:border-white bg-white py-4">
+            <div className="font-bold mb-2 pl-2 uppercase text-sm">
+              Recent listens <span>(courtesy of Apple Music)</span>
             </div>
             <ul>
               {tracks.map((track, trackIdx) => (
