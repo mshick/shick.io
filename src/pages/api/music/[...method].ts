@@ -30,6 +30,14 @@ export default async function handler(req: NextRequest) {
     case 'renew-token':
       if (req.headers.get('authorization') === `Bearer ${apiSecret}`) {
         results = await musicKit.renewMusicUserToken()
+        if (results.error) {
+          status = 500
+          results = {
+            errors: [
+              { title: results.error, message: results.error_description }
+            ]
+          }
+        }
       } else {
         results = { errors: [{ title: 'Unauthorized' }] }
         status = 401
@@ -40,18 +48,27 @@ export default async function handler(req: NextRequest) {
       results = await musicKit.getRecentlyPlayedTracks(
         Object.fromEntries(searchParams)
       )
+      if (results.errors) {
+        status = 500
+      }
       break
 
     case 'heavy-rotation':
       results = await musicKit.getHeavyRotationContent(
         Object.fromEntries(searchParams)
       )
+      if (results.errors) {
+        status = 500
+      }
       break
 
     case 'recently-added':
       results = await musicKit.getRecentlyAddedResources(
         Object.fromEntries(searchParams)
       )
+      if (results.errors) {
+        status = 500
+      }
       break
 
     default:

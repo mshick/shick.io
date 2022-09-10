@@ -8,11 +8,8 @@ export type SiteFooterProps = {
 export function SiteFooter({ siteName, showListeningTo }: SiteFooterProps) {
   return (
     <>
-      {/* <hr /> */}
-      <footer className="w-full grid grid-cols-3 pt-0 pb-0 text-center divide-x">
-        <div className="col-span-2">{showListeningTo && <ListeningTo />}</div>
-        <div>{siteName}</div>
-        {/* [[[[ {siteName} {format(new Date(), 'yyyy')} ]]]] */}
+      <footer className="w-full pt-0 pb-4">
+        <div>{showListeningTo && <ListeningTo />}</div>
       </footer>
     </>
   )

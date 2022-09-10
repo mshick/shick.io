@@ -69,6 +69,7 @@ export function ArticleFooter({
           </FooterLink>
         )}
       </footer>
+      <hr className="my-8" />
     </>
   )
 }

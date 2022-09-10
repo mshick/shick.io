@@ -78,7 +78,7 @@ function ListeningToTrack({
 
   return (
     <button
-      className="flex gap-2 hover:bg-blue-700 hover:text-white"
+      className="flex gap-2 hover:bg-blue-700 hover:text-white p-2"
       onClick={togglePlay}
     >
       {trackUrl && <span className="cursor-pointer">⏯</span>}
@@ -101,7 +101,7 @@ export type ListeningToProps = {
 }
 
 export function ListeningTo({ limit }: ListeningToProps) {
-  const { data: recentTracks } = useSWR(
+  const { data: recentTracks, error: recentTracksError } = useSWR(
     `/api/music/recent-tracks?limit=${limit ?? 10}&types=songs`,
     get,
     { refreshInterval: 60000 }
@@ -109,6 +109,10 @@ export function ListeningTo({ limit }: ListeningToProps) {
 
   const [activeTrackId, setActiveTrackId] = useState(null)
   const audio = useRef<HTMLAudioElement>()
+
+  if (recentTracksError) {
+    return null
+  }
 
   if (!recentTracks) {
     return <Loading />
@@ -139,8 +143,8 @@ export function ListeningTo({ limit }: ListeningToProps) {
               } h-6 w-6 text-black`}
             />
           </Popover.Button>
-          <Popover.Panel className="absolute bottom-10 left-4 p-2 text-left bg-white dark:bg-black">
-            <div className="font-bold mb-2">
+          <Popover.Panel className="absolute bottom-10 left-0 p-8 text-left bg-white dark:bg-black">
+            <div className="font-bold mb-2 pl-2">
               Recent listens{' '}
               <span className="text-xs">(courtesy of Apple Music)</span>
             </div>
