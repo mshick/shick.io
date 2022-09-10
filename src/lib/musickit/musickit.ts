@@ -36,8 +36,8 @@ function getRecentlyPlayedTracks({
     const searchParams = new URLSearchParams({
       limit: String(limit ?? 10),
       offset: String(offset ?? 0),
-      types: types ?? 'songs',
-      ...params
+      types: types ?? 'songs'
+      // ...params
     })
 
     const url = new URL(
@@ -78,8 +78,8 @@ function getHeavyRotationContent({
   }: GetHeavyRotationContentParams) => {
     const searchParams = new URLSearchParams({
       limit: String(limit ?? 10),
-      offset: String(offset ?? 0),
-      ...params
+      offset: String(offset ?? 0)
+      // ...params
     })
 
     const url = new URL(
@@ -117,8 +117,8 @@ function getRecentlyAddedResources({
   }: GetRecentlyAddedResourcesParams) => {
     const searchParams = new URLSearchParams({
       limit: String(limit ?? 10),
-      offset: String(offset ?? 0),
-      ...params
+      offset: String(offset ?? 0)
+      // ...params
     })
 
     const url = new URL(
