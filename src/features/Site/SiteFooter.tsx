@@ -1,3 +1,4 @@
+import { config } from 'contentlayer/generated'
 import { ListeningTo } from 'features/Music/ListeningTo'
 
 export type SiteFooterProps = {
@@ -12,7 +13,7 @@ export function SiteFooter({ siteName, showListeningTo }: SiteFooterProps) {
         <div>{showListeningTo && <ListeningTo />}</div>
         <div className="text-sm absolute right-0 top-0 bg-white dark:bg-black">
           <a
-            href="https://github.com/mshick/shick.io"
+            href={config.repoUrl}
             className="hover:bg-blue-700 hover:text-white"
             target="_blank"
             rel="noreferrer"

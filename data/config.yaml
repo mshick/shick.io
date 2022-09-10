@@ -2,6 +2,7 @@ locale: en-US
 siteName: Michael Shick
 siteDescription: My personal site.
 showListeningTo: true
+repoUrl: https://github.com/mshick/shick.io
 seo:   
   additionalLinkTags:
     - rel: icon

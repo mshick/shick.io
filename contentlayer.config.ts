@@ -190,6 +190,10 @@ export const Config = defineDocumentType(() => ({
       type: 'boolean',
       required: true,
       default: false
+    },
+    repoUrl: {
+      type: 'string',
+      required: true
     }
   },
   computedFields: {
