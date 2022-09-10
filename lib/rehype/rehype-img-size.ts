@@ -1,6 +1,7 @@
 import sizeOf from 'image-size'
 import path from 'path'
 import { Node, visit } from 'unist-util-visit'
+import { VFile } from 'vfile'
 
 /**
  * Handles:
@@ -97,10 +98,20 @@ function addSizeAttributes(
   }
 }
 
-function createImageSizeTransformer(dir: string) {
+type ContentLayerVFile = VFile & {
+  data: { rawDocumentData: { sourceFileDir: string } }
+}
+
+function createImageSizeTransformer(contentDir: string) {
   const importIdentifierMap: ImportIdentifierMap = {}
 
-  return function transformer(tree: Node) {
+  return function transformer(tree: Node, file: ContentLayerVFile) {
+    if (!file?.data?.rawDocumentData?.sourceFileDir) {
+      return tree
+    }
+
+    const dir = path.join(contentDir, file.data.rawDocumentData.sourceFileDir)
+
     visit(tree, ['mdxjsEsm', 'mdxJsxTextElement'], (node) => {
       if (node.type === 'mdxjsEsm') {
         collectImportIdentifiers(node, importIdentifierMap)

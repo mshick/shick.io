@@ -32,6 +32,7 @@ import {
   getUpdatedBy,
   getUpdatedByEmail
 } from './lib/fields'
+import rehypeImgSize from './lib/rehype/rehype-img-size'
 import remarkEpigraph from './lib/remark/remark-epigraph'
 import remarkFigure from './lib/remark/remark-figure'
 import remarkFooter from './lib/remark/remark-footer'
@@ -203,7 +204,6 @@ export default makeSource({
   contentDirPath: contentDirPath,
   documentTypes: [Config, Article, Page],
   mdx: {
-    useRelativeCwd: true,
     remarkPlugins: [
       remarkGemoji,
       remarkDirective,
@@ -226,7 +226,7 @@ export default makeSource({
       rehypeSlug,
       rehypeCodeTitles,
       [rehypePrism, { ignoreMissing: true }],
-      // [rehypeImgSize, { dir: contentDirPath }],
+      [rehypeImgSize, { dir: contentDirPath }],
       [
         rehypeAutolinkHeadings,
         {
