@@ -22,7 +22,7 @@ export function DocumentListItem({
     <Link
       href={path}
       onClick={onClickLink}
-      className={`block no-underline group hover:bg-blue-700 ${
+      className={`block no-underline group hover:bg-blue-700 p-2 px-4 ${
         className ?? ''
       }`}
     >

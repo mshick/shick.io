@@ -18,7 +18,7 @@ export function SiteFooter({ siteName, showListeningTo }: SiteFooterProps) {
             target="_blank"
             rel="noreferrer"
           >
-            [src]
+            &lt;src&gt;
           </a>
         </div>
       </footer>
