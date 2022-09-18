@@ -1,5 +1,8 @@
 import { LocalDocument } from 'contentlayer/source-files'
 import dateFns from 'date-fns-tz'
+import { get } from 'lodash-es'
+import { createHash } from 'node:crypto'
+import { copyFile, readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { format } from 'node:util'
 import readingTime, { ReadTimeResults } from 'reading-time'
@@ -144,4 +147,31 @@ export function getEditUrl(doc: LocalDocument): string {
 
 export function getShareUrl(doc: LocalDocument): string {
   return new URL(getPath(doc), getSiteUrl()).href
+}
+
+async function getFileHash(filePath: string): Promise<string> {
+  const fileBuffer = await readFile(filePath)
+  const hashSum = createHash('sha256')
+  hashSum.update(fileBuffer)
+  return hashSum.digest('hex').slice(0, 8).toUpperCase()
+}
+
+export function copyAssetAndGetUrl(fieldName: string) {
+  return async (doc: LocalDocument): Promise<string> => {
+    const asset = get(doc, fieldName)
+    const { filePath } = asset
+    const imgPath = 'images'
+
+    const srcPath = path.join(baseDir, contentDirPath, filePath)
+
+    const fileHash = await getFileHash(srcPath)
+    const extName = path.extname(filePath)
+    const baseName = path.basename(filePath, extName)
+    const dstFileName = `/${baseName}~${fileHash}${extName}`
+
+    const dstPath = path.join(baseDir, 'public', imgPath, dstFileName)
+
+    await copyFile(srcPath, dstPath)
+    return `/${imgPath}/${dstFileName}`
+  }
 }

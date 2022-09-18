@@ -7,6 +7,8 @@ tags:
   - tufte
   - some other
   - tags
+featuredImage:
+  asset: ./foobar.png
 ---
 
 Tufte CSS provides[^10] tools to style web articles using the ideas demonstrated by

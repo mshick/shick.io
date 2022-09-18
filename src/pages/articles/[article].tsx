@@ -12,7 +12,15 @@ import { getSingle } from 'utils/types'
 export default function ArticlePage({
   article
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const { title, image, excerpt, tags, publishedAt, updatedAt } = article
+  const {
+    title,
+    featuredImage,
+    featuredImageUrl,
+    excerpt,
+    tags,
+    publishedAt,
+    updatedAt
+  } = article
 
   const seo: NextSeoProps = {
     title,
@@ -25,13 +33,13 @@ export default function ArticlePage({
         modifiedTime: updatedAt,
         tags: tags.map((tag) => tag.name)
       },
-      images: image
+      images: featuredImage
         ? [
             {
-              url: new URL(image.url, config.siteUrl).href,
+              url: new URL(featuredImageUrl, config.siteUrl).href,
               width: 850,
               height: 650,
-              alt: image.alt ?? image.title ?? title
+              alt: featuredImage.alt ?? featuredImage.title ?? title
             }
           ]
         : null

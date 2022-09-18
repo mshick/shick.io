@@ -1,5 +1,4 @@
 import { withSentryConfig } from '@sentry/nextjs'
-import { withContentlayer } from 'next-contentlayer'
 
 const isBuild = process.argv.includes('build')
 const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN
@@ -164,20 +163,21 @@ const nextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384]
   },
-  experimental: {
-    images: {
-      allowFutureImage: true,
-      remotePatterns: [
-        {
-          protocol: 'https',
-          hostname: '**.github.io'
-        },
-        {
-          protocol: 'https',
-          hostname: 'github.com'
-        }
-      ]
-    }
+  images: {
+    minimumCacheTTL: 60,
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**.github.io'
+      },
+      {
+        protocol: 'https',
+        hostname: 'github.com'
+      }
+    ]
   }
 }
 
@@ -188,14 +188,14 @@ const withPlugins = (plugins, config) => () =>
 
 export default withPlugins(
   [
-    isBuild ? (config) => config : withContentlayer,
-    sentryDsn
-      ? (config) =>
-          withSentryConfig(
+    (config) => (isBuild ? withContentlayer : config),
+    (config) =>
+      sentryDsn
+        ? withSentryConfig(
             { ...config, sentry: { hideSourceMaps: true } },
             { silent: true }
           )
-      : (config) => config
+        : config
   ],
   nextConfig
 )

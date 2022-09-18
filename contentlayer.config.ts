@@ -19,6 +19,7 @@ import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import remarkUnwrapImages from 'remark-unwrap-images'
 import { contentDirPath, publicDir } from './env'
 import {
+  copyAssetAndGetUrl,
   getEditUrl,
   getExcerpt,
   getPath,
@@ -46,25 +47,17 @@ import remarkYoutube from './lib/remark/remark-youtube'
 const Image = defineNestedType(() => ({
   name: 'Image',
   fields: {
-    url: { type: 'string', required: false },
+    asset: { type: 'image', required: true },
     title: { type: 'string', required: false },
     alt: { type: 'string', required: false },
     caption: { type: 'string', required: false }
   }
 }))
 
-const Tag = defineNestedType(() => ({
-  name: 'Tag',
-  fields: {
-    name: { type: 'string', required: true },
-    path: { type: 'string', required: true }
-  }
-}))
-
 const fields: FieldDefs = {
   author: { type: 'string', required: false },
   excerpt: { type: 'string', required: false },
-  image: { type: 'nested', of: Image, required: false },
+  featuredImage: { type: 'nested', of: Image, required: false },
   isPrivate: { type: 'boolean', required: false, default: false },
   pinned: { type: 'boolean', default: false },
   publishedAt: { type: 'string', required: true },
@@ -75,6 +68,10 @@ const fields: FieldDefs = {
 }
 
 const computedFields: ComputedFields = {
+  featuredImageUrl: {
+    type: 'string',
+    resolve: copyAssetAndGetUrl('featuredImage.asset')
+  },
   readingTime: {
     type: 'json',
     resolve: getReadingTime
@@ -243,7 +240,7 @@ export default makeSource({
     esbuildOptions: (options) => {
       options.platform = 'node'
       options.outdir = publicDir
-      options.assetNames = `images/[name]-[hash]`
+      options.assetNames = `images/[name]~[hash]`
       options.loader = {
         ...options.loader,
         '.png': 'file',
