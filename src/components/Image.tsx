@@ -11,6 +11,7 @@ export const Image = ({
   src,
   width,
   height,
+  alt,
   ...props
 }: ImageProps) => {
   if (!src || !width || !height) {
@@ -18,7 +19,15 @@ export const Image = ({
     return <img src={src} alt="" className={className} {...props}></img>
   }
 
-  return <NextImage src={src} width={width} height={height} {...props} />
+  return (
+    <NextImage
+      src={src}
+      alt={alt ?? ''}
+      width={width}
+      height={height}
+      {...props}
+    />
+  )
 }
 
 export default Image
