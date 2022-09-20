@@ -153,7 +153,7 @@ async function main() {
 
   const musicUserToken = await requests.getMusicUserToken()
 
-  console.log({ musicUserToken })
+  // console.log({ musicUserToken })
 
   const envVar = await requests.getEnvVarByKey({ key: envVarKey })
 
