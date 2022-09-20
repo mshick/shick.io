@@ -1,5 +1,5 @@
 import { Popover } from '@headlessui/react'
-import { ChevronUpIcon } from '@heroicons/react/solid'
+import { ChevronUpIcon, PlayPauseIcon } from '@heroicons/react/24/solid'
 import Loading from 'components/Loading'
 import {
   Fragment,
@@ -91,8 +91,12 @@ function ListeningToTrack({
       className="w-full flex hover:bg-blue-700 hover:text-white p-2"
       onClick={togglePlay}
     >
-      <div className="flex gap-2">
-        {trackUrl && <span className="cursor-pointer">⏯</span>}
+      <div className="flex gap-2 flex-row items-center justify-center">
+        {trackUrl && (
+          <span className="cursor-pointer">
+            <PlayPauseIcon className="w-4 h-4" />
+          </span>
+        )}
 
         <span className="text-left">
           {name} by {artistName}

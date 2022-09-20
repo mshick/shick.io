@@ -1,4 +1,7 @@
-import { DocumentSearchIcon, ExclamationIcon } from '@heroicons/react/outline'
+import {
+  DocumentMagnifyingGlassIcon,
+  ExclamationTriangleIcon
+} from '@heroicons/react/24/outline'
 import Loading from 'components/Loading'
 import { DocumentList } from 'features/Document/DocumentList'
 import { DocumentListItem } from 'features/Document/DocumentListItem'
@@ -39,7 +42,7 @@ export function SearchResults({
 
         {!isLoading && isInitial && (
           <div className="py-14 px-6 text-center text-sm sm:px-14">
-            <DocumentSearchIcon
+            <DocumentMagnifyingGlassIcon
               className="mx-auto h-6 w-6"
               aria-hidden="true"
             />
@@ -52,7 +55,10 @@ export function SearchResults({
 
         {!isLoading && !isInitial && items.length === 0 && (
           <div className="py-14 px-6 text-center text-sm sm:px-14">
-            <ExclamationIcon className="mx-auto h-6 w-6" aria-hidden="true" />
+            <ExclamationTriangleIcon
+              className="mx-auto h-6 w-6"
+              aria-hidden="true"
+            />
             <p className="mt-4 font-semibold">No results found</p>
             <p className="mt-2 text-gray-700 dark:text-gray-200">
               We couldn’t find anything with that term.
