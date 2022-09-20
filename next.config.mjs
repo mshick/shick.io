@@ -1,4 +1,5 @@
 import { withSentryConfig } from '@sentry/nextjs'
+import { withContentlayer } from 'next-contentlayer'
 
 const isBuild = process.argv.includes('build')
 const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN
@@ -188,7 +189,7 @@ const withPlugins = (plugins, config) => () =>
 
 export default withPlugins(
   [
-    (config) => (isBuild ? withContentlayer : config),
+    (config) => (isBuild ? withContentlayer(config) : config),
     (config) =>
       sentryDsn
         ? withSentryConfig(
