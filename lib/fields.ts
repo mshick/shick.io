@@ -1,3 +1,4 @@
+import { Image } from 'contentlayer/generated'
 import { LocalDocument } from 'contentlayer/source-files'
 import dateFns from 'date-fns-tz'
 import { get } from 'lodash-es'
@@ -27,7 +28,7 @@ import {
 import remarkTruncate from '../lib/remark/remark-truncate'
 import { getContentPath } from './content'
 import { getGitFileInfo } from './git'
-import { Tag } from './types'
+import { isImageFieldData, Tag } from './types'
 
 const { zonedTimeToUtc } = dateFns
 
@@ -158,7 +159,12 @@ async function getFileHash(filePath: string): Promise<string> {
 
 export function copyAssetAndGetUrl(fieldName: string) {
   return async (doc: LocalDocument): Promise<string> => {
-    const asset = get(doc, fieldName)
+    const asset = get<Image['asset']>(doc, fieldName)
+
+    if (!isImageFieldData(asset)) {
+      return null
+    }
+
     const { filePath } = asset
     const imgPath = 'images'
 

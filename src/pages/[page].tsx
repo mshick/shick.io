@@ -10,7 +10,15 @@ import { getSingle } from 'utils/types'
 export default function PagePage({
   page
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const { title, image, excerpt, tags, publishedAt, updatedAt } = page
+  const {
+    title,
+    featuredImageUrl,
+    featuredImage,
+    excerpt,
+    tags,
+    publishedAt,
+    updatedAt
+  } = page
 
   const seo: NextSeoProps = {
     title,
@@ -23,13 +31,13 @@ export default function PagePage({
         modifiedTime: updatedAt,
         tags: tags.map((tag) => tag.name)
       },
-      images: image
+      images: featuredImageUrl
         ? [
             {
-              url: new URL(image.url, config.siteUrl).href,
+              url: new URL(featuredImageUrl, config.siteUrl).href,
               width: 850,
               height: 650,
-              alt: image.alt ?? image.title ?? title
+              alt: featuredImage.alt ?? featuredImage.title ?? title
             }
           ]
         : null
@@ -59,7 +67,7 @@ export async function getStaticProps({ params }: GetStaticPropsContext) {
   return {
     notFound: !Boolean(page),
     props: {
-      page
+      page: page ?? null
     }
   }
 }

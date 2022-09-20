@@ -51,9 +51,13 @@ function ListeningToTrack({
   const { name, artistName, previews } = attributes
   const [duration, setDuration] = useState(0)
   const [elapsed, setElapsed] = useState(0)
-  const trackUrl = previews?.[0].url
+  const trackUrl = previews?.[0]?.url
 
   const togglePlay = useCallback(() => {
+    if (!trackUrl) {
+      return
+    }
+
     if (!audio.current?.currentSrc || audio.current.currentSrc !== trackUrl) {
       if (audio.current) {
         audio.current.pause()
