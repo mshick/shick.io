@@ -22,6 +22,8 @@ export const publicDir = `${baseDir}/${publicDirPath}`
 export const contentDirPath = process.env.NEXT_PUBLIC_CONTENT_DIR ?? 'data'
 export const contentDir = `${baseDir}/${contentDirPath}`
 
+export const editUrlPattern = process.env.NEXT_PUBLIC_EDIT_URL_PATTERN
+
 const _contentTypePathMap = process.env.NEXT_PUBLIC_CONTENT_TYPE_PATH_MAP
 // E.g., pages=/;articles=/posts;tags=/tagged
 export const contentTypePathMap = _contentTypePathMap
@@ -33,5 +35,3 @@ export const contentTypePathMap = _contentTypePathMap
       }
     }, {})
   : {}
-
-export const editUrlPattern = process.env.NEXT_PUBLIC_EDIT_URL_PATTERN
