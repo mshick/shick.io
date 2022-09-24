@@ -1,4 +1,4 @@
-import { components } from 'components/Mdx'
+import { components } from 'mdx'
 import { useMDXComponent } from 'next-contentlayer/hooks'
 import { Page } from 'types'
 

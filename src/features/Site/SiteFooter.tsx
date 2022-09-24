@@ -2,11 +2,10 @@ import { config } from 'contentlayer/generated'
 import { ListeningTo } from 'features/Music/ListeningTo'
 
 export type SiteFooterProps = {
-  siteName: string
   showListeningTo: boolean
 }
 
-export function SiteFooter({ siteName, showListeningTo }: SiteFooterProps) {
+export function SiteFooter({ showListeningTo }: SiteFooterProps) {
   return (
     <>
       <footer className="w-full pt-0 pb-4 relative">

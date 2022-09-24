@@ -34,55 +34,6 @@
       }
     ]
   },
-  "eslintConfig": {
-    "parserOptions": {
-      "ecmaVersion": 12
-    },
-    "extends": [
-      "next/core-web-vitals",
-      "plugin:prettier/recommended"
-    ],
-    "rules": {
-      "no-console": "error",
-      "no-unreachable": "error"
-    },
-    "overrides": [
-      {
-        "files": [
-          "scripts/**/*"
-        ],
-        "rules": {
-          "no-console": "off"
-        }
-      },
-      {
-        "files": [
-          "*.json"
-        ],
-        "plugins": [
-          "json-format"
-        ]
-      },
-      {
-        "files": [
-          "*.mdx",
-          "*.md"
-        ],
-        "settings": {
-          "mdx/code-blocks": false,
-          "mdx/language-mapper": {}
-        },
-        "extends": "plugin:mdx/recommended",
-        "rules": {
-          "indent": "off"
-        }
-      }
-    ]
-  },
-  "eslintIgnore": [
-    "tsconfig.json",
-    "package-lock.json"
-  ],
   "dependencies": {
     "@contentlayer/utils": "^0.2.8",
     "@headlessui/react": "^1.7.2",
@@ -114,14 +65,14 @@
     "@tailwindcss/typography": "^0.5.7",
     "@types/hast": "^2.3.4",
     "@types/mdast": "^3.0.10",
-    "@types/node": "^18.7.18",
-    "@types/react": "^18.0.20",
+    "@types/node": "^18.7.20",
+    "@types/react": "^18.0.21",
     "@types/slug": "^5.0.3",
     "@types/unist": "^2.0.6",
-    "autoprefixer": "^10.4.11",
+    "autoprefixer": "^10.4.12",
     "csstype": "^3.1.1",
     "dotenv-cli": "^6.0.0",
-    "eslint": "^8.23.1",
+    "eslint": "^8.24.0",
     "eslint-config-next": "^12.3.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-json-format": "^2.0.1",
@@ -157,7 +108,7 @@
     "simple-git": "^3.14.1",
     "slug": "^8.0.0",
     "tailwindcss": "^3.1.8",
-    "type-fest": "^2.19.0",
+    "type-fest": "^3.0.0",
     "typescript": "^4.8.3",
     "unified": "^10.1.2",
     "unist-builder": "^3.0.0",

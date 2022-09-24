@@ -53,7 +53,9 @@ export default function PagePage({
 
 export async function getStaticPaths() {
   return {
-    paths: getPagePageParams(allPages as unknown as Page[]),
+    paths: getPagePageParams(
+      allPages.filter((page) => page.slug !== 'index') as unknown as Page[]
+    ),
     fallback: false
   }
 }

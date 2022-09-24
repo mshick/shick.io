@@ -189,7 +189,7 @@ const withPlugins = (plugins, config) => () =>
 
 export default withPlugins(
   [
-    (config) => (isBuild ? withContentlayer(config) : config),
+    (config) => (isBuild ? config : withContentlayer(config)),
     (config) =>
       sentryDsn
         ? withSentryConfig(

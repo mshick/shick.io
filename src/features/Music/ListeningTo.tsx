@@ -9,6 +9,7 @@ import {
   useState
 } from 'react'
 import useSWR from 'swr'
+import classNames from 'utils/classNames'
 import { get } from 'utils/fetcher'
 
 type Track = {
@@ -144,7 +145,7 @@ export function ListeningTo({ limit }: ListeningToProps) {
     <Popover as={Fragment}>
       {({ open }) => (
         <div className="relative">
-          <Popover.Button className="flex gap-2 text-sm max-w-[90%]">
+          <Popover.Button className="flex gap-2 text-sm max-w-[90%] group hover:bg-blue-700 hover:text-white">
             <div className="mr-2">♬♪♫</div>
 
             <div className="flex justify-between whitespace-nowrap overflow-x-hidden">
@@ -156,9 +157,10 @@ export function ListeningTo({ limit }: ListeningToProps) {
             </div>
 
             <ChevronUpIcon
-              className={`${
-                open ? 'rotate-180 transform' : ''
-              } h-5 w-5 text-black dark:text-white`}
+              className={classNames(
+                open ? 'rotate-180 transform' : '',
+                'h-5 w-5 text-black dark:text-white group-hover:text-white'
+              )}
             />
           </Popover.Button>
           <Popover.Panel className="w-full absolute bottom-10 left-0 text-left dark:bg-black border-t-2 border-b-2 border-black dark:border-white bg-white py-4">
