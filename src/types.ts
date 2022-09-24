@@ -29,9 +29,18 @@ export type Article = Merge<
     next?: Pick<TArticle, 'title' | 'path'>
   }
 >
+export type Project = Merge<
+  SetRequired<TArticle, 'excerpt'>,
+  {
+    tags: Tag[]
+    readingTime: ReadTimeResults
+    previous?: Pick<TArticle, 'title' | 'path'>
+    next?: Pick<TArticle, 'title' | 'path'>
+  }
+>
 export type Page = Merge<TPage, { tags: Tag[] }>
 
-export type DocumentTypes = Article | Page
+export type DocumentTypes = Article | Page | Project
 
 export type Config = SetRequired<TConfig, 'siteUrl'>
 

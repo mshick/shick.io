@@ -1,13 +1,5 @@
 import { Article } from 'types'
 
-export function getArticlePageParams(articles: Article[]) {
-  return articles.map((article) => ({
-    params: {
-      article: article.slug
-    }
-  }))
-}
-
 export function getArticle(slug: string, articles: Article[]) {
   const orderedArticles = articles.sort(
     (a, b) =>

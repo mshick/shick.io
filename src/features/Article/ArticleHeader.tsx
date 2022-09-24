@@ -41,12 +41,12 @@ export function ArticleHeader({
             {tags.map((tag) => {
               return (
                 <li
-                  className="inline m-0 pl-0 text-xs before:content-[initial]"
+                  className="inline-block m-0 pl-0 text-xs before:content-[initial]"
                   key={tag.slug}
                 >
                   <Link
                     href={tag.path}
-                    className="ml-0 mr-2 no-underline before:content-['#'] hover:bg-blue-700 hover:text-white transition-all"
+                    className="ml-0 mr-2 no-underline before:content-['#'] hover:bg-blue-700 hover:text-white"
                   >
                     {tag.slug}
                   </Link>

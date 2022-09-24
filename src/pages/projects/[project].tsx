@@ -1,4 +1,4 @@
-import { allArticles, config } from 'contentlayer/generated'
+import { allProjects, config } from 'contentlayer/generated'
 import { ArticleBody } from 'features/Article/ArticleBody'
 import { ArticleFooter } from 'features/Article/ArticleFooter'
 import { ArticleHeader } from 'features/Article/ArticleHeader'
@@ -6,11 +6,11 @@ import { getArticle } from 'features/Article/utils'
 import Layout from 'layouts/Article'
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 import { NextSeoProps } from 'next-seo'
-import { Article } from 'types'
+import { Project } from 'types'
 import { getSingle } from 'utils/types'
 
-export default function ArticlePage({
-  article
+export default function ProjectPage({
+  project
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const {
     title,
@@ -20,7 +20,7 @@ export default function ArticlePage({
     tags,
     publishedAt,
     updatedAt
-  } = article
+  } = project
 
   const seo: NextSeoProps = {
     title,
@@ -49,19 +49,19 @@ export default function ArticlePage({
   return (
     <Layout seo={seo}>
       <div className="mb-8">
-        <ArticleHeader {...article} />
+        <ArticleHeader {...project} />
       </div>
-      <ArticleBody {...article} />
-      <ArticleFooter {...article} />
+      <ArticleBody {...project} />
+      <ArticleFooter {...project} />
     </Layout>
   )
 }
 
 export async function getStaticPaths() {
   return {
-    paths: allArticles.map((article) => ({
+    paths: allProjects.map((project) => ({
       params: {
-        article: article.slug
+        project: project.slug
       }
     })),
     fallback: false
@@ -69,13 +69,13 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: GetStaticPropsContext) {
-  const slug = getSingle(params.article)
-  const article = getArticle(slug, allArticles as unknown as Article[])
+  const slug = getSingle(params.project)
+  const project = getArticle(slug, allProjects as unknown as Project[])
 
   return {
-    notFound: !Boolean(article),
+    notFound: !Boolean(project),
     props: {
-      article
+      project
     }
   }
 }

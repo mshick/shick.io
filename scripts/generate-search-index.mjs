@@ -2,10 +2,14 @@
 
 import MiniSearch from 'minisearch'
 import { mkdirSync, writeFileSync } from 'node:fs'
-import { allArticles, allPages } from '../.contentlayer/generated/index.mjs'
+import {
+  allArticles,
+  allPages,
+  allProjects
+} from '../.contentlayer/generated/index.mjs'
 
 function generate() {
-  const docs = [...allArticles, ...allPages].map((doc) => ({
+  const docs = [...allArticles, ...allPages, ...allProjects].map((doc) => ({
     id: doc._id,
     title: doc.title,
     body: doc.body.raw,

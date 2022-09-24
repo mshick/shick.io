@@ -140,6 +140,14 @@ export const Article = defineDocumentType(() => ({
   computedFields
 }))
 
+export const Projects = defineDocumentType(() => ({
+  name: 'Project',
+  filePathPattern: 'projects/**/*.{md,mdx}',
+  contentType: 'mdx',
+  fields,
+  computedFields
+}))
+
 export const Config = defineDocumentType(() => ({
   name: 'Config',
   filePathPattern: 'config.yaml',
@@ -203,7 +211,7 @@ export const Config = defineDocumentType(() => ({
 
 export default makeSource({
   contentDirPath: contentDirPath,
-  documentTypes: [Config, Article, Page],
+  documentTypes: [Config, Article, Page, Projects],
   mdx: {
     remarkPlugins: [
       remarkGemoji,
