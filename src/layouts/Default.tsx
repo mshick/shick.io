@@ -25,7 +25,6 @@ export const LayoutDefault = ({
           </main>
 
           <SiteFooter
-            siteName={config.siteName}
             showListeningTo={config.showListeningTo}
           />
         </div>
