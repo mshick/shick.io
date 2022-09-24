@@ -6,30 +6,47 @@ export type HomepageListProps = {
   href: string
   documents: Pick<
     DocumentTypes,
-    'path' | 'title' | 'excerpt' | 'publishedAt' | 'featured'
+    | 'path'
+    | 'title'
+    | 'excerpt'
+    | 'publishedAt'
+    | 'featured'
+    | 'featuredImageUrl'
+    | 'featuredImage'
   >[]
 }
 
 export function HomepageList({ heading, href, documents }: HomepageListProps) {
   return (
-    <div className="my-4">
+    <div className="my-4 -mx-4">
       <div className="mb-8">
-        <h3 className="font-bold text-xl md:text-2xl tracking-tight my-4 text-black dark:text-white hover:bg-blue-700 hover:text-white inline-block">
-          <Link href={href}>{heading} -&gt;</Link>
+        <h3 className="text-xl md:text-xl tracking-tight my-6 p-2 px-4 bg-black text-white dark:text-black dark:bg-white">
+          Featured {heading}
         </h3>
-        <div className="grid grid-rows-3 grid-cols-1 md:grid-cols-3 md:grid-rows-1">
+        <div className="flex flex-col">
           {documents.map((doc) => (
             <Link
               key={doc.path}
               href={doc.path}
-              className="flex flex-row gap-2 items-center p-4 hover:bg-blue-700 focus:bg-blue-700 focus:first-letter:ring-0 outline-none hover:text-white focus:text-white first-letter:cursor-pointer hp-featured hp-featured-black dark:hp-featured-white md:hp-featured-md hover:hp-featured-white dark:hp-featured-white dark:hover:hp-featured-black focus:hp-featured-black dark:focus:hp-featured-black min-h-[10rem]"
+              className="block no-underline group hover:bg-blue-700 p-2 px-4"
             >
-              <div className="mb-0 font-bold text-xl group-hover:text-white">
+              <h2 className="mb-0 font-bold text-2xl group-hover:text-white">
                 {doc.title}
-              </div>
-              <div className="ml-auto whitespace-nowrap">-&gt;</div>
+              </h2>
+              <div
+                className="prose text-gray-700 dark:text-gray-100 group-hover:text-white"
+                dangerouslySetInnerHTML={{ __html: doc.excerpt }}
+              />
             </Link>
           ))}
+          <Link
+            href={href}
+            className="block no-underline group hover:bg-blue-700 p-2 px-4 my-4"
+          >
+            <div className="mb-0 group-hover:text-white">
+              See all {heading} -&gt;
+            </div>
+          </Link>
         </div>
       </div>
     </div>

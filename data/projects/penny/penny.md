@@ -11,6 +11,7 @@ tags:
   - Shopify
 featuredImage:
   asset: ./penny-social.png
+author: Michael Shick
 ---
 
 Penny is a fast, efficient, best-practices based e-commerce starter built on

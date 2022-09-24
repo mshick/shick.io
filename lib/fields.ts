@@ -173,7 +173,7 @@ export function copyAssetAndGetUrl(fieldName: string) {
     const fileHash = await getFileHash(srcPath)
     const extName = path.extname(filePath)
     const baseName = path.basename(filePath, extName)
-    const dstFileName = `/${baseName}~${fileHash}${extName}`
+    const dstFileName = `${baseName}~${fileHash}${extName}`
 
     const dstPath = path.join(baseDir, 'public', imgPath, dstFileName)
 

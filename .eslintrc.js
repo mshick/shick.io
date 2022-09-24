@@ -32,7 +32,7 @@ module.exports = {
       },
       globals: {
         HomepageHero: false,
-        HomepageArticles: false
+        HomepageList: false
       }
     }
   ],
