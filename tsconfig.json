@@ -20,6 +20,6 @@
       "env": ["../env"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".contentlayer/generated", "env"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".contentlayer/generated", "env", "src/mdx.js"],
   "exclude": ["node_modules"]
 }
