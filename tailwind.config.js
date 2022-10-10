@@ -69,6 +69,7 @@ module.exports = {
                 }
               },
               h2: {
+                fontWeight: 'normal',
                 fontStyle: 'italic',
                 fontSize: theme('fontSize.3xl')[0],
                 ...theme('fontSize.3xl')[1],
@@ -76,11 +77,16 @@ module.exports = {
                 marginBottom: theme('spacing.6')
               },
               h3: {
+                fontWeight: 'normal',
                 fontStyle: 'italic',
                 fontSize: theme('fontSize.2xl')[0],
                 ...theme('fontSize.2xl')[1],
                 marginTop: theme('spacing.8'),
                 marginBottom: theme('spacing.6')
+              },
+              // Auto-linked headings
+              'h2 > a, h3 > a': {
+                fontWeight: 'normal'
               },
               pre: {
                 borderColor: 'var(--tw-prose-borders)',

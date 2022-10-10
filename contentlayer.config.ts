@@ -10,13 +10,8 @@ import rehypeAutolinkHeadings from 'rehype-autolink-headings'
 import rehypeCodeTitles from 'rehype-code-titles'
 import rehypePrism from 'rehype-prism-plus'
 import rehypeSlug from 'rehype-slug'
-import remarkDirective from 'remark-directive'
-import remarkDirectiveRehype from 'remark-directive-rehype'
 import remarkGemoji from 'remark-gemoji'
 import remarkGfm from 'remark-gfm'
-import remarkMdxImages from 'remark-mdx-images'
-import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
-import remarkUnwrapImages from 'remark-unwrap-images'
 import { contentDirPath, publicDir } from './env'
 import {
   copyAssetAndGetUrl,
@@ -34,15 +29,7 @@ import {
   getUpdatedByEmail
 } from './lib/fields'
 import rehypeImgSize from './lib/rehype/rehype-img-size'
-import remarkEpigraph from './lib/remark/remark-epigraph'
-import remarkFigure from './lib/remark/remark-figure'
-import remarkFooter from './lib/remark/remark-footer'
-import remarkInitialHeading from './lib/remark/remark-initial-heading'
-import remarkNewthought from './lib/remark/remark-newthought'
-import remarkSectionize from './lib/remark/remark-sectionize'
-import remarkSidenotes from './lib/remark/remark-sidenotes'
-import remarkWrapImages from './lib/remark/remark-wrap-images'
-import remarkYoutube from './lib/remark/remark-youtube'
+import remarkPresetTss from './lib/remark/remark-preset-tss'
 
 const Image = defineNestedType(() => ({
   name: 'Image',
@@ -215,21 +202,22 @@ export default makeSource({
   mdx: {
     remarkPlugins: [
       remarkGemoji,
-      remarkDirective,
-      remarkDirectiveRehype,
-      remarkYoutube,
-      remarkUnwrapImages,
-      remarkWrapImages,
-      remarkFigure,
-      remarkFooter,
-      remarkNewthought,
       remarkGfm,
-      remarkSidenotes,
-      remarkSqueezeParagraphs,
-      remarkInitialHeading,
-      [remarkSectionize, { maxHeadingDepth: 2 }],
-      remarkEpigraph,
-      remarkMdxImages
+      remarkPresetTss
+      // remarkDirective,
+      // remarkDirectiveRehype,
+      // remarkYoutube,
+      // remarkUnwrapImages,
+      // remarkWrapImages,
+      // remarkFigure,
+      // remarkFooter,
+      // remarkNewthought,
+      // remarkSidenotes,
+      // remarkSqueezeParagraphs,
+      // remarkInitialHeading,
+      // [remarkSectionize, { maxHeadingDepth: 2 }],
+      // remarkEpigraph,
+      // remarkMdxImages
     ],
     rehypePlugins: [
       rehypeSlug,
@@ -239,6 +227,7 @@ export default makeSource({
       [
         rehypeAutolinkHeadings,
         {
+          behavior: 'wrap',
           properties: {
             className: ['anchor']
           }

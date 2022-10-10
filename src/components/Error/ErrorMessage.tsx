@@ -28,7 +28,7 @@ export const ErrorMessage = ({
         <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent">
           <Link
             href="/"
-            className="bg-featured inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium hp-featured hp-featured-black dark:hp-featured-white hover:text-white hover:bg-blue-700 hover:hp-featured-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="inline-flex items-center px-4 py-2 border border-dashed text-sm font-medium hover:text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Go back home
             <span aria-hidden="true" className="ml-2">
