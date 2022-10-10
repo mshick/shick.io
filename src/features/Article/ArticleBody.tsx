@@ -7,7 +7,7 @@ export type ArticleBodyProps = Pick<Article, 'body'>
 export function ArticleBody({ body }: ArticleBodyProps) {
   const Component = useMDXComponent(body.code)
   return (
-    <div className="prose prose-high-contrast prose-tufte-sidenotes md:prose-tufte-sidenotes-lg dark:prose-invert">
+    <div className="prose prose-bbs prose-tss-sidenotes md:prose-tss-sidenotes-lg dark:prose-bbs-invert">
       <Component components={components} />
     </div>
   )

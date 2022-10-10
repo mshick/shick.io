@@ -6,10 +6,6 @@ import {
   FieldDefs,
   makeSource
 } from 'contentlayer/source-files'
-import rehypeAutolinkHeadings from 'rehype-autolink-headings'
-import rehypeCodeTitles from 'rehype-code-titles'
-import rehypePrism from 'rehype-prism-plus'
-import rehypeSlug from 'rehype-slug'
 import remarkGemoji from 'remark-gemoji'
 import remarkGfm from 'remark-gfm'
 import { contentDirPath, publicDir } from './env'
@@ -28,7 +24,7 @@ import {
   getUpdatedBy,
   getUpdatedByEmail
 } from './lib/fields'
-import rehypeImgSize from './lib/rehype/rehype-img-size'
+import rehypePresetTss from './lib/rehype/rehype-preset-tss'
 import remarkPresetTss from './lib/remark/remark-preset-tss'
 
 const Image = defineNestedType(() => ({
@@ -200,40 +196,8 @@ export default makeSource({
   contentDirPath: contentDirPath,
   documentTypes: [Config, Article, Page, Projects],
   mdx: {
-    remarkPlugins: [
-      remarkGemoji,
-      remarkGfm,
-      remarkPresetTss
-      // remarkDirective,
-      // remarkDirectiveRehype,
-      // remarkYoutube,
-      // remarkUnwrapImages,
-      // remarkWrapImages,
-      // remarkFigure,
-      // remarkFooter,
-      // remarkNewthought,
-      // remarkSidenotes,
-      // remarkSqueezeParagraphs,
-      // remarkInitialHeading,
-      // [remarkSectionize, { maxHeadingDepth: 2 }],
-      // remarkEpigraph,
-      // remarkMdxImages
-    ],
-    rehypePlugins: [
-      rehypeSlug,
-      rehypeCodeTitles,
-      [rehypePrism, { ignoreMissing: true }],
-      [rehypeImgSize, { dir: contentDirPath }],
-      [
-        rehypeAutolinkHeadings,
-        {
-          behavior: 'wrap',
-          properties: {
-            className: ['anchor']
-          }
-        }
-      ]
-    ],
+    remarkPlugins: [remarkGemoji, remarkGfm, remarkPresetTss()],
+    rehypePlugins: [rehypePresetTss({ imgSizeDir: contentDirPath })],
     esbuildOptions: (options) => {
       options.platform = 'node'
       options.outdir = publicDir

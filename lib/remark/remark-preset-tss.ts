@@ -14,23 +14,25 @@ import remarkSidenotes from './remark-sidenotes'
 import remarkWrapImages from './remark-wrap-images'
 import remarkYoutube from './remark-youtube'
 
-const remarkPresetTss: Preset = {
-  plugins: [
-    remarkDirective,
-    remarkDirectiveRehype,
-    remarkYoutube,
-    remarkUnwrapImages,
-    remarkWrapImages,
-    remarkFigure,
-    remarkFooter,
-    remarkNewthought,
-    remarkSidenotes,
-    remarkSqueezeParagraphs,
-    remarkInitialHeading,
-    [remarkSectionize, { maxHeadingDepth: 2 }],
-    remarkEpigraph,
-    remarkMdxImages
-  ]
+function main(): Preset {
+  return {
+    plugins: [
+      remarkDirective,
+      remarkDirectiveRehype,
+      remarkYoutube,
+      remarkUnwrapImages,
+      remarkWrapImages,
+      remarkFigure,
+      remarkFooter,
+      remarkNewthought,
+      remarkSidenotes,
+      remarkSqueezeParagraphs,
+      remarkInitialHeading,
+      [remarkSectionize, { maxHeadingDepth: 2 }],
+      remarkEpigraph,
+      remarkMdxImages
+    ]
+  }
 }
 
-export default remarkPresetTss
+export default main
