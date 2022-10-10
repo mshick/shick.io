@@ -139,6 +139,12 @@ const nextConfig = {
     ]
   },
   webpack(config, options) {
+    // Contentlayer generates many warnings:
+    // Build dependencies behind this expression are ignored and might cause incorrect cache invalidation
+    config.infrastructureLogging = {
+      level: 'error'
+    }
+
     // Workaround: https://github.com/getsentry/sentry-javascript/issues/5667
     if (options.isServer && options.nextRuntime === 'edge') {
       config.resolve.alias = {

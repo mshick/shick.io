@@ -18,7 +18,7 @@ export type HomepageListProps = {
 
 export function HomepageList({ heading, href, documents }: HomepageListProps) {
   return (
-    <div className="my-4 -mx-4">
+    <div className="my-4">
       <div className="mb-8">
         <h3 className="text-xl md:text-xl tracking-tight my-6 p-2 px-4 bg-black text-white dark:text-black dark:bg-white">
           Featured {heading}
