@@ -138,9 +138,14 @@ const nextConfig = {
       }
     ]
   },
-  webpack(config) {
-    config.infrastructureLogging = {
-      level: 'error'
+  webpack(config, options) {
+    // Workaround: https://github.com/getsentry/sentry-javascript/issues/5667
+    if (options.isServer && options.nextRuntime === 'edge') {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        './sentry.client.config.js': false,
+        './sentry.server.config.js': false
+      }
     }
 
     config.module = {
