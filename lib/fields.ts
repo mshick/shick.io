@@ -7,13 +7,6 @@ import { copyFile, readFile } from 'node:fs/promises'
 import path from 'node:path'
 import { format } from 'node:util'
 import readingTime, { ReadTimeResults } from 'reading-time'
-import { remark } from 'remark'
-import remarkHtml from 'remark-html'
-import remarkMdx from 'remark-mdx'
-import remarkMdxRemoveImports from 'remark-mdx-remove-imports'
-import remarkParse from 'remark-parse'
-import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
-import remarkUnlink from 'remark-unlink'
 import slug from 'slug'
 import {
   baseDir,
@@ -25,27 +18,21 @@ import {
   timezone,
   vercelUrl
 } from '../env'
-import remarkTruncate from '../lib/remark/remark-truncate'
+import { remarkExcerpt } from '../lib/remark-excerpt'
 import { getContentPath } from './content'
 import { getGitFileInfo } from './git'
+import { remarkTruncate } from './remark-truncate'
 import { isImageFieldData, Tag } from './types'
 
 const { zonedTimeToUtc } = dateFns
 
 export async function convertExcerpt(excerpt: string) {
-  const html = await remark().use(remarkParse).use(remarkHtml).process(excerpt)
+  const html = await remarkExcerpt(excerpt)
   return String(html)
 }
 
 export async function truncateBody(body: string) {
-  const html = await remark()
-    .use(remarkMdx)
-    .use(remarkMdxRemoveImports)
-    .use(remarkUnlink)
-    .use(remarkSqueezeParagraphs)
-    .use(remarkTruncate)
-    .use(remarkHtml)
-    .process(body)
+  const html = await remarkTruncate(body)
   return String(html)
 }
 
