@@ -18,7 +18,7 @@ export function ArticleHeader({
   author
 }: ArticleHeaderProps) {
   return (
-    <div className="prose prose-bbs prose-tss-sidenotes md:prose-tss-sidenotes-lg dark:prose-bbs-invert">
+    <div className="prose prose-tufted-bbs prose-tufted-sidenotes md:prose-tufted-sidenotes-lg dark:prose-tufted-bbs-invert">
       <div className="w-full md:clear-right md:float-right md:w-[25%]">
         <span className="text-xs md:block">
           <time dateTime={publishedAt}>{formatDate(publishedAt)}</time>

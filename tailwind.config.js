@@ -1,5 +1,5 @@
 const { fontFamily } = require('tailwindcss/defaultTheme')
-const { typography } = require('./lib/tailwind/tailwind-tss')
+const { typography } = require('@mshick/tufted/tailwind')
 
 module.exports = {
   content: ['./src/**/*.{ts,tsx}'],

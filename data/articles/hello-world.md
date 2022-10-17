@@ -28,6 +28,12 @@ Howdie **there**
 
 ::youtube[Video of a cat in a box]{#5qap5aO4i9A}
 
+Foo bar baz.
+
+![Am I wrapped?](./cute-cat.jpg 'Meow!')
+
+Boo bam blah.
+
 ```javascript
 var foo = 'bar'
 ```

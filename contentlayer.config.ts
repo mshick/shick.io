@@ -1,4 +1,6 @@
 import { omit } from '@contentlayer/utils'
+import rehypePresetTufted from '@mshick/tufted/rehype'
+import remarkPresetTufted from '@mshick/tufted/remark'
 import {
   ComputedFields,
   defineDocumentType,
@@ -7,7 +9,7 @@ import {
   makeSource
 } from 'contentlayer/source-files'
 import remarkGemoji from 'remark-gemoji'
-import remarkGfm from 'remark-gfm'
+import remarkMdxImages from 'remark-mdx-images'
 import { contentDirPath, publicDir } from './env'
 import {
   copyAssetAndGetUrl,
@@ -24,8 +26,6 @@ import {
   getUpdatedBy,
   getUpdatedByEmail
 } from './lib/fields'
-import rehypePresetTss from './lib/rehype/rehype-preset-tss'
-import remarkPresetTss from './lib/remark/remark-preset-tss'
 
 const Image = defineNestedType(() => ({
   name: 'Image',
@@ -196,8 +196,8 @@ export default makeSource({
   contentDirPath: contentDirPath,
   documentTypes: [Config, Article, Page, Projects],
   mdx: {
-    remarkPlugins: [remarkGemoji, remarkGfm, remarkPresetTss()],
-    rehypePlugins: [rehypePresetTss({ imgSizeDir: contentDirPath })],
+    remarkPlugins: [remarkGemoji, remarkPresetTufted(), remarkMdxImages],
+    rehypePlugins: [rehypePresetTufted({ imgSizeDir: contentDirPath })],
     esbuildOptions: (options) => {
       options.platform = 'node'
       options.outdir = publicDir

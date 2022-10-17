@@ -20,13 +20,15 @@
       ".json"
     ]
   },
-  "eslint.runtime": "node",
   "eslint.onIgnoredFiles": "warn",
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,
     "source.organizeImports": true
   },
+  "editor.quickSuggestions": {
+    "strings": true
+  },  
   "editor.detectIndentation": false,
   "editor.tabSize": 2,
   "editor.insertSpaces": true,
