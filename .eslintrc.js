@@ -1,4 +1,4 @@
-const { getGlobals } = require('eslint-plugin-mdx/lib/helpers')
+// const { getGlobals } = require('eslint-plugin-mdx/lib/helpers')
 
 module.exports = {
   parserOptions: {
