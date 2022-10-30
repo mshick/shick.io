@@ -10,6 +10,10 @@ import { getSingle } from 'utils/types'
 export default function PagePage({
   page
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  if (!page) {
+    return
+  }
+
   return (
     <Layout seo={getSeoProps(page)}>
       <PageBody {...page} />
@@ -27,7 +31,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: GetStaticPropsContext) {
-  const slug = getSingle(params.page)
+  const slug = getSingle(params?.page)
   const page = (allPages as unknown as Page[]).find(
     (page) => page.slug === slug
   )

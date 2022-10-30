@@ -26,7 +26,7 @@ export const editUrlPattern = process.env.NEXT_PUBLIC_EDIT_URL_PATTERN
 
 const _contentTypePathMap = process.env.NEXT_PUBLIC_CONTENT_TYPE_PATH_MAP
 // E.g., pages=/;articles=/posts;tags=/tagged
-export const contentTypePathMap = _contentTypePathMap
+export const contentTypePathMap: Record<string, string> = _contentTypePathMap
   ? _contentTypePathMap.split(';').reduce((map, typePath) => {
       const [type, path] = typePath.split('=')
       return {

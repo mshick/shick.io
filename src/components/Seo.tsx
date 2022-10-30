@@ -2,7 +2,7 @@ import { config } from 'contentlayer/generated'
 import { NextSeo, NextSeoProps } from 'next-seo'
 import { useRouter } from 'next/router'
 
-function getCanonicalUrl(path, siteUrl): string {
+function getCanonicalUrl(path: string, siteUrl: string): string {
   return new URL(path, siteUrl).href
 }
 

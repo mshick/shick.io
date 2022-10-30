@@ -2,6 +2,7 @@ import type { Root } from 'mdast'
 import { remark } from 'remark'
 import remarkHtml from 'remark-html'
 import remarkMdx from 'remark-mdx'
+// @ts-expect-error No typedefs
 import remarkMdxRemoveImports from 'remark-mdx-remove-imports'
 import remarkSqueezeParagraphs from 'remark-squeeze-paragraphs'
 import remarkUnlink from 'remark-unlink'
@@ -12,7 +13,7 @@ function truncate(): Transformer<Root> {
   return (tree) => {
     let paragraphCount = 0
 
-    const filter = (node, _index, parent) => {
+    remove(tree, { cascade: false }, (node, _index, parent) => {
       if (node.type === 'root') {
         return false
       }
@@ -37,9 +38,7 @@ function truncate(): Transformer<Root> {
       }
 
       return false
-    }
-
-    remove(tree, { cascade: false }, filter)
+    })
   }
 }
 

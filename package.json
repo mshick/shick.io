@@ -62,6 +62,7 @@
     "@mshick/tufted": "^1.0.12",
     "@tailwindcss/forms": "^0.5.3",
     "@tailwindcss/typography": "^0.5.7",
+    "@types/lodash-es": "^4.17.6",
     "@types/mdast": "^3.0.10",
     "@types/node": "^18.8.3",
     "@types/react": "^18.0.21",

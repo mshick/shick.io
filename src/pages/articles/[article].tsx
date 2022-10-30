@@ -12,6 +12,10 @@ import { getSingle } from 'utils/types'
 export default function ArticlePage({
   article
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  if (!article) {
+    return
+  }
+
   return (
     <Layout seo={getSeoProps(article)}>
       <div className="mb-8">
@@ -35,8 +39,8 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: GetStaticPropsContext) {
-  const slug = getSingle(params.article)
-  const article = getArticle(slug, allArticles as unknown as Article[])
+  const slug = getSingle(params?.article)
+  const article = slug && getArticle(slug, allArticles as unknown as Article[])
 
   return {
     notFound: !Boolean(article),

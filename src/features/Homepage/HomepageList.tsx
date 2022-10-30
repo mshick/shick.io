@@ -33,10 +33,12 @@ export function HomepageList({ heading, href, documents }: HomepageListProps) {
               <h2 className="mb-0 font-bold text-2xl group-hover:text-white">
                 {doc.title}
               </h2>
-              <div
-                className="prose text-gray-700 dark:text-gray-100 group-hover:text-white"
-                dangerouslySetInnerHTML={{ __html: doc.excerpt }}
-              />
+              {doc.excerpt && (
+                <div
+                  className="prose text-gray-700 dark:text-gray-100 group-hover:text-white"
+                  dangerouslySetInnerHTML={{ __html: doc.excerpt }}
+                />
+              )}
             </Link>
           ))}
           <Link

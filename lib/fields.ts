@@ -22,7 +22,7 @@ import { remarkExcerpt } from '../lib/remark-excerpt'
 import { getContentPath } from './content'
 import { getGitFileInfo } from './git'
 import { remarkTruncate } from './remark-truncate'
-import { isImageFieldData, Tag } from './types'
+import { GitFileInfo, isImageFieldData, Tag } from './types'
 
 const { zonedTimeToUtc } = dateFns
 
@@ -37,7 +37,7 @@ export async function truncateBody(body: string) {
 }
 
 export function getSiteUrl(): string {
-  return isProduction ? canonicalUrl : vercelUrl ?? localDevUrl
+  return isProduction ? canonicalUrl ?? '' : vercelUrl ?? localDevUrl
 }
 
 export async function getExcerpt(doc: LocalDocument): Promise<string> {
@@ -46,7 +46,7 @@ export async function getExcerpt(doc: LocalDocument): Promise<string> {
     : truncateBody(doc.body.raw))
 }
 
-const readingTimeCache = {}
+const readingTimeCache: Record<string, ReadTimeResults> = {}
 
 export function getReadingTime(doc: LocalDocument): ReadTimeResults {
   if (!readingTimeCache[doc._id]) {
@@ -55,9 +55,7 @@ export function getReadingTime(doc: LocalDocument): ReadTimeResults {
   return readingTimeCache[doc._id]
 }
 
-const gitCache = {
-  __config: null
-}
+const gitCache: Record<string, GitFileInfo> = {}
 
 export async function getUpdatedBy(doc: LocalDocument): Promise<string> {
   if (!gitCache[doc._id]) {
@@ -145,8 +143,8 @@ async function getFileHash(filePath: string): Promise<string> {
 }
 
 export function copyAssetAndGetUrl(fieldName: string) {
-  return async (doc: LocalDocument): Promise<string> => {
-    const asset = get<Image['asset']>(doc, fieldName)
+  return async (doc: LocalDocument): Promise<string | null> => {
+    const asset = get<Image['asset']>(doc, fieldName as any)
 
     if (!isImageFieldData(asset)) {
       return null

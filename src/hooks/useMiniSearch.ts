@@ -37,11 +37,11 @@ export function useMiniSearch({ searchOptions }: UseMiniSearchProps = {}): [
   }
 
   const [query, setQuery] = useState('')
-  const [results, setResults] = useState([])
+  const [results, setResults] = useState<MiniSearchResult[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [isReady, setIsReady] = useState(false)
 
-  const minisearch = useRef<MiniSearch>(null)
+  const minisearch = useRef<MiniSearch>()
 
   useEffect(() => {
     async function loadSearchIndex() {
@@ -62,8 +62,10 @@ export function useMiniSearch({ searchOptions }: UseMiniSearchProps = {}): [
   useEffect(() => {
     async function search() {
       setIsLoading(true)
-      const results = minisearch.current.search(query)
-      setResults(results)
+      if (minisearch.current) {
+        const results = minisearch.current.search(query) as MiniSearchResult[]
+        setResults(results)
+      }
       setIsLoading(false)
     }
 

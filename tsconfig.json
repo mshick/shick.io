@@ -18,8 +18,9 @@
     "paths": {
       "contentlayer/generated": ["../.contentlayer/generated"],
       "env": ["../env"]
-    }
+    },
+    "pretty": true
   },
-  "include": ["next-env.d.ts", "**/*.tsx", ".contentlayer/generated", "env"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".contentlayer/generated", "env"],
   "exclude": ["node_modules"]
 }
