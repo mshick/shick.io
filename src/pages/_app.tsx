@@ -1,9 +1,10 @@
 import { config } from 'contentlayer/generated'
 import { DefaultSeo } from 'next-seo'
 import { ThemeProvider } from 'next-themes'
+import { AppProps } from 'next/app'
 import 'styles/globals.css'
 
-export default function App({ Component, pageProps }) {
+export default function App({ Component, pageProps }: AppProps) {
   const { siteUrl, siteName, siteDescription, seo } = config
 
   return (

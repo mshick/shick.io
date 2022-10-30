@@ -66,6 +66,7 @@
     "@types/mdast": "^3.0.10",
     "@types/node": "^18.8.3",
     "@types/react": "^18.0.21",
+    "@types/react-is": "^17.0.3",
     "@types/slug": "^5.0.3",
     "autoprefixer": "^10.4.12",
     "csstype": "^3.1.1",

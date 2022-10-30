@@ -25,8 +25,8 @@ export type Article = Merge<
   {
     tags: Tag[]
     readingTime: ReadTimeResults
-    previous?: Pick<TArticle, 'title' | 'path'>
-    next?: Pick<TArticle, 'title' | 'path'>
+    previous?: Pick<TArticle, 'title' | 'path'> | null
+    next?: Pick<TArticle, 'title' | 'path'> | null
   }
 >
 export type Project = Merge<
@@ -34,8 +34,8 @@ export type Project = Merge<
   {
     tags: Tag[]
     readingTime: ReadTimeResults
-    previous?: Pick<TArticle, 'title' | 'path'>
-    next?: Pick<TArticle, 'title' | 'path'>
+    previous?: Pick<TArticle, 'title' | 'path'> | null
+    next?: Pick<TArticle, 'title' | 'path'> | null
   }
 >
 export type Page = Merge<TPage, { tags: Tag[] }>

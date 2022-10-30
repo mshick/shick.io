@@ -14,7 +14,19 @@ export const config = {
 
 export default async function handler(req: NextRequest) {
   const { pathname, searchParams } = new URL(req.url)
-  const method = pathname.match(/([^\/]+)\/?$/)[1]
+  const method = pathname.match(/([^\/]+)\/?$/)?.[1]
+
+  if (!musickitMusicUserToken || !musickitTeamId || !musickitKeyId) {
+    return new Response(
+      JSON.stringify({ errors: [{ title: 'Not configured' }] }),
+      {
+        status: 500,
+        headers: {
+          'content-type': 'application/json'
+        }
+      }
+    )
+  }
 
   const musicKit = await createMusicKit({
     musicUserToken: musickitMusicUserToken,

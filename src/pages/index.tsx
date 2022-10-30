@@ -13,7 +13,7 @@ export default function IndexPage({
   featuredArticles,
   featuredProjects
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const Body = useMDXComponent(page.body.code, {
+  const Body = useMDXComponent(page?.body.code ?? '', {
     featuredArticles,
     featuredProjects
   })
@@ -25,7 +25,7 @@ export default function IndexPage({
   }
 
   return (
-    <Layout seo={{ defaultTitle: page.title }}>
+    <Layout seo={{ defaultTitle: page?.title }}>
       <Body components={bodyComponents} />
     </Layout>
   )

@@ -1,6 +1,9 @@
 import { MutableRefObject, useCallback, useRef } from 'react'
 
-export function useFocus(): [MutableRefObject<HTMLInputElement>, () => void] {
+export function useFocus(): [
+  MutableRefObject<HTMLInputElement | null>,
+  () => void
+] {
   const htmlElRef = useRef<HTMLInputElement>(null)
 
   const setFocus = useCallback(() => {

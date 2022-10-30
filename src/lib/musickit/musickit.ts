@@ -10,6 +10,7 @@ type RequestContext = {
 }
 
 type PaginatedResult = {
+  errors?: [{ title: string }]
   next?: string
   data: Record<string, unknown>[]
 }

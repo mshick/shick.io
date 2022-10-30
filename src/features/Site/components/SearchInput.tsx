@@ -13,7 +13,7 @@ export type SearchInputProps = {
 
 export const SearchInput = forwardRef(function _SearchInput(
   { value, onChange, onFocus }: SearchInputProps,
-  ref: ForwardedRef<HTMLInputElement>
+  ref: ForwardedRef<HTMLInputElement | null>
 ) {
   return (
     <div className="max-w-[90%] w-full">

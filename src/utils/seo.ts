@@ -51,7 +51,7 @@ export function getSeoProps(
               alt: featuredImage.alt ?? featuredImage.title ?? title
             }
           ]
-        : null
+        : undefined
     }
   }
 }

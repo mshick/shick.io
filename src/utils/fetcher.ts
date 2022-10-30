@@ -1,4 +1,4 @@
-export const get = (url, options: RequestInit = {}) =>
+export const get = (url: string, options: RequestInit = {}) =>
   fetch(url, {
     ...options,
     headers: {

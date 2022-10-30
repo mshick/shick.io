@@ -11,6 +11,10 @@ export default function TagPage({
   tag,
   documents
 }: InferGetStaticPropsType<typeof getStaticProps>) {
+  if (!tag) {
+    return
+  }
+
   return (
     <Layout seo={{ title: `Tagged w/ ${tag.name}` }}>
       <div className="w-full mt-8 max-w-none">
@@ -34,7 +38,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: GetStaticPropsContext) {
-  const slug = getSingle(params.tag)
+  const slug = getSingle(params?.tag)
 
   const documents = (
     [...allPages, ...allArticles] as unknown as DocumentTypes[]
