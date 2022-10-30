@@ -28,7 +28,7 @@ type Track = {
     genreName: string[]
     name: string
     previews: {
-      url
+      url: string
     }[]
     releaseDate: string
     trackNumber: number
@@ -120,14 +120,14 @@ export type ListeningToProps = {
 }
 
 export function ListeningTo({ limit }: ListeningToProps) {
-  const { data: recentTracks, error: recentTracksError } = useSWR(
-    `/api/music/recent-tracks?limit=${limit ?? 10}&types=songs`,
-    get,
-    { refreshInterval: 60000 }
-  )
+  const { data: recentTracks, error: recentTracksError } = useSWR<{
+    data: Track[]
+  }>(`/api/music/recent-tracks?limit=${limit ?? 10}&types=songs`, get, {
+    refreshInterval: 60000
+  })
 
-  const [activeTrackId, setActiveTrackId] = useState(null)
-  const audio = useRef<HTMLAudioElement>()
+  const [activeTrackId, setActiveTrackId] = useState<string | null>(null)
+  const audio = useRef<HTMLAudioElement>(new Audio())
 
   if (recentTracksError) {
     return null

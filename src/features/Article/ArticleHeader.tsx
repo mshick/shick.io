@@ -2,7 +2,7 @@ import Link from 'components/Link'
 import { format } from 'date-fns'
 import { Article } from 'types'
 
-const formatDate = (date) => format(new Date(date), 'yyyy-MM-dd')
+const formatDate = (date: string) => format(new Date(date), 'yyyy-MM-dd')
 
 export type ArticleHeaderProps = Pick<
   Article,
@@ -19,18 +19,20 @@ export function ArticleHeader({
 }: ArticleHeaderProps) {
   return (
     <div className="prose prose-tufted-bbs prose-tufted-sidenotes md:prose-tufted-sidenotes-lg dark:prose-tufted-bbs-invert">
-      <div className="w-full md:clear-right md:float-right md:w-[25%]">
+      <div className="w-full md:clear-right md:float-right md:w-[18.5%]">
         <span className="text-xs md:block">
           <time dateTime={publishedAt}>{formatDate(publishedAt)}</time>
         </span>
-        <span className="text-xs mt-2 ml-2 before:content-['::'] before:mr-2 md:before:content-[initial] md:before:mr-2 md:ml-0 md:block ">
-          <time
-            dateTime={updatedAt}
-            className="after:content-['(modify)'] md:after:content-['(mod)'] lg:after:content-['(modify)'] after:ml-1"
-          >
-            {formatDate(updatedAt)}
-          </time>
-        </span>
+        {updatedAt && (
+          <span className="text-xs mt-2 ml-2 before:content-['::'] before:mr-2 md:before:content-[initial] md:before:mr-2 md:ml-0 md:block ">
+            <time
+              dateTime={updatedAt}
+              className="after:content-['(modify)'] md:after:content-['(mod)'] after:ml-1"
+            >
+              {formatDate(updatedAt)}
+            </time>
+          </span>
+        )}
         {readingTime ? (
           <span className="text-xs md:mt-4 ml-2 before:content-['::'] before:mr-2 md:before:content-[initial] md:before:mr-0 md:ml-0 md:block">
             {readingTime.text}

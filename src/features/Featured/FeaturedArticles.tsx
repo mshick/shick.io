@@ -20,10 +20,12 @@ export function FeaturedArticles({
           <Link href={path} className="no-underline">
             <div>
               <h2 className="mb-0 font-bold text-2xl">{title}</h2>
-              <div
-                className="-mt-2 prose-tufte"
-                dangerouslySetInnerHTML={{ __html: excerpt }}
-              />
+              {excerpt && (
+                <div
+                  className="-mt-2 prose-tufte"
+                  dangerouslySetInnerHTML={{ __html: excerpt }}
+                />
+              )}
             </div>
           </Link>
         </li>

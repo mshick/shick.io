@@ -3,7 +3,7 @@ const { typography } = require('@mshick/tufted/tailwind')
 
 module.exports = {
   content: ['./src/**/*.{ts,tsx}'],
-  safelist: [],
+  safelist: ['aspect-video'],
   darkMode: 'class',
   theme: {
     screens: {
@@ -49,9 +49,5 @@ module.exports = {
   variants: {
     typography: ['dark']
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/aspect-ratio'),
-    require('@tailwindcss/typography')
-  ]
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')]
 }

@@ -2,7 +2,13 @@ import { ThemeToggle } from 'features/Site/components/ThemeToggle'
 import { useFocus } from 'hooks/useFocus'
 import { useMiniSearch } from 'hooks/useMiniSearch'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import {
+  ChangeEventHandler,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
 import { replaceState } from 'utils/history'
 import { MobileMenu } from './components/MobileMenu'
 import { NavigationMenu } from './components/NavigationMenu'
@@ -46,7 +52,7 @@ export function SiteNavigation({ items }: SiteNavigationProps) {
     setIsOpen(true)
   }, [])
 
-  const handleQueryChange = useCallback(
+  const handleQueryChange: ChangeEventHandler<HTMLFormElement> = useCallback(
     (e) => {
       const searchQuery = e.target.value
       setQuery(searchQuery)
@@ -70,8 +76,8 @@ export function SiteNavigation({ items }: SiteNavigationProps) {
   }, [setQuery, handleOpenSearch])
 
   useEffect(() => {
-    const close = (e) => {
-      if (e.keyCode === 27) {
+    const close = (e: KeyboardEvent) => {
+      if (e.code === 'Escape') {
         handleClose()
       }
     }
