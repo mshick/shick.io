@@ -1,5 +1,5 @@
+import { ListeningTo } from '#/features/Music/ListeningTo'
 import { config } from 'contentlayer/generated'
-import { ListeningTo } from 'features/Music/ListeningTo'
 
 export type SiteFooterProps = {
   showListeningTo: boolean

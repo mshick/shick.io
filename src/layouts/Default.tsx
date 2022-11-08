@@ -1,7 +1,7 @@
-import Seo from 'components/Seo'
+import Seo from '#/components/Seo'
+import { SiteFooter } from '#/features/Site/SiteFooter'
+import { SiteNavigation } from '#/features/Site/SiteNavigation'
 import { config } from 'contentlayer/generated'
-import { SiteFooter } from 'features/Site/SiteFooter'
-import { SiteNavigation } from 'features/Site/SiteNavigation'
 import { NextSeoProps } from 'next-seo'
 import { PropsWithChildren } from 'react'
 

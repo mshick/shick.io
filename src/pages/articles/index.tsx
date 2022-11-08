@@ -1,10 +1,10 @@
+import { DocumentList } from '#/features/Document/DocumentList'
+import { DocumentListItem } from '#/features/Document/DocumentListItem'
+import Layout from '#/layouts/Default'
+import { Article } from '#/types'
 import { pick } from '@contentlayer/utils'
 import { allArticles } from 'contentlayer/generated'
-import { DocumentList } from 'features/Document/DocumentList'
-import { DocumentListItem } from 'features/Document/DocumentListItem'
-import Layout from 'layouts/Default'
 import { InferGetStaticPropsType } from 'next'
-import { Article } from 'types'
 
 export default function ArticlesPage({
   articles

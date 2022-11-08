@@ -1,6 +1,7 @@
-import { ThemeToggle } from 'features/Site/components/ThemeToggle'
-import { useFocus } from 'hooks/useFocus'
-import { useMiniSearch } from 'hooks/useMiniSearch'
+import { ThemeToggle } from '#/features/Site/components/ThemeToggle'
+import { useFocus } from '#/hooks/useFocus'
+import { useMiniSearch } from '#/hooks/useMiniSearch'
+import { replaceState } from '#/utils/history'
 import { useRouter } from 'next/router'
 import {
   ChangeEventHandler,
@@ -9,7 +10,6 @@ import {
   useMemo,
   useState
 } from 'react'
-import { replaceState } from 'utils/history'
 import { MobileMenu } from './components/MobileMenu'
 import { NavigationMenu } from './components/NavigationMenu'
 import { NavigationToggle } from './components/NavigationToggle'

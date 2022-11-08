@@ -1,6 +1,6 @@
-import Link from 'components/Link'
+import Link from '#/components/Link'
+import { Article } from '#/types'
 import { format } from 'date-fns'
-import { Article } from 'types'
 
 const formatDate = (date: string) => format(new Date(date), 'yyyy-MM-dd')
 

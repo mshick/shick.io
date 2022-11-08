@@ -1,6 +1,8 @@
+import Loading from '#/components/Loading'
+import classNames from '#/utils/classNames'
+import { get } from '#/utils/fetcher'
 import { Popover } from '@headlessui/react'
 import { ChevronUpIcon, PlayPauseIcon } from '@heroicons/react/24/solid'
-import Loading from 'components/Loading'
 import {
   Fragment,
   MutableRefObject,
@@ -9,8 +11,6 @@ import {
   useState
 } from 'react'
 import useSWR from 'swr'
-import classNames from 'utils/classNames'
-import { get } from 'utils/fetcher'
 
 type Track = {
   id: string

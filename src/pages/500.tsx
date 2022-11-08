@@ -1,5 +1,5 @@
-import { ErrorMessage } from 'components/Error/ErrorMessage'
-import Layout from 'layouts/Default'
+import { ErrorMessage } from '#/components/Error/ErrorMessage'
+import Layout from '#/layouts/Default'
 
 export default function Custom500() {
   return (

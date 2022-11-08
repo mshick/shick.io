@@ -1,13 +1,13 @@
+import { ArticleBody } from '#/features/Article/ArticleBody'
+import { ArticleFooter } from '#/features/Article/ArticleFooter'
+import { ArticleHeader } from '#/features/Article/ArticleHeader'
+import { getArticle } from '#/features/Article/utils'
+import Layout from '#/layouts/Article'
+import { Article } from '#/types'
+import { getSeoProps } from '#/utils/seo'
+import { getSingle } from '#/utils/types'
 import { allArticles } from 'contentlayer/generated'
-import { ArticleBody } from 'features/Article/ArticleBody'
-import { ArticleFooter } from 'features/Article/ArticleFooter'
-import { ArticleHeader } from 'features/Article/ArticleHeader'
-import { getArticle } from 'features/Article/utils'
-import Layout from 'layouts/Article'
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
-import { Article } from 'types'
-import { getSeoProps } from 'utils/seo'
-import { getSingle } from 'utils/types'
 
 export default function ArticlePage({
   article

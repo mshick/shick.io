@@ -1,6 +1,6 @@
-import Link from 'components/Link'
+import Link from '#/components/Link'
+import { Article } from '#/types'
 import { PropsWithChildren } from 'react'
-import { Article } from 'types'
 
 type FooterLinkProps = {
   href: string

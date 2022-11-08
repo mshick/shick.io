@@ -1,12 +1,12 @@
+import { HomepageHero } from '#/features/Homepage/HomepageHero'
+import { HomepageList } from '#/features/Homepage/HomepageList'
+import Layout from '#/layouts/Page'
+import { components } from '#/mdx'
+import { Article, Page, Project } from '#/types'
 import { pick } from '@contentlayer/utils'
 import { allArticles, allPages, allProjects } from 'contentlayer/generated'
-import { HomepageHero } from 'features/Homepage/HomepageHero'
-import { HomepageList } from 'features/Homepage/HomepageList'
-import Layout from 'layouts/Page'
-import { components } from 'mdx'
 import { InferGetStaticPropsType } from 'next'
 import { useMDXComponent } from 'next-contentlayer/hooks'
-import { Article, Page, Project } from 'types'
 
 export default function IndexPage({
   page,

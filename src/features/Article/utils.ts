@@ -1,4 +1,4 @@
-import { Article } from 'types'
+import { Article } from '#/types'
 
 export function getArticle(slug: string, articles: Article[]) {
   const orderedArticles = articles.sort(

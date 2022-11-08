@@ -1,10 +1,10 @@
+import { Link } from '#/components/Link'
+import { TagEntry, TagList } from '#/features/Tag/TagList'
+import Layout from '#/layouts/Default'
+import { DocumentTypes } from '#/types'
 import { pick } from '@contentlayer/utils'
-import { Link } from 'components/Link'
 import { allArticles, allPages } from 'contentlayer/generated'
-import { TagEntry, TagList } from 'features/Tag/TagList'
-import Layout from 'layouts/Default'
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
-import { DocumentTypes } from 'types'
 
 export default function TagsPage({
   tags

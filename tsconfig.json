@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
     "target": "ES2016",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -16,8 +16,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "paths": {
-      "contentlayer/generated": ["../.contentlayer/generated"],
-      "env": ["../env"]
+      "#/*": ["./src/*"],
+      "contentlayer/generated": ["./.contentlayer/generated"],
+      "env": ["./env"]
     },
     "pretty": true
   },

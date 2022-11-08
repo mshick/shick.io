@@ -1,4 +1,4 @@
-import { DocumentTypes, PropsWithCallableChildren } from 'types'
+import { DocumentTypes, PropsWithCallableChildren } from '#/types'
 
 type Document = Pick<
   DocumentTypes,

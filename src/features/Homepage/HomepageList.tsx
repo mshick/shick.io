@@ -1,5 +1,5 @@
-import Link from 'components/Link'
-import { DocumentTypes } from 'types'
+import Link from '#/components/Link'
+import { DocumentTypes } from '#/types'
 
 export type HomepageListProps = {
   heading: string

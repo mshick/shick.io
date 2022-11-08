@@ -1,10 +1,10 @@
+import { DocumentList } from '#/features/Document/DocumentList'
+import { DocumentListItem } from '#/features/Document/DocumentListItem'
+import Layout from '#/layouts/Default'
+import { Project } from '#/types'
 import { pick } from '@contentlayer/utils'
 import { allProjects } from 'contentlayer/generated'
-import { DocumentList } from 'features/Document/DocumentList'
-import { DocumentListItem } from 'features/Document/DocumentListItem'
-import Layout from 'layouts/Default'
 import { InferGetStaticPropsType } from 'next'
-import { Project } from 'types'
 
 export default function ProjectsPage({
   projects

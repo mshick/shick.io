@@ -1,10 +1,10 @@
+import Loading from '#/components/Loading'
+import { DocumentList } from '#/features/Document/DocumentList'
+import { DocumentListItem } from '#/features/Document/DocumentListItem'
 import {
-  DocumentMagnifyingGlassIcon,
-  ExclamationTriangleIcon
+    DocumentMagnifyingGlassIcon,
+    ExclamationTriangleIcon
 } from '@heroicons/react/24/outline'
-import Loading from 'components/Loading'
-import { DocumentList } from 'features/Document/DocumentList'
-import { DocumentListItem } from 'features/Document/DocumentListItem'
 
 export type SearchResultsItem = {
   id: string

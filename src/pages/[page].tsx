@@ -1,11 +1,11 @@
+import { PageBody } from '#/features/Page/PageBody'
+import { getPagePageParams } from '#/features/Page/utils'
+import Layout from '#/layouts/Page'
+import { Page } from '#/types'
+import { getSeoProps } from '#/utils/seo'
+import { getSingle } from '#/utils/types'
 import { allPages } from 'contentlayer/generated'
-import { PageBody } from 'features/Page/PageBody'
-import { getPagePageParams } from 'features/Page/utils'
-import Layout from 'layouts/Page'
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
-import { Page } from 'types'
-import { getSeoProps } from 'utils/seo'
-import { getSingle } from 'utils/types'
 
 export default function PagePage({
   page

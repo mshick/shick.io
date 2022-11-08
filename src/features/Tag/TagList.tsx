@@ -1,4 +1,4 @@
-import { DocumentTypes, PropsWithCallableChildren, Tag } from 'types'
+import { DocumentTypes, PropsWithCallableChildren, Tag } from '#/types'
 
 export type TagEntry = {
   tag: Tag

@@ -1,6 +1,6 @@
+import { DocumentTypes } from '#/types'
 import { config } from 'contentlayer/generated'
 import { NextSeoProps } from 'next-seo'
-import { DocumentTypes } from 'types'
 
 type SeoDocument = Pick<
   DocumentTypes,

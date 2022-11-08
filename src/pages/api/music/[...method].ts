@@ -1,4 +1,4 @@
-import { createMusicKit } from 'lib/musickit/musickit'
+import { createMusicKit } from '#/lib/musickit/musickit'
 import { NextRequest } from 'next/server'
 
 const _musickitPrivateKey = process.env.MUSICKIT_PRIVATE_KEY ?? ''

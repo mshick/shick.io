@@ -1,5 +1,5 @@
+import { isReactElement } from '#/utils/types'
 import { HTMLAttributes, PropsWithChildren } from 'react'
-import { isReactElement } from 'utils/types'
 
 export function Pre(props: PropsWithChildren<HTMLAttributes<HTMLPreElement>>) {
   let className = props.className ?? ''
