@@ -1,3 +1,4 @@
+import ClientOnly from '#/components/ClientOnly'
 import Loading from '#/components/Loading'
 import classNames from '#/utils/classNames'
 import { get } from '#/utils/fetcher'
@@ -119,7 +120,7 @@ export type ListeningToProps = {
   limit?: number
 }
 
-export function ListeningTo({ limit }: ListeningToProps) {
+export function ListeningToPopover({ limit }: ListeningToProps) {
   const { data: recentTracks, error: recentTracksError } = useSWR<{
     data: Track[]
   }>(`/api/music/recent-tracks?limit=${limit ?? 10}&types=songs`, get, {
@@ -183,5 +184,13 @@ export function ListeningTo({ limit }: ListeningToProps) {
         </div>
       )}
     </Popover>
+  )
+}
+
+export function ListeningTo() {
+  return (
+    <ClientOnly>
+      <ListeningToPopover />
+    </ClientOnly>
   )
 }

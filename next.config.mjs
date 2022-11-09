@@ -55,6 +55,7 @@ const securityHeaders = [
   }
 ]
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   swcMinify: true,
   reactStrictMode: true,
@@ -145,15 +146,6 @@ const nextConfig = {
       level: 'error'
     }
 
-    // Workaround: https://github.com/getsentry/sentry-javascript/issues/5667
-    // if (options.isServer && options.nextRuntime === 'edge') {
-    //   config.resolve.alias = {
-    //     ...config.resolve.alias,
-    //     './sentry.client.config.js': false,
-    //     './sentry.server.config.js': false
-    //   }
-    // }
-
     config.module = {
       ...config.module,
       rules: config.module.rules.concat([
@@ -167,7 +159,7 @@ const nextConfig = {
     return config
   },
   eslint: {
-    dirs: ['src']
+    dirs: ['src', 'lib', 'env']
   },
   images: {
     minimumCacheTTL: 60,
