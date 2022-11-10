@@ -1,7 +1,7 @@
 import * as base64 from '#/utils/base64'
 import { useManualQuery, useMutation } from 'graphql-hooks'
 import { MouseEventHandler, useCallback, useEffect, useState } from 'react'
-import { File } from '../types'
+import { Repo, TextFile } from '../types'
 import ScriptEditor, { MonacoOnInitializePane } from './ScriptEditor'
 
 type HeadOidResponse = {
@@ -76,7 +76,12 @@ type CommitChangesVariables = {
   }
 }
 
-export function FileEditor({ file }: { file: File | undefined }) {
+type FileEditorProps = {
+  file: TextFile | undefined
+  repo: Repo
+}
+
+export function FileEditor({ file, repo }: FileEditorProps) {
   const [getHeadOid] = useManualQuery<HeadOidResponse>(headOidQuery)
 
   const [commitChanges, { loading, error, data }] = useMutation<
@@ -106,6 +111,16 @@ export function FileEditor({ file }: { file: File | undefined }) {
     []
   )
 
+  const onReset: MouseEventHandler = useCallback(
+    (event) => {
+      event.stopPropagation()
+      if (file?.text) {
+        setCode(file.text)
+      }
+    },
+    [file?.text]
+  )
+
   const onCommit: MouseEventHandler = useCallback(
     async (event) => {
       event.stopPropagation()
@@ -114,7 +129,7 @@ export function FileEditor({ file }: { file: File | undefined }) {
       }
 
       const headOidResponse = await getHeadOid({
-        variables: { name: 'shick.io', owner: 'mshick' }
+        variables: { name: repo.name, owner: repo.owner }
       })
 
       const expectedHeadOid =
@@ -130,8 +145,8 @@ export function FileEditor({ file }: { file: File | undefined }) {
           input: {
             expectedHeadOid,
             branch: {
-              repositoryNameWithOwner: 'mshick/shick.io',
-              branchName: 'main'
+              repositoryNameWithOwner: `${repo.owner}/${repo.name}`,
+              branchName: repo.branch
             },
             message: {
               headline: 'will it blend?'
@@ -148,24 +163,36 @@ export function FileEditor({ file }: { file: File | undefined }) {
         }
       })
     },
-    [code, commitChanges, file]
+    [code, commitChanges, file, getHeadOid, repo.branch, repo.name, repo.owner]
   )
 
   return (
-    <div className="flex flex-col">
-      <div className="flex-grow">
+    <div className="min-h-screen relative">
+      <div className="fixed top-0 h-8 px-12 w-[inherit] bg-neutral-100 flex align-middle items-center">
+        {file?.path}
+      </div>
+      <div className="mt-8 mb-16">
         <ScriptEditor
           path={file?.path ?? ''}
+          language={file?.language ?? 'plaintext'}
           code={code}
           setCode={setCode}
-          editorOptions={{
-            stopRenderingLineAfter: 1000
-          }}
           onInitializePane={onInitializePane}
         />
       </div>
-      <div>
-        <button onClick={onCommit}>Commit</button>
+      <div className="fixed bottom-0 h-16 px-12 w-[inherit] bg-neutral-100 flex items-center justify-end gap-2">
+        <button
+          className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          onClick={onReset}
+        >
+          Reset
+        </button>
+        <button
+          className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          onClick={onCommit}
+        >
+          Commit
+        </button>
       </div>
     </div>
   )

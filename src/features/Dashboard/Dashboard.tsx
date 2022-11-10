@@ -8,5 +8,15 @@ export function Dashboard() {
     return null
   }
 
-  return <Editor accessToken={session.accessToken} />
+  return (
+    <Editor
+      accessToken={session.accessToken}
+      repo={{
+        name: 'shick.io',
+        owner: 'mshick',
+        branch: 'main',
+        dataDir: 'data'
+      }}
+    />
+  )
 }
