@@ -6,8 +6,9 @@ import {
   useEffect,
   useRef
 } from 'react'
+import { TextFile } from '../types'
 
-export type MonacoEditorOptions = {
+export type MonacoEditorOptions = Record<string, unknown> & {
   stopRenderingLineAfter: number
 }
 
@@ -23,14 +24,16 @@ export type MonacoOnInitializePane = (
 
 export type ScriptEditorProps = {
   path: string
+  language: TextFile['language']
   code: string
   setCode: Dispatch<SetStateAction<string>>
-  editorOptions: MonacoEditorOptions
+  editorOptions?: MonacoEditorOptions
   onInitializePane: MonacoOnInitializePane
 }
 
 const ScriptEditor = (props: ScriptEditorProps): JSX.Element => {
-  const { path, code, setCode, editorOptions, onInitializePane } = props
+  const { path, language, code, setCode, editorOptions, onInitializePane } =
+    props
 
   const monacoEditorRef = useRef<any | null>(null)
   const editorRef = useRef<any | null>(null)
@@ -46,8 +49,8 @@ const ScriptEditor = (props: ScriptEditorProps): JSX.Element => {
 
   return (
     <Editor
-      height="100%"
-      language="markdown"
+      height="calc(100vh - 6rem)"
+      language={language}
       onChange={(value, _event) => {
         setCode(value ?? '')
       }}
@@ -55,11 +58,19 @@ const ScriptEditor = (props: ScriptEditorProps): JSX.Element => {
         monacoEditorRef.current = monaco.editor
         editorRef.current = editor
       }}
-      options={editorOptions}
-      theme="vs-dark"
+      options={{
+        ...editorOptions,
+        wordWrap: 'on',
+        automaticLayout: true,
+        scrollBeyondLastLine: false,
+        stopRenderingLineAfter: editorOptions?.stopRenderingLineAfter ?? 1000,
+        minimap: {
+          enabled: false
+        }
+      }}
       path={path}
       value={code}
-      width="60em"
+      width="100%"
     />
   )
 }
