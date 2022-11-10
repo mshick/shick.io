@@ -1,10 +1,4 @@
-import NextImage from 'next/future/image'
-import { DetailedHTMLProps, ImgHTMLAttributes } from 'react'
-
-export type ImageProps = DetailedHTMLProps<
-  Omit<ImgHTMLAttributes<HTMLImageElement>, 'placeholder'>,
-  HTMLImageElement
->
+import NextImage, { ImageProps } from 'next/image'
 
 export const Image = ({
   className,
@@ -14,7 +8,7 @@ export const Image = ({
   alt,
   ...props
 }: ImageProps) => {
-  if (!src || !width || !height) {
+  if ((!width || !height) && typeof src === 'string') {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} alt="" className={className} {...props}></img>
   }

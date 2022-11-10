@@ -13,8 +13,8 @@ export const Link = ({
   }
 
   return (
-    <NextLink href={href} as={as}>
-      <a {...props}>{children}</a>
+    <NextLink href={href} as={as} {...props}>
+      {children}
     </NextLink>
   )
 }

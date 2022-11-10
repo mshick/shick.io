@@ -7,21 +7,21 @@ const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN
 // https://securityheaders.com
 const ContentSecurityPolicy = `
   default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline';
+  script-src 'self' 'unsafe-eval' 'unsafe-inline' cdn.jsdelivr.net;
   child-src *.google.com *.youtube.com;
   style-src 'self' 'unsafe-inline' *.googleapis.com;
   img-src * blob: data:;
   media-src *;
   connect-src *;
-  font-src 'self' fonts.gstatic.com
+  font-src 'self'
 `
 
 const securityHeaders = [
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-  {
-    key: 'Content-Security-Policy',
-    value: ContentSecurityPolicy.replace(/\n/g, '')
-  },
+  // {
+  //   key: 'Content-Security-Policy',
+  //   value: ContentSecurityPolicy.replace(/\n/g, '')
+  // },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
   {
     key: 'Referrer-Policy',
