@@ -109,7 +109,7 @@
     "unified": "^10.1.2",
     "unist-util-remove": "^3.1.0"
   },
-  "packageManager": "npm@8.11.0",
+  "packageManager": "npm@8.19.2",
   "engines": {
     "node": "16",
     "npm": "8"
