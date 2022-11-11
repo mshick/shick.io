@@ -1,7 +1,11 @@
+import Image from '#/components/Image'
 import * as base64 from '#/utils/base64'
 import { useManualQuery, useMutation } from 'graphql-hooks'
+import { useAtomValue } from 'jotai'
 import { MouseEventHandler, useCallback, useEffect, useState } from 'react'
-import { Repo, TextFile } from '../types'
+import { commitChangesQuery, headOidQuery } from '../queries'
+import { currentFileAtom } from '../store'
+import { Repo } from '../types'
 import ScriptEditor, { MonacoOnInitializePane } from './ScriptEditor'
 
 type HeadOidResponse = {
@@ -19,32 +23,6 @@ type HeadOidResponse = {
     }
   }
 }
-
-const headOidQuery = /* GraphQL */ `
-  query ($name: String!, $owner: String!) {
-    repository(name: $name, owner: $owner) {
-      defaultBranchRef {
-        target {
-          ... on Commit {
-            history(first: 1) {
-              nodes {
-                oid
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`
-
-const commitChangesQuery = /* GraphQL */ `
-  mutation ($input: CreateCommitOnBranchInput!) {
-    createCommitOnBranch(input: $input) {
-      clientMutationId
-    }
-  }
-`
 
 type CommitChangesResponse = {
   clientMutationId: string
@@ -77,14 +55,15 @@ type CommitChangesVariables = {
 }
 
 type FileEditorProps = {
-  file: TextFile | undefined
   repo: Repo
 }
 
-export function FileEditor({ file, repo }: FileEditorProps) {
+export function FileEditor({ repo }: FileEditorProps) {
+  const file = useAtomValue(currentFileAtom)
+
   const [getHeadOid] = useManualQuery<HeadOidResponse>(headOidQuery)
 
-  const [commitChanges, { loading, error, data }] = useMutation<
+  const [commitChanges] = useMutation<
     CommitChangesResponse,
     CommitChangesVariables,
     CommitChangesVariables
@@ -93,7 +72,7 @@ export function FileEditor({ file, repo }: FileEditorProps) {
   const [code, setCode] = useState<string>('')
 
   useEffect(() => {
-    if (file?.text) {
+    if (file?.type === 'text') {
       setCode(file.text)
     }
   }, [file])
@@ -114,11 +93,11 @@ export function FileEditor({ file, repo }: FileEditorProps) {
   const onReset: MouseEventHandler = useCallback(
     (event) => {
       event.stopPropagation()
-      if (file?.text) {
+      if (file?.type === 'text') {
         setCode(file.text)
       }
     },
-    [file?.text]
+    [file]
   )
 
   const onCommit: MouseEventHandler = useCallback(
@@ -166,20 +145,33 @@ export function FileEditor({ file, repo }: FileEditorProps) {
     [code, commitChanges, file, getHeadOid, repo.branch, repo.name, repo.owner]
   )
 
+  let Component: JSX.Element
+
+  if (file?.type === 'binary') {
+    Component = (
+      <Image
+        src={`https://github.com/${repo.owner}/${repo.name}/raw/${repo.branch}/${file.path}`}
+        alt={file.name}
+      />
+    )
+  } else {
+    Component = (
+      <ScriptEditor
+        path={file?.type === 'text' ? file.path : ''}
+        language={file?.type === 'text' ? file.language : 'plaintext'}
+        code={code}
+        setCode={setCode}
+        onInitializePane={onInitializePane}
+      />
+    )
+  }
+
   return (
     <div className="min-h-screen relative">
       <div className="fixed top-0 h-8 px-12 w-[inherit] bg-neutral-100 flex align-middle items-center">
         {file?.path}
       </div>
-      <div className="mt-8 mb-16">
-        <ScriptEditor
-          path={file?.path ?? ''}
-          language={file?.language ?? 'plaintext'}
-          code={code}
-          setCode={setCode}
-          onInitializePane={onInitializePane}
-        />
-      </div>
+      <div className="mt-8 mb-16">{Component}</div>
       <div className="fixed bottom-0 h-16 px-12 w-[inherit] bg-neutral-100 flex items-center justify-end gap-2">
         <button
           className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"

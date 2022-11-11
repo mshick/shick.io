@@ -1,79 +1,9 @@
 import { useQuery } from 'graphql-hooks'
 import mime from 'mime/lite'
-import {
-  File,
-  Repo,
-  RepoBlob,
-  RepoEntry,
-  RepoTree,
-  RepoTreeEntry,
-  TextFile
-} from '../types'
-import { isTextFile } from '../utils'
+import { repoFilesQuery } from '../queries'
+import { File, Repo, RepoBlob, RepoTree, TextFile } from '../types'
+import { isNotNullish, isRepoTreeEntry } from '../utils'
 import { FileRoot } from './FileRoot'
-
-function isRepoTreeEntry(entry: RepoEntry): entry is RepoTreeEntry {
-  return entry.type === 'tree'
-}
-
-const repoFilesQuery = /* GraphQL */ `
-  query ($name: String!, $owner: String!, $expression: String!) {
-    viewer {
-      login
-    }
-    repository(name: $name, owner: $owner) {
-      object(expression: $expression) {
-        ... on Tree {
-          entries {
-            name
-            type
-            mode
-            object {
-              ... on Blob {
-                byteSize
-                text
-                isBinary
-              }
-              ... on Tree {
-                entries {
-                  name
-                  type
-                  mode
-                  object {
-                    ... on Blob {
-                      byteSize
-                      text
-                      isBinary
-                    }
-
-                    ... on Tree {
-                      entries {
-                        name
-                        type
-                        mode
-                        object {
-                          ... on Blob {
-                            byteSize
-                            text
-                            isBinary
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`
-
-function isNotNullish<T>(x: T | null | undefined): x is T {
-  return x !== null && x !== undefined
-}
 
 function getFileLanguage(name: string): TextFile['language'] {
   const ext = name.split('.').pop()
@@ -129,10 +59,9 @@ function toFileTree(prevPath: string, tree: RepoTree): File[] {
 
 export type FileTreeProps = {
   repo: Repo
-  onClickTextFile: (file: TextFile) => void
 }
 
-export function FileTree({ repo, onClickTextFile }: FileTreeProps) {
+export function FileTree({ repo }: FileTreeProps) {
   const { loading, error, data } = useQuery(repoFilesQuery, {
     variables: {
       name: repo.name,
@@ -160,11 +89,6 @@ export function FileTree({ repo, onClickTextFile }: FileTreeProps) {
           type: 'parent',
           path: repo.dataDir,
           children: tree
-        }}
-        onClickLeaf={(file) => {
-          if (isTextFile(file)) {
-            onClickTextFile(file)
-          }
         }}
       />
     </div>

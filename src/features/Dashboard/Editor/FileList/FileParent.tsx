@@ -7,16 +7,15 @@ import React, {
   useCallback,
   useState
 } from 'react'
-import { LeafFile, ParentFile } from '../types'
+import { ParentFile } from '../types'
 import { FileRoot } from './FileRoot'
 
 export type FileParentProps = PropsWithChildren<{
   file: ParentFile
   depth: number
-  onClickLeaf: (file: LeafFile) => void
 }>
 
-export function FileParent({ file, depth, onClickLeaf }: FileParentProps) {
+export function FileParent({ file, depth }: FileParentProps) {
   const [toggle, setToggle] = useState<boolean>(false)
 
   const onClicked: MouseEventHandler = useCallback(
@@ -53,7 +52,7 @@ export function FileParent({ file, depth, onClickLeaf }: FileParentProps) {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <FileRoot depth={depth + 1} tree={file} onClickLeaf={onClickLeaf} />
+        <FileRoot depth={depth + 1} tree={file} />
       </Transition>
     </li>
   )

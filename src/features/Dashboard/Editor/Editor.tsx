@@ -1,10 +1,9 @@
 import { ClientContext, GraphQLClient } from 'graphql-hooks'
-import { useState } from 'react'
+import { Provider } from 'jotai'
 import Split from 'react-split'
-import { EditorProvider } from './EditorContext'
 import { FileEditor } from './FileEditor/FileEditor'
 import { FileTree } from './FileList/FileTree'
-import { Repo, TextFile } from './types'
+import { Repo } from './types'
 
 export type EditorProp = {
   accessToken: string
@@ -19,16 +18,14 @@ export function Editor({ accessToken, repo }: EditorProp) {
     }
   })
 
-  const [file, setFile] = useState<TextFile>()
-
   return (
     <ClientContext.Provider value={client}>
-      <EditorProvider>
+      <Provider>
         <Split sizes={[25, 75]} className="flex flex-row min-h-screen">
-          <FileTree repo={repo} onClickTextFile={(file) => setFile(file)} />
-          <FileEditor repo={repo} file={file} />
+          <FileTree repo={repo} />
+          <FileEditor repo={repo} />
         </Split>
-      </EditorProvider>
+      </Provider>
     </ClientContext.Provider>
   )
 }
