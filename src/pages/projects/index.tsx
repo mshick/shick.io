@@ -1,7 +1,7 @@
 import { DocumentList } from '#/features/Document/DocumentList'
 import { DocumentListItem } from '#/features/Document/DocumentListItem'
 import Layout from '#/layouts/Default'
-import { Project } from '#/types'
+import { Project } from '#/types/types'
 import { pick } from '@contentlayer/utils'
 import { allProjects } from 'contentlayer/generated'
 import { InferGetStaticPropsType } from 'next'

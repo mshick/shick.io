@@ -1,4 +1,4 @@
-import { Page } from '#/types'
+import { Page } from '#/types/types'
 
 export function getPagePageParams(pages: Page[]) {
   return pages.map((page) => ({

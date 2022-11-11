@@ -9,7 +9,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const { siteUrl, siteName, siteDescription, seo } = config
 
   return (
-    <SessionProvider>
+    <SessionProvider refetchOnWindowFocus={false}>
       <ThemeProvider attribute="class">
         <DefaultSeo
           canonical={siteUrl}

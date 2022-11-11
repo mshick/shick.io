@@ -10,8 +10,6 @@ import {
   TextFile
 } from '../types'
 import { isTextFile } from '../utils'
-import { ContextMenuProvider } from './context'
-import { ContextMenu } from './ContextMenu'
 import { FileRoot } from './FileRoot'
 
 function isRepoTreeEntry(entry: RepoEntry): entry is RepoTreeEntry {
@@ -154,24 +152,21 @@ export function FileTree({ repo, onClickTextFile }: FileTreeProps) {
   const tree = toFileTree(repo.dataDir, data.repository.object)
 
   return (
-    <div>
-      <ContextMenuProvider>
-        <ContextMenu />
-        <FileRoot
-          depth={0}
-          tree={{
-            name: 'root',
-            type: 'parent',
-            path: repo.dataDir,
-            children: tree
-          }}
-          onClickLeaf={(file) => {
-            if (isTextFile(file)) {
-              onClickTextFile(file)
-            }
-          }}
-        />
-      </ContextMenuProvider>
+    <div className="py-4 px-2">
+      <FileRoot
+        depth={0}
+        tree={{
+          name: 'root',
+          type: 'parent',
+          path: repo.dataDir,
+          children: tree
+        }}
+        onClickLeaf={(file) => {
+          if (isTextFile(file)) {
+            onClickTextFile(file)
+          }
+        }}
+      />
     </div>
   )
 }

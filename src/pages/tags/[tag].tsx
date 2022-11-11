@@ -1,7 +1,7 @@
 import { DocumentList } from '#/features/Document/DocumentList'
 import { DocumentListItem } from '#/features/Document/DocumentListItem'
 import Layout from '#/layouts/Default'
-import { DocumentTypes } from '#/types'
+import { DocumentTypes } from '#/types/types'
 import { getSingle } from '#/utils/types'
 import { pick } from '@contentlayer/utils'
 import { allArticles, allPages } from 'contentlayer/generated'

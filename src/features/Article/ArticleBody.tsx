@@ -1,5 +1,5 @@
 import { components } from '#/mdx'
-import { Article } from '#/types'
+import { Article } from '#/types/types'
 import { useMDXComponent } from 'next-contentlayer/hooks'
 
 export type ArticleBodyProps = Pick<Article, 'body'>

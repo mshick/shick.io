@@ -1,5 +1,5 @@
 import Link from '#/components/Link'
-import { Article } from '#/types'
+import { Article } from '#/types/types'
 import { PropsWithChildren } from 'react'
 
 type FooterLinkProps = {

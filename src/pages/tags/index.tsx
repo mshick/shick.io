@@ -1,7 +1,7 @@
 import { Link } from '#/components/Link'
 import { TagEntry, TagList } from '#/features/Tag/TagList'
 import Layout from '#/layouts/Default'
-import { DocumentTypes } from '#/types'
+import { DocumentTypes } from '#/types/types'
 import { pick } from '@contentlayer/utils'
 import { allArticles, allPages } from 'contentlayer/generated'
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next'

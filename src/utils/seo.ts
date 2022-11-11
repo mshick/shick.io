@@ -1,4 +1,4 @@
-import { DocumentTypes } from '#/types'
+import { DocumentTypes } from '#/types/types'
 import { config } from 'contentlayer/generated'
 import { NextSeoProps } from 'next-seo'
 

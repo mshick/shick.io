@@ -1,3 +1,4 @@
+import classNames from '#/utils/classNames'
 import { Transition } from '@headlessui/react'
 import { FolderIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 import React, {
@@ -28,7 +29,14 @@ export function FileParent({ file, depth, onClickLeaf }: FileParentProps) {
 
   return (
     <li className="cursor-pointer" onClick={onClicked}>
-      <span className="p-2 hover:bg-gray-100 transition block truncate">
+      <span
+        className={classNames(
+          depth === 0 ? 'pl-2' : '',
+          depth === 1 ? 'pl-6' : '',
+          depth === 2 ? 'pl-10' : '',
+          'hover:bg-gray-100 transition block truncate py-2'
+        )}
+      >
         {toggle ? (
           <FolderOpenIcon className="inline-block w-5 h-5 mr-2 stroke-current" />
         ) : (

@@ -1,5 +1,5 @@
 import Link from '#/components/Link'
-import { DocumentTypes } from '#/types'
+import { DocumentTypes } from '#/types/types'
 
 export type DocumentListItemProps = Pick<
   DocumentTypes,

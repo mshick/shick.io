@@ -1,5 +1,5 @@
 import Link from '#/components/Link'
-import { Article } from '#/types'
+import { Article } from '#/types/types'
 import { format } from 'date-fns'
 
 const formatDate = (date: string) => format(new Date(date), 'yyyy-MM-dd')
