@@ -1,4 +1,5 @@
 import NextImage, { ImageProps } from 'next/image'
+import { DetailedHTMLProps, ImgHTMLAttributes } from 'react'
 
 export const Image = ({
   className,
@@ -7,7 +8,14 @@ export const Image = ({
   height,
   alt,
   ...props
-}: ImageProps) => {
+}: DetailedHTMLProps<
+  ImgHTMLAttributes<HTMLImageElement>,
+  HTMLImageElement
+>) => {
+  if (!src) {
+    return null
+  }
+
   if ((!width || !height) && typeof src === 'string') {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={src} alt="" className={className} {...props}></img>
@@ -15,11 +23,11 @@ export const Image = ({
 
   return (
     <NextImage
+      {...(props as ImageProps)}
       src={src}
       alt={alt ?? ''}
-      width={width}
-      height={height}
-      {...props}
+      width={Number(width)}
+      height={Number(height)}
     />
   )
 }
