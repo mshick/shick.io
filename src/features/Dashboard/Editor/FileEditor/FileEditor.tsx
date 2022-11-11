@@ -4,7 +4,7 @@ import { useManualQuery, useMutation } from 'graphql-hooks'
 import { useAtomValue } from 'jotai'
 import { MouseEventHandler, useCallback, useEffect, useState } from 'react'
 import { commitChangesQuery, headOidQuery } from '../queries'
-import { currentFileAtom } from '../store'
+import { currentFileAtomAtom } from '../store'
 import { Repo } from '../types'
 import ScriptEditor, { MonacoOnInitializePane } from './ScriptEditor'
 
@@ -59,7 +59,8 @@ type FileEditorProps = {
 }
 
 export function FileEditor({ repo }: FileEditorProps) {
-  const file = useAtomValue(currentFileAtom)
+  const fileAtom = useAtomValue(currentFileAtomAtom)
+  const file = useAtomValue(fileAtom)
 
   const [getHeadOid] = useManualQuery<HeadOidResponse>(headOidQuery)
 

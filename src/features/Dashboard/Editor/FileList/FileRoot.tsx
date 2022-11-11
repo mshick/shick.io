@@ -1,23 +1,43 @@
 import classNames from '#/utils/classNames'
-import { ParentFile } from '../types'
-import { isParentFile } from '../utils'
+import { Atom, atom, useAtomValue } from 'jotai'
+import { splitAtom } from 'jotai/utils'
+import { useMemo } from 'react'
+import { LeafFile, NodeFile, ParentFile } from '../types'
 import { FileLeaf } from './FileLeaf'
 import { FileParent } from './FileParent'
 
 export type FileRootProps = {
-  tree: ParentFile
-  depth: number
+  fileAtom: Atom<ParentFile>
 }
 
-export function FileRoot({ tree, depth }: FileRootProps) {
+export type FileNodeProps = {
+  fileAtom: Atom<NodeFile>
+}
+
+function FileNode({ fileAtom }: FileNodeProps) {
+  const file = useAtomValue(fileAtom)
+
+  if (file.type === 'parent') {
+    return <FileParent fileAtom={fileAtom as Atom<ParentFile>} />
+  }
+
+  return <FileLeaf fileAtom={fileAtom as Atom<LeafFile>} />
+}
+
+export function FileRoot({ fileAtom }: FileRootProps) {
+  const childrenAtom = useMemo(
+    () => atom((get) => get(fileAtom)?.children ?? []),
+    [fileAtom]
+  )
+
+  const childrenAtomsAtom = splitAtom(childrenAtom)
+  const childrenAtoms = useAtomValue(childrenAtomsAtom)
+  const node = useAtomValue(fileAtom)
+
   return (
     <ul className={classNames('p-0 m-0 menu bg-default text-content-700')}>
-      {tree.children.map((file) => {
-        if (isParentFile(file)) {
-          return <FileParent key={file.name} depth={depth} file={file} />
-        }
-
-        return <FileLeaf key={file.name} file={file} depth={depth} />
+      {childrenAtoms.map((childAtom) => {
+        return <FileNode fileAtom={childAtom} key={childAtom.toString()} />
       })}
     </ul>
   )

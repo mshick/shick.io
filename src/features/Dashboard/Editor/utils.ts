@@ -1,10 +1,16 @@
-import { File, ParentFile, RepoEntry, RepoTreeEntry, TextFile } from './types'
+import {
+  NodeFile,
+  ParentFile,
+  RepoEntry,
+  RepoTreeEntry,
+  TextFile
+} from './types'
 
-export function isParentFile(file: File): file is ParentFile {
+export function isParentFile(file: NodeFile): file is ParentFile {
   return file.type === 'parent'
 }
 
-export function isTextFile(file: File): file is TextFile {
+export function isTextFile(file: NodeFile): file is TextFile {
   return file.type === 'text'
 }
 

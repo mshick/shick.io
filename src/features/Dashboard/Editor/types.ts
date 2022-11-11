@@ -1,5 +1,6 @@
 export type TextFile = {
   type: 'text'
+  depth: number
   path: string
   name: string
   mimeType?: string
@@ -9,6 +10,7 @@ export type TextFile = {
 
 export type BinaryFile = {
   type: 'binary'
+  depth: number
   path: string
   name: string
   mimeType?: string
@@ -18,12 +20,13 @@ export type LeafFile = BinaryFile | TextFile
 
 export type ParentFile = {
   type: 'parent'
+  depth: number
   path: string
   name: string
-  children: File[]
+  children: NodeFile[]
 }
 
-export type File = ParentFile | LeafFile
+export type NodeFile = ParentFile | LeafFile
 
 export type State = {
   position?: {

@@ -1,33 +1,34 @@
 import classNames from '#/utils/classNames'
 import { DocumentTextIcon, PhotoIcon } from '@heroicons/react/24/outline'
-import { useAtom } from 'jotai'
+import { Atom, useAtom, useAtomValue } from 'jotai'
 import { MouseEventHandler, useCallback } from 'react'
-import { currentFileAtom } from '../store'
+import { currentFileAtomAtom } from '../store'
 import { LeafFile } from '../types'
 
 export type FileLeafProps = {
-  file: LeafFile
-  depth: number
+  fileAtom: Atom<LeafFile>
 }
 
-export function FileLeaf({ depth, file }: FileLeafProps) {
-  const [currentFile, setCurrentFile] = useAtom(currentFileAtom)
+export function FileLeaf({ fileAtom }: FileLeafProps) {
+  const file = useAtomValue(fileAtom)
+  const [currentFileAtom, setCurrentFileAtom] = useAtom(currentFileAtomAtom)
+  const currentFile = useAtomValue(currentFileAtom)
 
   const onClicked: MouseEventHandler = useCallback(
     (event) => {
       event.stopPropagation()
-      setCurrentFile(file)
+      setCurrentFileAtom(fileAtom)
     },
-    [file, setCurrentFile]
+    [fileAtom, setCurrentFileAtom]
   )
 
   return (
     <li className="cursor-pointer" onClick={onClicked}>
       <span
         className={classNames(
-          depth === 0 ? 'pl-2' : '',
-          depth === 1 ? 'pl-6' : '',
-          depth === 2 ? 'pl-10' : '',
+          file.depth === 1 ? 'pl-2' : '',
+          file.depth === 2 ? 'pl-6' : '',
+          file.depth === 3 ? 'pl-10' : '',
           file.path === currentFile?.path
             ? 'bg-indigo-200'
             : 'hover:bg-gray-200',
