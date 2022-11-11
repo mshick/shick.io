@@ -1,5 +1,4 @@
 import Image from '#/components/Image'
-import * as base64 from '#/utils/base64'
 import { useManualQuery, useMutation } from 'graphql-hooks'
 import { useAtomValue } from 'jotai'
 import { MouseEventHandler, useCallback, useEffect, useState } from 'react'
@@ -135,7 +134,7 @@ export function FileEditor({ repo }: FileEditorProps) {
               additions: [
                 {
                   path: file.path,
-                  contents: base64.encode(code)
+                  contents: Buffer.from(code).toString('base64')
                 }
               ]
             }

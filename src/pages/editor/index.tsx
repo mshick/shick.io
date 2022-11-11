@@ -1,7 +1,7 @@
+import { Editor } from '#/features/Editor/Editor'
 import { useSession } from 'next-auth/react'
-import { Editor } from './Editor/Editor'
 
-export function Dashboard() {
+export default function EditorPage() {
   const { data: session } = useSession({ required: true })
 
   if (!session) {
