@@ -10,7 +10,7 @@ export function Dashboard() {
 
   return (
     <Editor
-      accessToken={session.accessToken}
+      accessToken={session.accessToken!}
       repo={{
         name: 'shick.io',
         owner: 'mshick',
