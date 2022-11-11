@@ -5,7 +5,7 @@ excerpt: 'Foo bar.'
 featured: true
 ---
 
-Hello `world`!
+Hello `WORLD`!
 
 :::figure
 
