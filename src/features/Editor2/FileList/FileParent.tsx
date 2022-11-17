@@ -1,23 +1,21 @@
 import classNames from '#/utils/classNames'
 import { Transition } from '@headlessui/react'
 import { FolderIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
-import { Atom, useAtomValue } from 'jotai'
 import React, {
   MouseEventHandler,
   PropsWithChildren,
   useCallback,
   useState
 } from 'react'
-import { NodeFile } from '../types'
+import { TreeNodeParent } from '../useTreeState/types'
 import { FileRoot } from './FileRoot'
 
 export type FileParentProps = PropsWithChildren<{
-  parentAtom: Atom<NodeFile>
-  childAtom: Atom<NodeFile>
+  child: TreeNodeParent
+  path: number[]
 }>
 
-export function FileParent({ parentAtom, childAtom }: FileParentProps) {
-  const file = useAtomValue(childAtom)
+export function FileParent({ child, path }: FileParentProps) {
   const [toggle, setToggle] = useState<boolean>(false)
 
   const onClicked: MouseEventHandler = useCallback(
@@ -32,9 +30,9 @@ export function FileParent({ parentAtom, childAtom }: FileParentProps) {
     <li className="cursor-pointer" onClick={onClicked}>
       <span
         className={classNames(
-          file.depth === 1 ? 'pl-2' : '',
-          file.depth === 2 ? 'pl-6' : '',
-          file.depth === 3 ? 'pl-10' : '',
+          child.depth === 1 ? 'pl-2' : '',
+          child.depth === 2 ? 'pl-6' : '',
+          child.depth === 3 ? 'pl-10' : '',
           'hover:bg-gray-100 transition block truncate py-2'
         )}
       >
@@ -43,7 +41,7 @@ export function FileParent({ parentAtom, childAtom }: FileParentProps) {
         ) : (
           <FolderIcon className="inline-block w-5 h-5 mr-2 stroke-current" />
         )}
-        {file.name}
+        {child.name}
       </span>
       <Transition
         show={toggle}
@@ -54,7 +52,7 @@ export function FileParent({ parentAtom, childAtom }: FileParentProps) {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <FileRoot parentAtom={childAtom} />
+        <FileRoot parent={child} path={path} />
       </Transition>
     </li>
   )

@@ -1,4 +1,4 @@
-import { Editor } from '#/features/Editor/Editor'
+import { Editor } from '#/features/Editor2/Editor'
 import { useSession } from 'next-auth/react'
 
 export default function EditorPage() {

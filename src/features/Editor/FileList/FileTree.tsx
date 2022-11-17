@@ -1,7 +1,8 @@
 import { useQuery } from 'graphql-hooks'
-import { atom } from 'jotai'
+import { Atom, useSetAtom } from 'jotai'
 import mime from 'mime/lite'
 import { repoFilesQuery } from '../queries'
+import { fileAtomFamily, fileTreeAtom } from '../store'
 import {
   NodeFile,
   ParentFile,
@@ -10,7 +11,7 @@ import {
   RepoTree,
   TextFile
 } from '../types'
-import { isNotNullish, isRepoTreeEntry } from '../utils'
+import { isRepoTreeEntry } from '../utils'
 import { FileRoot } from './FileRoot'
 
 function getFileLanguage(name: string): TextFile['language'] {
@@ -29,48 +30,67 @@ function getFileLanguage(name: string): TextFile['language'] {
   }
 }
 
-function toFileTree(
+const filePaths: string[] = []
+
+function toFileTreeRecurse(
   prevPath: string,
   depth: number,
-  tree: RepoTree
-): NodeFile[] {
-  return tree.entries
-    .map((entry) => {
-      const basePath = prevPath === '' ? prevPath : `${prevPath}/`
-      const nodePath = `${basePath}${entry.name}`
-      const nodeDepth = depth + 1
+  repoTree: RepoTree
+): Atom<NodeFile>[] {
+  return repoTree.entries.map((entry) => {
+    const basePath = prevPath === '' ? prevPath : `${prevPath}/`
+    const nodePath = `${basePath}${entry.name}`
+    const nodeDepth = depth + 1
+    filePaths.push(nodePath)
 
-      if (isRepoTreeEntry(entry)) {
-        return {
-          type: 'parent' as const,
-          path: nodePath,
-          depth: nodeDepth,
-          name: entry.name,
-          children: toFileTree(nodePath, nodeDepth, entry.object)
-        }
+    let node: NodeFile
+
+    if (isRepoTreeEntry(entry)) {
+      node = {
+        type: 'parent' as const,
+        path: nodePath,
+        depth: nodeDepth,
+        name: entry.name,
+        children: toFileTreeRecurse(nodePath, nodeDepth, entry.object),
+        selected: false
       }
-
-      if ((entry.object as RepoBlob).isBinary) {
-        return {
-          type: 'binary' as const,
-          path: nodePath,
-          depth: nodeDepth,
-          name: entry.name,
-          mimeType: mime.getType(entry.name) ?? undefined
-        }
+    } else if ((entry.object as RepoBlob).isBinary) {
+      node = {
+        type: 'binary' as const,
+        path: nodePath,
+        depth: nodeDepth,
+        name: entry.name,
+        mimeType: mime.getType(entry.name) ?? undefined,
+        selected: false
       }
-
-      return {
+    } else {
+      node = {
         type: 'text' as const,
         path: nodePath,
         depth: nodeDepth,
         name: entry.name,
         mimeType: mime.getType(entry.name) ?? undefined,
         text: (entry.object as RepoBlob).text,
-        language: getFileLanguage(entry.name)
+        language: getFileLanguage(entry.name),
+        selected: false
       }
-    })
-    .filter(isNotNullish)
+    }
+
+    return fileAtomFamily(node)
+  })
+}
+
+function toFileTree(repo: Repo, data: RepoTree): Atom<NodeFile> {
+  const root: ParentFile = {
+    type: 'parent' as const,
+    name: 'root',
+    depth: 0,
+    path: repo.dataDir,
+    children: toFileTreeRecurse(repo.dataDir, 0, data),
+    selected: false
+  }
+
+  return fileAtomFamily(root)
 }
 
 export type FileTreeProps = {
@@ -78,7 +98,10 @@ export type FileTreeProps = {
 }
 
 export function FileTree({ repo }: FileTreeProps) {
-  const { loading, error, data } = useQuery(repoFilesQuery, {
+  const setFileTree = useSetAtom(fileTreeAtom)
+  const { loading, error, data } = useQuery<{
+    repository: { object: RepoTree }
+  }>(repoFilesQuery, {
     variables: {
       name: repo.name,
       owner: repo.owner,
@@ -94,18 +117,15 @@ export function FileTree({ repo }: FileTreeProps) {
     return <div>Something bad happened</div>
   }
 
-  const tree = toFileTree(repo.dataDir, 0, data.repository.object)
-  const rootAtom = atom<ParentFile>({
-    type: 'parent',
-    name: 'root',
-    depth: 0,
-    path: repo.dataDir,
-    children: tree
-  })
+  if (!data?.repository?.object) {
+    return <div>Something bad happened</div>
+  }
+
+  const treeAtom = toFileTree(repo, data.repository.object)
 
   return (
     <div className="py-4 px-2">
-      <FileRoot fileAtom={rootAtom} />
+      <FileRoot parentAtom={treeAtom} />
     </div>
   )
 }

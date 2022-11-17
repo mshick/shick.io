@@ -1,44 +1,51 @@
 import classNames from '#/utils/classNames'
-import { Atom, atom, useAtomValue } from 'jotai'
-import { splitAtom } from 'jotai/utils'
-import { useMemo } from 'react'
+import { Atom, useAtomValue } from 'jotai'
 import { LeafFile, NodeFile, ParentFile } from '../types'
 import { FileLeaf } from './FileLeaf'
 import { FileParent } from './FileParent'
 
 export type FileRootProps = {
-  fileAtom: Atom<ParentFile>
+  parentAtom: Atom<NodeFile>
 }
 
 export type FileNodeProps = {
-  fileAtom: Atom<NodeFile>
+  parentAtom: Atom<NodeFile>
+  childAtom: Atom<NodeFile>
 }
 
-function FileNode({ fileAtom }: FileNodeProps) {
-  const file = useAtomValue(fileAtom)
+function FileNode({ parentAtom, childAtom }: FileNodeProps) {
+  const file = useAtomValue(childAtom)
 
   if (file.type === 'parent') {
-    return <FileParent fileAtom={fileAtom as Atom<ParentFile>} />
+    return (
+      <FileParent
+        parentAtom={parentAtom}
+        childAtom={childAtom as Atom<ParentFile>}
+      />
+    )
   }
 
-  return <FileLeaf fileAtom={fileAtom as Atom<LeafFile>} />
+  return (
+    <FileLeaf parentAtom={parentAtom} childAtom={childAtom as Atom<LeafFile>} />
+  )
 }
 
-export function FileRoot({ fileAtom }: FileRootProps) {
-  const childrenAtom = useMemo(
-    () => atom((get) => get(fileAtom)?.children ?? []),
-    [fileAtom]
-  )
+export function FileRoot({ parentAtom }: FileRootProps) {
+  const parent = useAtomValue(parentAtom)
 
-  const childrenAtomsAtom = splitAtom(childrenAtom)
-  const childrenAtoms = useAtomValue(childrenAtomsAtom)
-  const node = useAtomValue(fileAtom)
+  if (parent.type !== 'parent') {
+    return null
+  }
 
   return (
     <ul className={classNames('p-0 m-0 menu bg-default text-content-700')}>
-      {childrenAtoms.map((childAtom) => {
-        return <FileNode fileAtom={childAtom} key={childAtom.toString()} />
-      })}
+      {parent.children.map((childAtom) => (
+        <FileNode
+          parentAtom={parentAtom}
+          childAtom={childAtom}
+          key={`${childAtom}`}
+        />
+      ))}
     </ul>
   )
 }

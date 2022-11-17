@@ -1,6 +1,6 @@
-import { Atom } from 'jotai'
-
 export type TextFile = {
+  _id: number
+  checked: number
   type: 'text'
   depth: number
   path: string
@@ -12,6 +12,8 @@ export type TextFile = {
 }
 
 export type BinaryFile = {
+  _id: number
+  checked: number
   type: 'binary'
   depth: number
   path: string
@@ -23,25 +25,18 @@ export type BinaryFile = {
 export type LeafFile = BinaryFile | TextFile
 
 export type ParentFile = {
+  _id: number
+  checked: number
+  isOpen: boolean
   type: 'parent'
   depth: number
   path: string
   name: string
-  children: Atom<NodeFile>[]
+  children: NodeFile[]
   selected: boolean
 }
 
 export type NodeFile = ParentFile | LeafFile
-
-export type State = {
-  position?: {
-    x: number
-    y: number
-  }
-  show?: boolean
-  setShow?: (s: boolean) => void
-  setPosition?: ({ x, y }: { x: any; y: any }) => void
-}
 
 export type Repo = {
   name: string

@@ -3,23 +3,24 @@ import { DocumentTextIcon, PhotoIcon } from '@heroicons/react/24/outline'
 import { Atom, useAtom, useAtomValue } from 'jotai'
 import { MouseEventHandler, useCallback } from 'react'
 import { currentFileAtomAtom } from '../store'
-import { LeafFile } from '../types'
+import { LeafFile, NodeFile } from '../types'
 
 export type FileLeafProps = {
-  fileAtom: Atom<LeafFile>
+  parentAtom: Atom<NodeFile>
+  childAtom: Atom<LeafFile>
 }
 
-export function FileLeaf({ fileAtom }: FileLeafProps) {
-  const file = useAtomValue(fileAtom)
+export function FileLeaf({ parentAtom, childAtom }: FileLeafProps) {
+  const file = useAtomValue(childAtom)
   const [currentFileAtom, setCurrentFileAtom] = useAtom(currentFileAtomAtom)
-  const currentFile = useAtomValue(currentFileAtom)
+  const currentFile = useAtomValue(currentFileAtom.childAtom)
 
   const onClicked: MouseEventHandler = useCallback(
     (event) => {
       event.stopPropagation()
-      setCurrentFileAtom(fileAtom)
+      setCurrentFileAtom({ parentAtom, childAtom })
     },
-    [fileAtom, setCurrentFileAtom]
+    [childAtom, parentAtom, setCurrentFileAtom]
   )
 
   return (
