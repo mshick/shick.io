@@ -1,7 +1,7 @@
 import classNames from '#/utils/classNames'
 import { DocumentTextIcon, PhotoIcon } from '@heroicons/react/24/outline'
 import { MouseEventHandler, useCallback, useContext } from 'react'
-import { TreeContext } from '../context'
+import { TreeStateContext } from '../useTreeState/context'
 import { TreeNodeLeaf } from '../useTreeState/types'
 
 export type FileLeafProps = {
@@ -10,7 +10,7 @@ export type FileLeafProps = {
 }
 
 export function FileLeaf({ child, path }: FileLeafProps) {
-  const { checkNode } = useContext(TreeContext)
+  const { methods } = useContext(TreeStateContext)
   // const [currentFileAtom, setCurrentFileAtom] = useAtom(currentFileAtomAtom)
   // const currentFile = useAtomValue(currentFileAtom.childAtom)
 
@@ -18,10 +18,10 @@ export function FileLeaf({ child, path }: FileLeafProps) {
     (event) => {
       event.stopPropagation()
       console.log({ path })
-      checkNode(path)
+      methods.checkNode(path, 1)
       // setCurrentFileAtom({ parentAtom, childAtom })
     },
-    [checkNode, path]
+    [methods, path]
   )
 
   return (

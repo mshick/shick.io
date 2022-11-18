@@ -12,11 +12,10 @@ import { NodeFile } from '../types'
 import { FileRoot } from './FileRoot'
 
 export type FileParentProps = PropsWithChildren<{
-  parentAtom: Atom<NodeFile>
   childAtom: Atom<NodeFile>
 }>
 
-export function FileParent({ parentAtom, childAtom }: FileParentProps) {
+export function FileParent({ childAtom }: FileParentProps) {
   const file = useAtomValue(childAtom)
   const [toggle, setToggle] = useState<boolean>(false)
 

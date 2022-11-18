@@ -21,3 +21,16 @@ export function isRepoTreeEntry(entry: RepoEntry): entry is RepoTreeEntry {
 export function isNotNullish<T>(x: T | null | undefined): x is T {
   return x !== null && x !== undefined
 }
+
+export function shallowEquals(
+  a: Record<string, unknown>,
+  b: Record<string, unknown>
+): boolean {
+  for (const key of Object.keys(a)) {
+    if (a[key] !== b[key]) {
+      return false
+    }
+  }
+
+  return true
+}

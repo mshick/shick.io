@@ -1,8 +1,9 @@
 import { useQuery } from 'graphql-hooks'
-import { Atom, useSetAtom } from 'jotai'
+import { Atom } from 'jotai'
 import mime from 'mime/lite'
+import { useMemo } from 'react'
 import { repoFilesQuery } from '../queries'
-import { fileAtomFamily, fileTreeAtom } from '../store'
+import { fileAtomFamily } from '../store'
 import {
   NodeFile,
   ParentFile,
@@ -98,7 +99,6 @@ export type FileTreeProps = {
 }
 
 export function FileTree({ repo }: FileTreeProps) {
-  const setFileTree = useSetAtom(fileTreeAtom)
   const { loading, error, data } = useQuery<{
     repository: { object: RepoTree }
   }>(repoFilesQuery, {
@@ -109,6 +109,11 @@ export function FileTree({ repo }: FileTreeProps) {
     }
   })
 
+  const treeAtom = useMemo(
+    () => data && toFileTree(repo, data.repository.object),
+    [data, repo]
+  )
+
   if (loading) {
     return <div>Loading...</div>
   }
@@ -117,11 +122,9 @@ export function FileTree({ repo }: FileTreeProps) {
     return <div>Something bad happened</div>
   }
 
-  if (!data?.repository?.object) {
+  if (!treeAtom) {
     return <div>Something bad happened</div>
   }
-
-  const treeAtom = toFileTree(repo, data.repository.object)
 
   return (
     <div className="py-4 px-2">

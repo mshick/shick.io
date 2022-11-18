@@ -8,7 +8,9 @@ export function deepClone<T extends JsonValue>(treeData: T): T {
   return JSON.parse(JSON.stringify(treeData))
 }
 
-export function findTargetNode(node: TreeNode, path: number[]) {
+export function findTargetNode(node: TreeNode, path: number[] | null) {
+  path = path ?? []
+
   let targetNode = node
 
   for (const p of path) {
@@ -121,22 +123,26 @@ export function initializeTree(
 }
 
 function setStatusDown(node: TreeNode, status: number) {
-  const setChecked = (node: TreeNode): TreeNode => {
+  const setChecked = (node: TreeNode) => {
     if (isParentFile(node)) {
-      return {
-        ...node,
-        checked: status,
-        children: node.children.map(setChecked)
-      }
+      // return {
+      //   ...node,
+      //   checked: status,
+      //   children: node.children.map(setChecked)
+      // }
+      node.checked = status
+      node.children.map(setChecked)
+      return
     }
 
-    return {
-      ...node,
-      checked: status
-    }
+    node.checked = status
+    // return {
+    //   ...node,
+    //   checked: status
+    // }
   }
 
-  return setChecked(node)
+  setChecked(node)
 }
 
 export const setAllCheckedStatus = setStatusDown
@@ -183,19 +189,20 @@ export function checkNode(
   path: number[] | null,
   status: number
 ) {
+  let targetNode = findTargetNode(node, path)
+
   let curNode: TreeNodeParent = node
-  const parentNodes: TreeNodeParent[] = [curNode] // parent nodes for getNewCheckStatus() upwards
+  const parentNodes: TreeNodeParent[] = [] // parent nodes for getNewCheckStatus() upwards
 
   if (path) {
-    for (const idx of path) {
-      const child = curNode.children[idx]
-      if (isParentFile(child)) {
-        parentNodes.push(curNode)
-      }
+    const p = path.slice(0, -1)
+    for (const idx of p) {
+      curNode = curNode.children[idx] as TreeNodeParent
+      parentNodes.push(curNode)
     }
   }
 
-  setStatusDown(curNode, status) // update check status of this node and all childrens, in place
+  targetNode = setStatusDown(targetNode, status) // update check status of this node and all childrens, in place
 
   parentNodes.pop() // don't need to check this node's level
   updateStatusUp(parentNodes) // update check status up, from this nodes parent, in place

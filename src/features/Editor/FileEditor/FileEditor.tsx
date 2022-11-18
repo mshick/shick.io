@@ -1,9 +1,15 @@
 import Image from '#/components/Image'
 import { useManualQuery, useMutation } from 'graphql-hooks'
-import { useAtom, useAtomValue } from 'jotai'
-import { MouseEventHandler, useCallback, useEffect, useState } from 'react'
+import { atom, useAtom, useAtomValue } from 'jotai'
+import {
+  MouseEventHandler,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState
+} from 'react'
 import { commitChangesQuery, headOidQuery } from '../queries'
-import { currentFileAtomAtom } from '../store'
+import { currentFileAtomAtom, fileAtomFamily } from '../store'
 import { Repo } from '../types'
 import ScriptEditor, { MonacoOnInitializePane } from './ScriptEditor'
 
@@ -59,8 +65,15 @@ type FileEditorProps = {
 
 export function FileEditor({ repo }: FileEditorProps) {
   const fileAtom = useAtomValue(currentFileAtomAtom)
-  const file = useAtomValue(fileAtom.childAtom)
-  const [parent, setParent] = useAtom(fileAtom.parentAtom)
+  const file = useAtomValue(fileAtom)
+  const parentAtom = useMemo(
+    () =>
+      file
+        ? fileAtomFamily({ path: file.path.split('/').slice(0, -1).join('/') })
+        : atom(null),
+    [file]
+  )
+  const [parentDir, setParentDir] = useAtom(parentAtom)
 
   const [getHeadOid] = useManualQuery<HeadOidResponse>(headOidQuery)
 
@@ -146,13 +159,18 @@ export function FileEditor({ repo }: FileEditorProps) {
     [code, commitChanges, file, getHeadOid, repo.branch, repo.name, repo.owner]
   )
 
-  // const onDelete = useCallback(() => {
-  //   const fileIndex = (parent as ParentFile)?.children.findIndex((child) => {})
-  //   setParent({
-  //     ...parent,
-  //     children: (parent as ParentFile)?.children.slice(1)
-  //   })
-  // }, [parent, setParent])
+  const onDelete = useCallback(() => {
+    // console.log(parentDir)
+    // const fileIndex = (parent as ParentFile)?.children.findIndex((child) => {})
+    if (parentDir && parentDir.type === 'parent') {
+      const children = parentDir.children.slice(1)
+      // console.log({ parentDir, children })
+      setParentDir({
+        ...parentDir,
+        children
+      })
+    }
+  }, [parentDir, setParentDir])
 
   let Component: JSX.Element
 

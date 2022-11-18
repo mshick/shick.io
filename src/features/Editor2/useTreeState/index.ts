@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 import { JsonPrimitive } from 'type-fest'
-import { Repo, RepoTree } from '../types'
+import { ParentFile, Repo, RepoTree } from '../types'
 import { TreeEvent, TreeNode, TreeNodeParent, TreeReducer } from './types'
 import {
   addNode,
@@ -24,7 +24,36 @@ export type TreeStateHookProps = {
   onChange?: (root: TreeNodeParent | null, event: TreeEvent) => void
 }
 
-function useTreeState({ onChange, repo, options = {} }: TreeStateHookProps) {
+type TreeMethod = (path: number[], ...args: unknown[]) => ParentFile | null
+type TreeMethodByProp = (
+  propName: keyof TreeNode,
+  targetValue: JsonPrimitive,
+  ...args: unknown[]
+) => ParentFile | null
+
+export type TreeState = {
+  treeState: ParentFile | null
+  methods: {
+    checkNode: TreeMethod
+    renameNode: TreeMethod
+    deleteNode: TreeMethod
+    addNode: TreeMethod
+    toggleOpen: TreeMethod
+    checkNodeByProp: TreeMethodByProp
+    renameNodeByProp: TreeMethodByProp
+    deleteNodeByProp: TreeMethodByProp
+    addNodeByProp: TreeMethodByProp
+    toggleOpenByProp: TreeMethodByProp
+  }
+}
+
+export type TreeStateHookReturn = [TreeState, (data: RepoTree) => void]
+
+function useTreeState({
+  onChange,
+  repo,
+  options = {}
+}: TreeStateHookProps): TreeStateHookReturn {
   const { initCheckedStatus, initOpenStatus } = options
 
   const initTreeState = useCallback(
@@ -33,27 +62,7 @@ function useTreeState({ onChange, repo, options = {} }: TreeStateHookProps) {
     [initCheckedStatus, initOpenStatus, repo]
   )
 
-  // const initState = useMemo(
-  //   () => root && initTreeState(root),
-  //   [root, initTreeState]
-  // )
-
   const [treeState, setTreeState] = useState<TreeNodeParent | null>(null)
-
-  // const [event, setEvent] = useState<TreeEvent>({
-  //   type: 'initialization',
-  //   path: null,
-  //   params: []
-  // })
-
-  // const handleChange = useCallback(
-  //   (e: TreeEvent) => onChange?.(treeState, e),
-  //   [onChange, treeState]
-  // )
-
-  // useEffect(() => {
-  //   handleChange(event)
-  // }, [event, handleChange])
 
   const _setTreeState = useCallback(
     (data: RepoTree) => {
@@ -73,6 +82,8 @@ function useTreeState({ onChange, repo, options = {} }: TreeStateHookProps) {
 
         setTreeState(newState)
         onChange?.(newState, e)
+
+        return newState
       },
     [onChange, treeState]
   )
@@ -99,18 +110,20 @@ function useTreeState({ onChange, repo, options = {} }: TreeStateHookProps) {
     toggleOpen: getMethod(toggleOpen, 'toggleOpen')
   }
 
-  return {
-    treeState,
-    setTreeState: _setTreeState,
-    methods: {
-      ...methods,
-      checkNodeByProp: getReducerByProp(methods.checkNode),
-      renameNodeByProp: getReducerByProp(methods.renameNode),
-      deleteNodeByProp: getReducerByProp(methods.deleteNode),
-      addNodeByProp: getReducerByProp(methods.addNode),
-      toggleOpenByProp: getReducerByProp(methods.toggleOpen)
-    }
-  }
+  return [
+    {
+      treeState,
+      methods: {
+        ...methods,
+        checkNodeByProp: getReducerByProp(methods.checkNode),
+        renameNodeByProp: getReducerByProp(methods.renameNode),
+        deleteNodeByProp: getReducerByProp(methods.deleteNode),
+        addNodeByProp: getReducerByProp(methods.addNode),
+        toggleOpenByProp: getReducerByProp(methods.toggleOpen)
+      }
+    },
+    _setTreeState
+  ]
 }
 
 export {

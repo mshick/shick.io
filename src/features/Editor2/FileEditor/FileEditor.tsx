@@ -1,10 +1,17 @@
 import Image from '#/components/Image'
 import { useManualQuery, useMutation } from 'graphql-hooks'
 import { useAtom, useAtomValue } from 'jotai'
-import { MouseEventHandler, useCallback, useEffect, useState } from 'react'
+import {
+  MouseEventHandler,
+  useCallback,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
 import { commitChangesQuery, headOidQuery } from '../queries'
 import { currentFileAtomAtom } from '../store'
-import { Repo } from '../types'
+import { ParentFile, Repo } from '../types'
+import { TreeStateContext } from '../useTreeState/context'
 import ScriptEditor, { MonacoOnInitializePane } from './ScriptEditor'
 
 type HeadOidResponse = {
@@ -55,9 +62,11 @@ type CommitChangesVariables = {
 
 type FileEditorProps = {
   repo: Repo
+  treeState: ParentFile
 }
 
 export function FileEditor({ repo }: FileEditorProps) {
+  const { treeState } = useContext(TreeStateContext)
   const fileAtom = useAtomValue(currentFileAtomAtom)
   const file = useAtomValue(fileAtom.childAtom)
   const [parent, setParent] = useAtom(fileAtom.parentAtom)
@@ -194,12 +203,12 @@ export function FileEditor({ repo }: FileEditorProps) {
         >
           Commit
         </button>
-        <button
+        {/* <button
           className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           onClick={onDelete}
         >
           Delete
-        </button>
+        </button> */}
       </div>
     </div>
   )

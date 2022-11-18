@@ -1,26 +1,26 @@
 import classNames from '#/utils/classNames'
 import { DocumentTextIcon, PhotoIcon } from '@heroicons/react/24/outline'
-import { Atom, useAtom, useAtomValue } from 'jotai'
+import { Atom, useAtomValue, useSetAtom } from 'jotai'
 import { MouseEventHandler, useCallback } from 'react'
 import { currentFileAtomAtom } from '../store'
-import { LeafFile, NodeFile } from '../types'
+import { LeafFile } from '../types'
 
 export type FileLeafProps = {
-  parentAtom: Atom<NodeFile>
   childAtom: Atom<LeafFile>
 }
 
-export function FileLeaf({ parentAtom, childAtom }: FileLeafProps) {
+export function FileLeaf({ childAtom }: FileLeafProps) {
   const file = useAtomValue(childAtom)
-  const [currentFileAtom, setCurrentFileAtom] = useAtom(currentFileAtomAtom)
-  const currentFile = useAtomValue(currentFileAtom.childAtom)
+  const setCurrentFileAtom = useSetAtom(currentFileAtomAtom)
+
+  console.log('FileLeaf', file.path, file.selected)
 
   const onClicked: MouseEventHandler = useCallback(
     (event) => {
       event.stopPropagation()
-      setCurrentFileAtom({ parentAtom, childAtom })
+      setCurrentFileAtom(childAtom)
     },
-    [childAtom, parentAtom, setCurrentFileAtom]
+    [childAtom, setCurrentFileAtom]
   )
 
   return (
@@ -30,9 +30,7 @@ export function FileLeaf({ parentAtom, childAtom }: FileLeafProps) {
           file.depth === 1 ? 'pl-2' : '',
           file.depth === 2 ? 'pl-6' : '',
           file.depth === 3 ? 'pl-10' : '',
-          file.path === currentFile?.path
-            ? 'bg-indigo-200'
-            : 'hover:bg-gray-200',
+          file.selected ? 'bg-indigo-200' : 'hover:bg-gray-200',
           'transition block truncate py-2'
         )}
       >
