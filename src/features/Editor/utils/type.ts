@@ -4,7 +4,7 @@ import {
   RepoEntry,
   RepoTreeEntry,
   TextFile
-} from './types'
+} from '../types'
 
 export function isParentFile(file: NodeFile): file is ParentFile {
   return file.type === 'parent'

@@ -33,6 +33,10 @@ export type ParentFile = {
 
 export type NodeFile = ParentFile | LeafFile
 
+export type NodeFileInput = Partial<NodeFile> & {
+  path: string
+}
+
 export type State = {
   position?: {
     x: number

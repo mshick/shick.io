@@ -49,7 +49,7 @@ const ScriptEditor = (props: ScriptEditorProps): JSX.Element => {
 
   return (
     <Editor
-      height="calc(100vh - 6rem)"
+      height="calc(100vh - 6.5rem)"
       language={language}
       onChange={(value, _event) => {
         setCode(value ?? '')
