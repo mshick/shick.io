@@ -17,9 +17,10 @@ export type EditorMutationHookProps = {
 }
 
 export type EditorQueryResult = {
-  loading: boolean
+  called: boolean
   data: any
   error: Error | null
+  loading: boolean
 }
 
 export type EditorQueryHookReturn = [EditorQuery, EditorQueryResult]
@@ -32,9 +33,11 @@ export function useEditorManualQuery({
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState(null)
   const [error, setError] = useState<Error | null>(null)
+  const [called, setCalled] = useState(false)
 
   const executeQuery: EditorQuery = useCallback(
     async (options) => {
+      setCalled(true)
       setLoading(true)
       try {
         const result = await query({ ...queryOptions, ...options })
@@ -52,30 +55,34 @@ export function useEditorManualQuery({
     [query, queryOptions]
   )
 
-  return [executeQuery, { data, loading, error }]
+  return [executeQuery, { data, called, loading, error }]
 }
 
 export function useEditorMutation({
   mutation,
   options
 }: EditorMutationHookProps): EditorMutationHookReturn {
-  const [executeQuery, { loading, error, data }] = useEditorManualQuery({
-    query: mutation,
-    options
-  })
+  const [executeQuery, { called, loading, error, data }] = useEditorManualQuery(
+    {
+      query: mutation,
+      options
+    }
+  )
 
-  return [executeQuery, { data, loading, error }]
+  return [executeQuery, { called, data, loading, error }]
 }
 
 export function useEditorQuery({ query, options }: EditorQueryHookProps) {
-  const [executeQuery, { loading, error, data }] = useEditorManualQuery({
-    query,
-    options
-  })
+  const [executeQuery, { called, loading, error, data }] = useEditorManualQuery(
+    {
+      query,
+      options
+    }
+  )
 
   useEffect(() => {
     executeQuery(options)
   }, [executeQuery, options, query])
 
-  return { data, loading, error }
+  return { called, data, loading, error }
 }

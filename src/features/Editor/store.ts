@@ -1,21 +1,21 @@
-import {
-  atom,
-  Atom,
-  useAtom,
-  useAtomValue,
-  useSetAtom,
-  WritableAtom
-} from 'jotai'
-import { atomFamily } from 'jotai/utils'
+import { atom, useAtom, useAtomValue, useSetAtom, WritableAtom } from 'jotai'
+import { atomFamily, atomWithReset } from 'jotai/utils'
 import { useCallback, useMemo } from 'react'
-import { NodeFile, NodeFileInput, ParentFile } from './types'
-import { applyNodeDefaults } from './utils/convert'
+import {
+  NodeFile,
+  NodeFileAddition,
+  NodeFileDeletion,
+  NodeFileInput,
+  NodeFilePath,
+  NodeFileUpdateText
+} from './types'
+import { applyFileDefaults } from './utils/convert'
 
 export const fileAtomFamily = atomFamily<
   NodeFileInput,
   WritableAtom<NodeFile, NodeFile, void>
 >(
-  (file) => atom(applyNodeDefaults(file)),
+  (file) => atom(applyFileDefaults(file)),
   (a, b) => a.path === b.path
 )
 
@@ -25,32 +25,122 @@ function getParentPath(path: string) {
 
 const currentPathAtom = atom<string | null>(null)
 
-export const parentNodeAtomAtom = atom((get) => {
-  const currentPath = get(currentPathAtom)
-  if (currentPath) {
-    const path = getParentPath(currentPath)
-    return fileAtomFamily({ path })
+export type FileChanges = {
+  additions: {
+    path: string
+    contents: string
+  }[]
+  deletions: {
+    path: string
+  }[]
+}
+
+const fileChangesDefaults = {
+  additions: [],
+  deletions: []
+}
+
+const fileChangesAtom = atomWithReset<FileChanges>(fileChangesDefaults)
+
+const addDeletionAtom = atom<null, NodeFileDeletion>(null, (get, set, file) => {
+  const { path } = file
+  const fileChanges = get(fileChangesAtom)
+
+  const existingIndex = fileChanges.deletions.findIndex(
+    (file) => file.path === path
+  )
+
+  if (existingIndex > -1) {
+    return
   }
 
-  return atom(null)
+  set(fileChangesAtom, {
+    ...fileChanges,
+    deletions: [...fileChanges.deletions, { path }]
+  })
 })
 
-export const nodeAtomAtom = atom<Atom<NodeFile | null>>((get) => {
-  const currentPath = get(currentPathAtom)
-  if (currentPath) {
-    return fileAtomFamily({ path: currentPath })
+const removeDeletionAtom = atom<null, NodeFileDeletion>(
+  null,
+  (get, set, file) => {
+    const { path } = file
+    const fileChanges = get(fileChangesAtom)
+
+    const existingIndex = fileChanges.deletions.findIndex(
+      (file) => file.path === path
+    )
+
+    if (existingIndex === -1) {
+      return
+    }
+
+    const deletions = [
+      ...fileChanges.deletions.slice(0, existingIndex),
+      ...fileChanges.deletions.slice(existingIndex + 1)
+    ]
+
+    set(fileChangesAtom, {
+      ...fileChanges,
+      deletions
+    })
+  }
+)
+
+const addAdditionAtom = atom<null, NodeFileAddition>(null, (get, set, file) => {
+  const { path, contents } = file
+  const fileChanges = get(fileChangesAtom)
+
+  const existing = fileChanges.additions.find((file) => file.path === path)
+
+  if (existing) {
+    return
   }
 
-  return atom(null)
+  set(fileChangesAtom, {
+    ...fileChanges,
+    additions: [
+      ...fileChanges.additions,
+      { path, contents: Buffer.from(contents).toString('base64') }
+    ]
+  })
 })
 
-export const updateFileAtom = atom<null, NodeFile>(null, (get, set, update) => {
-  const fileAtom = fileAtomFamily(update)
-  const file = get(fileAtom)
-  set(fileAtom, { ...file, ...update })
-})
+const removeAdditionAtom = atom<null, NodeFileDeletion>(
+  null,
+  (get, set, file) => {
+    const { path } = file
+    const fileChanges = get(fileChangesAtom)
 
-export const selectNodeAtom = atom<null, NodeFile | null>(
+    const existingIndex = fileChanges.additions.findIndex(
+      (file) => file.path === path
+    )
+
+    if (existingIndex === -1) {
+      return
+    }
+
+    const additions = [
+      ...fileChanges.additions.slice(0, existingIndex),
+      ...fileChanges.additions.slice(existingIndex + 1)
+    ]
+
+    set(fileChangesAtom, {
+      ...fileChanges,
+      additions
+    })
+  }
+)
+
+export const updateFileTextAtom = atom<null, NodeFileUpdateText>(
+  null,
+  (get, set, update) => {
+    const fileAtom = fileAtomFamily(update)
+    const file = get(fileAtom)
+    set(fileAtom, { ...file, ...update, isDirty: true })
+  }
+)
+
+export const selectFileAtom = atom<null, NodeFilePath | null>(
   null,
   (get, set, update) => {
     const filepath = get(currentPathAtom)
@@ -72,25 +162,23 @@ export const selectNodeAtom = atom<null, NodeFile | null>(
   }
 )
 
-export const removeFileAtom = atom<null, NodeFile>(null, (get, set, node) => {
-  const parentPath = getParentPath(node.path)
-  const parentAtom = fileAtomFamily({ path: parentPath })
-  const parent = get(parentAtom) as ParentFile
-  const childIndex = parent.children.findIndex((childAtom) => {
-    const c = get(childAtom)
-    return c.path === node.path
-  })
+export const removeFileAtom = atom<null, NodeFilePath>(
+  null,
+  (get, set, node) => {
+    const fileAtom = fileAtomFamily(node)
+    const file = get(fileAtom)
+    set(fileAtom, { ...file, isDeleted: true })
+  }
+)
 
-  const children = [
-    ...parent.children.slice(0, childIndex),
-    ...parent.children.slice(childIndex + 1)
-  ]
-
-  set(parentAtom, {
-    ...parent,
-    children
-  })
-})
+export const restoreFileAtom = atom<null, NodeFilePath>(
+  null,
+  (get, set, node) => {
+    const fileAtom = fileAtomFamily(node)
+    const file = get(fileAtom)
+    set(fileAtom, { ...file, isDeleted: false })
+  }
+)
 
 // export const addTextFileAtom = atom<null, ParentFile>(null, (get, set, node) => {
 //   const parentAtom = fileAtomFamily({ path: node.path })
@@ -120,8 +208,16 @@ export function useFileAtom() {
 
   const [file, setFile] = useAtom(fileAtom)
 
+  const addAddition = useSetAtom(addAdditionAtom)
+  const removeAddition = useSetAtom(removeAdditionAtom)
+
+  const addDeletion = useSetAtom(addDeletionAtom)
+  const removeDeletion = useSetAtom(removeDeletionAtom)
+
   const _removeFile = useSetAtom(removeFileAtom)
-  const _selectNode = useSetAtom(selectNodeAtom)
+  const _restoreFile = useSetAtom(restoreFileAtom)
+  const _selectFile = useSetAtom(selectFileAtom)
+  const _updateFileText = useSetAtom(updateFileTextAtom)
 
   const renameFile = useCallback(
     (name: string) => {
@@ -135,19 +231,38 @@ export function useFileAtom() {
 
   const removeFile = useCallback(() => {
     if (file) {
+      addDeletion(file)
       _removeFile(file)
-      _selectNode(null)
     }
-  }, [_removeFile, _selectNode, file])
+  }, [_removeFile, addDeletion, file])
+
+  const restoreFile = useCallback(() => {
+    if (file) {
+      removeDeletion(file)
+      _restoreFile(file)
+    }
+  }, [_restoreFile, file, removeDeletion])
 
   const selectFile = useCallback(() => {
-    _selectNode(file)
-  }, [_selectNode, file])
+    _selectFile(file)
+  }, [_selectFile, file])
+
+  const updateFileText = useCallback(
+    (text: string) => {
+      if (file) {
+        addAddition({ ...file, contents: text })
+        _updateFileText({ ...file, text })
+      }
+    },
+    [_updateFileText, addAddition, file]
+  )
 
   return {
     file,
     renameFile,
     removeFile,
-    selectFile
+    restoreFile,
+    selectFile,
+    updateFileText
   }
 }

@@ -3,7 +3,7 @@ import { Transition } from '@headlessui/react'
 import { FolderIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
 import { Atom, useAtomValue } from 'jotai'
 import React, { MouseEventHandler, useCallback, useState } from 'react'
-import { NodeFile } from '../types'
+import { NodeFile } from '../../types'
 import { TreeParent } from './TreeParent'
 
 export type DirectoryProps = {

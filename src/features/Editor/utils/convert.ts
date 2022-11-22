@@ -4,7 +4,6 @@ import { fileAtomFamily } from '../store'
 import {
   NodeFile,
   NodeFileInput,
-  ParentFile,
   Repo,
   RepoBlob,
   RepoTree,
@@ -12,11 +11,13 @@ import {
 } from '../types'
 import { isRepoTreeEntry } from './type'
 
-export function applyNodeDefaults(input: NodeFileInput): NodeFile {
+export function applyFileDefaults(input: NodeFileInput): NodeFile {
   if (input.type === 'parent') {
     return {
       type: 'parent' as const,
-      selected: false,
+      isSelected: false,
+      isDeleted: false,
+      isDirty: false,
       name: '',
       depth: 1,
       children: [],
@@ -27,7 +28,9 @@ export function applyNodeDefaults(input: NodeFileInput): NodeFile {
   if (input.type === 'binary') {
     return {
       type: 'binary' as const,
-      selected: false,
+      isSelected: false,
+      isDeleted: false,
+      isDirty: false,
       name: '',
       depth: 1,
       ...input
@@ -37,7 +40,9 @@ export function applyNodeDefaults(input: NodeFileInput): NodeFile {
   if (input.type === 'text') {
     return {
       type: 'text' as const,
-      selected: false,
+      isSelected: false,
+      isDeleted: false,
+      isDirty: false,
       name: '',
       depth: 1,
       text: '',
@@ -49,7 +54,9 @@ export function applyNodeDefaults(input: NodeFileInput): NodeFile {
 
   return {
     type: 'text' as const,
-    selected: false,
+    isSelected: false,
+    isDeleted: false,
+    isDirty: false,
     name: '',
     depth: 1,
     text: '',
@@ -84,7 +91,7 @@ function toFileNode(prevPath: string, depth: number) {
     let node: NodeFile
 
     if (isRepoTreeEntry(entry)) {
-      node = applyNodeDefaults({
+      node = applyFileDefaults({
         type: 'parent' as const,
         path: nodePath,
         depth: nodeDepth,
@@ -92,14 +99,14 @@ function toFileNode(prevPath: string, depth: number) {
         children: entry.object.entries.map(toFileNode(nodePath, nodeDepth))
       })
     } else if ((entry.object as RepoBlob).isBinary) {
-      node = applyNodeDefaults({
+      node = applyFileDefaults({
         type: 'binary' as const,
         path: nodePath,
         depth: nodeDepth,
         name: entry.name
       })
     } else {
-      node = applyNodeDefaults({
+      node = applyFileDefaults({
         type: 'text' as const,
         path: nodePath,
         depth: nodeDepth,
@@ -108,19 +115,24 @@ function toFileNode(prevPath: string, depth: number) {
       })
     }
 
+    // Ensure we can rerun this and clean up
+    fileAtomFamily.remove(node)
+
     return fileAtomFamily(node)
   }
 }
 
 export function toFileTree(repo: Repo, data: RepoTree): Atom<NodeFile> {
-  const root: ParentFile = {
+  const root = applyFileDefaults({
     type: 'parent' as const,
     name: 'root',
     depth: 0,
     path: repo.dataDir,
-    children: data.entries.map(toFileNode(repo.dataDir, 0)),
-    selected: false
-  }
+    children: data.entries.map(toFileNode(repo.dataDir, 0))
+  })
+
+  // Ensure we can rerun this and clean up
+  fileAtomFamily.remove(root)
 
   return fileAtomFamily(root)
 }

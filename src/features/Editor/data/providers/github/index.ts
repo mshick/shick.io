@@ -17,17 +17,13 @@ export type CommitChangesOptions = {
     headline?: string
   }
   fileChanges: {
-    additions?: [
-      {
-        path: string
-        contents: string
-      }
-    ]
-    deletions?: [
-      {
-        path: string
-      }
-    ]
+    additions?: {
+      path: string
+      contents: string
+    }[]
+    deletions?: {
+      path: string
+    }[]
   }
 }
 

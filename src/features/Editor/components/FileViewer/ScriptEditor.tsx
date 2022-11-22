@@ -6,7 +6,7 @@ import {
   useEffect,
   useRef
 } from 'react'
-import { TextFile } from '../types'
+import { TextFile } from '../../types'
 
 export type MonacoEditorOptions = Record<string, unknown> & {
   stopRenderingLineAfter: number

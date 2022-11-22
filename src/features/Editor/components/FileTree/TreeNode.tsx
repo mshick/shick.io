@@ -1,5 +1,5 @@
 import { Atom, useAtomValue } from 'jotai'
-import { LeafFile, NodeFile, ParentFile } from '../types'
+import { LeafFile, NodeFile, ParentFile } from '../../types'
 import { File } from './File'
 import { Folder } from './Folder'
 

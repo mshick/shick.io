@@ -1,34 +1,34 @@
 import { Atom } from 'jotai'
 
-export type TextFile = {
-  type: 'text'
+type File = {
+  type: 'text' | 'binary' | 'parent'
   depth: number
   path: string
   name: string
   mimeType?: string
-  language: 'markdown' | 'plaintext' | 'yaml' | 'plaintext' | 'mdx'
-  text: string
-  selected: boolean
+  language?: 'markdown' | 'plaintext' | 'yaml' | 'plaintext' | 'mdx'
+  text?: string
+  children?: Atom<NodeFile>[]
+  isSelected: boolean
+  isDeleted: boolean
+  isDirty: boolean
 }
 
-export type BinaryFile = {
+export type TextFile = File & {
+  type: 'text'
+  language: 'markdown' | 'plaintext' | 'yaml' | 'plaintext' | 'mdx'
+  text: string
+}
+
+export type BinaryFile = File & {
   type: 'binary'
-  depth: number
-  path: string
-  name: string
-  mimeType?: string
-  selected: boolean
 }
 
 export type LeafFile = BinaryFile | TextFile
 
-export type ParentFile = {
+export type ParentFile = File & {
   type: 'parent'
-  depth: number
-  path: string
-  name: string
   children: Atom<NodeFile>[]
-  selected: boolean
 }
 
 export type NodeFile = ParentFile | LeafFile
@@ -37,14 +37,18 @@ export type NodeFileInput = Partial<NodeFile> & {
   path: string
 }
 
-export type State = {
-  position?: {
-    x: number
-    y: number
-  }
-  show?: boolean
-  setShow?: (s: boolean) => void
-  setPosition?: ({ x, y }: { x: any; y: any }) => void
+export type NodeFilePath = {
+  path: string
+}
+
+export type NodeFileDeletion = NodeFilePath
+
+export type NodeFileAddition = NodeFilePath & {
+  contents: string
+}
+
+export type NodeFileUpdateText = NodeFilePath & {
+  text: string
 }
 
 export type Repo = {

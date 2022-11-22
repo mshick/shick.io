@@ -1,8 +1,5 @@
 export const repoFilesQuery = /* GraphQL */ `
   query ($name: String!, $owner: String!, $expression: String!) {
-    viewer {
-      login
-    }
     repository(name: $name, owner: $owner) {
       object(expression: $expression) {
         ... on Tree {
@@ -44,6 +41,29 @@ export const repoFilesQuery = /* GraphQL */ `
                     }
                   }
                 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
+export const repoFileBlobQuery = /* GraphQL */ `
+  query ($name: String!, $owner: String!, $expression: String!) {
+    repository(name: $name, owner: $owner) {
+      object(expression: $expression) {
+        ... on Tree {
+          entries {
+            name
+            type
+            mode
+            object {
+              ... on Blob {
+                byteSize
+                text
+                isBinary
               }
             }
           }
