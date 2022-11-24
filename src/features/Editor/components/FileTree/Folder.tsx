@@ -1,17 +1,19 @@
 import classNames from '#/utils/classNames'
 import { Transition } from '@headlessui/react'
 import { FolderIcon, FolderOpenIcon } from '@heroicons/react/24/outline'
-import { Atom, useAtomValue } from 'jotai'
+import { useAtomValue } from 'jotai'
 import React, { MouseEventHandler, useCallback, useState } from 'react'
+import { getFileAtom } from '../../store'
 import { NodeFile } from '../../types'
 import { TreeParent } from './TreeParent'
 
 export type DirectoryProps = {
-  folderAtom: Atom<NodeFile>
+  node: NodeFile
+  path: number[]
 }
 
-export function Folder({ folderAtom }: DirectoryProps) {
-  const folder = useAtomValue(folderAtom)
+export function Folder({ node, path }: DirectoryProps) {
+  const folder = useAtomValue(getFileAtom(node))
   const [toggle, setToggle] = useState<boolean>(false)
 
   const onClicked: MouseEventHandler = useCallback(
@@ -22,13 +24,17 @@ export function Folder({ folderAtom }: DirectoryProps) {
     [toggle]
   )
 
+  if (!folder) {
+    return null
+  }
+
   return (
     <li className="cursor-pointer" onClick={onClicked}>
       <span
         className={classNames(
-          folder.depth === 1 ? 'pl-2' : '',
-          folder.depth === 2 ? 'pl-6' : '',
-          folder.depth === 3 ? 'pl-10' : '',
+          path.length === 1 ? 'pl-2' : '',
+          path.length === 2 ? 'pl-6' : '',
+          path.length === 3 ? 'pl-10' : '',
           'hover:bg-gray-100 transition block truncate py-2'
         )}
       >
@@ -48,7 +54,7 @@ export function Folder({ folderAtom }: DirectoryProps) {
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
       >
-        <TreeParent parentNodeAtom={folderAtom} />
+        <TreeParent node={node} path={path} />
       </Transition>
     </li>
   )

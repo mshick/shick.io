@@ -1,13 +1,8 @@
 import { ArrowPathIcon } from '@heroicons/react/24/outline'
-import {
-  MouseEventHandler,
-  PropsWithChildren,
-  useCallback,
-  useEffect
-} from 'react'
-import { useEditorContext } from '../../data/context'
-import { useEditorManualQuery } from '../../data/hooks'
-import { Repo } from '../../types'
+import { MouseEventHandler, PropsWithChildren, useCallback } from 'react'
+import { useFileTreeQuery } from '../../data/hooks'
+import { useFileTree } from '../../store'
+import { NodeFile, Repo } from '../../types'
 import { TreeParent } from './TreeParent'
 
 function TreeWrapper({
@@ -39,34 +34,28 @@ export type TreeRootProps = {
 }
 
 export function TreeRoot({ repo }: TreeRootProps) {
-  const { queries } = useEditorContext()
-  const [getFileTree, { called, loading, error, data }] = useEditorManualQuery({
-    query: queries.getFileTree
-  })
+  const { error, data, refetch, isRefetching } = useFileTreeQuery()
+  const { loaded } = useFileTree({ fileTree: data, isRefetching })
 
-  useEffect(() => {
-    getFileTree()
-  }, [getFileTree])
-
-  if (loading || !called) {
+  if (error) {
     return (
-      <TreeWrapper repo={repo} onRefresh={getFileTree}>
+      <TreeWrapper repo={repo} onRefresh={refetch}>
+        <div>Error: {(error as Error)?.message ?? 'no data'}</div>
+      </TreeWrapper>
+    )
+  }
+
+  if (!loaded) {
+    return (
+      <TreeWrapper repo={repo} onRefresh={refetch}>
         <div>Loading...</div>
       </TreeWrapper>
     )
   }
 
-  if (error || !data) {
-    return (
-      <TreeWrapper repo={repo} onRefresh={getFileTree}>
-        <div>Error: {error?.message ?? 'no data'}</div>
-      </TreeWrapper>
-    )
-  }
-
   return (
-    <TreeWrapper repo={repo} onRefresh={getFileTree}>
-      <TreeParent parentNodeAtom={data} />
+    <TreeWrapper repo={repo} onRefresh={refetch}>
+      <TreeParent node={data as NodeFile} path={[]} />
     </TreeWrapper>
   )
 }

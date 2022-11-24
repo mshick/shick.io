@@ -1,4 +1,7 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useQuery } from '@tanstack/react-query'
+import { ClientError } from 'graphql-request'
+import { useCallback, useState } from 'react'
+import { useEditorContext } from './context'
 
 export type EditorQueryOptions = {
   variables?: any
@@ -26,63 +29,70 @@ export type EditorQueryResult = {
 export type EditorQueryHookReturn = [EditorQuery, EditorQueryResult]
 export type EditorMutationHookReturn = [EditorQuery, EditorQueryResult]
 
-export function useEditorManualQuery({
+export function useEditorMethod({
   query,
   options: queryOptions
 }: EditorQueryHookProps): EditorQueryHookReturn {
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState(null)
-  const [error, setError] = useState<Error | null>(null)
+  const [error, setError] = useState<ClientError | Error | null>(null)
   const [called, setCalled] = useState(false)
 
   const executeQuery: EditorQuery = useCallback(
     async (options) => {
+      if (loading) {
+        return
+      }
+
       setCalled(true)
       setLoading(true)
+
       try {
         const result = await query({ ...queryOptions, ...options })
         setData(result)
         return result
       } catch (e) {
-        if (e instanceof Error) {
+        if (e instanceof Error || e instanceof ClientError) {
           setError(e)
+          return
         }
         setError(new Error('An unknown error occurred'))
       } finally {
         setLoading(false)
       }
     },
-    [query, queryOptions]
+    [loading, query, queryOptions]
   )
 
   return [executeQuery, { data, called, loading, error }]
 }
 
-export function useEditorMutation({
-  mutation,
-  options
-}: EditorMutationHookProps): EditorMutationHookReturn {
-  const [executeQuery, { called, loading, error, data }] = useEditorManualQuery(
-    {
-      query: mutation,
-      options
-    }
-  )
-
-  return [executeQuery, { called, data, loading, error }]
+export function useFileTreeQuery() {
+  const { methods } = useEditorContext()
+  return useQuery({
+    queryKey: ['fileTree'],
+    queryFn: methods.getFileTree
+  })
 }
 
-export function useEditorQuery({ query, options }: EditorQueryHookProps) {
-  const [executeQuery, { called, loading, error, data }] = useEditorManualQuery(
-    {
-      query,
-      options
-    }
-  )
+export type FileQueryHookProps = {
+  oid: string | undefined
+  path: string | undefined
+}
 
-  useEffect(() => {
-    executeQuery(options)
-  }, [executeQuery, options, query])
+export function useFileQuery({ oid, path }: FileQueryHookProps) {
+  const { methods } = useEditorContext()
 
-  return { called, data, loading, error }
+  const query = useQuery({
+    queryKey: [path ?? '', oid ?? ''],
+    queryFn: methods.getFile,
+    enabled: false,
+    cacheTime: 0
+  })
+
+  const fetchQuery = useCallback(async () => {
+    query.refetch()
+  }, [query])
+
+  return [fetchQuery, query] as const
 }

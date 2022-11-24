@@ -1,13 +1,16 @@
-export const repoFilesQuery = /* GraphQL */ `
+import { gql } from 'graphql-request'
+
+export const repoFilesQuery = gql`
   query ($name: String!, $owner: String!, $expression: String!) {
     repository(name: $name, owner: $owner) {
       object(expression: $expression) {
+        oid
         ... on Tree {
           entries {
             name
             type
-            mode
             object {
+              oid
               ... on Blob {
                 byteSize
                 text
@@ -17,8 +20,8 @@ export const repoFilesQuery = /* GraphQL */ `
                 entries {
                   name
                   type
-                  mode
                   object {
+                    oid
                     ... on Blob {
                       byteSize
                       text
@@ -29,8 +32,8 @@ export const repoFilesQuery = /* GraphQL */ `
                       entries {
                         name
                         type
-                        mode
                         object {
+                          oid
                           ... on Blob {
                             byteSize
                             text
@@ -50,30 +53,22 @@ export const repoFilesQuery = /* GraphQL */ `
   }
 `
 
-export const repoFileBlobQuery = /* GraphQL */ `
-  query ($name: String!, $owner: String!, $expression: String!) {
+export const repoFileQuery = gql`
+  query ($name: String!, $owner: String!, $oid: GitObjectID!) {
     repository(name: $name, owner: $owner) {
-      object(expression: $expression) {
-        ... on Tree {
-          entries {
-            name
-            type
-            mode
-            object {
-              ... on Blob {
-                byteSize
-                text
-                isBinary
-              }
-            }
-          }
+      object(oid: $oid) {
+        oid
+        ... on Blob {
+          byteSize
+          text
+          isBinary
         }
       }
     }
   }
 `
 
-export const headOidQuery = /* GraphQL */ `
+export const headOidQuery = gql`
   query ($name: String!, $owner: String!) {
     repository(name: $name, owner: $owner) {
       defaultBranchRef {
@@ -91,7 +86,7 @@ export const headOidQuery = /* GraphQL */ `
   }
 `
 
-export const commitChangesQuery = /* GraphQL */ `
+export const commitChangesQuery = gql`
   mutation ($input: CreateCommitOnBranchInput!) {
     createCommitOnBranch(input: $input) {
       clientMutationId

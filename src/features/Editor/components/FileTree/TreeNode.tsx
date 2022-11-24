@@ -1,18 +1,16 @@
-import { Atom, useAtomValue } from 'jotai'
-import { LeafFile, NodeFile, ParentFile } from '../../types'
+import { NodeFile } from '../../types'
 import { File } from './File'
 import { Folder } from './Folder'
 
 export type TreeNodeProps = {
-  nodeAtom: Atom<NodeFile>
+  node: NodeFile
+  path: number[]
 }
 
-export function TreeNode({ nodeAtom }: TreeNodeProps) {
-  const node = useAtomValue(nodeAtom)
-
+export function TreeNode({ node, path }: TreeNodeProps) {
   if (node.type === 'parent') {
-    return <Folder folderAtom={nodeAtom as Atom<ParentFile>} />
+    return <Folder node={node} path={path} />
   }
 
-  return <File fileAtom={nodeAtom as Atom<LeafFile>} />
+  return <File node={node} path={path} />
 }

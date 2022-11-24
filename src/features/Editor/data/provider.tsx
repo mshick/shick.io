@@ -1,30 +1,21 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { PropsWithChildren, useMemo } from 'react'
 import { Repo } from '../types'
 import { EditorContext } from './context'
-import { EditorQuery } from './hooks'
-import { getQueries as getGithubQueries } from './providers/github'
-import { ProviderProps } from './types'
-
-type GetQueriesReturn = {
-  queries: {
-    getFileTree: EditorQuery
-  }
-  mutations: {
-    commitChanges: EditorQuery
-  }
-}
+import { getMethods as getGithubMethods } from './providers/github'
+import { EditorContextMethods, ProviderProps } from './types'
 
 type GetQueriesOptions = {
   accessToken: string
   repo: Repo
 }
 
-function getQueries(
+function getMethods(
   provider: 'github',
   options: GetQueriesOptions
-): GetQueriesReturn {
+): EditorContextMethods {
   if (provider === 'github') {
-    return getGithubQueries(options)
+    return getGithubMethods(options)
   }
 
   throw new Error('unknown provider')
@@ -41,14 +32,18 @@ export function EditorProvider({
   accessToken,
   repo
 }: EditorDataProviderProps) {
-  const { queries, mutations } = useMemo(
-    () => getQueries(provider, { accessToken, repo }),
+  const methods = useMemo(
+    () => getMethods(provider, { accessToken, repo }),
     [accessToken, provider, repo]
   )
 
+  const queryClient = new QueryClient()
+
   return (
-    <EditorContext.Provider value={{ queries, mutations }}>
-      {children}
-    </EditorContext.Provider>
+    <QueryClientProvider client={queryClient}>
+      <EditorContext.Provider value={{ methods }}>
+        {children}
+      </EditorContext.Provider>
+    </QueryClientProvider>
   )
 }

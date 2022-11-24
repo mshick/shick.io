@@ -1,7 +1,7 @@
 import Image from '#/components/Image'
 import { useCallback, useEffect, useState } from 'react'
 import { useEditorContext } from '../../data/context'
-import { useEditorMutation } from '../../data/hooks'
+import { useEditorMethod } from '../../data/hooks'
 import { useFileAtom } from '../../store'
 import { Repo } from '../../types'
 import { ActionButton } from './components/ActionButton'
@@ -12,11 +12,12 @@ type FileEditorProps = {
 }
 
 export function FileViewer({ repo }: FileEditorProps) {
-  const { file, removeFile, restoreFile } = useFileAtom()
+  const { file, removeFile, restoreFile, resetFile } = useFileAtom()
 
-  const { mutations } = useEditorContext()
-  const [commitChanges] = useEditorMutation({
-    mutation: mutations.commitChanges
+  const { methods } = useEditorContext()
+
+  const [commitChanges] = useEditorMethod({
+    query: methods.commitChanges
   })
 
   const [code, setCode] = useState<string>('')
@@ -43,10 +44,13 @@ export function FileViewer({ repo }: FileEditorProps) {
   )
 
   const onReset = useCallback(() => {
+    console.log('onReset---------------')
+    resetFile()
+
     if (file?.type === 'text') {
       setCode(file.text)
     }
-  }, [file])
+  }, [file?.text, file?.type, resetFile])
 
   const onCommit = useCallback(() => {
     if (!file) {

@@ -1,37 +1,38 @@
-import { Atom } from 'jotai'
+import { SetRequired } from 'type-fest'
 
 type File = {
+  oid: string
   type: 'text' | 'binary' | 'parent'
-  depth: number
   path: string
   name: string
   mimeType?: string
   language?: 'markdown' | 'plaintext' | 'yaml' | 'plaintext' | 'mdx'
   text?: string
-  children?: Atom<NodeFile>[]
+  children?: NodeFile[]
   isSelected: boolean
   isDeleted: boolean
   isDirty: boolean
 }
 
-export type TextFile = File & {
+export type TextFile = SetRequired<File, 'text'> & {
   type: 'text'
   language: 'markdown' | 'plaintext' | 'yaml' | 'plaintext' | 'mdx'
-  text: string
 }
 
 export type BinaryFile = File & {
   type: 'binary'
 }
 
-export type LeafFile = BinaryFile | TextFile
-
-export type ParentFile = File & {
+export type ParentFile = SetRequired<File, 'children'> & {
   type: 'parent'
-  children: Atom<NodeFile>[]
 }
 
+export type LeafFile = BinaryFile | TextFile
 export type NodeFile = ParentFile | LeafFile
+
+// export type FileEntry = Omit<NodeFile, 'children'> & {
+//   children?: FileEntry[]
+// }
 
 export type NodeFileInput = Partial<NodeFile> & {
   path: string
@@ -59,26 +60,26 @@ export type Repo = {
 }
 
 export type RepoBlob = {
+  oid: string
   byteSize: number
   text: string
   isBinary: boolean
 }
 
 export type RepoTree = {
+  oid: string
   entries: RepoEntry[]
 }
 
 export type RepoBlobEntry = {
   name: string
   type: 'blob'
-  mode: string
   object: RepoBlob
 }
 
 export type RepoTreeEntry = {
   name: string
   type: 'tree'
-  mode: string
   object: RepoTree
 }
 

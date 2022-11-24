@@ -1,16 +1,15 @@
 import { createContext, useContext } from 'react'
-import { EditorQuery } from './hooks'
+import { EditorContextMethods } from './types'
 
-export type EditorContext = {
-  queries: {
-    getFileTree: EditorQuery
-  }
-  mutations: {
-    commitChanges: EditorQuery
-  }
+export type EditorQuery = (options?: any) => Promise<any>
+
+export type EditorContextType = {
+  methods: EditorContextMethods
 }
 
-export const EditorContext = createContext<EditorContext | undefined>(undefined)
+export const EditorContext = createContext<EditorContextType | undefined>(
+  undefined
+)
 
 export function useEditorContext() {
   const context = useContext(EditorContext)

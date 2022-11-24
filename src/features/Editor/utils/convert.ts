@@ -1,17 +1,18 @@
-import { Atom } from 'jotai'
 import mime from 'mime/lite'
-import { fileAtomFamily } from '../store'
+import { SetRequired } from 'type-fest'
 import {
   NodeFile,
-  NodeFileInput,
   Repo,
   RepoBlob,
+  RepoEntry,
   RepoTree,
   TextFile
 } from '../types'
 import { isRepoTreeEntry } from './type'
 
-export function applyFileDefaults(input: NodeFileInput): NodeFile {
+export function applyFileDefaults(
+  input: SetRequired<Partial<NodeFile>, 'path' | 'oid'>
+): NodeFile {
   if (input.type === 'parent') {
     return {
       type: 'parent' as const,
@@ -19,7 +20,6 @@ export function applyFileDefaults(input: NodeFileInput): NodeFile {
       isDeleted: false,
       isDirty: false,
       name: '',
-      depth: 1,
       children: [],
       ...input
     }
@@ -32,7 +32,6 @@ export function applyFileDefaults(input: NodeFileInput): NodeFile {
       isDeleted: false,
       isDirty: false,
       name: '',
-      depth: 1,
       ...input
     }
   }
@@ -44,7 +43,6 @@ export function applyFileDefaults(input: NodeFileInput): NodeFile {
       isDeleted: false,
       isDirty: false,
       name: '',
-      depth: 1,
       text: '',
       mimeType: mime.getType(input.name ?? '') ?? undefined,
       language: getFileLanguage(input.name ?? ''),
@@ -58,11 +56,11 @@ export function applyFileDefaults(input: NodeFileInput): NodeFile {
     isDeleted: false,
     isDirty: false,
     name: '',
-    depth: 1,
     text: '',
     mimeType: mime.getType(input.name ?? '') ?? undefined,
     language: getFileLanguage(input.name ?? ''),
-    path: input.path
+    path: input.path,
+    oid: input.oid
   }
 }
 
@@ -82,57 +80,43 @@ function getFileLanguage(name: string): TextFile['language'] {
   }
 }
 
-function toFileNode(prevPath: string, depth: number) {
-  return (entry: RepoTree['entries'][0]): Atom<NodeFile> => {
-    const basePath = prevPath === '' ? prevPath : `${prevPath}/`
-    const nodePath = `${basePath}${entry.name}`
-    const nodeDepth = depth + 1
-
-    let node: NodeFile
+export function toNodeFile(prevPath: string) {
+  return (entry: RepoEntry): NodeFile => {
+    const nodePath = `${prevPath}/${entry.name}`
 
     if (isRepoTreeEntry(entry)) {
-      node = applyFileDefaults({
+      return applyFileDefaults({
+        oid: entry.object.oid,
         type: 'parent' as const,
         path: nodePath,
-        depth: nodeDepth,
         name: entry.name,
-        children: entry.object.entries.map(toFileNode(nodePath, nodeDepth))
+        children: entry.object.entries.map(toNodeFile(nodePath))
       })
     } else if ((entry.object as RepoBlob).isBinary) {
-      node = applyFileDefaults({
+      return applyFileDefaults({
+        oid: entry.object.oid,
         type: 'binary' as const,
         path: nodePath,
-        depth: nodeDepth,
         name: entry.name
-      })
-    } else {
-      node = applyFileDefaults({
-        type: 'text' as const,
-        path: nodePath,
-        depth: nodeDepth,
-        name: entry.name,
-        text: (entry.object as RepoBlob).text
       })
     }
 
-    // Ensure we can rerun this and clean up
-    fileAtomFamily.remove(node)
-
-    return fileAtomFamily(node)
+    return applyFileDefaults({
+      oid: entry.object.oid,
+      type: 'text' as const,
+      path: nodePath,
+      name: entry.name,
+      text: (entry.object as RepoBlob).text
+    })
   }
 }
 
-export function toFileTree(repo: Repo, data: RepoTree): Atom<NodeFile> {
-  const root = applyFileDefaults({
+export function toNodeFileTree(repo: Repo, data: RepoTree): NodeFile {
+  return applyFileDefaults({
+    oid: data.oid,
     type: 'parent' as const,
     name: 'root',
-    depth: 0,
     path: repo.dataDir,
-    children: data.entries.map(toFileNode(repo.dataDir, 0))
+    children: data.entries.map(toNodeFile(repo.dataDir))
   })
-
-  // Ensure we can rerun this and clean up
-  fileAtomFamily.remove(root)
-
-  return fileAtomFamily(root)
 }

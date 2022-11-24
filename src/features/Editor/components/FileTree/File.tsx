@@ -1,17 +1,18 @@
 import classNames from '#/utils/classNames'
 import { DocumentTextIcon, PhotoIcon } from '@heroicons/react/24/outline'
-import { Atom, useAtomValue, useSetAtom } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { MouseEventHandler, useCallback } from 'react'
-import { selectFileAtom } from '../../store'
-import { LeafFile } from '../../types'
+import { getFileAtom, _selectFileAtom } from '../../store'
+import { NodeFile } from '../../types'
 
 export type FileProps = {
-  fileAtom: Atom<LeafFile>
+  node: NodeFile
+  path: number[]
 }
 
-export function File({ fileAtom }: FileProps) {
-  const file = useAtomValue(fileAtom)
-  const setSelectedNode = useSetAtom(selectFileAtom)
+export function File({ node, path }: FileProps) {
+  const file = useAtomValue(getFileAtom(node))
+  const setSelectedNode = useSetAtom(_selectFileAtom)
 
   const onClicked: MouseEventHandler = useCallback(
     (event) => {
@@ -21,14 +22,18 @@ export function File({ fileAtom }: FileProps) {
     [file, setSelectedNode]
   )
 
+  if (!file) {
+    return null
+  }
+
   return (
     <li className="cursor-pointer" onClick={onClicked}>
       <span
         className={classNames(
           file.isDeleted ? 'text-gray-500 line-through' : '',
-          file.depth === 1 ? 'pl-2' : '',
-          file.depth === 2 ? 'pl-6' : '',
-          file.depth === 3 ? 'pl-10' : '',
+          path.length === 1 ? 'pl-2' : '',
+          path.length === 2 ? 'pl-6' : '',
+          path.length === 3 ? 'pl-10' : '',
           file.isSelected ? 'bg-indigo-200' : 'hover:bg-gray-200',
           'block truncate py-2'
         )}
