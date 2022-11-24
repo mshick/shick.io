@@ -1,6 +1,6 @@
 import { Provider } from 'jotai'
 import Split from 'react-split'
-import { TreeRoot } from './components/FileTree/TreeRoot'
+import { FileTree } from './components/FileTree/FileTree'
 import { FileViewer } from './components/FileViewer/FileViewer'
 import { EditorProvider } from './data/provider'
 import { Repo } from './types'
@@ -27,7 +27,7 @@ export function Editor({ accessToken, repo }: EditorProp) {
           })}
           className="flex flex-row min-h-screen"
         >
-          <TreeRoot repo={repo} />
+          <FileTree repo={repo} />
           <FileViewer repo={repo} />
         </Split>
       </EditorProvider>

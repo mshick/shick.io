@@ -1,11 +1,5 @@
 import Editor from '@monaco-editor/react'
-import {
-  Dispatch,
-  MutableRefObject,
-  SetStateAction,
-  useEffect,
-  useRef
-} from 'react'
+import { MutableRefObject, useEffect, useRef, useState } from 'react'
 import { TextFile } from '../../types'
 
 export type MonacoEditorOptions = Record<string, unknown> & {
@@ -25,15 +19,25 @@ export type MonacoOnInitializePane = (
 export type ScriptEditorProps = {
   path: string
   language: TextFile['language']
-  code: string
-  setCode: Dispatch<SetStateAction<string>>
+  initialValue: string
+  onChange?: (value: string) => void
+  // code: string
+  // setCode: Dispatch<SetStateAction<string>>
   editorOptions?: MonacoEditorOptions
   onInitializePane: MonacoOnInitializePane
 }
 
 const ScriptEditor = (props: ScriptEditorProps): JSX.Element => {
-  const { path, language, code, setCode, editorOptions, onInitializePane } =
-    props
+  const {
+    path,
+    language,
+    initialValue,
+    editorOptions,
+    onInitializePane,
+    onChange
+  } = props
+
+  const [code, setCode] = useState<string>(initialValue)
 
   const monacoEditorRef = useRef<any | null>(null)
   const editorRef = useRef<any | null>(null)
@@ -53,6 +57,7 @@ const ScriptEditor = (props: ScriptEditorProps): JSX.Element => {
       language={language}
       onChange={(value, _event) => {
         setCode(value ?? '')
+        onChange?.(value ?? '')
       }}
       onMount={(editor, monaco) => {
         monacoEditorRef.current = monaco.editor

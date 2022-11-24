@@ -1,10 +1,10 @@
 import Image from '#/components/Image'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import { useEditorContext } from '../../data/context'
 import { useEditorMethod } from '../../data/hooks'
 import { useFileAtom } from '../../store'
 import { Repo } from '../../types'
-import { ActionButton } from './components/ActionButton'
+import { ActionButton } from '../Buttons/ActionButton'
 import ScriptEditor, { MonacoOnInitializePane } from './ScriptEditor'
 
 type FileEditorProps = {
@@ -12,23 +12,14 @@ type FileEditorProps = {
 }
 
 export function FileViewer({ repo }: FileEditorProps) {
-  const { file, removeFile, restoreFile, resetFile } = useFileAtom()
+  const { file, removeFile, restoreFile, resetFile, updateFileText } =
+    useFileAtom()
 
   const { methods } = useEditorContext()
 
   const [commitChanges] = useEditorMethod({
     query: methods.commitChanges
   })
-
-  const [code, setCode] = useState<string>('')
-
-  useEffect(() => {
-    if (file?.type === 'text' && !file?.isDeleted) {
-      setCode(file.text)
-    } else {
-      setCode('')
-    }
-  }, [file])
 
   const onInitializePane: MonacoOnInitializePane = useCallback(
     (monacoEditorRef, editorRef, model) => {
@@ -44,18 +35,15 @@ export function FileViewer({ repo }: FileEditorProps) {
   )
 
   const onReset = useCallback(() => {
-    console.log('onReset---------------')
     resetFile()
-
-    if (file?.type === 'text') {
-      setCode(file.text)
-    }
-  }, [file?.text, file?.type, resetFile])
+  }, [resetFile])
 
   const onCommit = useCallback(() => {
     if (!file) {
       return
     }
+
+    const code = ''
 
     commitChanges({
       fileChanges: {
@@ -67,7 +55,7 @@ export function FileViewer({ repo }: FileEditorProps) {
         ]
       }
     })
-  }, [code, commitChanges, file])
+  }, [commitChanges, file])
 
   const onDelete = useCallback(() => {
     removeFile()
@@ -76,6 +64,13 @@ export function FileViewer({ repo }: FileEditorProps) {
   const onUndelete = useCallback(() => {
     restoreFile()
   }, [restoreFile])
+
+  const onTextChange = useCallback(
+    (value: string) => {
+      updateFileText(value)
+    },
+    [updateFileText]
+  )
 
   let Component: JSX.Element | null
 
@@ -89,10 +84,11 @@ export function FileViewer({ repo }: FileEditorProps) {
   } else if (file?.type === 'text' && !file?.isDeleted) {
     Component = (
       <ScriptEditor
-        path={file?.type === 'text' ? file.path : ''}
-        language={file?.type === 'text' ? file.language : 'plaintext'}
-        code={code}
-        setCode={setCode}
+        key={file.path}
+        path={file.path}
+        language={file.language}
+        onChange={onTextChange}
+        initialValue={file.text}
         onInitializePane={onInitializePane}
       />
     )

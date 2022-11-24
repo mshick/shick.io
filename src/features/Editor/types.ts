@@ -8,6 +8,7 @@ type File = {
   mimeType?: string
   language?: 'markdown' | 'plaintext' | 'yaml' | 'plaintext' | 'mdx'
   text?: string
+  initialText?: string
   children?: NodeFile[]
   isSelected: boolean
   isDeleted: boolean

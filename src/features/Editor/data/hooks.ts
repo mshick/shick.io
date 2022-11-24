@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { ClientError } from 'graphql-request'
 import { useCallback, useState } from 'react'
 import { useEditorContext } from './context'
@@ -95,4 +95,12 @@ export function useFileQuery({ oid, path }: FileQueryHookProps) {
   }, [query])
 
   return [fetchQuery, query] as const
+}
+
+export function useCommitMutation() {
+  const { methods } = useEditorContext()
+
+  return useMutation({
+    mutationFn: methods.commitChanges
+  })
 }

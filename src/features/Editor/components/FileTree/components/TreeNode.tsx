@@ -1,4 +1,4 @@
-import { NodeFile } from '../../types'
+import { NodeFile } from '../../../types'
 import { File } from './File'
 import { Folder } from './Folder'
 

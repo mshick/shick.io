@@ -1,9 +1,9 @@
 import classNames from '#/utils/classNames'
 import { useAtomValue } from 'jotai'
 import { memo } from 'react'
-import { getFileAtom } from '../../store'
-import { NodeFile } from '../../types'
-import { shallowEquals } from '../../utils/compare'
+import { getFileAtom } from '../../../store'
+import { NodeFile } from '../../../types'
+import { shallowEquals } from '../../../utils/compare'
 import { TreeNode } from './TreeNode'
 
 export type TreeParentProps = {

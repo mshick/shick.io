@@ -1,7 +1,7 @@
 import { atom, useAtom, useAtomValue, useSetAtom, WritableAtom } from 'jotai'
 import { atomFamily, atomWithReset } from 'jotai/utils'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useFileQuery } from './data/hooks'
+import { useCommitMutation, useFileQuery } from './data/hooks'
 import {
   NodeFile,
   NodeFileAddition,
@@ -183,7 +183,16 @@ const _updateFileTextAtom = atom<null, NodeFileUpdateText>(
       return
     }
 
-    set(fileAtom, { ...file, ...update, isDirty: true })
+    const payload = { ...file, text: update.text }
+
+    if (!file.isDirty) {
+      payload.isDirty = true
+      payload.initialText = file.text
+    } else {
+      payload.isDirty = file.initialText !== update.text
+    }
+
+    set(fileAtom, payload)
   }
 )
 
@@ -319,9 +328,9 @@ export function useFileAtom() {
     if (file) {
       fetchFile()
       _removeAddition(file)
-      restoreFile()
+      _removeDeletion(file)
     }
-  }, [file, fetchFile, _removeAddition, restoreFile])
+  }, [file, fetchFile, _removeAddition, _removeDeletion])
 
   useEffect(() => {
     if (fetchFileResult.data) {
@@ -363,4 +372,19 @@ export function useFileTree({ fileTree, isRefetching }: FileTreeHookProps) {
   }, [isRefetching])
 
   return { loaded }
+}
+
+export function useFileTreeActions() {
+  const mutation = useCommitMutation()
+  const fileChanges = useAtomValue(fileChangesAtom)
+
+  const commitChanges = useCallback(() => {
+    mutation.mutate({
+      fileChanges
+    })
+  }, [fileChanges, mutation])
+
+  return {
+    commitChanges
+  }
 }
