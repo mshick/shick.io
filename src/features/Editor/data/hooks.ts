@@ -75,6 +75,22 @@ export function useFileTreeQuery() {
   })
 }
 
+export function useFileTreeManualQuery() {
+  const { methods } = useEditorContext()
+
+  const query = useQuery({
+    queryKey: ['fileTree'],
+    queryFn: methods.getFileTree,
+    enabled: false
+  })
+
+  const fetchQuery = useCallback(async () => {
+    query.refetch()
+  }, [query])
+
+  return [fetchQuery, query] as const
+}
+
 export type FileQueryHookProps = {
   oid: string | undefined
   path: string | undefined
@@ -97,10 +113,10 @@ export function useFileQuery({ oid, path }: FileQueryHookProps) {
   return [fetchQuery, query] as const
 }
 
-export function useCommitMutation() {
+export function useCreateCommitMutation() {
   const { methods } = useEditorContext()
 
   return useMutation({
-    mutationFn: methods.commitChanges
+    mutationFn: methods.createCommit
   })
 }

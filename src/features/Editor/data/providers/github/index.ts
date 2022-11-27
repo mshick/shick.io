@@ -1,10 +1,10 @@
 import { getParentPath } from '#/features/Editor/utils/path'
 import { QueryFunctionContext } from '@tanstack/react-query'
 import { GraphQLClient } from 'graphql-request'
-import { Repo } from '../../../types'
+import { CreateCommit, CreateCommitResponse, Repo } from '../../../types'
 import { toNodeFile, toNodeFileTree } from '../../../utils/convert'
 import {
-  commitChangesQuery,
+  createCommitQuery,
   headOidQuery,
   repoFileQuery,
   repoFilesQuery
@@ -21,7 +21,8 @@ export type GetFileTreeOptions = {
 
 export type CommitChangesOptions = {
   message?: {
-    headline?: string
+    headline: string
+    body?: string
   }
   fileChanges: {
     additions?: {
@@ -84,11 +85,9 @@ export function getMethods(options: GetQueriesOptions) {
 
       return toNodeFile(getParentPath(path))(data.repository)
     },
-    commitChanges: async (options?: CommitChangesOptions) => {
-      if (!options?.fileChanges) {
-        throw new Error('variables are required')
-      }
-
+    createCommit: async (
+      variables: CreateCommit
+    ): Promise<CreateCommitResponse> => {
       const headOidResponse = await client.request<HeadOidResponse>(
         headOidQuery,
         {
@@ -105,16 +104,10 @@ export function getMethods(options: GetQueriesOptions) {
       }
 
       const data = await client.request<CommitChangesResponse>(
-        commitChangesQuery,
+        createCommitQuery,
         {
           input: {
-            message: {
-              headline: 'commit from teddi',
-              ...options.message
-            },
-            fileChanges: {
-              ...options.fileChanges
-            },
+            ...variables,
             branch: {
               repositoryNameWithOwner: `${repo.owner}/${repo.name}`,
               branchName: repo.branch

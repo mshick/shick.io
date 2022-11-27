@@ -86,7 +86,7 @@ export const headOidQuery = gql`
   }
 `
 
-export const commitChangesQuery = gql`
+export const createCommitQuery = gql`
   mutation ($input: CreateCommitOnBranchInput!) {
     createCommitOnBranch(input: $input) {
       clientMutationId

@@ -1,8 +1,9 @@
 import { atom, useAtom, useAtomValue, useSetAtom, WritableAtom } from 'jotai'
 import { atomFamily, atomWithReset } from 'jotai/utils'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useCommitMutation, useFileQuery } from './data/hooks'
+import { useCreateCommitMutation, useFileQuery } from './data/hooks'
 import {
+  CreateCommitMessage,
   NodeFile,
   NodeFileAddition,
   NodeFileDeletion,
@@ -11,6 +12,8 @@ import {
   NodeFileUpdateText
 } from './types'
 import { getParentPath } from './utils/path'
+
+export const isCommittingAtom = atom(false)
 
 let filePaths: Set<string> = new Set()
 
@@ -375,16 +378,33 @@ export function useFileTree({ fileTree, isRefetching }: FileTreeHookProps) {
 }
 
 export function useFileTreeActions() {
-  const mutation = useCommitMutation()
+  const mutation = useCreateCommitMutation()
   const fileChanges = useAtomValue(fileChangesAtom)
 
-  const commitChanges = useCallback(() => {
-    mutation.mutate({
-      fileChanges
-    })
-  }, [fileChanges, mutation])
+  const createCommit = useCallback(
+    (message: CreateCommitMessage) => {
+      mutation.mutate({
+        fileChanges,
+        message
+      })
+    },
+    [fileChanges, mutation]
+  )
+
+  const hasChanges = useMemo(() => {
+    return Boolean(fileChanges.additions.length || fileChanges.deletions.length)
+  }, [fileChanges.additions.length, fileChanges.deletions.length])
+
+  const changedFiles = useMemo(() => {
+    return {
+      additions: fileChanges.additions?.map(({ path }) => path),
+      deletions: fileChanges.deletions?.map(({ path }) => path)
+    }
+  }, [fileChanges.additions, fileChanges.deletions])
 
   return {
-    commitChanges
+    hasChanges,
+    changedFiles,
+    createCommit
   }
 }

@@ -1,6 +1,7 @@
 import { useFileTreeQuery } from '../../data/hooks'
 import { useFileTree } from '../../store'
 import { NodeFile, Repo } from '../../types'
+import { CommitModal } from './components/CommitModal'
 import { TreeActions } from './components/TreeActions'
 import { TreeHeader } from './components/TreeHeader'
 import { TreeRoot } from './components/TreeRoot'
@@ -38,6 +39,7 @@ export function FileTree({ repo }: FileTreeProps) {
         <TreeRoot node={data as NodeFile} />
       </div>
       <TreeActions />
+      <CommitModal />
     </div>
   )
 }

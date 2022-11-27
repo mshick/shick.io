@@ -85,3 +85,27 @@ export type RepoTreeEntry = {
 }
 
 export type RepoEntry = RepoTreeEntry | RepoBlobEntry
+
+export type CreateCommitMessage = {
+  headline: string
+  body?: string
+}
+
+export type CreateCommitFileChanges = {
+  additions?: {
+    path: string
+    contents: string
+  }[]
+  deletions?: {
+    path: string
+  }[]
+}
+
+export type CreateCommit = {
+  message: CreateCommitMessage
+  fileChanges: CreateCommitFileChanges
+}
+
+export type CreateCommitResponse = {
+  clientMutationId: string
+}

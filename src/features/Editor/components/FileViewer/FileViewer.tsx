@@ -18,7 +18,7 @@ export function FileViewer({ repo }: FileEditorProps) {
   const { methods } = useEditorContext()
 
   const [commitChanges] = useEditorMethod({
-    query: methods.commitChanges
+    query: methods.createCommit
   })
 
   const onInitializePane: MonacoOnInitializePane = useCallback(
@@ -38,24 +38,24 @@ export function FileViewer({ repo }: FileEditorProps) {
     resetFile()
   }, [resetFile])
 
-  const onCommit = useCallback(() => {
-    if (!file) {
-      return
-    }
+  // const onCommit = useCallback(() => {
+  //   if (!file) {
+  //     return
+  //   }
 
-    const code = ''
+  //   const code = ''
 
-    commitChanges({
-      fileChanges: {
-        additions: [
-          {
-            path: file.path,
-            contents: Buffer.from(code).toString('base64')
-          }
-        ]
-      }
-    })
-  }, [commitChanges, file])
+  //   commitChanges({
+  //     fileChanges: {
+  //       additions: [
+  //         {
+  //           path: file.path,
+  //           contents: Buffer.from(code).toString('base64')
+  //         }
+  //       ]
+  //     }
+  //   })
+  // }, [commitChanges, file])
 
   const onDelete = useCallback(() => {
     removeFile()
@@ -107,7 +107,6 @@ export function FileViewer({ repo }: FileEditorProps) {
       {file && (
         <div className="fixed bottom-0 h-14 px-12 w-[inherit] flex items-center justify-end gap-2 border-t">
           <ActionButton onClick={onReset}>Reset</ActionButton>
-          <ActionButton onClick={onCommit}>Commit</ActionButton>
           {file.isDeleted ? (
             <ActionButton onClick={onUndelete}>Undelete</ActionButton>
           ) : (
