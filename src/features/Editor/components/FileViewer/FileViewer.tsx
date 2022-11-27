@@ -1,7 +1,5 @@
 import Image from '#/components/Image'
 import { useCallback } from 'react'
-import { useEditorContext } from '../../data/context'
-import { useEditorMethod } from '../../data/hooks'
 import { useFileAtom } from '../../store'
 import { Repo } from '../../types'
 import { ActionButton } from '../Buttons/ActionButton'
@@ -14,12 +12,6 @@ type FileEditorProps = {
 export function FileViewer({ repo }: FileEditorProps) {
   const { file, removeFile, restoreFile, resetFile, updateFileText } =
     useFileAtom()
-
-  const { methods } = useEditorContext()
-
-  const [commitChanges] = useEditorMethod({
-    query: methods.createCommit
-  })
 
   const onInitializePane: MonacoOnInitializePane = useCallback(
     (monacoEditorRef, editorRef, model) => {
@@ -37,25 +29,6 @@ export function FileViewer({ repo }: FileEditorProps) {
   const onReset = useCallback(() => {
     resetFile()
   }, [resetFile])
-
-  // const onCommit = useCallback(() => {
-  //   if (!file) {
-  //     return
-  //   }
-
-  //   const code = ''
-
-  //   commitChanges({
-  //     fileChanges: {
-  //       additions: [
-  //         {
-  //           path: file.path,
-  //           contents: Buffer.from(code).toString('base64')
-  //         }
-  //       ]
-  //     }
-  //   })
-  // }, [commitChanges, file])
 
   const onDelete = useCallback(() => {
     removeFile()
