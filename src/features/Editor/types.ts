@@ -1,3 +1,4 @@
+import { QueryFunctionContext } from '@tanstack/react-query'
 import { SetRequired } from 'type-fest'
 
 type File = {
@@ -92,11 +93,11 @@ export type CreateCommitMessage = {
 }
 
 export type CreateCommitFileChanges = {
-  additions?: {
+  additions: {
     path: string
     contents: string
   }[]
-  deletions?: {
+  deletions: {
     path: string
   }[]
 }
@@ -108,4 +109,12 @@ export type CreateCommit = {
 
 export type CreateCommitResponse = {
   clientMutationId: string
+}
+
+export type EditorMethodContext = QueryFunctionContext<string[]>
+
+export type EditorContextMethods = {
+  getFileTree: (context: EditorMethodContext) => Promise<NodeFile>
+  getFile: (context: EditorMethodContext) => Promise<NodeFile>
+  createCommit: (variables: CreateCommit) => Promise<CreateCommitResponse>
 }

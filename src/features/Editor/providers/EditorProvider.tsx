@@ -1,40 +1,40 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { PropsWithChildren, useMemo } from 'react'
-import { Repo } from '../types'
-import { EditorContext } from './context'
-import { getMethods as getGithubMethods } from './providers/github'
-import { EditorContextMethods, ProviderProps } from './types'
+import { EditorContext } from '../contexts/EditorContext'
+import { EditorContextMethods, Repo } from '../types'
+import { getMethods as getGithubMethods } from './services/github'
 
-type GetQueriesOptions = {
+export type Service = 'github'
+
+export type GetMethodsOptions = {
   accessToken: string
   repo: Repo
 }
 
 function getMethods(
-  provider: 'github',
-  options: GetQueriesOptions
+  service: Service,
+  options: GetMethodsOptions
 ): EditorContextMethods {
-  if (provider === 'github') {
+  if (service === 'github') {
     return getGithubMethods(options)
   }
 
-  throw new Error('unknown provider')
+  throw new Error('unknown service')
 }
 
-export type EditorDataProviderProps = PropsWithChildren<ProviderProps> & {
-  accessToken: string
-  repo: Repo
-}
+export type EditorDataProviderProps = PropsWithChildren<
+  { service: Service } & GetMethodsOptions
+>
 
 export function EditorProvider({
-  provider,
+  service,
   children,
   accessToken,
   repo
 }: EditorDataProviderProps) {
   const methods = useMemo(
-    () => getMethods(provider, { accessToken, repo }),
-    [accessToken, provider, repo]
+    () => getMethods(service, { accessToken, repo }),
+    [accessToken, service, repo]
   )
 
   const queryClient = new QueryClient()

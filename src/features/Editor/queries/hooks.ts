@@ -1,29 +1,19 @@
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
-import { useEditorContext } from './context'
+import { useEditorContext } from '../contexts/EditorContext'
 
 export function useFileTreeQuery() {
   const { methods } = useEditorContext()
-  return useQuery({
-    queryKey: ['fileTree'],
-    queryFn: methods.getFileTree
-  })
-}
+  const queryClient = useQueryClient()
 
-export function useFileTreeManualQuery() {
-  const { methods } = useEditorContext()
+  const executeQuery = useCallback(async () => {
+    return queryClient.fetchQuery({
+      queryKey: ['fileTree'],
+      queryFn: methods.getFileTree
+    })
+  }, [methods.getFileTree, queryClient])
 
-  const query = useQuery({
-    queryKey: ['fileTree'],
-    queryFn: methods.getFileTree,
-    enabled: false
-  })
-
-  const fetchQuery = useCallback(async () => {
-    query.refetch()
-  }, [query])
-
-  return [fetchQuery, query] as const
+  return [executeQuery] as const
 }
 
 export type FileQueryHookProps = {

@@ -1,6 +1,6 @@
 import Image from '#/components/Image'
 import { useCallback } from 'react'
-import { useFileAtom } from '../../store'
+import { useFileAtom } from '../../files/hooks'
 import { Repo } from '../../types'
 import { ActionButton } from '../Buttons/ActionButton'
 import ScriptEditor, { MonacoOnInitializePane } from './ScriptEditor'

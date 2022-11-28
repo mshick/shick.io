@@ -2,7 +2,7 @@ import classNames from '#/utils/classNames'
 import { DocumentTextIcon, PhotoIcon } from '@heroicons/react/24/outline'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { MouseEventHandler, useCallback } from 'react'
-import { getFileAtom, _selectFileAtom } from '../../../store'
+import { getFileAtom, _selectFileAtom } from '../../../files/store'
 import { NodeFile } from '../../../types'
 
 export type FileProps = {

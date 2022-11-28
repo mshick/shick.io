@@ -2,7 +2,7 @@ import { Provider } from 'jotai'
 import Split from 'react-split'
 import { FileTree } from './components/FileTree/FileTree'
 import { FileViewer } from './components/FileViewer/FileViewer'
-import { EditorProvider } from './data/provider'
+import { EditorProvider } from './providers/EditorProvider'
 import { Repo } from './types'
 
 export type EditorProp = {
@@ -13,7 +13,7 @@ export type EditorProp = {
 export function Editor({ accessToken, repo }: EditorProp) {
   return (
     <Provider>
-      <EditorProvider provider="github" repo={repo} accessToken={accessToken}>
+      <EditorProvider service="github" repo={repo} accessToken={accessToken}>
         <Split
           sizes={[25, 75]}
           minSize={300}

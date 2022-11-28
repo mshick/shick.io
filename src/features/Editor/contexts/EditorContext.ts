@@ -1,7 +1,5 @@
 import { createContext, useContext } from 'react'
-import { EditorContextMethods } from './types'
-
-export type EditorQuery = (options?: any) => Promise<any>
+import { EditorContextMethods } from '../types'
 
 export type EditorContextType = {
   methods: EditorContextMethods
