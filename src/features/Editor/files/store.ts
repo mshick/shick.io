@@ -1,5 +1,5 @@
 import { atom, WritableAtom } from 'jotai'
-import { atomFamily, atomWithStorage } from 'jotai/utils'
+import { atomWithReset, atomWithStorage, RESET } from 'jotai/utils'
 import {
   CreateCommitFileChanges,
   NodeFile,
@@ -10,20 +10,22 @@ import {
   NodeFileUpdateText
 } from '../types'
 
-export const fileAtomFamily = atomFamily<
-  NodeFile | null,
-  WritableAtom<NodeFile, NodeFile | null, void>
->(
-  (file) => (file?.path ? atomWithStorage(file.path, file) : atom(null)),
-  (a, b) => a?.path === b?.path
-)
+const fileAtomMap = new Map<string, WritableAtom<NodeFile, NodeFile, void>>()
+
+// export const fileAtomFamily = atomFamily<
+//   NodeFile | null,
+//   WritableAtom<NodeFile | null, NodeFile | null, void>
+// >(
+//   (file) => (file?.path ? atomWithStorage(file.path, file) : atom(null)),
+//   (a, b) => a?.path === b?.path
+// )
 
 export function getFileAtom(file: NodeFileInput) {
   // if (!filePaths.has(file.path)) {
   //   return atom(null) as WritableAtom<null, NodeFile | null, void>
   // }
 
-  return fileAtomFamily(file as NodeFile)
+  return fileAtomMap.get(file.path) ?? atom(null)
 }
 
 // export function removeFileAtomFamily(file: NodeFileInput) {
@@ -59,36 +61,44 @@ const filePathsAtom = atomWithStorage<string[]>('filePaths', [])
 
 const _fileTreeAtom = atom<NodeFile | null>(null)
 
-export const fileTreeAtom = atom<NodeFile | null, NodeFile>(
+export const fileTreeAtom = atom(
   (get) => get(_fileTreeAtom),
-  (get, set, file) => {
-    const filePaths = get(filePathsAtom)
+  (get, set, file: NodeFile | typeof RESET) => {
+    if (file === RESET) {
+      // const filePaths = get(filePathsAtom)
 
-    for (const path of filePaths) {
-      fileAtomFamily.remove({ path } as NodeFile)
+      for (const [path] of fileAtomMap) {
+        const fileAtom = atomWithStorage(path, RESET)
+        set(fileAtom, RESET)
+        fileAtomMap.delete(path)
+        // fileAtomFamily.remove({ path } as NodeFile)
+      }
+
+      // set(filePathsAtom, [])
+      set(_fileTreeAtom, null)
+
+      return
     }
 
-    const newFilePaths: string[] = []
+    // const newFilePaths: string[] = []
 
-    const addFile = (file: NodeFile) => {
-      newFilePaths.push(file.path)
-      return fileAtomFamily(file)
-    }
-
-    const loadFileAtoms = (file: NodeFile) => {
-      addFile(file)
+    const addFiles = (file: NodeFile) => {
+      // newFilePaths.push(file.path)
+      fileAtomMap.set(file.path, atomWithStorage(file.path, file))
+      // fileAtomFamily(file)
       if (file.children) {
-        file.children.forEach(loadFileAtoms)
+        file.children.forEach(addFiles)
       }
     }
 
-    loadFileAtoms(file)
-    set(filePathsAtom, newFilePaths)
+    addFiles(file)
+
+    // set(filePathsAtom, newFilePaths)
     set(_fileTreeAtom, file)
   }
 )
 
-export const currentPathAtom = atom<string | null>(null)
+export const currentPathAtom = atomWithReset<string | null>(null)
 
 const fileChangesDefaults = {
   additions: [],

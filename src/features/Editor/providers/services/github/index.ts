@@ -1,4 +1,4 @@
-import { getParentPath } from '#/features/Editor/utils/path'
+import { getPathFilename, getPathParent } from '#/features/Editor/utils/path'
 import { QueryFunctionContext } from '@tanstack/react-query'
 import { GraphQLClient } from 'graphql-request'
 import { CreateCommit, CreateCommitResponse, Repo } from '../../../types'
@@ -83,7 +83,10 @@ export function getMethods(options: GetQueriesOptions) {
         oid
       })
 
-      return toNodeFile(getParentPath(path))(data.repository)
+      const parent = getPathParent(path)
+      const name = getPathFilename(path)
+
+      return toNodeFile(parent)({ ...data.repository, name })
     },
     createCommit: async (
       variables: CreateCommit

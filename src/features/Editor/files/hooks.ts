@@ -1,4 +1,5 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useResetAtom } from 'jotai/utils'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import {
   useCreateCommitMutation,
@@ -111,36 +112,35 @@ export function useFileAtom() {
 
 export function useFileTree() {
   const [executeQuery] = useFileTreeQuery()
-  const setCurrentPath = useSetAtom(currentPathAtom)
+  const resetCurrentPath = useResetAtom(currentPathAtom)
+  const resetFileTree = useResetAtom(fileTreeAtom)
   const [data, setData] = useAtom(fileTreeAtom)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<unknown | null>(null)
 
-  const getFileTree = useCallback(async () => {
-    console.log('getFileTree')
-    if (!isLoading) {
-      console.log('getFileTree not loading')
+  const getFileTree = useCallback(
+    async (options?: { shouldReset?: boolean }) => {
+      if (!isLoading) {
+        setIsLoading(true)
+        setError(null)
 
-      setIsLoading(true)
-      setError(null)
-      setCurrentPath(null)
+        if (options?.shouldReset) {
+          resetCurrentPath()
+          resetFileTree()
+        }
 
-      try {
-        const data = await executeQuery()
-
-        // resetFileAtoms()
-
-        // loadFileAtoms(data)
-        console.log('before setData')
-
-        setData(data)
-      } catch (error) {
-        setError(error)
-      } finally {
-        setIsLoading(false)
+        try {
+          const data = await executeQuery()
+          setData(data)
+        } catch (error) {
+          setError(error)
+        } finally {
+          setIsLoading(false)
+        }
       }
-    }
-  }, [isLoading, setCurrentPath, executeQuery, setData])
+    },
+    [isLoading, resetCurrentPath, resetFileTree, executeQuery, setData]
+  )
 
   return [getFileTree, { error, data, isLoading }] as const
 }
@@ -161,7 +161,7 @@ export function useFileTreeActions() {
   )
 
   const resetTree = useCallback(() => {
-    getFileTree()
+    getFileTree({ shouldReset: true })
   }, [getFileTree])
 
   const hasChanges = useMemo(() => {

@@ -24,7 +24,7 @@ export type ScriptEditorProps = {
   // code: string
   // setCode: Dispatch<SetStateAction<string>>
   editorOptions?: MonacoEditorOptions
-  onInitializePane: MonacoOnInitializePane
+  onInitializePane?: MonacoOnInitializePane
 }
 
 const ScriptEditor = (props: ScriptEditorProps): JSX.Element => {
@@ -46,7 +46,15 @@ const ScriptEditor = (props: ScriptEditorProps): JSX.Element => {
     if (monacoEditorRef?.current) {
       const model: any = monacoEditorRef.current.getModels()
       if (model?.length > 0) {
-        onInitializePane(monacoEditorRef, editorRef, model)
+        editorRef.current.setScrollTop(1)
+        editorRef.current.setPosition({
+          lineNumber: 2,
+          column: 0
+        })
+        editorRef.current.focus()
+        monacoEditorRef.current.setModelMarkers(model[0], 'owner', null)
+
+        onInitializePane?.(monacoEditorRef, editorRef, model)
       }
     }
   }, [onInitializePane])

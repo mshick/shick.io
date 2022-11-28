@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { useFileAtom } from '../../files/hooks'
 import { Repo } from '../../types'
 import { ActionButton } from '../Buttons/ActionButton'
-import ScriptEditor, { MonacoOnInitializePane } from './ScriptEditor'
+import ScriptEditor from './ScriptEditor'
 
 type FileEditorProps = {
   repo: Repo
@@ -12,19 +12,6 @@ type FileEditorProps = {
 export function FileViewer({ repo }: FileEditorProps) {
   const { file, removeFile, restoreFile, resetFile, updateFileText } =
     useFileAtom()
-
-  const onInitializePane: MonacoOnInitializePane = useCallback(
-    (monacoEditorRef, editorRef, model) => {
-      editorRef.current.setScrollTop(1)
-      editorRef.current.setPosition({
-        lineNumber: 2,
-        column: 0
-      })
-      editorRef.current.focus()
-      monacoEditorRef.current.setModelMarkers(model[0], 'owner', null)
-    },
-    []
-  )
 
   const onReset = useCallback(() => {
     resetFile()
@@ -62,7 +49,6 @@ export function FileViewer({ repo }: FileEditorProps) {
         language={file.language}
         onChange={onTextChange}
         initialValue={file.text}
-        onInitializePane={onInitializePane}
       />
     )
   } else {
