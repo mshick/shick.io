@@ -22,7 +22,7 @@ import { remarkExcerpt } from '../lib/remark-excerpt'
 import { getContentPath } from './content'
 import { getGitFileInfo } from './git'
 import { remarkTruncate } from './remark-truncate'
-import { GitFileInfo, isImageFieldData, Tag } from './types'
+import { GitFileInfo, Tag, isImageFieldData } from './types'
 
 export async function convertExcerpt(excerpt: string) {
   const html = await remarkExcerpt(excerpt)
@@ -63,6 +63,17 @@ export async function getUpdatedBy(doc: LocalDocument): Promise<string> {
     )
   }
   return gitCache[doc._id].latestAuthorName
+}
+
+export async function getUpdatedByVelite(filePath: string): Promise<string> {
+  console.log({ filePath })
+  if (!gitCache[filePath]) {
+    gitCache[filePath] = await getGitFileInfo(
+      baseDir,
+      path.join(contentDirPath, filePath)
+    )
+  }
+  return gitCache[filePath].latestAuthorName
 }
 
 export async function getUpdatedByEmail(doc: LocalDocument): Promise<string> {

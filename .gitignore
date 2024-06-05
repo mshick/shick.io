@@ -37,6 +37,12 @@ yarn-error.log*
 # contentlayer
 .contentlayer
 
+# content-collections
+.content-collections
+
+# velite
+.velite
+
 # typescript
 *.tsbuildinfo
 
