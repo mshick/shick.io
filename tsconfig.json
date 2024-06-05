@@ -27,8 +27,8 @@
     ],    
     "paths": {
       "#/*": ["./src/*"],
+      "#/content": ["./.velite"],
       "contentlayer/generated": ["./.contentlayer/generated"],
-      "content-collections": ["./.content-collections/generated"],
       "env": ["./env"]
     }
   },

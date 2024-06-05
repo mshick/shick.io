@@ -1,11 +1,7 @@
 ---
-title: Hello world
-slug: hello-world
-date: 2024-06-05 13:22
+title: Not Comitted
+slug: not-comitted
 cover: cover.jpg
-author: BLAH
-tags:
-  - needs slug conversion
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse

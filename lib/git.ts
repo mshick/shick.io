@@ -5,14 +5,14 @@ import { GitFileInfo } from './types'
 export async function getGitFileInfo(
   repoFolder: string,
   filePath: string
-): Promise<GitFileInfo> {
+): Promise<GitFileInfo | undefined> {
   const gitRepo = git(repoFolder)
 
   const logOptions = {
     file: filePath,
     n: 1,
     format: {
-      date: `%ai`,
+      date: `%aI`,
       authorName: `%an`,
       authorEmail: '%ae'
     }
@@ -21,17 +21,17 @@ export async function getGitFileInfo(
   try {
     const { latest } = await gitRepo.log(logOptions)
 
+    if (!latest) {
+      return
+    }
+
     return {
-      latestAuthorName: latest?.authorName ?? '',
-      latestAuthorEmail: latest?.authorEmail ?? '',
-      latestDate: latest?.date ?? ''
+      latestAuthorName: latest.authorName,
+      latestAuthorEmail: latest.authorEmail,
+      latestDate: latest.date
     }
   } catch (e) {
     logger.debug(e, `${filePath} not found in repo`)
-    return {
-      latestAuthorName: '',
-      latestAuthorEmail: '',
-      latestDate: ''
-    }
+    return
   }
 }

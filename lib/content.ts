@@ -1,6 +1,6 @@
-import path from 'path'
+import { join } from 'node:path'
 import { contentTypePathMap } from '../env'
 
 export function getContentPath(contentType: string, slug: string) {
-  return path.join(contentTypePathMap[contentType] ?? `/${contentType}`, slug)
+  return join(contentTypePathMap[contentType] ?? `/${contentType}`, slug)
 }

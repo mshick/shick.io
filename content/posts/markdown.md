@@ -1,8 +1,5 @@
 ---
 title: Markdown
-slug: markdown
-date: 2021-10-20 13:22
-cover: cover.jpg
 tags:
   - markdown
 ---

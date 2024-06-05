@@ -13,7 +13,7 @@ export type GitConfig = {
 
 export type Tag = {
   name: string
-  path: string
+  permalink: string
   slug: string
 }
 
