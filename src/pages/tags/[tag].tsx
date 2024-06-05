@@ -3,7 +3,7 @@ import { DocumentListItem } from '#/features/Document/DocumentListItem'
 import Layout from '#/layouts/Default'
 import { DocumentTypes } from '#/types/types'
 import { getSingle } from '#/utils/types'
-import { pick } from '@contentlayer/utils'
+import { pick } from '@contentlayer2/utils'
 import { allArticles, allPages } from 'contentlayer/generated'
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 
@@ -26,9 +26,9 @@ export default function TagPage({
   )
 }
 
-export async function getStaticPaths() {
+export function getStaticPaths() {
   const paths = ([...allPages, ...allArticles] as unknown as DocumentTypes[])
-    .filter((doc) => doc.tags && doc.tags.length)
+    .filter((doc) => doc?.tags.length)
     .flatMap((doc) => doc.tags.map((tag) => ({ params: { tag: tag.slug } })))
 
   return {
@@ -37,7 +37,7 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params }: GetStaticPropsContext) {
+export function getStaticProps({ params }: GetStaticPropsContext) {
   const slug = getSingle(params?.tag)
 
   const documents = (
@@ -48,7 +48,7 @@ export async function getStaticProps({ params }: GetStaticPropsContext) {
     )
     .sort(
       (a, b) =>
-        Number(new Date(b['publishedAt'])) - Number(new Date(a['publishedAt']))
+        Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt))
     )
     .filter((doc) => doc.tags?.some((tag) => tag.slug === slug))
 

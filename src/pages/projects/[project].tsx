@@ -27,7 +27,7 @@ export default function ProjectPage({
   )
 }
 
-export async function getStaticPaths() {
+export function getStaticPaths() {
   return {
     paths: allProjects.map((project) => ({
       params: {
@@ -38,12 +38,12 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params }: GetStaticPropsContext) {
+export function getStaticProps({ params }: GetStaticPropsContext) {
   const slug = getSingle(params?.project)
   const project = slug && getArticle(slug, allProjects as unknown as Project[])
 
   return {
-    notFound: !Boolean(project),
+    notFound: !project,
     props: {
       project
     }

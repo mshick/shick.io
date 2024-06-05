@@ -27,7 +27,7 @@ export default function ArticlePage({
   )
 }
 
-export async function getStaticPaths() {
+export function getStaticPaths() {
   return {
     paths: allArticles.map((article) => ({
       params: {
@@ -38,12 +38,12 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params }: GetStaticPropsContext) {
+export function getStaticProps({ params }: GetStaticPropsContext) {
   const slug = getSingle(params?.article)
   const article = slug && getArticle(slug, allArticles as unknown as Article[])
 
   return {
-    notFound: !Boolean(article),
+    notFound: !article,
     props: {
       article
     }

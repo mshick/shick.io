@@ -1,15 +1,11 @@
-import { omit } from '@contentlayer/utils'
-import rehypePresetTufted from '@mshick/tufted/rehype'
-import remarkPresetTufted from '@mshick/tufted/remark'
+import { omit } from '@contentlayer2/utils'
 import {
   ComputedFields,
   defineDocumentType,
   defineNestedType,
   FieldDefs,
   makeSource
-} from 'contentlayer/source-files'
-import remarkGemoji from 'remark-gemoji'
-import remarkMdxImages from 'remark-mdx-images'
+} from 'contentlayer2/source-files'
 import { contentDirPath, publicDir } from './env'
 import {
   copyAssetAndGetUrl,
@@ -196,8 +192,8 @@ export default makeSource({
   contentDirPath: contentDirPath,
   documentTypes: [Config, Article, Page, Projects],
   mdx: {
-    remarkPlugins: [remarkGemoji, remarkPresetTufted(), remarkMdxImages],
-    rehypePlugins: [rehypePresetTufted({ imgSizeDir: contentDirPath })],
+    // remarkPlugins: [remarkGemoji, remarkPresetTufted(), remarkMdxImages],
+    // rehypePlugins: [rehypePresetTufted({ imgSizeDir: contentDirPath })],
     esbuildOptions: (options) => {
       options.platform = 'node'
       options.outdir = publicDir

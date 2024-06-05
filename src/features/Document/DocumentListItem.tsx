@@ -16,7 +16,11 @@ export function DocumentListItem({
   className,
   onClickLink
 }: DocumentListItemProps) {
-  onClickLink = onClickLink ?? (() => {})
+  onClickLink =
+    onClickLink ??
+    (() => {
+      // empty
+    })
 
   return (
     <Link

@@ -2,7 +2,7 @@ import { DocumentList } from '#/features/Document/DocumentList'
 import { DocumentListItem } from '#/features/Document/DocumentListItem'
 import Layout from '#/layouts/Default'
 import { Article } from '#/types/types'
-import { pick } from '@contentlayer/utils'
+import { pick } from '@contentlayer2/utils'
 import { allArticles } from 'contentlayer/generated'
 import { InferGetStaticPropsType } from 'next'
 
@@ -20,14 +20,14 @@ export default function ArticlesPage({
   )
 }
 
-export async function getStaticProps() {
+export function getStaticProps() {
   const articles = (allArticles as unknown as Article[])
     .map((doc) =>
       pick(doc, ['path', 'title', 'excerpt', 'publishedAt', 'tags'])
     )
     .sort(
       (a, b) =>
-        Number(new Date(b['publishedAt'])) - Number(new Date(a['publishedAt']))
+        Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt))
     )
 
   return {

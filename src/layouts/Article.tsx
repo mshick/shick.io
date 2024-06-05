@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react'
 import { LayoutDefault, LayoutDefaultProps } from './Default'
 
-export interface LayoutArticleProps extends LayoutDefaultProps {}
+export type LayoutArticleProps = LayoutDefaultProps
 
 export const LayoutArticle = ({
   seo,

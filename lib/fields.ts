@@ -1,5 +1,5 @@
 import { Image } from 'contentlayer/generated'
-import { LocalDocument } from 'contentlayer/source-files'
+import { LocalDocument } from 'contentlayer2/source-files'
 import { fromZonedTime } from 'date-fns-tz'
 import { get } from 'lodash-es'
 import { createHash } from 'node:crypto'
@@ -88,8 +88,8 @@ export async function getUpdatedAt(doc: LocalDocument): Promise<string> {
   const date = doc.updatedAt
     ? fromZonedTime(doc.updatedAt, timezone)
     : latestDate
-    ? new Date(latestDate)
-    : null
+      ? new Date(latestDate)
+      : null
 
   return date ? date.toISOString() : new Date().toISOString()
 }

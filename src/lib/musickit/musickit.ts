@@ -28,12 +28,7 @@ function getRecentlyPlayedTracks({
   developerToken,
   musicUserToken
 }: RequestContext) {
-  return async ({
-    limit,
-    offset,
-    types,
-    ...params
-  }: GetRecentlyPlayedTracksParams) => {
+  return async ({ limit, offset, types }: GetRecentlyPlayedTracksParams) => {
     const searchParams = new URLSearchParams({
       limit: String(limit ?? 10),
       offset: String(offset ?? 0),
@@ -72,11 +67,7 @@ function getHeavyRotationContent({
   developerToken,
   musicUserToken
 }: RequestContext) {
-  return async ({
-    limit,
-    offset,
-    ...params
-  }: GetHeavyRotationContentParams) => {
+  return async ({ limit, offset }: GetHeavyRotationContentParams) => {
     const searchParams = new URLSearchParams({
       limit: String(limit ?? 10),
       offset: String(offset ?? 0)
@@ -111,11 +102,7 @@ function getRecentlyAddedResources({
   developerToken,
   musicUserToken
 }: RequestContext) {
-  return async ({
-    limit,
-    offset,
-    ...params
-  }: GetRecentlyAddedResourcesParams) => {
+  return async ({ limit, offset }: GetRecentlyAddedResourcesParams) => {
     const searchParams = new URLSearchParams({
       limit: String(limit ?? 10),
       offset: String(offset ?? 0)

@@ -18,7 +18,7 @@ Penny is a fast, efficient, best-practices based e-commerce starter built on
 Next.js with TakeShape and Shopify. It is written in TypeScript, and provides
 an incredible array of features that offer a production-ready devex.
 
-:::figure{.fullwidth}
+:::figure\\\{.fullwidth}
 
 ![Penny logo](./penny-social.png)
 

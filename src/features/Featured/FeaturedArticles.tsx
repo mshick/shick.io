@@ -15,7 +15,7 @@ export function FeaturedArticles({
 }: PropsWithCallableChildren<FeaturedArticlesProps, Document>) {
   return (
     <ul className="flex flex-col m-0 p-0 list-none">
-      {documents.map(({ _id, slug, path, title, excerpt }) => (
+      {documents.map(({ _id, path, title, excerpt }) => (
         <li key={_id} className="mb-3">
           <Link href={path} className="no-underline">
             <div>

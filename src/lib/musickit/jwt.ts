@@ -30,12 +30,7 @@ export type DeveloperKeyCredentials = {
 export async function createDeveloperKey(
   credentials: DeveloperKeyCredentials
 ): Promise<string> {
-  if (
-    !credentials ||
-    !credentials.privateKey ||
-    !credentials.teamId ||
-    !credentials.keyId
-  ) {
+  if (!credentials?.privateKey || !credentials?.teamId || !credentials?.keyId) {
     throw new Error('Invalid credentials')
   }
 

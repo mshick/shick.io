@@ -3,10 +3,10 @@ import { HomepageList } from '#/features/Homepage/HomepageList'
 import Layout from '#/layouts/Page'
 import { components } from '#/mdx'
 import { Article, Page, Project } from '#/types/types'
-import { pick } from '@contentlayer/utils'
+import { pick } from '@contentlayer2/utils'
 import { allArticles, allPages, allProjects } from 'contentlayer/generated'
 import { InferGetStaticPropsType } from 'next'
-import { useMDXComponent } from 'next-contentlayer/hooks'
+import { useMDXComponent } from 'next-contentlayer2/hooks'
 
 export default function IndexPage({
   page,
@@ -31,7 +31,7 @@ export default function IndexPage({
   )
 }
 
-export async function getStaticProps() {
+export function getStaticProps() {
   const page = (allPages as unknown as Page[]).find(
     (page) => page.slug === 'index'
   )
@@ -50,7 +50,7 @@ export async function getStaticProps() {
     )
     .sort(
       (a, b) =>
-        Number(new Date(b['publishedAt'])) - Number(new Date(a['publishedAt']))
+        Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt))
     )
     .filter((doc) => doc.featured)
 
@@ -68,7 +68,7 @@ export async function getStaticProps() {
     )
     .sort(
       (a, b) =>
-        Number(new Date(b['publishedAt'])) - Number(new Date(a['publishedAt']))
+        Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt))
     )
     .filter((doc) => doc.featured)
 

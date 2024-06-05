@@ -2,9 +2,9 @@ import { Link } from '#/components/Link'
 import { TagEntry, TagList } from '#/features/Tag/TagList'
 import Layout from '#/layouts/Default'
 import { DocumentTypes } from '#/types/types'
-import { pick } from '@contentlayer/utils'
+import { pick } from '@contentlayer2/utils'
 import { allArticles, allPages } from 'contentlayer/generated'
-import { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
+import { InferGetStaticPropsType } from 'next'
 
 export default function TagsPage({
   tags
@@ -25,7 +25,7 @@ export default function TagsPage({
   )
 }
 
-export async function getStaticProps({}: GetStaticPropsContext) {
+export function getStaticProps() {
   const tagsByTags = (
     [...allPages, ...allArticles] as unknown as DocumentTypes[]
   )
@@ -34,11 +34,9 @@ export async function getStaticProps({}: GetStaticPropsContext) {
     )
     .sort(
       (a, b) =>
-        Number(new Date(b['publishedAt'])) - Number(new Date(a['publishedAt']))
+        Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt))
     )
-    .reduce<{
-      [k: string]: TagEntry
-    }>((prev, doc) => {
+    .reduce<Record<string, TagEntry>>((prev, doc) => {
       if (!doc.tags) {
         return prev
       }

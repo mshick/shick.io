@@ -55,12 +55,12 @@ export function useMiniSearch({ searchOptions }: UseMiniSearchProps = {}): [
     }
 
     if (!isReady) {
-      loadSearchIndex()
+      void loadSearchIndex()
     }
   }, [isReady, searchOptions])
 
   useEffect(() => {
-    async function search() {
+    function search() {
       setIsLoading(true)
       if (minisearch.current) {
         const results = minisearch.current.search(query) as MiniSearchResult[]

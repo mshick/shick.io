@@ -26,7 +26,7 @@ Howdie **there**
 >
 > ::footer[[Edward Tufte, forum post, 'Book design: advice and examples' thread](http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB)]
 
-::youtube[Video of a cat in a box]{#5qap5aO4i9A}
+::youtube[Video of a cat in a box]\\\{#5qap5aO4i9A}
 
 Foo bar baz.
 

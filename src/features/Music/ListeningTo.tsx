@@ -77,14 +77,14 @@ function ListeningToTrack({
         setElapsed(Math.floor(audio.current.currentTime))
       })
 
-      audio.current.play()
+      void audio.current.play()
       return
     }
 
     if (audio.current?.duration > 0 && !audio.current.paused) {
       audio.current.pause()
     } else {
-      audio.current.play()
+      void audio.current.play()
     }
   }, [audio, onPlay, trackUrl])
 

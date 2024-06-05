@@ -2,8 +2,7 @@ import { Article } from '#/types/types'
 
 export function getArticle(slug: string, articles: Article[]) {
   const orderedArticles = articles.sort(
-    (a, b) =>
-      Number(new Date(b['publishedAt'])) - Number(new Date(a['publishedAt']))
+    (a, b) => Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt))
   )
 
   const articleIndex = orderedArticles.findIndex(

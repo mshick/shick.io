@@ -21,7 +21,7 @@ export default function PagePage({
   )
 }
 
-export async function getStaticPaths() {
+export function getStaticPaths() {
   return {
     paths: getPagePageParams(
       allPages.filter((page) => page.slug !== 'index') as unknown as Page[]
@@ -30,14 +30,14 @@ export async function getStaticPaths() {
   }
 }
 
-export async function getStaticProps({ params }: GetStaticPropsContext) {
+export function getStaticProps({ params }: GetStaticPropsContext) {
   const slug = getSingle(params?.page)
   const page = (allPages as unknown as Page[]).find(
     (page) => page.slug === slug
   )
 
   return {
-    notFound: !Boolean(page),
+    notFound: !page,
     props: {
       page: page ?? null
     }
