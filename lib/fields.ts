@@ -1,6 +1,6 @@
 import { Image } from 'contentlayer/generated'
 import { LocalDocument } from 'contentlayer/source-files'
-import dateFns from 'date-fns-tz'
+import { fromZonedTime } from 'date-fns-tz'
 import { get } from 'lodash-es'
 import { createHash } from 'node:crypto'
 import { copyFile, readFile } from 'node:fs/promises'
@@ -23,8 +23,6 @@ import { getContentPath } from './content'
 import { getGitFileInfo } from './git'
 import { remarkTruncate } from './remark-truncate'
 import { GitFileInfo, isImageFieldData, Tag } from './types'
-
-const { zonedTimeToUtc } = dateFns
 
 export async function convertExcerpt(excerpt: string) {
   const html = await remarkExcerpt(excerpt)
@@ -88,7 +86,7 @@ export async function getUpdatedAt(doc: LocalDocument): Promise<string> {
   const { latestDate } = gitCache[doc._id]
 
   const date = doc.updatedAt
-    ? zonedTimeToUtc(doc.updatedAt, timezone)
+    ? fromZonedTime(doc.updatedAt, timezone)
     : latestDate
     ? new Date(latestDate)
     : null
@@ -98,7 +96,7 @@ export async function getUpdatedAt(doc: LocalDocument): Promise<string> {
 
 export function getPublishedAt(doc: LocalDocument): string {
   return doc.publishedAt
-    ? zonedTimeToUtc(doc.publishedAt, timezone).toISOString()
+    ? fromZonedTime(doc.publishedAt, timezone).toISOString()
     : ''
 }
 

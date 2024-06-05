@@ -20,20 +20,11 @@
       ".json"
     ]
   },
-  "eslint.onIgnoredFiles": "warn",
-  "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true,
-    "source.organizeImports": true
+    "source.fixAll.eslint": "explicit",
+    "source.organizeImports": "explicit"
   },
-  "editor.quickSuggestions": {
-    "strings": true
-  },  
-  "editor.detectIndentation": false,
-  "editor.tabSize": 2,
-  "editor.insertSpaces": true,
-  "editor.trimAutoWhitespace": true,
-  "files.insertFinalNewline": true,
+  "eslint.onIgnoredFiles": "warn",
   "[markdown]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
@@ -54,6 +45,5 @@
   },
   "[json]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  },
-  "css.lint.unknownAtRules": "ignore"
+  }
 }
