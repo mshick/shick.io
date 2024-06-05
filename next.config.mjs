@@ -178,6 +178,10 @@ const nextConfig = {
   }
 }
 
+/**
+ * @param {Array<(config: import('next').NextConfig) => any>} plugins
+ * @param {import('next').NextConfig} config
+ */
 const withPlugins = (plugins, config) => () =>
   plugins.reduce((acc, plugin) => plugin(acc), {
     ...config

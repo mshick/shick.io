@@ -14,7 +14,7 @@ async function generate() {
       title: post.title,
       url: `https://shick.io/articles/${post.slug}`,
       date: post.publishedAt,
-      description: post.summary
+      description: post.excerpt ?? ''
     })
   })
 

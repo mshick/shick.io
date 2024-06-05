@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import fetch from 'node-fetch'
 import parser from 'yargs-parser'
 
 const defaultEnvVar = 'MUSICKIT_MUSIC_USER_TOKEN'
@@ -13,6 +12,9 @@ const argv = parser(process.argv.slice(2), {
   }
 })
 
+/**
+ * @param {{bearerToken: string; baseUrl: string}} params
+ */
 function getMusicUserToken({ bearerToken, baseUrl }) {
   return async () => {
     const url = new URL('/api/music/renew-token/', baseUrl)
@@ -27,7 +29,13 @@ function getMusicUserToken({ bearerToken, baseUrl }) {
   }
 }
 
+/**
+ * @param {{bearerToken: string; baseUrl: string}} params
+ */
 function getEnvVarByKey({ bearerToken, baseUrl }) {
+  /**
+   * @param {{key: string}} params
+   */
   return async ({ key }) => {
     const url = new URL('/v9/projects/shick-io/env?decrypt=true', baseUrl)
     const response = await fetch(url, {
@@ -36,13 +44,22 @@ function getEnvVarByKey({ bearerToken, baseUrl }) {
       }
     })
 
+    /**
+     * @type {{envs: Array<{id: string; key: string; value: string}>}}
+     */
     const result = await response.json()
 
     return result.envs.find((envVar) => envVar.key === key)
   }
 }
 
+/**
+ * @param {{bearerToken: string; baseUrl: string}} params
+ */
 function updateEnvVar({ bearerToken, baseUrl }) {
+  /**
+   * @param {{id: string; value: string}} params
+   */
   return async ({ id, value }) => {
     const url = new URL(`/v9/projects/shick-io/env/${id}`, baseUrl)
     const response = await fetch(url, {
@@ -59,7 +76,13 @@ function updateEnvVar({ bearerToken, baseUrl }) {
   }
 }
 
+/**
+ * @param {{bearerToken: string; baseUrl: string}} params
+ */
 function getLatestDeployment({ bearerToken, baseUrl }) {
+  /**
+   * @param {{target: string}} params
+   */
   return async ({ target }) => {
     const url = new URL(`/v6/deployments?target=${target}&limit=1`, baseUrl)
     const response = await fetch(url, {
@@ -73,7 +96,14 @@ function getLatestDeployment({ bearerToken, baseUrl }) {
   }
 }
 
+/**
+ * @param {{bearerToken: string; baseUrl: string}} params
+ */
 function reploy({ bearerToken, baseUrl }) {
+  /**
+   * @param {{deployment: {name: string; meta: {githubOrg: string; githubRepo: string; githubCommitRef: string; githubCommitSha: string}}; target: string}} params
+   * @returns {Promise<any>}
+   */
   return async ({ deployment, target }) => {
     const url = new URL(`/v13/deployments?forceNew=1&withCache=1`, baseUrl)
 
@@ -102,6 +132,9 @@ function reploy({ bearerToken, baseUrl }) {
   }
 }
 
+/**
+ * @param {{siteToken: string; siteUrl: string; vercelToken: string; vercelUrl: string}} params
+ */
 function getRequests({ siteToken, siteUrl, vercelToken, vercelUrl }) {
   return {
     getMusicUserToken: getMusicUserToken({
@@ -156,6 +189,11 @@ async function main() {
   // console.log({ musicUserToken })
 
   const envVar = await requests.getEnvVarByKey({ key: envVarKey })
+
+  if (!envVar) {
+    console.log('No envVar found')
+    process.exit(0)
+  }
 
   if (envVar.value === musicUserToken) {
     console.log('Token has not changed, renewal halted')
