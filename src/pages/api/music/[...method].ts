@@ -9,7 +9,7 @@ const musickitMusicUserToken = process.env.MUSICKIT_MUSIC_USER_TOKEN
 const apiSecret = process.env.API_SECRET
 
 export const config = {
-  runtime: 'experimental-edge'
+  runtime: 'edge'
 }
 
 export default async function handler(req: NextRequest) {

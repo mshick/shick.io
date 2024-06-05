@@ -1,7 +1,11 @@
-const { fontFamily } = require('tailwindcss/defaultTheme')
-const { typography } = require('@mshick/tufted/tailwind')
+import { typography as tuftedTypography } from '@mshick/tufted/tailwind'
+import aspectRatio from '@tailwindcss/aspect-ratio'
+import forms from '@tailwindcss/forms'
+import typography from '@tailwindcss/typography'
+import type { Config } from 'tailwindcss'
+import { fontFamily } from 'tailwindcss/defaultTheme'
 
-module.exports = {
+export default {
   content: ['./src/**/*.{ts,tsx}'],
   safelist: ['aspect-video'],
   darkMode: 'class',
@@ -43,11 +47,11 @@ module.exports = {
         sans: ['Bitstream Vera Sans Mono', ...fontFamily.sans],
         mono: ['Bitstream Vera Sans Mono', ...fontFamily.mono]
       },
-      typography
+      tuftedTypography
     }
   },
   variants: {
     typography: ['dark']
   },
-  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')]
-}
+  plugins: [forms, typography, aspectRatio]
+} satisfies Config

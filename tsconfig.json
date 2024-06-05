@@ -1,27 +1,51 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "target": "ES2016",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "target": "esnext",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
+    "checkJs": true,
     "skipLibCheck": true,
-    "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noEmit": true,
     "incremental": true,
     "esModuleInterop": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
+    "strict": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],    
     "paths": {
       "#/*": ["./src/*"],
       "contentlayer/generated": ["./.contentlayer/generated"],
       "env": ["./env"]
-    },
-    "pretty": true
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".contentlayer/generated", "env"],
-  "exclude": ["node_modules"]
+ "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.mts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.mjs",
+    ".next/types/**/*.ts",
+    "tailwind.config.ts",
+    ".contentlayer/generated", 
+    "env"
+  ],
+  "exclude": [
+    "node_modules",
+    ".github",
+    "public"
+  ]
 }
