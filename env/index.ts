@@ -19,7 +19,7 @@ export const timezone = process.env.NEXT_PUBLIC_TIMEZONE ?? 'America/New_York'
 export const baseDir = process.cwd()
 export const publicDirPath = 'public'
 export const publicDir = `${baseDir}/${publicDirPath}`
-export const contentDirPath = process.env.NEXT_PUBLIC_CONTENT_DIR ?? 'data'
+export const contentDirPath = process.env.NEXT_PUBLIC_CONTENT_DIR ?? 'content'
 export const contentDir = `${baseDir}/${contentDirPath}`
 
 export const editUrlPattern = process.env.NEXT_PUBLIC_EDIT_URL_PATTERN

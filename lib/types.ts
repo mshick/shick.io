@@ -1,4 +1,4 @@
-import { ImageFieldData } from 'contentlayer/core'
+import { ImageFieldData } from 'contentlayer2/core'
 
 export type GitFileInfo = {
   latestAuthorName: string

@@ -15,7 +15,6 @@ export const Link = ({
   }
 
   return (
-    // @ts-expect-error Impossible to line up these types
     <NextLink href={href} {...props}>
       {children}
     </NextLink>

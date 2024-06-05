@@ -4,24 +4,22 @@ import { withContentlayer } from 'next-contentlayer2'
 const isBuild = process.argv.includes('build')
 const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN
 
+/**
+ * Add your own CSP here...
+ */
 // https://securityheaders.com
 const ContentSecurityPolicy = `
-  default-src 'self';
-  script-src 'self' 'unsafe-eval' 'unsafe-inline' cdn.jsdelivr.net;
-  child-src *.google.com *.youtube.com;
-  style-src 'self' 'unsafe-inline' *.googleapis.com;
-  img-src * blob: data:;
-  media-src *;
-  connect-src *;
-  font-src 'self'
+  default-src * 'unsafe-inline' 'unsafe-eval' data:;
+  script-src * 'unsafe-inline' 'unsafe-eval' data:;
+  worker-src * blob:;
 `
 
 const securityHeaders = [
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
-  // {
-  //   key: 'Content-Security-Policy',
-  //   value: ContentSecurityPolicy.replace(/\n/g, '')
-  // },
+  {
+    key: 'Content-Security-Policy',
+    value: ContentSecurityPolicy.replace(/\n/g, '')
+  },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
   {
     key: 'Referrer-Policy',
@@ -59,9 +57,6 @@ const securityHeaders = [
 const nextConfig = {
   swcMinify: true,
   reactStrictMode: true,
-  images: {
-    domains: ['github.com', 'edwardtufte.github.io']
-  },
   async headers() {
     return [
       {
@@ -139,7 +134,7 @@ const nextConfig = {
       }
     ]
   },
-  webpack(config, options) {
+  webpack(config) {
     // Contentlayer generates many warnings:
     // Build dependencies behind this expression are ignored and might cause incorrect cache invalidation
     config.infrastructureLogging = {
@@ -165,14 +160,12 @@ const nextConfig = {
     minimumCacheTTL: 60,
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
-    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384]
-  },
-  images: {
-    minimumCacheTTL: 60,
-    formats: ['image/avif', 'image/webp'],
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'edwardtufte.github.io'
+      },
       {
         protocol: 'https',
         hostname: '**.github.io'
