@@ -1,0 +1,73 @@
+locale: en-US
+siteName: Michael Shick
+siteDescription: My personal site.
+showListeningTo: true
+repoUrl: https://github.com/mshick/shick.io
+seo:   
+  additionalLinkTags:
+    - rel: icon
+      type: image/x-icon
+      href: /favicon.ico
+    - rel: icon
+      type: image/png
+      href: /favicon-16x16.png
+      sizes: 16x16
+    - rel: icon
+      type: image/png
+      href: /favicon-32x32.png
+      sizes: 32x32
+    - rel: icon
+      type: image/png
+      href: /favicon-192x192.png
+      sizes: 192x192
+    - rel: icon
+      type: image/png
+      href: /favicon-256x256.png
+      sizes: 256x256
+    - rel: apple-touch-icon
+      type: image/png
+      href: /apple-touch-icon.png
+      sizes: 180x180
+    - rel: manifest
+      href: /manifest.json
+    - rel: preload
+      href: /fonts/bitstream-vera-sans-mono-regular.woff2
+      as: font
+      type: font/woff2
+      crossOrigin: anonymous
+    - rel: preload
+      href: /fonts/bitstream-vera-sans-mono-bold.woff2
+      as: font
+      type: font/woff2
+      crossOrigin: anonymous
+    - rel: preload
+      href: /fonts/bitstream-vera-sans-mono-italic.woff2
+      as: font
+      type: font/woff2
+      crossOrigin: anonymous
+    - rel: preload
+      href: /fonts/bitstream-vera-sans-mono-bold-italic.woff2
+      as: font
+      type: font/woff2
+      crossOrigin: anonymous
+  openGraph:
+    type: website
+    locale: en_US
+    site_name: Michael Shick
+  twitter:
+    handle: '@michaelshick'
+    site: '@michaelshick'
+    cardType: summary_large_image
+navigation:
+  - label: home
+    path: /
+    current: false
+  - label: articles
+    path: /articles
+    current: false
+  - label: projects
+    path: /projects
+    current: false    
+  - label: about
+    path: /about
+    current: false

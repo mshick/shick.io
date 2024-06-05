@@ -42,6 +42,7 @@
     ".next/types/**/*.ts",
     "tailwind.config.ts",
     ".contentlayer/generated", 
+    ".velite",
     "env"
   ],
   "exclude": [

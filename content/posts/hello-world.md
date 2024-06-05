@@ -2,7 +2,8 @@
 title: Hello world
 slug: hello-world
 date: 2024-06-05 13:22
-cover: cover.jpg
+cover:
+  image: cover.jpg
 author: BLAH
 tags:
   - needs slug conversion
