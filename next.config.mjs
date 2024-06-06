@@ -1,8 +1,15 @@
-import { withContentCollections } from '@content-collections/next'
 import { withSentryConfig } from '@sentry/nextjs'
 
-const isBuild = process.argv.includes('build')
 const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN
+
+const isDev = process.argv.includes('dev')
+const isBuild = process.argv.includes('build')
+
+if (!process.env.VELITE_STARTED && isDev) {
+  process.env.VELITE_STARTED = '1'
+  const { build } = await import('velite')
+  await build({ watch: isDev, clean: !isDev })
+}
 
 /**
  * Add your own CSP here...
@@ -57,6 +64,7 @@ const securityHeaders = [
 const nextConfig = {
   swcMinify: true,
   reactStrictMode: true,
+  trailingSlash: true,
   async headers() {
     return [
       {
@@ -189,7 +197,7 @@ const withPlugins = (plugins, config) => () =>
 
 export default withPlugins(
   [
-    (config) => (isBuild ? config : withContentCollections(config)),
+    (config) => (isBuild ? config : config),
     (config) =>
       sentryDsn
         ? withSentryConfig(

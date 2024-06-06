@@ -21,7 +21,7 @@ export function HomepageList({ heading, href, documents }: HomepageListProps) {
     <div className="my-4">
       <div className="mb-8">
         <h3 className="text-xl md:text-xl tracking-tight my-6 p-2 px-4 bg-black text-white dark:text-black dark:bg-white">
-          Featured {heading}
+          {heading}
         </h3>
         <div className="flex flex-col">
           {documents.map((doc) => (

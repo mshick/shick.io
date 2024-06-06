@@ -1,0 +1,18 @@
+---
+title: 'Michael Shick | Software engineer, happy camper.'
+excerpt: 'Software engineer, happy camper.'
+---
+
+<HomepageHero />
+
+<HomepageList
+  heading="articles"
+  href="/articles"
+  documents={featuredArticles}
+/>
+
+<HomepageList
+  heading="projects"
+  href="/projects"
+  documents={featuredProjects}
+/>

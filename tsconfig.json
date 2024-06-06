@@ -27,7 +27,7 @@
     ],    
     "paths": {
       "#/*": ["./src/*"],
-      "#/content": ["./.velite"],
+      "#/.velite": ["./.velite"],
       "contentlayer/generated": ["./.contentlayer/generated"],
       "env": ["./env"]
     }

@@ -1,5 +1,5 @@
 import { fromZonedTime } from 'date-fns-tz'
-import { basename } from 'node:path'
+import { basename, join, relative } from 'node:path'
 import { format } from 'node:util'
 import slug from 'slug'
 import {
@@ -11,9 +11,8 @@ import {
   timezone,
   vercelUrl
 } from '../env'
-import { getContentPath } from './content'
 import { getGitFileInfo } from './git'
-import { GitFileInfo, Tag } from './types'
+import { GitFileInfo } from './types'
 
 function getSiteUrl(): string {
   return isProduction ? canonicalUrl ?? '' : vercelUrl ?? localDevUrl
@@ -47,22 +46,19 @@ export function getEditUrl(filePath: string): string {
   return editUrlPattern ? format(editUrlPattern, getRepoPath(filePath)) : ''
 }
 
-export function getTags(tags: string[]): Tag[] {
-  return tags.map((tag) => {
-    const tagSlug = slug(tag)
+export function getTaxonomy(collectionName: string, terms: string[]) {
+  return terms.map((term) => {
+    const termSlug = getSlug(term.replaceAll('/', '_'))
     return {
-      name: tag,
-      permalink: getContentPath('tags', tagSlug),
-      slug: tagSlug
+      name: term,
+      permalink: getPermalink(collectionName, termSlug),
+      slug: termSlug,
+      count: {
+        total: 0,
+        posts: 0
+      }
     }
   })
-}
-
-/**
- * Get the path within the collection
- */
-export function getCollectionPath(collectionName: string, path: string) {
-  return path.replace(`${collectionName}/`, '')
 }
 
 /**
@@ -71,13 +67,45 @@ export function getCollectionPath(collectionName: string, path: string) {
 export function getPermalink(
   collectionName: string,
   path: string,
-  slug?: string
+  slug = getSlugFromPath(path),
+  basePath = `/${collectionName}`
 ) {
-  let collectionPath = getCollectionPath(collectionName, path)
+  const slugPath = path
+    .replace(`${collectionName}/`, '')
+    .replace(basename(path), slug)
 
-  if (slug) {
-    collectionPath = collectionPath.replace(basename(collectionPath), slug)
+  return join(basePath, slugPath).replace(/\/index$/, '/')
+}
+
+/**
+ * Gets the relative path within the content directory
+ *
+ * @example https://github.com/zce/velite/blob/main/src/schemas/path.ts
+ */
+export function getContentPath(root: string, path: string) {
+  return relative(root, path)
+    .replace(/\.[^.]+$/, '')
+    .replace(/\\/g, '/')
+}
+
+/**
+ * Gets a slug from a path, using only the basename
+ */
+export function getSlugFromPath(path: string) {
+  return slug(basename(path))
+}
+
+/**
+ * Gets a slug from a valid name (a name is not a path)
+ */
+export function getSlug(name: string) {
+  if (name.search('/') !== -1) {
+    throw new Error('slug source cannot contain `/`')
   }
 
-  return getContentPath(collectionName, collectionPath)
+  return slug(name)
+}
+
+export function getAvailable(item: { draft: boolean; private: boolean }) {
+  return process.env.NODE_ENV !== 'production' || (!item.draft && !item.private)
 }

@@ -2,7 +2,10 @@
 title: Markdown
 tags:
   - markdown
+  - make/it/safe
 ---
+
+:+1:
 
 DEMO MATERIAL! NOT MINE!!
 

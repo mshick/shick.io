@@ -1,40 +1,47 @@
+import { MDXContent } from '#/components/MDXContent'
 import { HomepageHero } from '#/features/Homepage/HomepageHero'
 import { HomepageList } from '#/features/Homepage/HomepageList'
 import Layout from '#/layouts/Page'
 import { components } from '#/mdx'
-import { Article, Page, Project } from '#/types/types'
+import { Article, Project } from '#/types/types'
 import { pick } from '@contentlayer2/utils'
-import { allArticles, allPages, allProjects } from 'contentlayer/generated'
+import { allArticles, allProjects } from 'contentlayer/generated'
+import { getPage } from 'lib/helper'
 import { InferGetStaticPropsType } from 'next'
-import { useMDXComponent } from 'next-contentlayer2/hooks'
 
 export default function IndexPage({
   page,
   featuredArticles,
   featuredProjects
 }: InferGetStaticPropsType<typeof getStaticProps>) {
-  const Body = useMDXComponent(page?.body.code ?? '', {
-    featuredArticles,
-    featuredProjects
-  })
-
   const bodyComponents = {
     ...components,
     HomepageHero,
-    HomepageList
+    HomepageArticlesList: () => (
+      <HomepageList
+        heading="featured posts"
+        href="/articles"
+        documents={featuredArticles}
+      />
+    ),
+    HomepageProjectsList: () => (
+      <HomepageList
+        heading="featured projects"
+        href="/projects"
+        documents={featuredProjects}
+      />
+    )
   }
 
   return (
     <Layout seo={{ defaultTitle: page?.title }}>
-      <Body components={bodyComponents} />
+      <MDXContent code={page.code} components={bodyComponents} />
     </Layout>
   )
 }
 
 export function getStaticProps() {
-  const page = (allPages as unknown as Page[]).find(
-    (page) => page.slug === 'index'
-  )
+  const page = getPage((value) => value.slug === 'index')
 
   const featuredArticles = (allArticles as unknown as Article[])
     .map((doc) =>
@@ -73,8 +80,9 @@ export function getStaticProps() {
     .filter((doc) => doc.featured)
 
   return {
+    notFound: !page,
     props: {
-      page,
+      page: page!,
       featuredArticles,
       featuredProjects
     }
