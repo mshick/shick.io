@@ -29,36 +29,40 @@ export interface ExcerptOptions {
   length?: number
 }
 
-export const excerpt = ({
-  separator = 'more',
-  length = 260,
-  format = 'html'
-}: ExcerptOptions = {}) =>
+export function excerptFn(
+  { separator = 'more', length = 260, format = 'html' }: ExcerptOptions = {},
+  addIssue: (arg: z.IssueData) => void,
+  value: string,
+  content?: string
+) {
+  if (value == null && content != null) {
+    value = content
+  }
+  try {
+    const mdast = fromMarkdown(value)
+    const hast = toHast(mdast, { allowDangerousHtml: true })
+
+    if (!hast) {
+      return
+    }
+
+    const rawHast = raw(hast)
+    const exHast = hastExcerpt(rawHast, {
+      comment: separator,
+      maxSearchSize: 1024
+    })
+
+    const output = exHast ?? truncate(rawHast, { size: length, ellipsis: '…' })
+
+    // await rehypeCopyLinkedFiles(config.output)(output, { path })
+    return format === 'html' ? toHtml(output) : toText(output)
+  } catch (err: any) {
+    addIssue({ fatal: true, code: 'custom', message: err.message })
+    return value
+  }
+}
+
+export const excerpt = (options: ExcerptOptions = {}) =>
   z.custom<string>().transform((value, { meta: { content }, addIssue }) => {
-    if (value == null && content != null) {
-      value = content
-    }
-    try {
-      const mdast = fromMarkdown(value)
-      const hast = toHast(mdast, { allowDangerousHtml: true })
-
-      if (!hast) {
-        return
-      }
-
-      const rawHast = raw(hast)
-      const exHast = hastExcerpt(rawHast, {
-        comment: separator,
-        maxSearchSize: 1024
-      })
-
-      const output =
-        exHast ?? truncate(rawHast, { size: length, ellipsis: '…' })
-
-      // await rehypeCopyLinkedFiles(config.output)(output, { path })
-      return format === 'html' ? toHtml(output) : toText(output)
-    } catch (err: any) {
-      addIssue({ fatal: true, code: 'custom', message: err.message })
-      return value
-    }
+    return excerptFn(options, addIssue, value, content)
   })

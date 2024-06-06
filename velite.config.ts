@@ -1,6 +1,6 @@
 import remarkGemoji from 'remark-gemoji'
 import { defineCollection, defineConfig, s } from 'velite'
-import { excerpt } from './lib/excerpt'
+import { excerptFn } from './lib/excerpt'
 import {
   getAvailable,
   getContentPath,
@@ -126,8 +126,7 @@ const posts = defineCollection({
       meta,
       metadata: s.metadata(),
       content: s.markdown(),
-      excerpt: excerpt({ format: 'text', length: EXCERPT_LENGTH }),
-      excerptHtml: excerpt({ format: 'html', length: EXCERPT_LENGTH + 40 }),
+      excerpt: s.markdown(),
       date: s.isodate().optional(),
       author: s.string().optional(),
       draft: s.boolean().default(false),
@@ -137,13 +136,25 @@ const posts = defineCollection({
       categories: s.array(s.string()).default([]),
       tags: s.array(s.string()).default([])
     })
-    .transform(async (data, { meta }) => {
+    .transform(async (data, { meta, addIssue }) => {
       const updatedBy = await getUpdatedBy(meta.path)
       const path = getContentPath(meta.config.root, meta.path)
       const slug = data.slug ?? getSlugFromPath(path)
       const permalink = getPermalink('posts', path, slug)
       return {
         ...data,
+        excerpt: excerptFn(
+          { format: 'text', length: EXCERPT_LENGTH },
+          addIssue,
+          data.excerpt,
+          meta.content
+        ),
+        excerptHtml: excerptFn(
+          { format: 'html', length: EXCERPT_LENGTH + 40 },
+          addIssue,
+          data.excerpt,
+          meta.content
+        ),
         permalink,
         author: data.author ?? updatedBy?.latestAuthorName ?? '',
         shareUrl: getShareUrl(permalink),

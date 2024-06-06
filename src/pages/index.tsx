@@ -1,27 +1,28 @@
 import { MDXContent } from '#/components/MDXContent'
 import { HomepageHero } from '#/features/Homepage/HomepageHero'
 import { HomepageList } from '#/features/Homepage/HomepageList'
+import { HomepageList as HomepageListVelite } from '#/features/Homepage/HomepageListVelite'
 import Layout from '#/layouts/Page'
 import { components } from '#/mdx'
-import { Article, Project } from '#/types/types'
+import { Project } from '#/types/types'
 import { pick } from '@contentlayer2/utils'
-import { allArticles, allProjects } from 'contentlayer/generated'
-import { getPage } from 'lib/helper'
+import { allProjects } from 'contentlayer/generated'
+import { getPage, getPosts } from 'lib/helper'
 import { InferGetStaticPropsType } from 'next'
 
 export default function IndexPage({
   page,
-  featuredArticles,
+  posts,
   featuredProjects
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const bodyComponents = {
     ...components,
     HomepageHero,
     HomepageArticlesList: () => (
-      <HomepageList
+      <HomepageListVelite
         heading="featured posts"
         href="/articles"
-        documents={featuredArticles}
+        documents={posts}
       />
     ),
     HomepageProjectsList: () => (
@@ -43,23 +44,11 @@ export default function IndexPage({
 export function getStaticProps() {
   const page = getPage((value) => value.slug === 'index')
 
-  const featuredArticles = (allArticles as unknown as Article[])
-    .map((doc) =>
-      pick(doc, [
-        'path',
-        'title',
-        'excerpt',
-        'publishedAt',
-        'featured',
-        'featuredImage',
-        'featuredImageUrl'
-      ])
-    )
-    .sort(
-      (a, b) =>
-        Number(new Date(b.publishedAt)) - Number(new Date(a.publishedAt))
-    )
-    .filter((doc) => doc.featured)
+  const posts = getPosts(
+    ['permalink', 'title', 'excerpt', 'excerptHtml', 'publishedAt', 'featured'],
+    ['tags'],
+    (p) => p.featured
+  )
 
   const featuredProjects = (allProjects as unknown as Project[])
     .map((doc) =>
@@ -83,7 +72,7 @@ export function getStaticProps() {
     notFound: !page,
     props: {
       page: page!,
-      featuredArticles,
+      posts,
       featuredProjects
     }
   }

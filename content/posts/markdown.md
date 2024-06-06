@@ -1,5 +1,6 @@
 ---
 title: Markdown
+featured: true
 tags:
   - markdown
   - make/it/safe

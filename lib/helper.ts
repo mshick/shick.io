@@ -18,10 +18,14 @@ export const filters = {
 }
 
 export const sorters = {
-  dateAsc: <I extends { date: string }>(a: I, b: I): number =>
-    a.date > b.date ? 1 : -1,
-  dateDesc: <I extends { date: string }>(a: I, b: I): number =>
-    a.date > b.date ? -1 : 1,
+  publishedAtAsc: <I extends { publishedAt: string }>(a: I, b: I): number =>
+    a.publishedAt > b.publishedAt ? 1 : -1,
+  publishedAtDesc: <I extends { publishedAt: string }>(a: I, b: I): number =>
+    a.publishedAt > b.publishedAt ? -1 : 1,
+  updatedAtAsc: <I extends { updatedAt: string }>(a: I, b: I): number =>
+    a.updatedAt > b.updatedAt ? 1 : -1,
+  updatedAtDesc: <I extends { updatedAt: string }>(a: I, b: I): number =>
+    a.updatedAt > b.updatedAt ? -1 : 1,
   nameAsc: <I extends { name: string }>(a: I, b: I): number =>
     a.name > b.name ? 1 : -1,
   nameDesc: <I extends { name: string }>(a: I, b: I): number =>
@@ -199,28 +203,26 @@ export const getPageBySlug = async <F extends keyof Page>(
   return getPage((i) => i.slug === slug, fields)
 }
 
-export const getPosts = async <
+export function getPosts<
   F extends keyof Omit<Post, I>,
   I extends keyof Taxonomy = never
 >(
   fields?: F[],
   includes?: I[],
   filter: Filter<Post> = filters.none,
-  sorter: Sorter<Post> = sorters.dateDesc,
+  sorter: Sorter<Post> = sorters.publishedAtDesc,
   limit = Infinity,
   offset = 0
-): Promise<({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] })[]> => {
-  return Promise.all(
-    posts
-      .filter(available)
-      .filter(filter)
-      .sort(sorter)
-      .slice(offset, offset + limit)
-      .map(async (post) => ({
-        ...pick(post, fields),
-        ...include(post, includes)
-      }))
-  )
+): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] })[] {
+  return posts
+    .filter(available)
+    .filter(filter)
+    .sort(sorter)
+    .slice(offset, offset + limit)
+    .map((post) => ({
+      ...pick(post, fields),
+      ...include(post, includes)
+    }))
 }
 
 export const getPostsCount = async (
