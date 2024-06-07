@@ -53,7 +53,7 @@
         "plugin:mdx/recommended"
       ],
       "settings": {
-        "mdx/code-blocks": false,
+        "mdx/code-blocks": true,
         "mdx/language-mapper": {}
       }
     }

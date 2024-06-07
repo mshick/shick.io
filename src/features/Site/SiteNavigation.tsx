@@ -1,8 +1,9 @@
+'use client'
+
 import { ThemeToggle } from '#/features/Site/components/ThemeToggle'
 import { useFocus } from '#/hooks/useFocus'
 import { useMiniSearch } from '#/hooks/useMiniSearch'
 import { replaceState } from '#/utils/history'
-import { useRouter } from 'next/router'
 import {
   ChangeEventHandler,
   useCallback,
@@ -22,7 +23,8 @@ export type SiteNavigationProps = {
 }
 
 export function SiteNavigation({ items }: SiteNavigationProps) {
-  const { asPath } = useRouter()
+  // const { asPath } = useRouter()
+  const asPath = '/'
 
   items = useMemo(
     () => items.map((item) => ({ ...item, current: asPath === item.path })),

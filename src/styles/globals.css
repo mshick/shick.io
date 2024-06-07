@@ -7,7 +7,7 @@
     @apply bg-white dark:bg-black box-content flex flex-col min-h-screen min-w-[360px];
   }
 
-  @font-face {
+  /* @font-face {
     font-family: 'Bitstream Vera Sans Mono';
     font-style: normal;
     font-weight: 400;
@@ -39,7 +39,7 @@
     font-display: optional;
     src: url(/fonts/bitstream-vera-sans-mono-bold-italic.woff2)
       format('woff2');
-  }
+  } */
 }
 
 @layer components {
@@ -48,6 +48,7 @@
     font-family: ui-monospace, monospace;
     line-height: 1.1;
   }
+  
   .prose .language-qrcode {
     @apply border-0 text-gray-500 leading-none p-0;
   }

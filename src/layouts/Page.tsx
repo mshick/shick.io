@@ -9,7 +9,7 @@ export const LayoutPage = ({
 }: PropsWithChildren<LayoutPageProps>) => {
   return (
     <LayoutDefault seo={seo}>
-      <article className="w-full max-w-none">{children}</article>
+      <article className="w-full max-w-3xl">{children}</article>
     </LayoutDefault>
   )
 }

@@ -1,5 +1,6 @@
 import { Page, Post } from '#/.velite'
 import Link from '#/components/Link'
+import slug from 'slug'
 
 export type HomepageListProps = {
   heading: string
@@ -9,7 +10,7 @@ export type HomepageListProps = {
 
 export function HomepageList({ heading, href, documents }: HomepageListProps) {
   return (
-    <div className="my-4">
+    <section id={`list-${slug(heading)}`} className="my-4">
       <div className="mb-8">
         <h3 className="text-xl md:text-xl tracking-tight my-6 p-2 px-4 bg-black text-white dark:text-black dark:bg-white">
           {heading}
@@ -42,6 +43,6 @@ export function HomepageList({ heading, href, documents }: HomepageListProps) {
           </Link>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

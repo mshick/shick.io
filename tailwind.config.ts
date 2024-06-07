@@ -3,7 +3,6 @@ import aspectRatio from '@tailwindcss/aspect-ratio'
 import forms from '@tailwindcss/forms'
 import typography from '@tailwindcss/typography'
 import type { Config } from 'tailwindcss'
-import { fontFamily } from 'tailwindcss/defaultTheme'
 
 export default {
   content: ['./src/**/*.{ts,tsx}'],
@@ -44,8 +43,9 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Bitstream Vera Sans Mono', ...fontFamily.sans],
-        mono: ['Bitstream Vera Sans Mono', ...fontFamily.mono]
+        primary: ['var(--font-plex-mono)', 'sans-serif'],
+        sans: ['var(--font-plex-mono)', 'sans-serif'],
+        mono: ['var(--font-plex-mono)', 'monospace']
       },
       tuftedTypography
     }

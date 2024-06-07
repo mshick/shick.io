@@ -1,4 +1,5 @@
-import ClientOnly from '#/components/ClientOnly'
+'use client'
+
 import Loading from '#/components/Loading'
 import classNames from '#/utils/classNames'
 import { get } from '#/utils/fetcher'
@@ -188,9 +189,5 @@ export function ListeningToPopover({ limit }: ListeningToProps) {
 }
 
 export function ListeningTo() {
-  return (
-    <ClientOnly>
-      <ListeningToPopover />
-    </ClientOnly>
-  )
+  return <ListeningToPopover />
 }
