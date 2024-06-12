@@ -59,6 +59,7 @@
     }
   ],
   "ignorePatterns": [
+    "tsconfig.json",
     "**/generated/**/*"
   ]
 }

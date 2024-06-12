@@ -5,6 +5,7 @@ import { components } from '#/mdx'
 import { getPage, getPosts } from 'lib/helper'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { PropsWithChildren } from 'react'
 
 export const revalidate = 60
 
@@ -28,10 +29,15 @@ export default function IndexPage() {
 
   const bodyComponents = {
     ...components,
-    p: ({ children }) => (
-      <p className="mb-2 leading-6 max-w-3xl text-sm text-zinc-900">
+    // p: ({ children }) => (
+    //   <p className="mb-2 leading-6 max-w-3xl text-sm text-zinc-900">
+    //     {children}
+    //   </p>
+    // ),
+    HomepageBody: ({ children }: PropsWithChildren) => (
+      <div className="prose prose-tufted-bbs dark:prose-tufted-bbs-invert">
         {children}
-      </p>
+      </div>
     ),
     HomepageHero,
     HomepageArticlesList: () => (

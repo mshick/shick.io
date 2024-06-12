@@ -49,10 +49,12 @@
     "swr": "^2.2.5"
   },
   "devDependencies": {
-    "@mshick/tufted": "^2.0.0-0",
+    "@mshick/tufted": "^2.0.0-5",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.7",
     "@tailwindcss/typography": "^0.5.13",
+    "@tsconfig/next": "^2.0.3",
+    "@tsconfig/strictest": "^2.0.5",
     "@types/lodash-es": "^4.17.12",
     "@types/mdast": "^3.0.10",
     "@types/node": "^20.14.2",
