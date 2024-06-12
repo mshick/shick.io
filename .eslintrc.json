@@ -40,7 +40,24 @@
             "ignoreMixedLogicalExpressions": true
           }
         ],
-        "@typescript-eslint/ban-ts-comment": "off"
+        "@typescript-eslint/ban-ts-comment": "off",
+        "@typescript-eslint/no-unused-vars": [
+          "error",
+          {
+            "vars": "all",
+            "args": "after-used",
+            "ignoreRestSiblings": true,
+            "argsIgnorePattern": "/^_/.source",
+            "caughtErrors": "all",
+            "caughtErrorsIgnorePattern": "/^_$/.source"
+          }
+        ],
+        "@typescript-eslint/dot-notation": [
+          "error",
+          {
+            "allowIndexSignaturePropertyAccess": true
+          }
+        ]
       }
     },
     {

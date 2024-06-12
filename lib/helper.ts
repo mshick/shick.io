@@ -167,13 +167,13 @@ export function getTagBySlug<F extends keyof Tag>(
   return getTag((i) => i.slug === slug, fields)
 }
 
-export const getPages = async <F extends keyof Page>(
+export function getPages<F extends keyof Page>(
   fields?: F[],
   filter: Filter<Page> = filters.none,
   sorter: Sorter<Page> = sorters.titleAsc,
   limit = Infinity,
   offset = 0
-): Promise<{ [P in F]: Page[P] }[]> => {
+): { [P in F]: Page[P] }[] {
   return pages
     .filter(available)
     .filter(filter)
@@ -182,9 +182,7 @@ export const getPages = async <F extends keyof Page>(
     .map((page) => pick(page, fields))
 }
 
-export const getPagesCount = async (
-  filter: Filter<Page> = filters.none
-): Promise<number> => {
+export function getPagesCount(filter: Filter<Page> = filters.none): number {
   return pages.filter(available).filter(filter).length
 }
 
@@ -196,10 +194,10 @@ export function getPage<F extends keyof Page>(
   return page && pick(page, fields)
 }
 
-export const getPageBySlug = async <F extends keyof Page>(
+export function getPageBySlug<F extends keyof Page>(
   slug: string,
   fields?: F[]
-): Promise<{ [P in F]: Page[P] } | undefined> => {
+): { [P in F]: Page[P] } | undefined {
   return getPage((i) => i.slug === slug, fields)
 }
 
@@ -225,31 +223,29 @@ export function getPosts<
     }))
 }
 
-export const getPostsCount = async (
-  filter: Filter<Post> = filters.none
-): Promise<number> => {
+export function getPostsCount(filter: Filter<Post> = filters.none): number {
   return posts.filter(available).filter(filter).length
 }
 
-export const getPost = async <
+export function getPost<
   F extends keyof Omit<Post, I>,
   I extends keyof Taxonomy = never
 >(
   filter: Filter<Post>,
   fields?: F[],
   includes?: I[]
-): Promise<({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined> => {
+): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined {
   const post = posts.find(filter)
   return post && { ...pick(post, fields), ...include(post, includes) }
 }
 
-export const getPostBySlug = async <
+export function getPostBySlug<
   F extends keyof Omit<Post, I>,
   I extends keyof Taxonomy = never
 >(
   slug: string,
   fields?: F[],
   includes?: I[]
-): Promise<({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined> => {
+): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined {
   return getPost((i) => i.slug === slug, fields, includes)
 }

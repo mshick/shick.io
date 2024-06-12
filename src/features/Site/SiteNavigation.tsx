@@ -56,7 +56,7 @@ export function SiteNavigation({ items }: SiteNavigationProps) {
 
   const handleQueryChange: ChangeEventHandler<HTMLFormElement> = useCallback(
     (e) => {
-      const searchQuery = e.target.value
+      const searchQuery = e.target['value']
       setQuery(searchQuery)
       replaceState(`?search=${encodeURIComponent(searchQuery)}`)
     },

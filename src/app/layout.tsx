@@ -32,7 +32,8 @@ export default function Layout({ children }: PropsWithChildren) {
 
           <main id="content">{children}</main>
 
-          <SiteFooter showListeningTo={config.showListeningTo} />
+          {/* <SiteFooter showListeningTo={config.showListeningTo} /> */}
+          <SiteFooter />
         </div>
       </body>
     </html>

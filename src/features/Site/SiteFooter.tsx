@@ -4,7 +4,8 @@ export type SiteFooterProps = {
   showListeningTo: boolean
 }
 
-export function SiteFooter({ showListeningTo }: SiteFooterProps) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function SiteFooter() {
   return (
     <>
       <footer className="w-full pt-0 pb-4 relative">

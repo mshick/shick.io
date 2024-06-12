@@ -141,7 +141,7 @@ export function ListeningToPopover({ limit }: ListeningToProps) {
 
   const tracks = recentTracks.data
   const mostRecentTrack = tracks[0]
-  const { name, artistName } = mostRecentTrack.attributes
+  const { name, artistName } = mostRecentTrack?.attributes ?? {}
 
   return (
     <Popover as={Fragment}>

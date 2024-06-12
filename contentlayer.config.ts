@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { omit } from '@contentlayer2/utils'
 import {
   ComputedFields,

@@ -4,8 +4,10 @@
     "@tsconfig/next/tsconfig"
   ],
   "compilerOptions": {
+    "checkJs": false,
     "exactOptionalPropertyTypes": false,
     "strictNullChecks": true,
+    "pretty": true,
     "baseUrl": ".",
     "paths": {
       "#/*": [
@@ -25,10 +27,7 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.mts",
     "**/*.tsx",
-    "**/*.js",
-    "**/*.mjs",
     ".next/types/**/*.ts",
     "tailwind.config.ts",
     ".contentlayer/generated",

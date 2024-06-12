@@ -39,13 +39,13 @@ export function getStaticPaths() {
 }
 
 export function getStaticProps({ params }: GetStaticPropsContext) {
-  const slug = getSingle(params?.article)
+  const slug = getSingle(params?.['article'])
   const article = slug && getArticle(slug, allArticles as unknown as Article[])
 
   return {
     notFound: !article,
     props: {
-      article
+      article: article as any
     }
   }
 }

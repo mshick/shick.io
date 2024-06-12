@@ -29,6 +29,10 @@ const _contentTypePathMap = process.env.NEXT_PUBLIC_CONTENT_TYPE_PATH_MAP
 export const contentTypePathMap: Record<string, string> = _contentTypePathMap
   ? _contentTypePathMap.split(';').reduce((map, typePath) => {
       const [type, path] = typePath.split('=')
+      if (!type) {
+        return map
+      }
+
       return {
         ...map,
         [type]: path

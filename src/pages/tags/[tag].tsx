@@ -38,7 +38,7 @@ export function getStaticPaths() {
 }
 
 export function getStaticProps({ params }: GetStaticPropsContext) {
-  const slug = getSingle(params?.tag)
+  const slug = getSingle(params?.['tag'])
 
   const documents = (
     [...allPages, ...allArticles] as unknown as DocumentTypes[]
@@ -52,7 +52,7 @@ export function getStaticProps({ params }: GetStaticPropsContext) {
     )
     .filter((doc) => doc.tags?.some((tag) => tag.slug === slug))
 
-  const tag = documents?.[0].tags.find((tag) => tag.slug === slug)
+  const tag = documents?.[0]?.tags.find((tag) => tag.slug === slug)
 
   return {
     notFound: documents.length === 0,

@@ -17,14 +17,14 @@ export function getArticle(slug: string, articles: Article[]) {
     ...orderedArticles[articleIndex],
     next: orderedArticles[articleIndex - 1]
       ? {
-          path: orderedArticles[articleIndex - 1].path,
-          title: orderedArticles[articleIndex - 1].title
+          path: orderedArticles[articleIndex - 1]?.path,
+          title: orderedArticles[articleIndex - 1]?.title
         }
       : null,
     previous: orderedArticles[articleIndex + 1]
       ? {
-          path: orderedArticles[articleIndex + 1].path,
-          title: orderedArticles[articleIndex + 1].title
+          path: orderedArticles[articleIndex + 1]?.path,
+          title: orderedArticles[articleIndex + 1]?.title
         }
       : null
   }

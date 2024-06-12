@@ -16,18 +16,20 @@ cover:
 
 The original inspiration for the look and layout of the articles here was
 [Tufte CSS](https://edwardtufte.github.io/tufte-css/). Tufte CSS is a set of
-styles that utilize the principals of designer [Edward Tufte](https://en.wikipedia.org/wiki/Edward_Tufte)
-for a more organized, readable online article or blog post.
+styles that utilize the principals of designer
+[Edward Tufte](https://en.wikipedia.org/wiki/Edward_Tufte) for a more organized,
+readable online article or blog post.
 
-I created [Tufted](https://github.com/mshick/tufted) as a set of [remark](https://github.com/remarkjs/remark)
-and [rehype](https://github.com/rehypejs/rehype) plugins and a Tailwind
+I created [Tufted](https://github.com/mshick/tufted) as a set of
+[remark](https://github.com/remarkjs/remark) and
+[rehype](https://github.com/rehypejs/rehype) plugins and a Tailwind
 [typography](https://tailwindcss.com/docs/typography-plugin) theme that work
 together to apply these principals to a humble markdown-powered personal site.
 
 There are quite a few technologies at play here that I'm excited to share, so
 this the first in a series of articles on my maximally-minimal, BBS-inspired
-home on the web. It will also serve as a style guide of sorts, utilizing[^1]
-all the elements available through markdown.
+home on the web. It will also serve as a style guide of sorts, utilizing[^1] all
+the elements available through markdown.
 
 [^1]: Needlessly?
 
@@ -41,9 +43,10 @@ all the elements available through markdown.
 ```
 
 Tufte CSS relies on more structured and hierarchical HTML than markdown alone
-provides. [remark-initial-heading](https://github.com/mshick/tufted/blob/main/src/remark/remark-initial-heading.ts)
-makes use of various [unist](https://github.com/syntax-tree/unist) utilities
-to visit the markdown syntax tree and insert a hidden `h2` element for the first
+provides.
+[remark-initial-heading](https://github.com/mshick/tufted/blob/main/src/remark/remark-initial-heading.ts)
+makes use of various [unist](https://github.com/syntax-tree/unist) utilities to
+visit the markdown syntax tree and insert a hidden `h2` element for the first
 section of the site if one does not exist. This normalizes the hierarchy and
 semantic relationships throughout the article, which is great for a table of
 contents or for accessibility, and also makes it a bit easier to consistently
@@ -51,37 +54,38 @@ break the article into sections.
 
 Next, all the content in the article is wrapped into `section` tags with
 [remark-sectionize](https://github.com/mshick/tufted/blob/main/src/remark/remark-sectionize.ts).
-The sections are determined by the placement of `h2` tags throughout the article.
-Here we're applying more implicit hierarchy to the layout of an otherwise flat
-content relationship.^[I love the flatness of markdown for writing, but it limits
-styling possibilities.] `section` is called for by Tufte CSS to increase
-spacing between distinct thoughts in an article, much like chapters in a book.
-As you'll see later, the `section`s are also useful in additional remark
-processing, and the output HTML has more semantic queues that may be helpful
-for SEO.
+The sections are determined by the placement of `h2` tags throughout the
+article. Here we're applying more implicit hierarchy to the layout of an
+otherwise flat content relationship.^[I love the flatness of markdown for
+writing, but it limits styling possibilities.] `section` is called for by Tufte
+CSS to increase spacing between distinct thoughts in an article, much like
+chapters in a book. As you'll see later, the `section`s are also useful in
+additional remark processing, and the output HTML has more semantic queues that
+may be helpful for SEO.
 
 ## Figures
 
 Normally using markdown you'd miss out on some nice-to-have markup, like the
 `figure` tag. In Tufted I wanted to offer a form of progressive enhancement for
-regular images and iframes (more on that in a bit) as well as supporting
-more explicit and complex use cases.
+regular images and iframes (more on that in a bit) as well as supporting more
+explicit and complex use cases.
 
 [remark-wrap-images](https://github.com/mshick/tufted/blob/main/src/remark/remark-wrap-images.ts)
 will find top-level `image` and `iframe` nodes and wrap them in a `figure` tag.
-This allows for more consistent styling, such as maintaining the right margin for
-sidenotes at larger browser widths. These elements could be styled just fine
-without `figure` wrappers, but the CSS might end up more complicated with
-`img` tags and `figure.img` tags needing to be handled independently. Further,
-since all the markup is eventually passed to [mdx-bundler](https://github.com/kentcdodds/mdx-bundler)
-the `figure` tag gives me a more generic handle for rich content that may need
-to special consideration.
+This allows for more consistent styling, such as maintaining the right margin
+for sidenotes at larger browser widths. These elements could be styled just fine
+without `figure` wrappers, but the CSS might end up more complicated with `img`
+tags and `figure.img` tags needing to be handled independently. Further, since
+all the markup is eventually passed to
+[mdx-bundler](https://github.com/kentcdodds/mdx-bundler) the `figure` tag gives
+me a more generic handle for rich content that may need to special
+consideration.
 
 For more complex situations I used the fantastic
 [remark-directive](https://github.com/remarkjs/remark-directive) plugin. This
-allows me to create custom wrappers, which is useful for wrapping other
-content in a figure, like a code block, and for including caption text that
-is both semantic and can be styled as a proper caption.
+allows me to create custom wrappers, which is useful for wrapping other content
+in a figure, like a code block, and for including caption text that is both
+semantic and can be styled as a proper caption.
 
 :::figure\\\{.fullwidth}
 
@@ -120,8 +124,8 @@ layout.
 
 ::youtube[Broken World War II Headphones - Restoration]\\\{#98pUBuTar_s}
 
-Tufte CSS provides[^10] tools to style web articles using the ideas demonstrated by
-Edward Tufte's books and handouts. Tufte's style is known for its simplicity,
+Tufte CSS provides[^10] tools to style web articles using the ideas demonstrated
+by Edward Tufte's books and handouts. Tufte's style is known for its simplicity,
 extensive use of sidenotes, tight integration of graphics with text, and
 carefully chosen typography.
 
@@ -178,12 +182,12 @@ document subtitle, `h2` for section headings, and `h3` for low-level headings.
 More specific headings are not supported. If you feel the urge to reach for a
 heading of level 4 or greater, consider redesigning your document:
 
-> [It is] notable that the Feynman lectures (3 volumes) write about all of
-> physics in 1800 pages, using only 2 levels of hierarchical headings: chapters
-> and A-level heads in the text. It also uses the methodology of _sentences_
-> which then cumulate sequentially into _paragraphs_, rather than the grunts of
-> bullet points. Undergraduate Caltech physics is very complicated material, but
-> it didn't require an elaborate hierarchy to organize.
+> [It is] notable that the Feynman lectures (3 volumes) write about all of physics
+> in 1800 pages, using only 2 levels of hierarchical headings: chapters and A-level
+> heads in the text. It also uses the methodology of _sentences_ which then cumulate
+> sequentially into _paragraphs_, rather than the grunts of bullet points. Undergraduate
+> Caltech physics is very complicated material, but it didn't require an elaborate
+> hierarchy to organize.
 >
 > ::footer[[Edward Tufte, forum post, 'Book design: advice and examples' thread][quote-cite]]
 
@@ -224,7 +228,8 @@ other serif fonts like Palatino and Georgia.
 
 [^2]: See Tufte's comment in the [Tufte book fonts][bembo-thread] thread.
 
-[bembo-thread]: http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000Vt
+[bembo-thread]:
+  http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000Vt
 [et-book]: https://github.com/edwardtufte/et-book
 
 Also notice how Tufte CSS includes separate font files for bold (strong) and
@@ -269,7 +274,9 @@ users.
 
 > I do not paint things, I paint only the differences between things.
 >
-> ::footer[Henri Matisse, :cite[Henri Matisse Dessins: thèmes et variations (Paris, 1943), 37]]
+> ::footer[Henri Matisse, :cite[Henri Matisse Dessins: thèmes et > variations
+>
+> > (Paris, 1943), 37]]
 
 If you'd like to introduce your page or a section of your page with some quotes,
 use epigraphs. Modeled after chapter epigraphs in Tufte's books (particularly
@@ -532,4 +539,6 @@ function foo(bar) {
     b = 'Prism'
   return a + bar(b)
 }
+
+foo()
 ```

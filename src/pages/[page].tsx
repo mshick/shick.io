@@ -31,7 +31,7 @@ export function getStaticPaths() {
 }
 
 export function getStaticProps({ params }: GetStaticPropsContext) {
-  const slug = getSingle(params?.page)
+  const slug = getSingle(params?.['page'])
   const page = (allPages as unknown as Page[]).find(
     (page) => page.slug === slug
   )

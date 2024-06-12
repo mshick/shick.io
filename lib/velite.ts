@@ -31,7 +31,7 @@ export async function getUpdatedBy(
     gitCache[filePath] = (await getGitFileInfo(baseDir, filePath)) ?? null
   }
 
-  return gitCache[filePath]
+  return gitCache[filePath] ?? null
 }
 
 export function getZonedDate(date: string | Date): Date {

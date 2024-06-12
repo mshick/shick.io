@@ -1,3 +1,4 @@
+import remarkPresetTufted from '@mshick/tufted/remark'
 import remarkGemoji from 'remark-gemoji'
 import { defineCollection, defineConfig, s } from 'velite'
 import { excerptFn } from './lib/excerpt'
@@ -223,11 +224,13 @@ export default defineConfig({
   },
   markdown: {
     rehypePlugins: [],
-    remarkPlugins: [remarkGemoji]
+    // Bad velite types
+    remarkPlugins: [remarkGemoji, remarkPresetTufted() as any]
   },
   mdx: {
     rehypePlugins: [],
-    remarkPlugins: [remarkGemoji]
+    // Bad velite types
+    remarkPlugins: [remarkGemoji, remarkPresetTufted() as any]
   },
   prepare: (collections) => {
     const { categories, tags, posts, pages } = collections
