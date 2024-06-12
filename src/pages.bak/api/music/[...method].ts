@@ -40,7 +40,10 @@ export default async function handler(req: NextRequest) {
 
   switch (method) {
     case 'renew-token':
-      if (req.headers.get('authorization') === `Bearer ${apiSecret}`) {
+      if (
+        apiSecret &&
+        req.headers.get('authorization') === `Bearer ${apiSecret}`
+      ) {
         results = await musicKit.renewMusicUserToken()
         if (results.error) {
           status = 500

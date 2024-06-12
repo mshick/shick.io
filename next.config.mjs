@@ -65,83 +65,83 @@ const nextConfig = {
   swcMinify: true,
   reactStrictMode: true,
   trailingSlash: true,
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: securityHeaders
-      },
-      {
-        source: '/_next/image(.*)',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
-        ]
-      },
-      {
-        source: '/fonts/bitstream-vera-sans-mono-regular.woff2',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
-        ]
-      },
-      {
-        source: '/fonts/bitstream-vera-sans-mono-bold.woff2',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
-        ]
-      },
-      {
-        source: '/fonts/bitstream-vera-sans-mono-italic.woff2',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
-        ]
-      },
-      {
-        source: '/fonts/bitstream-vera-sans-mono-bold-italic.woff2',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
-        ]
-      }
-    ]
-  },
-  async redirects() {
-    return [
-      {
-        source: '/michael-shick-2022.pdf',
-        destination: 'https://read.cv/mshick',
-        permanent: false
-      },
-      {
-        source: '/resume',
-        destination: 'https://read.cv/mshick',
-        permanent: false
-      },
-      {
-        source: '/30',
-        destination: 'https://calendly.com/michaelshick/30min',
-        permanent: false
-      },
-      {
-        source: '/15',
-        destination: 'https://calendly.com/michaelshick/15min',
-        permanent: false
-      }
-    ]
-  },
+  // async headers() {
+  //   return [
+  //     {
+  //       source: '/(.*)',
+  //       headers: securityHeaders
+  //     },
+  //     {
+  //       source: '/_next/image(.*)',
+  //       headers: [
+  //         {
+  //           key: 'Cache-Control',
+  //           value: 'public, max-age=31536000, immutable'
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       source: '/fonts/bitstream-vera-sans-mono-regular.woff2',
+  //       headers: [
+  //         {
+  //           key: 'Cache-Control',
+  //           value: 'public, max-age=31536000, immutable'
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       source: '/fonts/bitstream-vera-sans-mono-bold.woff2',
+  //       headers: [
+  //         {
+  //           key: 'Cache-Control',
+  //           value: 'public, max-age=31536000, immutable'
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       source: '/fonts/bitstream-vera-sans-mono-italic.woff2',
+  //       headers: [
+  //         {
+  //           key: 'Cache-Control',
+  //           value: 'public, max-age=31536000, immutable'
+  //         }
+  //       ]
+  //     },
+  //     {
+  //       source: '/fonts/bitstream-vera-sans-mono-bold-italic.woff2',
+  //       headers: [
+  //         {
+  //           key: 'Cache-Control',
+  //           value: 'public, max-age=31536000, immutable'
+  //         }
+  //       ]
+  //     }
+  //   ]
+  // },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/michael-shick-2022.pdf',
+  //       destination: 'https://read.cv/mshick',
+  //       permanent: false
+  //     },
+  //     {
+  //       source: '/resume',
+  //       destination: 'https://read.cv/mshick',
+  //       permanent: false
+  //     },
+  //     {
+  //       source: '/30',
+  //       destination: 'https://calendly.com/michaelshick/30min',
+  //       permanent: false
+  //     },
+  //     {
+  //       source: '/15',
+  //       destination: 'https://calendly.com/michaelshick/15min',
+  //       permanent: false
+  //     }
+  //   ]
+  // },
   webpack(config) {
     // Contentlayer generates many warnings:
     // Build dependencies behind this expression are ignored and might cause incorrect cache invalidation
@@ -183,6 +183,10 @@ const nextConfig = {
         hostname: 'github.com'
       }
     ]
+  },
+  output: 'export',
+  experimental: {
+    serverComponentsExternalPackages: ['pino']
   }
 }
 

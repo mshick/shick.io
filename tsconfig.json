@@ -35,6 +35,7 @@
     "env"
   ],
   "exclude": [
+    "src/pages.bak",
     "node_modules",
     ".github",
     "public"
