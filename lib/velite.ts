@@ -2,6 +2,7 @@ import { fromZonedTime } from 'date-fns-tz'
 import { basename, join, relative } from 'node:path'
 import { format } from 'node:util'
 import slug from 'slug'
+import { z } from 'velite'
 import {
   baseDir,
   canonicalUrl,
@@ -11,6 +12,7 @@ import {
   timezone,
   vercelUrl
 } from '../env'
+import { excerptFn } from './excerpt'
 import { getGitFileInfo } from './git'
 import { GitFileInfo } from './types'
 
@@ -44,21 +46,6 @@ export function getShareUrl(path: string): string {
 
 export function getEditUrl(filePath: string): string {
   return editUrlPattern ? format(editUrlPattern, getRepoPath(filePath)) : ''
-}
-
-export function getTaxonomy(collectionName: string, terms: string[]) {
-  return terms.map((term) => {
-    const termSlug = getSlug(term.replaceAll('/', '_'))
-    return {
-      name: term,
-      permalink: getPermalink(collectionName, termSlug),
-      slug: termSlug,
-      count: {
-        total: 0,
-        posts: 0
-      }
-    }
-  })
 }
 
 /**
@@ -108,4 +95,83 @@ export function getSlug(name: string) {
 
 export function getAvailable(item: { draft: boolean; private: boolean }) {
   return process.env.NODE_ENV !== 'production' || (!item.draft && !item.private)
+}
+
+type TaxonomyData = {
+  [key: string]: unknown
+  name: string
+  count: {
+    total: number
+    posts: number
+    pages: number
+  }
+  slug?: string
+  content?: string
+  excerpt?: string
+  date?: string
+}
+
+type TaxonomyCtx = {
+  addIssue?: (arg: z.IssueData) => void
+  meta: {
+    content?: string
+    path: string
+    config: {
+      root: string
+    }
+  }
+}
+
+export function createTaxonomyTransform(taxonomyName: string) {
+  return async (data: TaxonomyData, ctx: TaxonomyCtx) => {
+    const { meta } = ctx
+    const updatedBy = await getUpdatedBy(meta.path)
+    const path = getContentPath(meta.config.root, meta.path)
+    const slug = data.slug ?? getSlugFromPath(path)
+    const excerpt = data.excerpt ?? `${data.name} ${taxonomyName}.`
+    return {
+      ...data,
+      content: data.content ?? excerptFn({ format: 'html' }, excerpt, ctx),
+      excerpt: excerptFn({ format: 'text' }, excerpt, ctx),
+      excerptHtml: excerptFn({ format: 'html' }, excerpt, ctx),
+      slug,
+      permalink: getPermalink(taxonomyName, path, slug),
+      publishedAt: getZonedDate(
+        data.date ?? updatedBy?.latestDate ?? new Date()
+      ).toISOString(),
+      updatedAt: getZonedDate(updatedBy?.latestDate ?? new Date()).toISOString()
+    }
+  }
+}
+
+export async function getTaxonomy(
+  root: string,
+  collectionName: string,
+  terms: string[]
+) {
+  const transform = createTaxonomyTransform(collectionName)
+  return Promise.all(
+    terms.map((term) => {
+      const termSlug = getSlug(term.replaceAll('/', '_'))
+      return transform(
+        {
+          name: term,
+          slug: termSlug,
+          count: {
+            total: 0,
+            posts: 0,
+            pages: 0
+          }
+        },
+        {
+          meta: {
+            path: `${collectionName}/${termSlug}`,
+            config: {
+              root
+            }
+          }
+        }
+      )
+    })
+  )
 }

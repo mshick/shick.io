@@ -3,6 +3,7 @@ import remarkGemoji from 'remark-gemoji'
 import { defineCollection, defineConfig, s } from 'velite'
 import { excerptFn } from './lib/excerpt'
 import {
+  createTaxonomyTransform,
   getAvailable,
   getContentPath,
   getEditUrl,
@@ -21,8 +22,8 @@ const EXCERPT_LENGTH = 260
 const icon = s.enum(['github', 'instagram', 'x'])
 
 const count = s
-  .object({ total: s.number(), posts: s.number() })
-  .default({ total: 0, posts: 0 })
+  .object({ total: s.number(), posts: s.number(), pages: s.number() })
+  .default({ total: 0, posts: 0, pages: 0 })
 
 const meta = s
   .object({
@@ -80,18 +81,12 @@ const tags = defineCollection({
       name: s.string().max(20),
       slug: s.slug('tags').optional(),
       cover: s.image().optional(),
-      description: s.string().max(999).optional(),
+      excerpt: s.markdown().optional(),
+      date: s.isodate().optional(),
+      content: s.markdown(),
       count
     })
-    .transform((data, { meta }) => {
-      const path = getContentPath(meta.config.root, meta.path)
-      const slug = data.slug ?? getSlugFromPath(path)
-      return {
-        ...data,
-        slug,
-        permalink: getPermalink('tags', path, slug)
-      }
-    })
+    .transform(createTaxonomyTransform('tags'))
 })
 
 const categories = defineCollection({
@@ -102,18 +97,12 @@ const categories = defineCollection({
       name: s.string().max(20),
       slug: s.slug('categories').optional(),
       cover: s.image().optional(),
-      description: s.string().max(999).optional(),
+      excerpt: s.markdown().optional(),
+      date: s.isodate().optional(),
+      content: s.markdown(),
       count
     })
-    .transform((data, { meta }) => {
-      const path = getContentPath(meta.config.root, meta.path)
-      const slug = data.slug ?? getSlugFromPath(path)
-      return {
-        ...data,
-        slug,
-        permalink: getPermalink('categories', path, slug)
-      }
-    })
+    .transform(createTaxonomyTransform('categories'))
 })
 
 const posts = defineCollection({
@@ -127,7 +116,7 @@ const posts = defineCollection({
       meta,
       metadata: s.metadata(),
       content: s.markdown(),
-      excerpt: s.markdown(),
+      excerpt: s.markdown().optional(),
       date: s.isodate().optional(),
       author: s.string().optional(),
       draft: s.boolean().default(false),
@@ -137,7 +126,8 @@ const posts = defineCollection({
       categories: s.array(s.string()).default([]),
       tags: s.array(s.string()).default([])
     })
-    .transform(async (data, { meta, addIssue }) => {
+    .transform(async (data, ctx) => {
+      const { meta } = ctx
       const updatedBy = await getUpdatedBy(meta.path)
       const path = getContentPath(meta.config.root, meta.path)
       const slug = data.slug ?? getSlugFromPath(path)
@@ -146,15 +136,13 @@ const posts = defineCollection({
         ...data,
         excerpt: excerptFn(
           { format: 'text', length: EXCERPT_LENGTH },
-          addIssue,
           data.excerpt,
-          meta.content
+          ctx
         ),
         excerptHtml: excerptFn(
           { format: 'html', length: EXCERPT_LENGTH + 40 },
-          addIssue,
           data.excerpt,
-          meta.content
+          ctx
         ),
         permalink,
         author: data.author ?? updatedBy?.latestAuthorName ?? '',
@@ -178,7 +166,7 @@ const pages = defineCollection({
   schema: s
     .object({
       title: s.string().max(99),
-      excerpt: s.string().max(EXCERPT_LENGTH),
+      excerpt: s.markdown(),
       cover: cover.optional(),
       meta,
       slug: s.slug('global', ['admin']).optional(),
@@ -188,17 +176,25 @@ const pages = defineCollection({
       draft: s.boolean().default(false),
       private: s.boolean().default(false)
     })
-    .transform(async (data, { meta }) => {
+    .transform(async (data, ctx) => {
+      const { meta } = ctx
       const updatedBy = await getUpdatedBy(meta.path)
       const path = getContentPath(meta.config.root, meta.path)
       const slug = data.slug ?? getSlugFromPath(path)
       const permalink = getPermalink('pages', path, slug, '/')
+      const excerptHtml = excerptFn({ format: 'html' }, data.excerpt, ctx)
       return {
         ...data,
+        // Provide a unified content as well as excerpt — should be html
+        content: excerptHtml,
+        excerptHtml,
         slug,
         permalink,
         shareUrl: getShareUrl(permalink),
         editUrl: getEditUrl(meta.path),
+        publishedAt: getZonedDate(
+          updatedBy?.latestDate ?? new Date()
+        ).toISOString(),
         updatedAt: getZonedDate(
           updatedBy?.latestDate ?? new Date()
         ).toISOString()
@@ -232,14 +228,15 @@ export default defineConfig({
     // Bad velite types
     remarkPlugins: [remarkGemoji, remarkPresetTufted() as any]
   },
-  prepare: (collections) => {
+  prepare: async (collections) => {
     const { categories, tags, posts, pages } = collections
 
     const docs = [...posts.filter(getAvailable), ...pages.filter(getAvailable)]
 
     const categoriesInDocs = new Set(docs.map((item) => item.categories).flat())
 
-    const categoriesFromDocs = getTaxonomy(
+    const categoriesFromDocs = await getTaxonomy(
+      'content',
       'categories',
       Array.from(categoriesInDocs).filter(
         (i) => categories.find((j) => j.name === i) == null
@@ -250,12 +247,14 @@ export default defineConfig({
 
     categories.forEach((i) => {
       i.count.posts = posts.filter((j) => j.categories.includes(i.name)).length
-      i.count.total = i.count.posts
+      i.count.pages = pages.filter((j) => j.categories.includes(i.name)).length
+      i.count.total = i.count.posts + i.count.pages
     })
 
     const tagsInDocs = new Set(docs.map((item) => item.tags).flat())
 
-    const tagsFromDocs = getTaxonomy(
+    const tagsFromDocs = await getTaxonomy(
+      'content',
       'tags',
       Array.from(tagsInDocs).filter(
         (i) => tags.find((j) => j.name === i) == null
@@ -266,7 +265,8 @@ export default defineConfig({
 
     tags.forEach((i) => {
       i.count.posts = posts.filter((j) => j.tags.includes(i.name)).length
-      i.count.total = i.count.posts
+      i.count.pages = pages.filter((j) => j.tags.includes(i.name)).length
+      i.count.total = i.count.posts + i.count.pages
     })
   }
 })

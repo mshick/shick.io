@@ -45,10 +45,10 @@ export function useMiniSearch({ searchOptions }: UseMiniSearchProps = {}): [
 
   useEffect(() => {
     async function loadSearchIndex() {
-      const { index } = await import('../generated/searchIndex.json')
+      const { index } = await import('../generated/search/index.json')
       minisearch.current = MiniSearch.loadJSON<IndexedResult>(index, {
-        fields: ['title', 'tags', 'excerpt', 'body'],
-        storeFields: ['title', 'excerpt', 'path', 'publishedAt'],
+        fields: ['title', 'tags', 'excerpt', 'content'],
+        storeFields: ['title', 'excerpt', 'permalink', 'publishedAt'],
         searchOptions
       })
       setIsReady(true)

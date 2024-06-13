@@ -6,13 +6,13 @@
     "prebuild": "dotenv -e .env.local -e .env contentlayer2 build && npm run generate:search-index",
     "build": "next build",
     "dev": "next dev",
-    "generate:search-index": "./scripts/generate-search-index.mjs",
+    "generate:search-index": "./scripts/generate-search-index.ts",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx,.json",
     "lint:fix": "eslint . --ext .js,.ts,.jsx,.tsx,.json --fix",
     "start": "next start",
     "test": "npm run lint && npm run typecheck",
     "typecheck": "tsc --noEmit",
-    "velite": "dotenv -e .env.local -e .env velite --clean",
+    "velite": "dotenv -e .env.local -e .env velite --clean && npm run generate:search-index",
     "xxpredev": "dotenv -e .env.local -e .env contentlayer2 build && npm run generate:search-index"
   },
   "prettier": {

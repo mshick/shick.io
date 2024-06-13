@@ -16,6 +16,9 @@
       "#/.velite": [
         "./.velite"
       ],
+      "#/.search": [
+        "./.search"
+      ],      
       "contentlayer/generated": [
         "./.contentlayer/generated"
       ],
@@ -32,6 +35,7 @@
     "tailwind.config.ts",
     ".contentlayer/generated",
     ".velite",
+    ".search",
     "env"
   ],
   "exclude": [

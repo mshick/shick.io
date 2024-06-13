@@ -1,6 +1,9 @@
 import type { Category, Option, Page, Post, Tag } from '#/.velite'
 import { categories, options, pages, posts, tags } from '#/.velite'
-import { getAvailable } from './velite'
+
+export function getAvailable(item: { draft: boolean; private: boolean }) {
+  return process.env.NODE_ENV !== 'production' || (!item.draft && !item.private)
+}
 
 type Taxonomy = {
   categories: { [P in 'name' | 'slug' | 'permalink']: Category[P] }[]

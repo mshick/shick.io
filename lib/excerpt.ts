@@ -29,15 +29,26 @@ export interface ExcerptOptions {
   length?: number
 }
 
+type ExcerptFnCtx = {
+  addIssue?: (arg: z.IssueData) => void
+  meta: {
+    content?: string
+  }
+}
+
 export function excerptFn(
   { separator = 'more', length = 260, format = 'html' }: ExcerptOptions = {},
-  addIssue: (arg: z.IssueData) => void,
-  value: string,
-  content?: string
+  value?: string,
+  ctx?: ExcerptFnCtx
 ) {
-  if (value == null && content != null) {
-    value = content
+  if (value == null && ctx?.meta.content != null) {
+    value = ctx?.meta.content
   }
+
+  if (!value) {
+    return
+  }
+
   try {
     const mdast = fromMarkdown(value)
     const hast = toHast(mdast, { allowDangerousHtml: true })
@@ -57,12 +68,12 @@ export function excerptFn(
     // await rehypeCopyLinkedFiles(config.output)(output, { path })
     return format === 'html' ? toHtml(output) : toText(output)
   } catch (err: any) {
-    addIssue({ fatal: true, code: 'custom', message: err.message })
+    ctx?.addIssue?.({ fatal: true, code: 'custom', message: err.message })
     return value
   }
 }
 
 export const excerpt = (options: ExcerptOptions = {}) =>
-  z.custom<string>().transform((value, { meta: { content }, addIssue }) => {
-    return excerptFn(options, addIssue, value, content)
+  z.custom<string>().transform((value, ctx) => {
+    return excerptFn(options, value, ctx)
   })
