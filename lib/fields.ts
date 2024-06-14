@@ -1,167 +1,188 @@
-// @ts-nocheck
-import { Image } from 'contentlayer/generated'
-import { LocalDocument } from 'contentlayer2/source-files'
 import { fromZonedTime } from 'date-fns-tz'
-import { get } from 'lodash-es'
-import { createHash } from 'node:crypto'
-import { copyFile, readFile } from 'node:fs/promises'
-import path from 'node:path'
+import { readFileSync } from 'node:fs'
+import { basename, join, relative, resolve } from 'node:path'
 import { format } from 'node:util'
-import readingTime, { ReadTimeResults } from 'reading-time'
 import slug from 'slug'
-import {
-  baseDir,
-  canonicalUrl,
-  contentDirPath,
-  editUrlPattern,
-  isProduction,
-  localDevUrl,
-  timezone,
-  vercelUrl
-} from '../env'
-import { remarkExcerpt } from '../lib/remark-excerpt'
-import { getContentPath } from './content'
-import { getGitFileInfo } from './git'
-import { remarkTruncate } from './remark-truncate'
-import { GitFileInfo, Tag, isImageFieldData } from './types'
+import { z } from 'velite'
+import { parse as parseYaml } from 'yaml'
+import { isProduction, localDevUrl, vercelUrl } from '../env'
+import { excerptFn } from './excerpt'
+import { getGitFileInfo, type GitFileInfo } from './git'
 
-export async function convertExcerpt(excerpt: string) {
-  const html = await remarkExcerpt(excerpt)
-  return String(html)
+const __dirname = import.meta.dirname
+const baseDir = resolve(__dirname, '..')
+
+type Options = {
+  timezone: string
+  editUrlPattern?: string
+  collectionPaths?: Record<string, string>
+  url: string
 }
 
-export async function truncateBody(body: string) {
-  const html = await remarkTruncate(body)
-  return String(html)
+const { timezone, editUrlPattern, collectionPaths, url }: Options = parseYaml(
+  readFileSync(join(__dirname, '../content/options.yml'), 'utf8')
+)
+
+function getSiteUrl(): string {
+  return isProduction && url ? url : vercelUrl ?? localDevUrl
 }
 
-export function getSiteUrl(): string {
-  return isProduction ? canonicalUrl ?? '' : vercelUrl ?? localDevUrl
+function getRepoPath(filePath: string): string {
+  return filePath.replace(`${baseDir}/`, '')
 }
 
-export async function getExcerpt(doc: LocalDocument): Promise<string> {
-  return await (doc['excerpt']
-    ? convertExcerpt(`${doc['excerpt']}\n\n`)
-    : truncateBody(doc['body'].raw))
-}
+const gitCache: Record<string, GitFileInfo | null> = {}
 
-const readingTimeCache: Record<string, ReadTimeResults> = {}
-
-export function getReadingTime(doc: LocalDocument): ReadTimeResults {
-  if (!readingTimeCache[doc._id]) {
-    readingTimeCache[doc._id] = readingTime(doc['body'].raw)
-  }
-  return readingTimeCache[doc._id]
-}
-
-const gitCache: Record<string, GitFileInfo> = {}
-
-export async function getUpdatedBy(doc: LocalDocument): Promise<string> {
-  if (!gitCache[doc._id]) {
-    gitCache[doc._id] = await getGitFileInfo(
-      baseDir,
-      path.join(contentDirPath, doc._raw.sourceFilePath)
-    )
-  }
-  return gitCache[doc._id].latestAuthorName
-}
-
-export async function getUpdatedByEmail(doc: LocalDocument): Promise<string> {
-  if (!gitCache[doc._id]) {
-    gitCache[doc._id] = await getGitFileInfo(
-      baseDir,
-      path.join(contentDirPath, doc._raw.sourceFilePath)
-    )
-  }
-  return gitCache[doc._id].latestAuthorEmail
-}
-
-export async function getUpdatedAt(doc: LocalDocument): Promise<string> {
-  if (!gitCache[doc._id]) {
-    gitCache[doc._id] = await getGitFileInfo(
-      baseDir,
-      path.join(contentDirPath, doc._raw.sourceFilePath)
-    )
+export async function getUpdatedBy(
+  filePath: string
+): Promise<GitFileInfo | null> {
+  if (gitCache[filePath] === undefined) {
+    gitCache[filePath] = (await getGitFileInfo(baseDir, filePath)) ?? null
   }
 
-  const { latestDate } = gitCache[doc._id]
-
-  const date = doc.updatedAt
-    ? fromZonedTime(doc.updatedAt, timezone)
-    : latestDate
-      ? new Date(latestDate)
-      : null
-
-  return date ? date.toISOString() : new Date().toISOString()
+  return gitCache[filePath] ?? null
 }
 
-export function getPublishedAt(doc: LocalDocument): string {
-  return doc.publishedAt
-    ? fromZonedTime(doc.publishedAt, timezone).toISOString()
-    : ''
+export function getZonedDate(date: string | Date): Date {
+  return fromZonedTime(date, timezone)
 }
 
-export function getSlug(doc: LocalDocument): string {
-  const fileName = doc._raw.sourceFileName.replace(/\.mdx?/, '')
-  return slug(fileName)
+export function getShareUrl(path: string): string {
+  return new URL(path, getSiteUrl()).href
 }
 
-export function getPath(doc: LocalDocument): string {
-  const fileDir = doc._raw.sourceFileDir.split('/')[0]
-  return getContentPath(fileDir, getSlug(doc))
+export function getEditUrl(filePath: string): string {
+  return editUrlPattern ? format(editUrlPattern, getRepoPath(filePath)) : ''
 }
 
-export function getTags(doc: LocalDocument): Tag[] {
-  const tags: string[] = doc.tags?.array() ?? []
-  return tags.map((tag) => {
-    const tagSlug = slug(tag, { replacement: '_' })
+/**
+ * Get the permalink path
+ */
+export function getPermalink(
+  collectionName: string,
+  path: string,
+  slug = getSlugFromPath(path)
+) {
+  const basePath = collectionPaths?.[collectionName] ?? `/${collectionName}`
+
+  const slugPath = path
+    .replace(`${collectionName}/`, '')
+    .replace(basename(path), slug)
+
+  // Enforce trailing slash
+  return join(basePath, slugPath)
+    .replace(/\/index$/, '')
+    .concat('/')
+}
+
+/**
+ * Gets the relative path within the content directory
+ *
+ * @example https://github.com/zce/velite/blob/main/src/schemas/path.ts
+ */
+export function getContentPath(root: string, path: string) {
+  return relative(root, path)
+    .replace(/\.[^.]+$/, '')
+    .replace(/\\/g, '/')
+}
+
+/**
+ * Gets a slug from a path, using only the basename
+ */
+export function getSlugFromPath(path: string) {
+  return slug(basename(path))
+}
+
+/**
+ * Gets a slug from a valid name (a name is not a path)
+ */
+export function getSlug(name: string) {
+  if (name.search('/') !== -1) {
+    throw new Error('slug source cannot contain `/`')
+  }
+
+  return slug(name)
+}
+
+export function getAvailable(item: { draft: boolean; private: boolean }) {
+  return process.env.NODE_ENV !== 'production' || (!item.draft && !item.private)
+}
+
+type TaxonomyData = {
+  [key: string]: unknown
+  name: string
+  count: {
+    total: number
+    posts: number
+    pages: number
+  }
+  slug?: string
+  content?: string
+  excerpt?: string
+  date?: string
+}
+
+type TaxonomyCtx = {
+  addIssue?: (arg: z.IssueData) => void
+  meta: {
+    content?: string
+    path: string
+    config: {
+      root: string
+    }
+  }
+}
+
+export function createTaxonomyTransform(taxonomyName: string) {
+  return async (data: TaxonomyData, ctx: TaxonomyCtx) => {
+    const { meta } = ctx
+    const updatedBy = await getUpdatedBy(meta.path)
+    const path = getContentPath(meta.config.root, meta.path)
+    const slug = data.slug ?? getSlugFromPath(path)
+    const excerpt = data.excerpt ?? `${data.name} ${taxonomyName}.`
     return {
-      name: tag,
-      path: getContentPath('tags', tagSlug),
-      slug: tagSlug
+      ...data,
+      content: data.content ?? excerptFn({ format: 'html' }, excerpt, ctx),
+      excerpt: excerptFn({ format: 'text' }, excerpt, ctx),
+      excerptHtml: excerptFn({ format: 'html' }, excerpt, ctx),
+      slug,
+      permalink: getPermalink(taxonomyName, path, slug),
+      publishedAt: getZonedDate(
+        data.date ?? updatedBy?.latestDate ?? new Date()
+      ).toISOString(),
+      updatedAt: getZonedDate(updatedBy?.latestDate ?? new Date()).toISOString()
     }
-  })
-}
-
-export function getEditUrl(doc: LocalDocument): string {
-  const { sourceFilePath } = doc._raw
-  return editUrlPattern
-    ? format(editUrlPattern, `${contentDirPath}/${sourceFilePath}`)
-    : ''
-}
-
-export function getShareUrl(doc: LocalDocument): string {
-  return new URL(getPath(doc), getSiteUrl()).href
-}
-
-async function getFileHash(filePath: string): Promise<string> {
-  const fileBuffer = await readFile(filePath)
-  const hashSum = createHash('sha256')
-  hashSum.update(fileBuffer)
-  return hashSum.digest('hex').slice(0, 8).toUpperCase()
-}
-
-export function copyAssetAndGetUrl(fieldName: string) {
-  return async (doc: LocalDocument): Promise<string | null> => {
-    const asset = get<Image['asset']>(doc, fieldName as any)
-
-    if (!isImageFieldData(asset)) {
-      return null
-    }
-
-    const { filePath } = asset
-    const imgPath = 'images'
-
-    const srcPath = path.join(baseDir, contentDirPath, filePath)
-
-    const fileHash = await getFileHash(srcPath)
-    const extName = path.extname(filePath)
-    const baseName = path.basename(filePath, extName)
-    const dstFileName = `${baseName}~${fileHash}${extName}`
-
-    const dstPath = path.join(baseDir, 'public', imgPath, dstFileName)
-
-    await copyFile(srcPath, dstPath)
-    return `/${imgPath}/${dstFileName}`
   }
+}
+
+export async function getTaxonomy(
+  root: string,
+  collectionName: string,
+  terms: string[]
+) {
+  const transform = createTaxonomyTransform(collectionName)
+  return Promise.all(
+    terms.map((term) => {
+      const termSlug = getSlug(term.replaceAll('/', '_'))
+      return transform(
+        {
+          name: term,
+          slug: termSlug,
+          count: {
+            total: 0,
+            posts: 0,
+            pages: 0
+          }
+        },
+        {
+          meta: {
+            path: `${collectionName}/${termSlug}`,
+            config: {
+              root
+            }
+          }
+        }
+      )
+    })
+  )
 }

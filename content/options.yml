@@ -1,0 +1,46 @@
+name: Michael Shick
+title: Michael Shick
+description: My personal site.
+url: https://shick.us
+timezone: America/New_York
+locale: en-US
+keywords:
+  - Blog
+  - Portfolio
+  - Content-first
+author:
+  name: Michael Shick
+  email: m@shick.us
+  url: https://shick.us
+showListeningTo: true
+editUrlPattern: https://github.com/mshick/shick.io/edit/main/%s
+repoUrl: https://github.com/mshick/shick.io
+collectionPaths:
+  pages: /
+  posts: /blog/
+socials:
+  - name: GitHub
+    icon: github
+    link: https://github.com/mshick
+  - name: X
+    icon: x
+    link: https://x.com/michaelshick
+links:
+  - text: home
+    path: /
+    type: navigation
+  - text: blog
+    path: /blog/
+    type: navigation
+  - text: projects
+    path: /projects/
+    type: navigation    
+  - text: Contact
+    path: /contact
+    type: footer
+  - text: Privacy Policy
+    path: /privacy-policy
+    type: copyright
+  - text: Terms of Service
+    path: /terms-of-service
+    type: copyright

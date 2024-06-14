@@ -1,5 +1,5 @@
 export type NavigationItem = {
-  label: string
+  text: string
   path: string
   current: boolean
 }

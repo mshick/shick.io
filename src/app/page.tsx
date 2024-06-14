@@ -2,7 +2,7 @@ import { MDXContent } from '#/components/MDXContent'
 import { HomepageHero } from '#/features/Homepage/HomepageHero'
 import { HomepageList as HomepageListVelite } from '#/features/Homepage/HomepageListVelite'
 import { components } from '#/mdx'
-import { getPage, getPosts } from 'lib/helper'
+import { getPage, getPosts } from '@/content'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
@@ -28,11 +28,6 @@ export default function IndexPage() {
 
   const bodyComponents = {
     ...components,
-    // p: ({ children }) => (
-    //   <p className="mb-2 leading-6 max-w-3xl text-sm text-zinc-900">
-    //     {children}
-    //   </p>
-    // ),
     HomepageHero,
     HomepageArticlesList: () => (
       <HomepageListVelite heading="blog" href="/articles" documents={posts} />

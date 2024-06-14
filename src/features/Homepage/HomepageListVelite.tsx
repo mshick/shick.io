@@ -1,5 +1,5 @@
-import { Page, Post } from '#/.velite'
 import Link from '#/components/Link'
+import type { Page, Post } from '@/content'
 import slug from 'slug'
 
 export type HomepageListProps = {

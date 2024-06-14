@@ -1,6 +1,11 @@
 import git from 'simple-git'
 import logger from './logger'
-import { GitFileInfo } from './types'
+
+export type GitFileInfo = {
+  latestAuthorName: string
+  latestAuthorEmail: string
+  latestDate: string
+}
 
 export async function getGitFileInfo(
   repoFolder: string,

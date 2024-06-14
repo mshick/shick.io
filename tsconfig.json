@@ -10,20 +10,20 @@
     "pretty": true,
     "baseUrl": ".",
     "paths": {
+      "_/.velite": [
+        "./.velite"
+      ],      
+      "@/content": [
+        "./lib/content"
+      ],      
+      "@/env": [
+        "./env"
+      ],
       "#/*": [
         "./src/*"
       ],
-      "#/.velite": [
-        "./.velite"
-      ],
-      "#/.search": [
-        "./.search"
-      ],      
       "contentlayer/generated": [
         "./.contentlayer/generated"
-      ],
-      "env": [
-        "./env"
       ]
     }
   },

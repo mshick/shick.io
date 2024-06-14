@@ -20,7 +20,7 @@ export function NavigationMenu({ items }: NavigationMenuProps) {
             'first-of-type:-ml-2 p-2 outline-none focus:bg-blue-700 focus:text-white no-underline before:p-0 after:p-0 hover:bg-blue-700 hover:text-white'
           )}
         >
-          {item.label}
+          {item.text}
         </Link>
       ))}
     </>

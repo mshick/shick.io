@@ -1,4 +1,5 @@
-import { canonicalUrl, isProduction } from 'env'
+import { getSiteUrl } from '@/content'
+import { isProduction } from '@/env'
 import { MetadataRoute } from 'next'
 
 export default function robots(): MetadataRoute.Robots {
@@ -8,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: isProduction ? '/' : undefined,
       disallow: isProduction ? undefined : '/'
     },
-    sitemap: `${canonicalUrl}/sitemap.xml`
+    sitemap: `${getSiteUrl()}/sitemap.xml`
   }
 }

@@ -2,43 +2,54 @@ import { SiteFooter } from '#/features/Site/SiteFooter'
 import { SiteHeader } from '#/features/Site/SiteHeader'
 import { plexMono } from '#/styles/fonts'
 import '#/styles/globals.css'
-import { config } from 'contentlayer/generated'
-import { getOptions } from 'lib/helper'
+import { getOptions } from '@/content'
 import { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { PropsWithChildren } from 'react'
 
+const { title, url, description, locale } = getOptions([
+  'title',
+  'url',
+  'description',
+  'locale'
+])
+
 export const metadata: Metadata = {
   title: {
-    default: config.siteName,
-    template: `%s - ${config.siteName}`
+    default: title,
+    template: `%s - ${title}`
   },
-  description: config.siteDescription,
+  description: description,
   alternates: {
-    canonical: config.siteUrl
+    canonical: url
   },
-  metadataBase: new URL(config.siteUrl),
+  metadataBase: new URL(url),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    siteName: config.siteName
+    siteName: title
   }
 }
 
 export default function Layout({ children }: PropsWithChildren) {
-  const { name, navigation } = getOptions(['name', 'navigation'])
+  const { name, links, repoUrl } = getOptions(['name', 'links', 'repoUrl'])
 
   return (
-    <html lang={config.locale} suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body className={`${plexMono.variable} font-primary`}>
         <ThemeProvider attribute="class">
           <div className="mx-auto max-w-3xl px-8">
-            <SiteHeader siteName={name} navigationItems={navigation} />
+            <SiteHeader
+              siteName={name}
+              navigationItems={links.filter(
+                (link) => link.type === 'navigation'
+              )}
+            />
 
             <main id="content">{children}</main>
 
             {/* <SiteFooter showListeningTo={config.showListeningTo} /> */}
-            <SiteFooter />
+            <SiteFooter repoUrl={repoUrl} />
           </div>
         </ThemeProvider>
       </body>

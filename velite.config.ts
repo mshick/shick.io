@@ -13,7 +13,7 @@ import {
   getTaxonomy,
   getUpdatedBy,
   getZonedDate
-} from './lib/velite'
+} from './lib/fields'
 
 // https://github.com/zce/velite/issues/134
 
@@ -42,14 +42,19 @@ const cover = s.object({
 })
 
 const options = defineCollection({
-  name: 'Option',
-  pattern: 'options/index.yml',
+  name: 'Options',
+  pattern: 'options.yml',
   single: true,
   schema: s.object({
     name: s.string().max(20),
     title: s.string().max(99),
-    description: s.string().max(999).optional(),
+    description: s.string().max(999),
+    locale: s.string(),
+    url: s.string(),
     keywords: s.array(s.string()),
+    timezone: s.string(),
+    editUrlPattern: s.string().optional(),
+    repoUrl: s.string().optional(),
     author: s.object({
       name: s.string(),
       email: s.string().email(),
@@ -58,8 +63,9 @@ const options = defineCollection({
     links: s.array(
       s.object({
         text: s.string(),
-        link: s.string(),
-        type: s.enum(['navigation', 'footer', 'copyright'])
+        path: s.string(),
+        type: s.enum(['navigation', 'footer', 'copyright']),
+        current: s.boolean().default(false)
       })
     ),
     socials: s.array(
@@ -70,13 +76,14 @@ const options = defineCollection({
         image: s.image().optional()
       })
     ),
-    navigation: s.array(
-      s.object({
-        label: s.string(),
-        path: s.string(),
-        current: s.boolean().default(false)
+    collectionPaths: s
+      .object({
+        pages: s.string().optional(),
+        posts: s.string().optional(),
+        tags: s.string().optional(),
+        categories: s.string().optional()
       })
-    )
+      .optional()
   })
 })
 
@@ -188,7 +195,7 @@ const pages = defineCollection({
       const updatedBy = await getUpdatedBy(meta.path)
       const path = getContentPath(meta.config.root, meta.path)
       const slug = data.slug ?? getSlugFromPath(path)
-      const permalink = getPermalink('pages', path, slug, '/')
+      const permalink = getPermalink('pages', path, slug)
       const excerptHtml = excerptFn({ format: 'html' }, data.excerpt, ctx)
       return {
         ...data,
