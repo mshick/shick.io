@@ -1,4 +1,5 @@
 import Link from '#/components/Link'
+import classNames from '#/utils/classNames'
 import { NavigationItem } from '../types'
 
 export type MobileMenuProps = {
@@ -20,7 +21,12 @@ export function MobileMenu({ items }: MobileMenuProps) {
           >
             <Link
               href={item.path}
-              className="block no-underline before:content-['['] before:p-0 after:content-[']'] after:p-0 hover:bg-blue-700 hover:text-white"
+              className={classNames(
+                item.current
+                  ? `before:content-[">"]`
+                  : `before:content-["["] after:content-["]"]`,
+                'block no-underline before:p-0 after:p-0 hover:bg-blue-700 hover:text-white'
+              )}
             >
               {item.label}
             </Link>

@@ -1,8 +1,9 @@
 import { SiteFooter } from '#/features/Site/SiteFooter'
-import { SiteNavigation } from '#/features/Site/SiteNavigation'
+import { SiteHeader } from '#/features/Site/SiteHeader'
 import { plexMono } from '#/styles/fonts'
 import '#/styles/globals.css'
 import { config } from 'contentlayer/generated'
+import { getOptions } from 'lib/helper'
 import { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { PropsWithChildren } from 'react'
@@ -25,12 +26,14 @@ export const metadata: Metadata = {
 }
 
 export default function Layout({ children }: PropsWithChildren) {
+  const { name, navigation } = getOptions(['name', 'navigation'])
+
   return (
     <html lang={config.locale} suppressHydrationWarning>
       <body className={`${plexMono.variable} font-primary`}>
         <ThemeProvider attribute="class">
           <div className="mx-auto max-w-3xl px-8">
-            <SiteNavigation items={config.navigation} />
+            <SiteHeader siteName={name} navigationItems={navigation} />
 
             <main id="content">{children}</main>
 

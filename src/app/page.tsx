@@ -40,7 +40,7 @@ export default function IndexPage() {
   }
 
   return (
-    <div className="prose prose-tufted dark:prose-invert">
+    <div className="prose prose-sm prose-tufted dark:prose-invert max-w-none">
       <MDXContent code={page.code} components={bodyComponents} />
     </div>
   )

@@ -69,6 +69,13 @@ const options = defineCollection({
         link: s.string().optional(),
         image: s.image().optional()
       })
+    ),
+    navigation: s.array(
+      s.object({
+        label: s.string(),
+        path: s.string(),
+        current: s.boolean().default(false)
+      })
     )
   })
 })

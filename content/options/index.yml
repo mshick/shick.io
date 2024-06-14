@@ -37,3 +37,10 @@ socials:
   - name: X
     icon: x
     link: https://x.com/michaelshick
+navigation:
+  - label: home
+    path: /
+  - label: blog
+    path: /blog/
+  - label: projects
+    path: /projects/

@@ -2,46 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  #__next {
-    @apply bg-white dark:bg-black box-content flex flex-col min-h-screen min-w-[360px];
-  }
-
-  /* @font-face {
-    font-family: 'Bitstream Vera Sans Mono';
-    font-style: normal;
-    font-weight: 400;
-    font-display: optional;
-    src: url(/fonts/bitstream-vera-sans-mono-regular.woff2)
-      format('woff2');
-  }
-
-  @font-face {
-    font-family: 'Bitstream Vera Sans Mono';
-    font-style: italic;
-    font-weight: 400;
-    font-display: optional;
-    src: url(/fonts/bitstream-vera-sans-mono-italic.woff2) format('woff2');
-  }
-
-  @font-face {
-    font-family: 'Bitstream Vera Sans Mono';
-    font-style: normal;
-    font-weight: 700;
-    font-display: optional;
-    src: url(/fonts/bitstream-vera-sans-mono-bold.woff2) format('woff2');
-  }
-
-  @font-face {
-    font-family: 'Bitstream Vera Sans Mono';
-    font-style: italic;
-    font-weight: 700;
-    font-display: optional;
-    src: url(/fonts/bitstream-vera-sans-mono-bold-italic.woff2)
-      format('woff2');
-  } */
-}
-
 @layer components {
   .prose .qrcode {
     @apply text-base lg:text-xl p-0 border-none overflow-hidden rounded-none;

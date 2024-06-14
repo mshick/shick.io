@@ -1,4 +1,5 @@
 import Link from '#/components/Link'
+import classNames from '#/utils/classNames'
 import { NavigationItem } from '../types'
 
 export type NavigationMenuProps = {
@@ -12,7 +13,12 @@ export function NavigationMenu({ items }: NavigationMenuProps) {
         <Link
           key={item.path}
           href={item.path}
-          className="first-of-type:-ml-2 p-2 outline-none focus:bg-blue-700 focus:text-white no-underline before:content-['['] before:p-0 after:content-[']'] after:p-0 hover:bg-blue-700 hover:text-white"
+          className={classNames(
+            item.current
+              ? String.raw`before:content-["\005F"] after:content-["\005F"]`
+              : `before:content-["["] after:content-["]"]`,
+            'first-of-type:-ml-2 p-2 outline-none focus:bg-blue-700 focus:text-white no-underline before:p-0 after:p-0 hover:bg-blue-700 hover:text-white'
+          )}
         >
           {item.label}
         </Link>

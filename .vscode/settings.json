@@ -45,5 +45,6 @@
   },
   "[json]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  }
+  },
+  "css.customData": [".vscode/tailwind.json"]
 }

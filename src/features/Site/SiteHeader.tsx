@@ -4,6 +4,7 @@ import { ThemeToggle } from '#/features/Site/components/ThemeToggle'
 import { useFocus } from '#/hooks/useFocus'
 import { useMiniSearch } from '#/hooks/useMiniSearch'
 import { replaceState } from '#/utils/history'
+import { usePathname } from 'next/navigation'
 import {
   ChangeEventHandler,
   useCallback,
@@ -18,17 +19,21 @@ import { SearchInput } from './components/SearchInput'
 import { SearchResults } from './components/SearchResults'
 import { NavigationItem } from './types'
 
-export type SiteNavigationProps = {
-  items: NavigationItem[]
+export type SiteHeaderProps = {
+  siteName: string
+  navigationItems: NavigationItem[]
 }
 
-export function SiteNavigation({ items }: SiteNavigationProps) {
-  // const { asPath } = useRouter()
-  const asPath = '/'
+export function SiteHeader({ siteName, navigationItems }: SiteHeaderProps) {
+  const pathname = usePathname()
 
-  items = useMemo(
-    () => items.map((item) => ({ ...item, current: asPath === item.path })),
-    [asPath, items]
+  const items = useMemo(
+    () =>
+      navigationItems.map((item) => ({
+        ...item,
+        current: pathname === item.path
+      })),
+    [pathname, navigationItems]
   )
 
   const [isOpen, setIsOpen] = useState(false)
@@ -89,16 +94,25 @@ export function SiteNavigation({ items }: SiteNavigationProps) {
 
   return (
     <nav className="flex flex-col">
-      <div className="flex justify-between items-center h-16 w-full z-30">
+      {/* Branding - Desktop */}
+      <div className="uppercase mt-4 mb-0 text-sm hidden sm:flex">
+        # {siteName}
+      </div>
+      <div className="flex justify-between items-center h-12 w-full z-30">
         <a href="#content" className="sr-only focus:not-sr-only">
           Skip to content
         </a>
         <div className="flex flex-row w-full">
+          {/* Branding - Mobile */}
+          {!isOpen && (
+            <div className="uppercase py-2 sm:hidden"># {siteName}</div>
+          )}
+
           {/* Top Menu */}
           {!isOpen && (
-            <div className="hidden sm:flex">
+            <nav className="hidden sm:flex">
               <NavigationMenu items={items} />
-            </div>
+            </nav>
           )}
 
           {/* Search Input */}
