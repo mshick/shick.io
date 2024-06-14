@@ -4,6 +4,7 @@ featured: true
 tags:
   - markdown
   - make/it/safe
+excerpt: Super **cool** things you can do with _markdown_!
 ---
 
 :+1:
@@ -126,7 +127,9 @@ There are two ways to create links.
 
 Or leave it empty and use the [link text itself].
 
-URLs and URLs in angle brackets will automatically get turned into links. http://www.example.com and sometimes example.com (but not on Github, for example).
+URLs and URLs in angle brackets will automatically get turned into links.
+http://www.example.com and sometimes example.com (but not on Github, for
+example).
 
 Some text to show that the reference links can follow later.
 
@@ -147,7 +150,8 @@ Some text to show that the reference links can follow later.
 
 Or leave it empty and use the [link text itself].
 
-URLs will automatically get turned into links. http://www.example.com and sometimes example.com (but not on Github, for example).
+URLs will automatically get turned into links. http://www.example.com and
+sometimes example.com (but not on Github, for example).
 
 Some text to show that the reference links can follow later.
 
@@ -165,7 +169,9 @@ Inline-style:
 
 Reference-style: ![alt text][logo]
 
-[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png 'Logo Title Text 2'
+[logo]:
+  https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png
+  'Logo Title Text 2'
 ```
 
 Here's our logo (hover to see the title text):
@@ -175,7 +181,9 @@ Inline-style:
 
 Reference-style: ![alt text][logo]
 
-[logo]: https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png 'Logo Title Text 2'
+[logo]:
+  https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png
+  'Logo Title Text 2'
 
 ## [Code and Syntax Highlighting](#code-and-syntax-highlighting)
 
@@ -187,8 +195,9 @@ Inline `code` has `back-ticks around` it.
 
 Inline `code` has `back-ticks around` it.
 
-Blocks of code are either fenced by lines with three back-ticks ```, or are indented with four spaces. I recommend only
-using the fenced code blocks -- they're easier and only they support syntax highlighting, but you must provide a
+Blocks of code are either fenced by lines with three back-ticks ```, or are
+indented with four spaces. I recommend only using the fenced code blocks --
+they're easier and only they support syntax highlighting, but you must provide a
 language or none
 
 ````markdown
@@ -233,8 +242,9 @@ alert(s)
 
 ## [Tables](#tables)
 
-Tables aren't part of the core Markdown spec, but they are part of GFM and Markdown Here supports them. They are an easy
-way of adding tables to your email -- a task that would otherwise require copy-pasting from another application.
+Tables aren't part of the core Markdown spec, but they are part of GFM and
+Markdown Here supports them. They are an easy way of adding tables to your email
+-- a task that would otherwise require copy-pasting from another application.
 
 ```markdown
 Colons can be used to align columns.
@@ -245,8 +255,9 @@ Colons can be used to align columns.
 | col 2 is      |   centered    |   \$12 |
 | zebra stripes |   are neat    |    \$1 |
 
-There must be at least 3 dashes separating each header cell. The outer pipes (|) are optional, and you don't need to
-make the raw Markdown line up prettily. You can also use inline Markdown.
+There must be at least 3 dashes separating each header cell. The outer pipes (|)
+are optional, and you don't need to make the raw Markdown line up prettily. You
+can also use inline Markdown.
 
 | Markdown | Less      | Pretty     |
 | -------- | --------- | ---------- |
@@ -262,8 +273,9 @@ Colons can be used to align columns.
 | col 2 is      |   centered    |   \$12 |
 | zebra stripes |   are neat    |    \$1 |
 
-There must be at least 3 dashes separating each header cell. The outer pipes (|) are optional, and you don't need to
-make the raw Markdown line up prettily. You can also use inline Markdown.
+There must be at least 3 dashes separating each header cell. The outer pipes (|)
+are optional, and you don't need to make the raw Markdown line up prettily. You
+can also use inline Markdown.
 
 | Markdown | Less      | Pretty     |
 | -------- | --------- | ---------- |
@@ -275,20 +287,24 @@ make the raw Markdown line up prettily. You can also use inline Markdown.
 ## [Blockquotes](#blockquotes)
 
 ```markdown
-> Blockquotes are very handy in email to emulate reply text. This line is part of the same quote.
+> Blockquotes are very handy in email to emulate reply text. This line is part
+> of the same quote.
 
 Quote break.
 
-> This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this
-> is long enough to actually wrap for everyone. Oh, you can _put_ **Markdown** into a blockquote.
+> This is a very long line that will still be quoted properly when it wraps. Oh
+> boy let's keep writing to make sure this is long enough to actually wrap for
+> everyone. Oh, you can _put_ **Markdown** into a blockquote.
 ```
 
-> Blockquotes are very handy in email to emulate reply text. This line is part of the same quote.
+> Blockquotes are very handy in email to emulate reply text. This line is part
+> of the same quote.
 
 Quote break.
 
-> This is a very long line that will still be quoted properly when it wraps. Oh boy let's keep writing to make sure this
-> is long enough to actually wrap for everyone. Oh, you can _put_ **Markdown** into a blockquote.
+> This is a very long line that will still be quoted properly when it wraps. Oh
+> boy let's keep writing to make sure this is long enough to actually wrap for
+> everyone. Oh, you can _put_ **Markdown** into a blockquote.
 
 ## [Inline HTML](#inline-html)
 
@@ -348,15 +364,17 @@ Underscores
 
 ## [Line Breaks](#line-breaks)
 
-My basic recommendation for learning how line breaks work is to experiment and discover -- hit `<Enter>` once (i.e.,
-insert one newline), then hit it twice (i.e., insert two new lines), see what happens. You'll soon learn to get what you
-want. "Markdown Toggle" is your friend.
+My basic recommendation for learning how line breaks work is to experiment and
+discover -- hit `<Enter>` once (i.e., insert one newline), then hit it twice
+(i.e., insert two new lines), see what happens. You'll soon learn to get what
+you want. "Markdown Toggle" is your friend.
 
 ```markdown
 Here's a line for us to start with.
 
-This line is separated from the one above by two newlines, so it will be a _separate paragraph_.
+This line is separated from the one above by two newlines, so it will be a
+_separate paragraph_.
 
-This line is also a separate paragraph, but... This line is only separated by a single newline, so it's a separate line
-in the _same paragraph_.
+This line is also a separate paragraph, but... This line is only separated by a
+single newline, so it's a separate line in the _same paragraph_.
 ```

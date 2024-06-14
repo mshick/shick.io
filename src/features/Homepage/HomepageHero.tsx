@@ -6,7 +6,7 @@ export function HomepageHero() {
   return (
     <section
       id="hero"
-      className="flex flex-col-reverse sm:flex-row sm:gap-10 my-4"
+      className="not-prose flex flex-col-reverse sm:flex-row sm:gap-10 my-4"
     >
       <div className="flex flex-col gap-4 items-center sm:items-start md:justify-center">
         <div className="flex flex-row gap-4 sm:flex-row sm:gap-2 sm:mx-0 text-[5px] sm:text-[6px] lg:text-[7px]">

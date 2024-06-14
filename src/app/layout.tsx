@@ -4,6 +4,7 @@ import { plexMono } from '#/styles/fonts'
 import '#/styles/globals.css'
 import { config } from 'contentlayer/generated'
 import { Metadata } from 'next'
+import { ThemeProvider } from 'next-themes'
 import { PropsWithChildren } from 'react'
 
 export const metadata: Metadata = {
@@ -25,16 +26,18 @@ export const metadata: Metadata = {
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
-    <html lang={config.locale}>
+    <html lang={config.locale} suppressHydrationWarning>
       <body className={`${plexMono.variable} font-primary`}>
-        <div className="mx-auto max-w-3xl px-8">
-          <SiteNavigation items={config.navigation} />
+        <ThemeProvider attribute="class">
+          <div className="mx-auto max-w-3xl px-8">
+            <SiteNavigation items={config.navigation} />
 
-          <main id="content">{children}</main>
+            <main id="content">{children}</main>
 
-          {/* <SiteFooter showListeningTo={config.showListeningTo} /> */}
-          <SiteFooter />
-        </div>
+            {/* <SiteFooter showListeningTo={config.showListeningTo} /> */}
+            <SiteFooter />
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   )

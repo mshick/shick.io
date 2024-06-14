@@ -5,7 +5,6 @@ import { components } from '#/mdx'
 import { getPage, getPosts } from 'lib/helper'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { PropsWithChildren } from 'react'
 
 export const revalidate = 60
 
@@ -34,16 +33,15 @@ export default function IndexPage() {
     //     {children}
     //   </p>
     // ),
-    HomepageBody: ({ children }: PropsWithChildren) => (
-      <div className="prose prose-tufted-bbs dark:prose-tufted-bbs-invert">
-        {children}
-      </div>
-    ),
     HomepageHero,
     HomepageArticlesList: () => (
       <HomepageListVelite heading="blog" href="/articles" documents={posts} />
     )
   }
 
-  return <MDXContent code={page.code} components={bodyComponents} />
+  return (
+    <div className="prose prose-tufted dark:prose-invert">
+      <MDXContent code={page.code} components={bodyComponents} />
+    </div>
+  )
 }

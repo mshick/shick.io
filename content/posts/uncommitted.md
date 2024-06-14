@@ -6,7 +6,10 @@ cover:
   caption: foobar
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus.
+Suspendisse
+
+<!-- more -->
 
 ![some image](img.png)
 
