@@ -1,5 +1,6 @@
 {
   "extends": [
+    "@tsconfig/node20/tsconfig",
     "@tsconfig/strictest/tsconfig",
     "@tsconfig/next/tsconfig"
   ],

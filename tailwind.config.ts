@@ -1,7 +1,82 @@
 import aspectRatio from '@tailwindcss/aspect-ratio'
 import forms from '@tailwindcss/forms'
 import typography from '@tailwindcss/typography'
+import parser, { Pseudo } from 'postcss-selector-parser'
 import plugin from 'tailwindcss/plugin'
+import { PluginAPI } from 'tailwindcss/types/config'
+
+const parseSelector = parser()
+
+function commonTrailingPseudos(selector: string) {
+  const ast = parseSelector.astSync(selector)
+
+  const matrix: Pseudo[][] = []
+
+  // Put the pseudo elements in reverse order in a sparse, column-major 2D array
+  for (const [i, sel] of ast.nodes.entries()) {
+    for (const [j, child] of [...sel.nodes].reverse().entries()) {
+      // We only care about pseudo elements
+      if (child.type !== 'pseudo' || !child.value.startsWith('::')) {
+        break
+      }
+
+      matrix[j] = matrix[j] ?? []
+      matrix[j][i] = child
+    }
+  }
+
+  const trailingPseudos = parser.selector()
+
+  // At this point the pseudo elements are in a column-major 2D array
+  // This means each row contains one "column" of pseudo elements from each selector
+  // We can compare all the pseudo elements in a row to see if they are the same
+  for (const pseudos of matrix) {
+    // It's a sparse 2D array so there are going to be holes in the rows
+    // We skip those
+    if (!pseudos) {
+      continue
+    }
+
+    const values = new Set([...pseudos.map((p) => p.value)])
+
+    // The pseudo elements are not the same
+    if (values.size > 1) {
+      break
+    }
+
+    pseudos.forEach((pseudo) => pseudo.remove())
+    trailingPseudos.prepend(pseudos[0])
+  }
+
+  if (trailingPseudos.nodes.length) {
+    return [trailingPseudos.toString(), ast.toString()]
+  }
+
+  return [null, selector]
+}
+
+function inWhere(
+  selector: string,
+  {
+    className,
+    modifier,
+    prefix
+  }: { className: string; modifier: string; prefix: (name: string) => string }
+) {
+  const prefixedNot = prefix(`.not-${className}`).slice(1)
+  const selectorPrefix = selector.startsWith('>')
+    ? `${modifier === 'DEFAULT' ? `.${className}` : `.${className}-${modifier}`} `
+    : ''
+
+  // Parse the selector, if every component ends in the same pseudo element(s) then move it to the end
+  const [trailingPseudo, rebuiltSelector] = commonTrailingPseudos(selector)
+
+  if (trailingPseudo) {
+    return `:where(${selectorPrefix}${rebuiltSelector}):not(:where([class~="${prefixedNot}"],[class~="${prefixedNot}"] *))${trailingPseudo}`
+  }
+
+  return `:where(${selectorPrefix}${selector}):not(:where([class~="${prefixedNot}"],[class~="${prefixedNot}"] *))`
+}
 
 const round = (num: number) =>
   num
@@ -21,6 +96,250 @@ const hexToRgb = (hex: string) => {
   const b = parseInt(hex.substring(4, 6), 16)
   return `${r} ${g} ${b}`
 }
+
+const styles = (theme: PluginAPI['theme']) => ({
+  DEFAULT: {
+    '[class~="lead"]': {
+      fontStyle: 'italic'
+    },
+    section: {
+      paddingTop: em(16, 16),
+      paddingBottom: em(16, 16)
+    },
+    a: {
+      '&::selection': {
+        backgroundColor: theme('colors.gray.500'),
+        color: theme('colors.white'),
+        textShadow: 'none'
+      }
+    },
+    h2: {
+      fontWeight: 'normal',
+      fontStyle: 'italic',
+      marginTop: em(24, 18),
+      marginBottom: em(16, 16)
+    },
+    h3: {
+      fontWeight: 'normal',
+      fontStyle: 'italic',
+      marginTop: em(24, 18),
+      marginBottom: em(16, 16)
+    },
+    // Auto-linked headings
+    'h2 > a, h3 > a': {
+      fontWeight: 'normal'
+    },
+    pre: {
+      borderColor: 'var(--tw-prose-borders)',
+      borderWidth: '1px',
+      borderStyle: 'dashed',
+      overflow: 'auto',
+      padding: em(16, 16),
+      marginTop: em(16, 16),
+      marginBottom: em(16, 16),
+      color: 'var(--tw-prose-pre-code)',
+      '.highlight': {
+        background: 'hsla(0, 0%, 70%, .5)'
+      },
+      '> code.highlight': {
+        outline: '.4em solid var(--tw-prose-pre-code-highlight)',
+        outlineOffset: '.4em'
+      }
+    },
+    '.token.comment,.token.prolog,.token.doctype,.token.cdata,.token.punctuation':
+      {
+        color: 'var(--tw-prose-pre-code-comment)'
+      },
+    '.token.namespace': {
+      opacity: '0.7'
+    },
+    '.token.tag,.token.operator,.token.number': {
+      color: 'var(--tw-prose-pre-code-tag)'
+    },
+    '.token.property,.token.function': {
+      color: 'var(--tw-prose-pre-code-function)'
+    },
+    '.token.tag-id,.token.selector,.token.atrule-id': {
+      color: 'var(--tw-prose-pre-code-selector)'
+    },
+    '.token.attr-name': {
+      color: 'var(--tw-prose-pre-code-attr-name)'
+    },
+    '.token.boolean,.token.string,.token.entity,.token.url,.token.attr-value,.token.keyword,.token.control,.token.directive,.token.unit,.token.statement,.token.regex,.token.at-rule':
+      {
+        color: 'var(--tw-prose-pre-code-keyword)'
+      },
+    '.token.placeholder,.token.variable': {
+      color: 'var(--tw-prose-pre-code-variable)'
+    },
+    '.token.deleted': {
+      textDecorationLine: 'line-through'
+    },
+    '.token.inserted': {
+      borderBottom: '1px dotted var(--tw-prose-pre-code-inserted)',
+      textDecoration: 'none'
+    },
+    '.token.italic': {
+      fontStyle: 'italic'
+    },
+    '.token.important,.bold': {
+      fontWeight: 'bold'
+    },
+    '.token.important': {
+      color: 'var(--tw-prose-pre-code-important)'
+    },
+    '.token.entity': {
+      cursor: 'help'
+    },
+    'code[class*="language-"],pre[class*="language-"]': {
+      '::selection': {
+        textShadow: 'none',
+        background: 'var(--tw-prose-pre-code-selection)'
+      }
+    },
+    '.rehype-code-title': {
+      backgroundColor: 'var(--tw-prose-pre-bg)',
+      paddingLeft: em(16, 16),
+      paddingRight: em(16, 16),
+      paddingTop: theme('spacing.2'),
+      paddingBottom: theme('spacing.2'),
+      margin: '0',
+      borderTopLeftRadius: '10px',
+      borderTopRightRadius: '10px',
+      borderColor: 'var(--tw-prose-borders)',
+      borderWidth: '1px',
+      borderStyle: 'dashed',
+      fontWeight: 'bold'
+    },
+    '.rehype-code-title + pre': {
+      marginTop: '0',
+      borderTopLeftRadius: '0',
+      borderTopRightRadius: '0',
+      borderTopWidth: '0'
+    },
+    blockquote: {
+      position: 'relative',
+      fontStyle: 'regular',
+      border: '0',
+      marginTop: '0',
+      marginLeft: theme('spacing.2'),
+      marginBottom: theme('spacing.3'),
+      marginRight: '0',
+      paddingLeft: theme('spacing.3'),
+      p: {
+        width: '100%'
+      },
+      'p:first-of-type::before': {
+        content: '">"',
+        display: 'block',
+        position: 'absolute',
+        left: '-8px',
+        color: 'inherit'
+      }
+    },
+    'blockquote footer': {
+      fontSize: '0.75rem',
+      textAlign: 'right'
+    },
+    '.newthought': {
+      fontVariant: 'small-caps'
+    },
+    hr: {
+      border: '0',
+      borderBottom: '1px dashed',
+      borderColor: 'muted'
+    },
+    ol: {
+      position: 'relative',
+      listStyle: 'none',
+      marginTop: '0',
+      marginBottom: theme('spacing.3'),
+      padding: '0',
+      marginLeft: theme('spacing.7')
+    },
+    'ol > li': {
+      counterIncrement: 'li'
+    },
+    'ol > li::before': {
+      content: 'counter(li)',
+      color: 'inherit',
+      position: 'absolute',
+      left: '-20px'
+    },
+    ul: {
+      position: 'relative',
+      listStyle: 'none',
+      marginTop: '0',
+      marginBottom: theme('spacing.3'),
+      padding: '0',
+      marginLeft: theme('spacing.7')
+    },
+    'ul > li': {
+      counterIncrement: 'li'
+    },
+    'ul > li::before': {
+      content: '"*"',
+      color: 'inherit',
+      position: 'absolute',
+      left: '-20px'
+    },
+    li: {
+      marginBottom: theme('spacing.1')
+    },
+    table: {
+      width: '100%',
+      borderCollapse: 'collapse',
+      marginBottom: theme('spacing.3'),
+      border: 'none'
+    },
+    'table thead': {
+      border: '0'
+    },
+    'table thead tr th': {
+      border: '1px dashed var(--tw-prose-borders)',
+      paddingTop: theme('spacing.2'),
+      paddingBottom: theme('spacing.2'),
+      paddingLeft: em(16, 16),
+      paddingRight: em(16, 16),
+      textAlign: 'center'
+    },
+    'table tbody tr:nth-of-type(even)': {
+      backgroundColor: 'var(--tw-prose-tr-even)'
+    },
+    'table tbody tr': {
+      border: '0'
+    },
+    'table tbody tr td': {
+      border: '1px dashed var(--tw-prose-borders)',
+      paddingTop: theme('spacing.2'),
+      paddingBottom: theme('spacing.2'),
+      paddingLeft: em(16, 16),
+      paddingRight: em(16, 16)
+    },
+    figure: {
+      maxWidth: '100%',
+      marginTop: theme('spacing.5'),
+      marginBottom: theme('spacing.5')
+    },
+    'figure > figcaption': {
+      marginTop: theme('spacing.2'),
+      color: theme('colors.black')
+    },
+    'figure.fullwidth': {
+      display: 'block',
+      gridTemplateColumns: 'initial',
+      marginTop: em(20, 16),
+      marginBottom: em(20, 16)
+    },
+    '.video-wrapper': {
+      aspectRatio: '16 / 9'
+    },
+    '.video-wrapper > iframe': {
+      height: '100%',
+      width: '100%'
+    }
+  }
+})
 
 export default {
   content: ['./src/**/*.{ts,tsx}'],
@@ -83,252 +402,25 @@ export default {
           e,
           config,
           corePlugins,
-          theme
+          theme,
+          ...plugin
         }) => {
+          const { prefix } = plugin as any
+          const styleProfile = styles(theme)
+
+          const prefixed = Object.keys(styleProfile).map((modifier) => ({
+            [modifier === 'DEFAULT'
+              ? `.${className}`
+              : `.${className}-${modifier}`]: Object.fromEntries(
+              Object.keys(styleProfile[modifier]).map((prop) => [
+                `${inWhere(prop, { className, modifier, prefix })}`,
+                styleProfile[modifier][prop]
+              ])
+            )
+          }))
+
           addComponents([
-            {
-              [`.${className}`]: {
-                '[class~="lead"]': {
-                  fontStyle: 'italic'
-                },
-                section: {
-                  paddingTop: em(16, 16),
-                  paddingBottom: em(16, 16)
-                },
-                a: {
-                  '&::selection': {
-                    backgroundColor: theme('colors.gray.500'),
-                    color: theme('colors.white'),
-                    textShadow: 'none'
-                  }
-                },
-                h2: {
-                  fontWeight: 'normal',
-                  fontStyle: 'italic',
-                  marginTop: em(24, 18),
-                  marginBottom: em(16, 16)
-                },
-                h3: {
-                  fontWeight: 'normal',
-                  fontStyle: 'italic',
-                  marginTop: em(24, 18),
-                  marginBottom: em(16, 16)
-                },
-                // Auto-linked headings
-                'h2 > a, h3 > a': {
-                  fontWeight: 'normal'
-                },
-                pre: {
-                  borderColor: 'var(--tw-prose-borders)',
-                  borderWidth: '1px',
-                  borderStyle: 'dashed',
-                  overflow: 'auto',
-                  padding: em(16, 16),
-                  marginTop: em(16, 16),
-                  marginBottom: em(16, 16),
-                  color: 'var(--tw-prose-pre-code)',
-                  '.highlight': {
-                    background: 'hsla(0, 0%, 70%, .5)'
-                  },
-                  '> code.highlight': {
-                    outline: '.4em solid var(--tw-prose-pre-code-highlight)',
-                    outlineOffset: '.4em'
-                  }
-                },
-                '.token.comment,.token.prolog,.token.doctype,.token.cdata,.token.punctuation':
-                  {
-                    color: 'var(--tw-prose-pre-code-comment)'
-                  },
-                '.token.namespace': {
-                  opacity: '0.7'
-                },
-                '.token.tag,.token.operator,.token.number': {
-                  color: 'var(--tw-prose-pre-code-tag)'
-                },
-                '.token.property,.token.function': {
-                  color: 'var(--tw-prose-pre-code-function)'
-                },
-                '.token.tag-id,.token.selector,.token.atrule-id': {
-                  color: 'var(--tw-prose-pre-code-selector)'
-                },
-                '.token.attr-name': {
-                  color: 'var(--tw-prose-pre-code-attr-name)'
-                },
-                '.token.boolean,.token.string,.token.entity,.token.url,.token.attr-value,.token.keyword,.token.control,.token.directive,.token.unit,.token.statement,.token.regex,.token.at-rule':
-                  {
-                    color: 'var(--tw-prose-pre-code-keyword)'
-                  },
-                '.token.placeholder,.token.variable': {
-                  color: 'var(--tw-prose-pre-code-variable)'
-                },
-                '.token.deleted': {
-                  textDecorationLine: 'line-through'
-                },
-                '.token.inserted': {
-                  borderBottom: '1px dotted var(--tw-prose-pre-code-inserted)',
-                  textDecoration: 'none'
-                },
-                '.token.italic': {
-                  fontStyle: 'italic'
-                },
-                '.token.important,.bold': {
-                  fontWeight: 'bold'
-                },
-                '.token.important': {
-                  color: 'var(--tw-prose-pre-code-important)'
-                },
-                '.token.entity': {
-                  cursor: 'help'
-                },
-                'code[class*="language-"],pre[class*="language-"]': {
-                  '::selection': {
-                    textShadow: 'none',
-                    background: 'var(--tw-prose-pre-code-selection)'
-                  }
-                },
-                '.rehype-code-title': {
-                  backgroundColor: 'var(--tw-prose-pre-bg)',
-                  paddingLeft: em(16, 16),
-                  paddingRight: em(16, 16),
-                  paddingTop: theme('spacing.2'),
-                  paddingBottom: theme('spacing.2'),
-                  margin: '0',
-                  borderTopLeftRadius: '10px',
-                  borderTopRightRadius: '10px',
-                  borderColor: 'var(--tw-prose-borders)',
-                  borderWidth: '1px',
-                  borderStyle: 'dashed',
-                  fontWeight: 'bold'
-                },
-                '.rehype-code-title + pre': {
-                  marginTop: '0',
-                  borderTopLeftRadius: '0',
-                  borderTopRightRadius: '0',
-                  borderTopWidth: '0'
-                },
-                blockquote: {
-                  position: 'relative',
-                  fontStyle: 'regular',
-                  border: '0',
-                  marginTop: '0',
-                  marginLeft: theme('spacing.2'),
-                  marginBottom: theme('spacing.3'),
-                  marginRight: '0',
-                  paddingLeft: theme('spacing.3'),
-                  p: {
-                    width: '100%'
-                  },
-                  'p:first-of-type::before': {
-                    content: '">"',
-                    display: 'block',
-                    position: 'absolute',
-                    left: '-8px',
-                    color: 'inherit'
-                  }
-                },
-                'blockquote footer': {
-                  fontSize: '0.75rem',
-                  textAlign: 'right'
-                },
-                '.newthought': {
-                  fontVariant: 'small-caps'
-                },
-                hr: {
-                  border: '0',
-                  borderBottom: '1px dashed',
-                  borderColor: 'muted'
-                },
-                ol: {
-                  position: 'relative',
-                  listStyle: 'none',
-                  marginTop: '0',
-                  marginBottom: theme('spacing.3'),
-                  padding: '0',
-                  marginLeft: theme('spacing.7')
-                },
-                'ol > li': {
-                  counterIncrement: 'li'
-                },
-                'ol > li::before': {
-                  content: 'counter(li)',
-                  color: 'inherit',
-                  position: 'absolute',
-                  left: '-20px'
-                },
-                ul: {
-                  position: 'relative',
-                  listStyle: 'none',
-                  marginTop: '0',
-                  marginBottom: theme('spacing.3'),
-                  padding: '0',
-                  marginLeft: theme('spacing.7')
-                },
-                'ul > li': {
-                  counterIncrement: 'li'
-                },
-                'ul > li::before': {
-                  content: '"*"',
-                  color: 'inherit',
-                  position: 'absolute',
-                  left: '-20px'
-                },
-                li: {
-                  marginBottom: theme('spacing.1')
-                },
-                table: {
-                  width: '100%',
-                  borderCollapse: 'collapse',
-                  marginBottom: theme('spacing.3'),
-                  border: 'none'
-                },
-                'table thead': {
-                  border: '0'
-                },
-                'table thead tr th': {
-                  border: '1px dashed var(--tw-prose-borders)',
-                  paddingTop: theme('spacing.2'),
-                  paddingBottom: theme('spacing.2'),
-                  paddingLeft: em(16, 16),
-                  paddingRight: em(16, 16),
-                  textAlign: 'center'
-                },
-                'table tbody tr:nth-of-type(even)': {
-                  backgroundColor: 'var(--tw-prose-tr-even)'
-                },
-                'table tbody tr': {
-                  border: '0'
-                },
-                'table tbody tr td': {
-                  border: '1px dashed var(--tw-prose-borders)',
-                  paddingTop: theme('spacing.2'),
-                  paddingBottom: theme('spacing.2'),
-                  paddingLeft: em(16, 16),
-                  paddingRight: em(16, 16)
-                },
-                figure: {
-                  maxWidth: '100%',
-                  marginTop: theme('spacing.5'),
-                  marginBottom: theme('spacing.5')
-                },
-                'figure > figcaption': {
-                  marginTop: theme('spacing.2'),
-                  color: theme('colors.black')
-                },
-                'figure.fullwidth': {
-                  display: 'block',
-                  gridTemplateColumns: 'initial',
-                  marginTop: em(20, 16),
-                  marginBottom: em(20, 16)
-                },
-                '.video-wrapper': {
-                  aspectRatio: '16 / 9'
-                },
-                '.video-wrapper > iframe': {
-                  height: '100%',
-                  width: '100%'
-                }
-              }
-            },
+            ...prefixed,
             {
               [`.${className}-tufted`]: {
                 '--tw-prose-body': theme('colors.black'),

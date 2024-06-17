@@ -6,18 +6,21 @@ export type SiteFooterProps = {
 export function SiteFooter({ repoUrl }: SiteFooterProps) {
   return (
     <>
-      <footer className="w-full pt-0 h-10 pb-4 relative">
+      <footer className="w-full">
+        <hr className="z-30" />
         {/* <div>{showListeningTo && <ListeningTo />}</div> */}
         {repoUrl ? (
-          <div className="text-sm absolute right-0 top-0 bg-white dark:bg-black">
-            <a
-              href={repoUrl}
-              className="hover:bg-blue-700 hover:text-white"
-              target="_blank"
-              rel="noreferrer"
-            >
-              &lt;src&gt;
-            </a>
+          <div className="flex py-6">
+            <div className="ml-auto bg-white dark:bg-black">
+              <a
+                href={repoUrl}
+                className="hover:bg-blue-700 hover:text-white"
+                target="_blank"
+                rel="noreferrer"
+              >
+                &lt;src&gt;
+              </a>
+            </div>
           </div>
         ) : null}
       </footer>

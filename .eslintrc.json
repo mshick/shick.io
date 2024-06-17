@@ -9,7 +9,8 @@
   ],
   "parserOptions": {
     "ecmaVersion": 12,
-    "project": "tsconfig.json",
+    "project": true,
+    "tsconfigRootDir": "./",
     "sourceType": "module"
   },
   "overrides": [
@@ -72,6 +73,10 @@
       "settings": {
         "mdx/code-blocks": true,
         "mdx/language-mapper": {}
+      },
+      "globals": {
+        "HomepageArticlesList": true,
+        "HomepageHero": true
       }
     }
   ],
