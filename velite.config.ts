@@ -1,3 +1,4 @@
+import rehypePresetTufted from '@mshick/tufted/rehype'
 import remarkPresetTufted from '@mshick/tufted/remark'
 import remarkGemoji from 'remark-gemoji'
 import { defineCollection, defineConfig, s } from 'velite'
@@ -233,13 +234,17 @@ export default defineConfig({
     options
   },
   markdown: {
-    rehypePlugins: [],
     // Bad velite types
+    rehypePlugins: [
+      rehypePresetTufted({ assets: 'public/static', base: '/static/' }) as any
+    ],
     remarkPlugins: [remarkGemoji, remarkPresetTufted() as any]
   },
   mdx: {
-    rehypePlugins: [],
     // Bad velite types
+    rehypePlugins: [
+      rehypePresetTufted({ assets: 'public/static', base: '/static/' }) as any
+    ],
     remarkPlugins: [remarkGemoji, remarkPresetTufted() as any]
   },
   prepare: async (collections) => {

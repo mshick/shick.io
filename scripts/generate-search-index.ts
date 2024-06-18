@@ -1,6 +1,6 @@
 #!/usr/bin/env -S npx tsx
 
-import { getPages, getPosts } from 'lib/helper.js'
+import { getPages, getPosts } from '@/content'
 import MiniSearch from 'minisearch'
 import { mkdirSync, writeFileSync } from 'node:fs'
 

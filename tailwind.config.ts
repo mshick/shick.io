@@ -113,6 +113,12 @@ const styles = (theme: PluginAPI['theme']) => ({
         textShadow: 'none'
       }
     },
+    'a.anchor': {
+      textDecoration: 'none'
+    },
+    h1: {
+      fontWeight: 'normal'
+    },
     h2: {
       fontWeight: 'normal',
       fontStyle: 'italic',
