@@ -1,8 +1,8 @@
 import { MDXContent } from '#/components/MDXContent'
 import { HomepageHero } from '#/features/Homepage/HomepageHero'
-import { HomepageList as HomepageListVelite } from '#/features/Homepage/HomepageListVelite'
+import { HomepageList } from '#/features/Homepage/HomepageList'
 import { components } from '#/mdx'
-import { getPage, getPosts } from '@/content'
+import { getOptions, getPage, getPosts } from '@/content'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
@@ -20,6 +20,9 @@ export default function IndexPage() {
     return notFound()
   }
 
+  const { links } = getOptions(['links'])
+  const blogLink = links.find((link) => link.text === 'blog')
+
   const posts = getPosts(
     ['permalink', 'title', 'excerpt', 'excerptHtml', 'publishedAt', 'featured'],
     ['tags'],
@@ -29,8 +32,13 @@ export default function IndexPage() {
   const bodyComponents = {
     ...components,
     HomepageHero,
-    HomepageArticlesList: () => (
-      <HomepageListVelite heading="blog" href="/articles" documents={posts} />
+    HomepagePostsList: () => (
+      <HomepageList
+        collectionName="posts"
+        heading={blogLink?.text ?? 'posts'}
+        href={blogLink?.path ?? '/posts/'}
+        documents={posts}
+      />
     )
   }
 

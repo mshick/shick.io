@@ -144,9 +144,22 @@ const posts = defineCollection({
     .transform(async (data, ctx) => {
       const { meta } = ctx
       const updatedBy = await getUpdatedBy(meta.path)
+
+      // posts/foo.md -> posts/foo
+      // posts/bar/index.md -> posts/bar/index
+      // posts/baz/bam.md -> posts/baz/bam
       const path = getContentPath(meta.config.root, meta.path)
-      const slug = data.slug ?? getSlugFromPath(path)
+
+      // posts/foo.md -> posts/foo -> foo
+      // posts/bar/index.md -> posts/bar/index -> bar
+      // posts/baz/bam.md -> posts/baz/bam -> baz/bam
+      const slug = getSlugFromPath('posts', path, data.slug)
+
+      // posts/foo.md -> posts/foo -> foo -> /foo/
+      // posts/bar/index.md -> posts/bar/index -> bar -> /bar/
+      // posts/baz/bam.md -> posts/baz/bam -> baz/bam -> /posts/baz/bam/
       const permalink = getPermalink('posts', path, slug)
+
       return {
         ...data,
         excerpt: excerptFn(
@@ -159,6 +172,7 @@ const posts = defineCollection({
           data.excerpt,
           ctx
         ),
+        slug,
         permalink,
         author: data.author ?? updatedBy?.latestAuthorName ?? '',
         shareUrl: getShareUrl(permalink),
@@ -195,7 +209,7 @@ const pages = defineCollection({
       const { meta } = ctx
       const updatedBy = await getUpdatedBy(meta.path)
       const path = getContentPath(meta.config.root, meta.path)
-      const slug = data.slug ?? getSlugFromPath(path)
+      const slug = getSlugFromPath('pages', path, data.slug)
       const permalink = getPermalink('pages', path, slug)
       const excerptHtml = excerptFn({ format: 'html' }, data.excerpt, ctx)
       return {

@@ -45,3 +45,10 @@ export type DocumentTypes = Article | Page | Project
 export type Config = SetRequired<TConfig, 'siteUrl'>
 
 export type SingletonTypes = Config
+
+export type ServerParams = Record<string, string | string[]>
+
+export type ServerProps<Params = ServerParams> = {
+  params: Params
+  searchParams: ServerParams
+}

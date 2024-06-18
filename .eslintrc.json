@@ -75,7 +75,7 @@
         "mdx/language-mapper": {}
       },
       "globals": {
-        "HomepageArticlesList": true,
+        "HomepagePostsList": true,
         "HomepageHero": true
       }
     }

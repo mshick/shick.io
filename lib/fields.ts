@@ -61,18 +61,18 @@ export function getEditUrl(filePath: string): string {
 export function getPermalink(
   collectionName: string,
   path: string,
-  slug = getSlugFromPath(path)
+  pathSlug = getSlugFromPath(collectionName, path)
 ) {
   const basePath = collectionPaths?.[collectionName] ?? `/${collectionName}`
 
-  const slugPath = path
+  const nakedPath = path
     .replace(`${collectionName}/`, '')
-    .replace(basename(path), slug)
+    .replace(/\/index$/, '')
+
+  const slugPath = nakedPath.replace(basename(nakedPath), pathSlug)
 
   // Enforce trailing slash
-  return join(basePath, slugPath)
-    .replace(/\/index$/, '')
-    .concat('/')
+  return join(basePath, slugPath).concat('/')
 }
 
 /**
@@ -87,10 +87,34 @@ export function getContentPath(root: string, path: string) {
 }
 
 /**
- * Gets a slug from a path, using only the basename
+ * Gets a slug from a path inside the content folder
+ *
+ * @example
+ * posts/foo.md -> posts/foo -> foo
+ * posts/bar/index.md -> posts/bar/index -> blah
+ * posts/baz/bam.md -> posts/baz/bam -> baz/bam
  */
-export function getSlugFromPath(path: string) {
-  return slug(basename(path))
+export function getSlugFromPath(
+  collectionName: string,
+  contentPath: string,
+  userSlug?: string
+) {
+  // posts/foo -> foo
+  // posts/bar/index.md -> bar
+  // posts/baz/bam.md -> baz/bam
+  const nakedPath = contentPath
+    .replace(`${collectionName}/`, '')
+    .replace(/\/index$/, '')
+
+  // foo -> foo
+  // bar -> bar
+  // baz/bam -> bam
+  const slugPath = nakedPath.replace(
+    basename(nakedPath),
+    userSlug ?? basename(nakedPath)
+  )
+
+  return slugPath
 }
 
 /**
@@ -138,7 +162,7 @@ export function createTaxonomyTransform(taxonomyName: string) {
     const { meta } = ctx
     const updatedBy = await getUpdatedBy(meta.path)
     const path = getContentPath(meta.config.root, meta.path)
-    const slug = data.slug ?? getSlugFromPath(path)
+    const slug = getSlugFromPath(taxonomyName, path, data.slug)
     const excerpt = data.excerpt ?? `${data.name} ${taxonomyName}.`
     return {
       ...data,

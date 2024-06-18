@@ -14,3 +14,11 @@ export function toSnakeCase(str: string) {
     ?.map((x) => x.toLowerCase())
     .join('_')
 }
+
+export function toPlural(noun: string, suffix = 's', count?: number) {
+  if (count) {
+    return `${count} ${noun}${count !== 1 ? suffix : ''}`
+  }
+
+  return `${noun}${suffix}`
+}
