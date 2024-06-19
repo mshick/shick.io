@@ -15,6 +15,6 @@ Suspendisse
 
 <!-- more -->
 
-![some image](img.png)
+![some image](./img.png)
 
-[link to file](plain.txt)
+[link to file](./plain.txt)

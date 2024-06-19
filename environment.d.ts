@@ -14,6 +14,8 @@ declare global {
       MUSICKIT_TEAM_ID?: string
       MUSICKIT_MUSIC_USER_TOKEN?: string
       API_SECRET?: string
+      OAUTH_GITHUB_CLIENT_ID?: string
+      OAUTH_GITHUB_CLIENT_SECRET?: string
     }
   }
 }
