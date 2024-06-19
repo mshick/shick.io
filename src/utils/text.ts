@@ -1,3 +1,5 @@
+import { format } from 'date-fns'
+
 export function toCamelCase(str: string) {
   return str
     ?.replace(/(?:^\w|[A-Z]|\b\w)/g, (ltr, idx) =>
@@ -21,4 +23,8 @@ export function toPlural(noun: string, suffix = 's', count?: number) {
   }
 
   return `${noun}${suffix}`
+}
+
+export function standardDate(date: string) {
+  return format(new Date(date), 'yyyy-MM-dd')
 }

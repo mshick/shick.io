@@ -117,7 +117,9 @@ const styles = (theme: PluginAPI['theme']) => ({
       textDecoration: 'none'
     },
     h1: {
-      fontWeight: 'normal'
+      fontWeight: 'normal',
+      marginTop: em(20, 18),
+      marginBottom: em(14, 16)
     },
     h2: {
       fontWeight: 'normal',
@@ -329,7 +331,7 @@ const styles = (theme: PluginAPI['theme']) => ({
     },
     'figure > figcaption': {
       marginTop: theme('spacing.2'),
-      color: theme('colors.black')
+      color: 'var(--tw-prose-body)'
     },
     'figure.fullwidth': {
       display: 'block',

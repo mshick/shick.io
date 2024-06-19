@@ -31,7 +31,7 @@ export function SiteHeader({ siteName, navigationItems }: SiteHeaderProps) {
     () =>
       navigationItems.map((item) => ({
         ...item,
-        current: pathname === item.path
+        current: Boolean(new RegExp(item.match).exec(pathname))
       })),
     [pathname, navigationItems]
   )

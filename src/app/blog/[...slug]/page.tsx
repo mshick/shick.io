@@ -1,7 +1,8 @@
-import { ArticleFooter } from '#/features/Article/ArticleFooter'
-import { ArticleHeader } from '#/features/Article/ArticleHeader'
+import { PostBody } from '#/features/Post/PostBody'
+import { PostFooter } from '#/features/Post/PostFooter'
+import { PostHeader } from '#/features/Post/PostHeader'
 import { ServerProps } from '#/types/types'
-import { getPostBySlug, getPosts } from '@/content'
+import { getPostBySlug, getPostWithRelated, getPosts } from '@/content'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
@@ -36,7 +37,11 @@ export function generateMetadata({ params }: ServerProps<Params>): Metadata {
 }
 
 export default function BlogPage({ params }: ServerProps<Params>) {
-  const post = getPostBySlug(params.slug.join('/'))
+  const post = getPostWithRelated(
+    (p) => p.slug === params.slug.join('/'),
+    undefined,
+    ['tags']
+  )
 
   if (!post) {
     return notFound()
@@ -44,8 +49,9 @@ export default function BlogPage({ params }: ServerProps<Params>) {
 
   return (
     <>
-      <ArticleHeader {...post} />
-      <ArticleFooter {...post} />
+      <PostHeader {...post} />
+      <PostBody {...post} />
+      <PostFooter {...post} />
     </>
   )
 }

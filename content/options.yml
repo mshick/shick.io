@@ -28,19 +28,25 @@ socials:
 links:
   - text: home
     path: /
+    match: ^/$
     type: navigation
   - text: blog
     path: /blog/
+    match: ^/blog/(.+)?
     type: navigation
   - text: projects
     path: /projects/
+    match: ^/projects/(.+)?
     type: navigation    
   - text: Contact
-    path: /contact
+    path: /contact/
+    match: /contact/
     type: footer
   - text: Privacy Policy
-    path: /privacy-policy
+    path: /privacy-policy/
+    match: /privacy-policy/
     type: copyright
   - text: Terms of Service
-    path: /terms-of-service
+    path: /terms-of-service/
+    match: /terms-of-service/
     type: copyright

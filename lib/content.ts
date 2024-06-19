@@ -245,7 +245,69 @@ export function getPost<
   includes?: I[]
 ): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined {
   const post = posts.find(filter)
-  return post && { ...pick(post, fields), ...include(post, includes) }
+  return (
+    post && {
+      ...pick(post, fields),
+      ...include(post, includes)
+    }
+  )
+}
+
+const intersection = (arr: string[], ...args: string[][]) =>
+  arr.filter((item) => args.every((arr) => arr.includes(item)))
+
+export function getPostWithRelated<
+  F extends keyof Omit<Post, I>,
+  I extends keyof Taxonomy = never
+>(
+  filter: Filter<Post>,
+  fields?: F[],
+  includes?: I[]
+): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined {
+  const post = posts.find(filter)
+  const related = posts
+    .filter(
+      (p) =>
+        p.permalink !== post?.permalink &&
+        (intersection(p.categories, post?.categories ?? []).length ||
+          intersection(p.tags, post?.tags ?? []).length)
+    )
+    .slice(0, 4)
+    .map((p) => pick(p, ['title', 'publishedAt', 'permalink', 'excerptHtml']))
+
+  return (
+    post && {
+      ...pick(post, fields),
+      ...include(post, includes),
+      related
+    }
+  )
+}
+
+export function getPostWithPager<
+  F extends keyof Omit<Post, I>,
+  I extends keyof Taxonomy = never
+>(
+  filter: Filter<Post>,
+  fields?: F[],
+  includes?: I[]
+): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined {
+  const postIndex = posts.findIndex(filter)
+  const post = posts[postIndex]
+  const previous = posts[postIndex - 1]
+  const next = posts[postIndex + 1]
+
+  return (
+    post && {
+      ...pick(post, fields),
+      ...include(post, includes),
+      pager: {
+        previous:
+          previous && pick(previous, ['title', 'permalink', 'excerptHtml']),
+        next: next && pick(next, ['title', 'permalink', 'excerptHtml'])
+      }
+    }
+  )
 }
 
 export function getPostBySlug<

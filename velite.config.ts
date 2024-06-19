@@ -26,6 +26,20 @@ const count = s
   .object({ total: s.number(), posts: s.number(), pages: s.number() })
   .default({ total: 0, posts: 0, pages: 0 })
 
+const preview = s.object({
+  title: s.string(),
+  permalink: s.string(),
+  excerptHtml: s.string(),
+  publishedAt: s.string()
+})
+
+const related = s.array(preview)
+
+const pager = s.object({
+  next: preview.optional(),
+  previous: preview.optional()
+})
+
 const meta = s
   .object({
     title: s.string().optional(),
@@ -65,6 +79,7 @@ const options = defineCollection({
       s.object({
         text: s.string(),
         path: s.string(),
+        match: s.string(),
         type: s.enum(['navigation', 'footer', 'copyright']),
         current: s.boolean().default(false)
       })
@@ -139,7 +154,9 @@ const posts = defineCollection({
       toc: s.toc(),
       featured: s.boolean().default(false),
       categories: s.array(s.string()).default([]),
-      tags: s.array(s.string()).default([])
+      tags: s.array(s.string()).default([]),
+      pager: pager.optional(),
+      related: related.optional()
     })
     .transform(async (data, ctx) => {
       const { meta } = ctx
