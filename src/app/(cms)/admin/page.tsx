@@ -1,5 +1,8 @@
 'use client'
 
+const CMS_SCRIPT_SRC = 'https://unpkg.com/decap-cms@^3.1.10/dist/decap-cms.js'
+// const CMS_SCRIPT_SRC = 'https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js'
+
 export default function AdminPage() {
   const config = {
     // local_backend: true,
@@ -15,9 +18,10 @@ export default function AdminPage() {
       auth_endpoint: 'oauth'
     },
 
-    media_folder: 'public/static',
+    publish_mode: 'simple',
+    media_folder: 'content/posts',
     public_folder: '/',
-    show_preview_links: false,
+    show_preview_links: true,
 
     editor: {
       preview: false
@@ -30,9 +34,87 @@ export default function AdminPage() {
         label_singular: 'Post',
         folder: 'content/posts',
         create: true,
+        media_folder: '{{dirname}}',
+        public_folder: '',
+        meta: {
+          path: {
+            widget: 'string',
+            label: 'Path',
+            index_file: 'index'
+          }
+        },
+        nested: {
+          depth: 3
+        },
         fields: [
-          { label: 'Title', name: 'title', widget: 'string' },
-          { label: 'Date', name: 'date', widget: 'datetime' },
+          { label: 'Title', name: 'title', widget: 'string', required: true },
+          { label: 'Date', name: 'date', widget: 'datetime', required: true },
+          { label: 'Slug', name: 'slug', widget: 'string', required: false },
+          { label: 'Draft', name: 'draft', widget: 'boolean', required: false },
+          {
+            label: 'Private',
+            name: 'private',
+            widget: 'boolean',
+            required: false
+          },
+          {
+            label: 'Featured',
+            name: 'featured',
+            widget: 'boolean',
+            required: false
+          },
+          {
+            label: 'Cover',
+            name: 'cover',
+            widget: 'image',
+            allow_multiple: false,
+            required: false
+          },
+          {
+            label: 'Meta',
+            name: 'meta',
+            widget: 'object',
+            required: false,
+            collapsed: true,
+            fields: [
+              {
+                label: 'Title',
+                name: 'title',
+                widget: 'string',
+                required: false
+              },
+              {
+                label: 'Description',
+                name: 'description',
+                widget: 'text',
+                required: false
+              },
+              {
+                label: 'Keywords',
+                name: 'keywords',
+                widget: 'list',
+                required: false
+              }
+            ]
+          },
+          {
+            label: 'Excerpt',
+            name: 'excerpt',
+            widget: 'markdown',
+            required: false
+          },
+          {
+            label: 'Categories',
+            name: 'categories',
+            widget: 'list',
+            required: false
+          },
+          {
+            label: 'Tags',
+            name: 'tags',
+            widget: 'list',
+            required: false
+          },
           { label: 'Body', name: 'body', widget: 'markdown' }
         ]
       },
@@ -44,10 +126,235 @@ export default function AdminPage() {
         extension: 'mdx',
         format: 'frontmatter',
         create: true,
+        media_folder: '{{dirname}}',
+        public_folder: '',
+        meta: {
+          path: {
+            widget: 'string',
+            label: 'Path',
+            index_file: 'index'
+          }
+        },
+        nested: {
+          depth: 3
+        },
         fields: [
-          { label: 'Title', name: 'title', widget: 'string' },
-          { label: 'Date', name: 'date', widget: 'datetime' },
+          { label: 'Title', name: 'title', widget: 'string', required: true },
+          { label: 'Date', name: 'date', widget: 'datetime', required: true },
+          { label: 'Slug', name: 'slug', widget: 'string', required: false },
+          { label: 'Draft', name: 'draft', widget: 'boolean', required: false },
+          {
+            label: 'Private',
+            name: 'private',
+            widget: 'boolean',
+            required: false
+          },
+          {
+            label: 'Cover',
+            name: 'cover',
+            widget: 'image',
+            allow_multiple: false,
+            required: false
+          },
+          {
+            label: 'Meta',
+            name: 'meta',
+            widget: 'object',
+            required: false,
+            collapsed: true,
+            fields: [
+              {
+                label: 'Title',
+                name: 'title',
+                widget: 'string',
+                required: false
+              },
+              {
+                label: 'Description',
+                name: 'description',
+                widget: 'text',
+                required: false
+              },
+              {
+                label: 'Keywords',
+                name: 'keywords',
+                widget: 'list',
+                required: false
+              }
+            ]
+          },
+          {
+            label: 'Excerpt',
+            name: 'excerpt',
+            widget: 'markdown',
+            required: false
+          },
+          {
+            label: 'Categories',
+            name: 'categories',
+            widget: 'list',
+            required: false
+          },
+          {
+            label: 'Tags',
+            name: 'tags',
+            widget: 'list',
+            required: false
+          },
           { label: 'Body', name: 'body', widget: 'markdown' }
+        ]
+      },
+      {
+        name: 'site',
+        label: 'Site',
+        media_folder: '',
+        public_folder: '',
+        files: [
+          {
+            file: 'content/site/options.yml',
+            name: 'options',
+            label: 'Options',
+            fields: [
+              { label: 'Name', name: 'name', widget: 'string', required: true },
+              {
+                label: 'Title',
+                name: 'title',
+                widget: 'string',
+                required: true
+              },
+              {
+                label: 'Description',
+                name: 'description',
+                widget: 'text',
+                required: true
+              },
+              {
+                label: 'Locale',
+                name: 'locale',
+                widget: 'string',
+                required: true
+              },
+              { label: 'URL', name: 'url', widget: 'string', required: true },
+              {
+                label: 'Keywords',
+                name: 'keywords',
+                widget: 'list',
+                required: true
+              },
+              {
+                label: 'Timezone',
+                name: 'timezone',
+                widget: 'string',
+                required: true
+              },
+              {
+                label: 'Edit URL Pattern',
+                name: 'editUrlPattern',
+                widget: 'string',
+                required: true
+              },
+              {
+                label: 'Repo URL',
+                name: 'repoUrl',
+                widget: 'string',
+                required: true
+              },
+              {
+                label: 'Author',
+                name: 'author',
+                widget: 'object',
+                required: true,
+                collapsed: true,
+                fields: [
+                  {
+                    label: 'Name',
+                    name: 'name',
+                    widget: 'string',
+                    required: false
+                  },
+                  {
+                    label: 'Email',
+                    name: 'email',
+                    widget: 'string',
+                    required: false
+                  },
+                  {
+                    label: 'URL',
+                    name: 'url',
+                    widget: 'string',
+                    required: false
+                  }
+                ]
+              },
+              {
+                label: 'Links',
+                name: 'links',
+                widget: 'list',
+                required: true,
+                collapsed: true,
+                fields: [
+                  {
+                    label: 'Text',
+                    name: 'text',
+                    widget: 'string',
+                    required: true
+                  },
+                  {
+                    label: 'Path',
+                    name: 'path',
+                    widget: 'string',
+                    required: true
+                  },
+                  {
+                    label: 'Match',
+                    name: 'match',
+                    widget: 'string',
+                    required: true
+                  },
+                  {
+                    label: 'Type',
+                    name: 'type',
+                    widget: 'string',
+                    required: true
+                  }
+                ]
+              },
+              {
+                label: 'Socials',
+                name: 'socials',
+                widget: 'list',
+                required: true,
+                collapsed: true,
+                fields: [
+                  {
+                    label: 'Name',
+                    name: 'name',
+                    widget: 'string',
+                    required: true
+                  },
+                  {
+                    label: 'Link',
+                    name: 'link',
+                    widget: 'string',
+                    required: false
+                  },
+                  {
+                    label: 'Image',
+                    name: 'image',
+                    widget: 'image',
+                    required: false
+                  },
+                  {
+                    label: 'Icon',
+                    name: 'icon',
+                    widget: 'select',
+                    required: false,
+                    options: ['x', 'github', 'instagram']
+                  }
+                ]
+              }
+            ]
+          }
         ]
       }
     ]
@@ -69,11 +376,11 @@ export default function AdminPage() {
     <title>Content Manager</title>
   </head>
   <body>
-    <script is:inline>
+    <script>
       window.CMS_MANUAL_INIT = true;
     </script>
 
-    <script src="https://unpkg.com/decap-cms@^3.1.10/dist/decap-cms.js" type="module"></script>
+    <script src="${CMS_SCRIPT_SRC}"></script>
 
     <script type="module">
       const config = ${JSON.stringify(config)};

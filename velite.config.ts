@@ -35,11 +35,6 @@ const preview = s.object({
 
 const related = s.array(preview)
 
-const pager = s.object({
-  next: preview.optional(),
-  previous: preview.optional()
-})
-
 const meta = s
   .object({
     title: s.string().optional(),
@@ -58,7 +53,7 @@ const cover = s.object({
 
 const options = defineCollection({
   name: 'Options',
-  pattern: 'options.yml',
+  pattern: 'site/options.yml',
   single: true,
   schema: s.object({
     name: s.string().max(20),
@@ -155,7 +150,6 @@ const posts = defineCollection({
       featured: s.boolean().default(false),
       categories: s.array(s.string()).default([]),
       tags: s.array(s.string()).default([]),
-      pager: pager.optional(),
       related: related.optional()
     })
     .transform(async (data, ctx) => {

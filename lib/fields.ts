@@ -20,7 +20,7 @@ type Options = {
 }
 
 const { timezone, editUrlPattern, collectionPaths, url }: Options = parseYaml(
-  readFileSync(join(__dirname, '../content/options.yml'), 'utf8')
+  readFileSync(join(__dirname, '../content/site/options.yml'), 'utf8')
 )
 
 function getSiteUrl(): string {
