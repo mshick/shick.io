@@ -2,7 +2,7 @@
 title: Markdown
 date: 2024-06-20T09:17:00.000Z
 featured: true
-cover: cover.jpg
+cover: image.png
 excerpt: Super **cool** things you can do with _markdown_!
 tags:
   - markdown
@@ -333,7 +333,7 @@ You can also use raw HTML in your Markdown, and it'll mostly work pretty well.
   <dd>Is something people use sometimes.</dd>
 
   <dt>Markdown in HTML</dt>
-  <dd>Does \*not\* work \*\*very\*\* well. Use HTML <em>tags</em>.</dd>
+  <dd>Does \\*not\\* work \\*\\*very\\*\\* well. Use HTML <em>tags</em>.</dd>
 </dl>
 
 <hr />
