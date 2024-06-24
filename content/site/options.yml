@@ -13,7 +13,7 @@ author:
   email: m@shick.us
   url: https://shick.us
 showListeningTo: true
-editUrlPattern: https://github.com/mshick/shick.io/edit/main/%s
+repoUrlPattern: https://github.com/mshick/shick.io/%s/main/%s
 repoUrl: https://github.com/mshick/shick.io
 collectionPaths:
   pages: /
@@ -25,6 +25,21 @@ socials:
   - name: X
     icon: x
     link: https://x.com/michaelshick
+  - name: Linkedin
+    icon: linkedin
+    link: https://www.linkedin.com/in/mshick/
+  - name: Signal
+    description: Message me on Signal
+    icon: signal
+    link: https://signal.me/#eu/JI8Y9Hwrk6bIe1Eh79bV5mT8wfUAoe8TGvzGp1rp6FO8OyO4GsFKk5b-c6zUyW0D
+  - name: WhatsApp
+    description: Message me on WhatsApp
+    icon: whatsapp
+    link: https://wa.me/19193600095
+  - name: Email
+    description: Email me
+    icon: email
+    link: mailto:m@shick.us
 links:
   - text: home
     path: /

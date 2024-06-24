@@ -66,9 +66,42 @@ export default function AdminPage() {
           {
             label: 'Cover',
             name: 'cover',
-            widget: 'image',
+            widget: 'object',
             allow_multiple: false,
-            required: false
+            required: false,
+            collapsed: true,
+            fields: [
+              {
+                label: 'Image',
+                name: 'image',
+                widget: 'image',
+                required: false
+              },
+              {
+                label: 'Video',
+                name: 'video',
+                widget: 'string',
+                required: false
+              },
+              {
+                label: 'Title',
+                name: 'title',
+                widget: 'string',
+                required: false
+              },
+              {
+                label: 'Alt',
+                name: 'alt',
+                widget: 'string',
+                required: false
+              },
+              {
+                label: 'Caption',
+                name: 'caption',
+                widget: 'string',
+                required: false
+              }
+            ]
           },
           {
             label: 'Meta',
@@ -152,9 +185,42 @@ export default function AdminPage() {
           {
             label: 'Cover',
             name: 'cover',
-            widget: 'image',
+            widget: 'object',
             allow_multiple: false,
-            required: false
+            required: false,
+            collapsed: true,
+            fields: [
+              {
+                label: 'Image',
+                name: 'image',
+                widget: 'image',
+                required: false
+              },
+              {
+                label: 'Video',
+                name: 'video',
+                widget: 'string',
+                required: false
+              },
+              {
+                label: 'Title',
+                name: 'title',
+                widget: 'string',
+                required: false
+              },
+              {
+                label: 'Alt',
+                name: 'alt',
+                widget: 'string',
+                required: false
+              },
+              {
+                label: 'Caption',
+                name: 'caption',
+                widget: 'string',
+                required: false
+              }
+            ]
           },
           {
             label: 'Meta',
@@ -248,8 +314,8 @@ export default function AdminPage() {
                 required: true
               },
               {
-                label: 'Edit URL Pattern',
-                name: 'editUrlPattern',
+                label: 'Repo URL Pattern',
+                name: 'repoUrlPattern',
                 widget: 'string',
                 required: true
               },
@@ -333,6 +399,12 @@ export default function AdminPage() {
                     required: true
                   },
                   {
+                    label: 'Description',
+                    name: 'description',
+                    widget: 'string',
+                    required: false
+                  },
+                  {
                     label: 'Link',
                     name: 'link',
                     widget: 'string',
@@ -349,7 +421,47 @@ export default function AdminPage() {
                     name: 'icon',
                     widget: 'select',
                     required: false,
-                    options: ['x', 'github', 'instagram']
+                    options: [
+                      'x',
+                      'github',
+                      'whatsapp',
+                      'signal',
+                      'linkedin',
+                      'email'
+                    ]
+                  }
+                ]
+              },
+              {
+                label: 'Collection Paths',
+                name: 'collectionPaths',
+                widget: 'object',
+                required: true,
+                collapsed: true,
+                fields: [
+                  {
+                    label: 'Pages',
+                    name: 'pages',
+                    widget: 'string',
+                    required: false
+                  },
+                  {
+                    label: 'Posts',
+                    name: 'posts',
+                    widget: 'string',
+                    required: false
+                  },
+                  {
+                    label: 'Tags',
+                    name: 'tags',
+                    widget: 'string',
+                    required: false
+                  },
+                  {
+                    label: 'Categories',
+                    name: 'categories',
+                    widget: 'string',
+                    required: false
                   }
                 ]
               }

@@ -32,7 +32,12 @@ export const metadata: Metadata = {
 }
 
 export default function Layout({ children }: PropsWithChildren) {
-  const { name, links, repoUrl } = getOptions(['name', 'links', 'repoUrl'])
+  const { name, links, repoUrl, socials } = getOptions([
+    'name',
+    'links',
+    'repoUrl',
+    'socials'
+  ])
 
   return (
     <html lang={locale} suppressHydrationWarning>
@@ -49,7 +54,7 @@ export default function Layout({ children }: PropsWithChildren) {
             <main id="content">{children}</main>
 
             {/* <SiteFooter showListeningTo={config.showListeningTo} /> */}
-            <SiteFooter repoUrl={repoUrl} />
+            <SiteFooter repoUrl={repoUrl} socials={socials} />
           </div>
         </ThemeProvider>
       </body>

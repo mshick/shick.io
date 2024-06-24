@@ -4,21 +4,28 @@ import Link from 'next/link'
 
 export type PostFooterProps = Pick<
   Post,
-  'editUrl' | 'shareUrl' | 'related' | 'updatedAt'
+  'historyUrl' | 'shareUrl' | 'related' | 'updatedAt'
 > & {
   tags: Pick<Tag, 'name' | 'slug' | 'permalink'>[]
 }
 
 function PostFooterMeta({
   updatedAt,
+  historyUrl,
   tags
-}: Pick<PostFooterProps, 'updatedAt' | 'tags'>) {
+}: Pick<PostFooterProps, 'updatedAt' | 'historyUrl' | 'tags'>) {
   return (
     <div className="flex flex-col items-start sm:items-center sm:flex-row-reverse justify-between gap-2 sm:gap-4">
       {updatedAt && (
         <div className="flex flex-row">
           <time className="text-xs" dateTime={updatedAt}>
-            last updated: {standardDate(updatedAt)}
+            last updated:{' '}
+            <a
+              href={historyUrl}
+              className="underline decoration-dotted hover:bg-blue-700 hover:text-white"
+            >
+              {standardDate(updatedAt)}
+            </a>
           </time>
         </div>
       )}
@@ -40,24 +47,12 @@ function PostFooterMeta({
   )
 }
 
-function PostFooterActions({
-  editUrl,
-  shareUrl
-}: Pick<PostFooterProps, 'editUrl' | 'shareUrl'>) {
+function PostFooterActions({ shareUrl }: Pick<PostFooterProps, 'shareUrl'>) {
   const encodedShareUrl = encodeURIComponent(shareUrl)
 
   return (
     <div className="flex flex-col gap-2">
       <div className="flex flex-row gap-8">
-        {editUrl ? (
-          <Link
-            href={editUrl}
-            className="block no-underline hover:bg-blue-700 hover:text-white"
-          >
-            (fork on github)
-          </Link>
-        ) : null}
-
         {shareUrl ? (
           <Link
             href={`https://x.com/intent/post?url=${encodedShareUrl}`}
@@ -66,6 +61,15 @@ function PostFooterActions({
             (share on x)
           </Link>
         ) : null}
+
+        {/* {editUrl ? (
+          <Link
+            href={editUrl}
+            className="block no-underline hover:bg-blue-700 hover:text-white"
+          >
+            (fork on github)
+          </Link>
+        ) : null} */}
       </div>
     </div>
   )
@@ -107,11 +111,11 @@ export function PostFooter(post: PostFooterProps) {
 
       <hr className="my-8" />
 
-      {post.editUrl || post.shareUrl ? <PostFooterActions {...post} /> : null}
+      {post.related ? <PostFooterRelated related={post.related} /> : null}
 
       <hr className="my-8" />
 
-      {post.related ? <PostFooterRelated related={post.related} /> : null}
+      {post.shareUrl ? <PostFooterActions {...post} /> : null}
     </footer>
   )
 }

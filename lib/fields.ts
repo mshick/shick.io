@@ -14,12 +14,12 @@ const baseDir = resolve(__dirname, '..')
 
 type Options = {
   timezone: string
-  editUrlPattern?: string
+  repoUrlPattern?: string
   collectionPaths?: Record<string, string>
   url: string
 }
 
-const { timezone, editUrlPattern, collectionPaths, url }: Options = parseYaml(
+const { timezone, repoUrlPattern, collectionPaths, url }: Options = parseYaml(
   readFileSync(join(__dirname, '../content/site/options.yml'), 'utf8')
 )
 
@@ -51,8 +51,16 @@ export function getShareUrl(path: string): string {
   return new URL(path, getSiteUrl()).href
 }
 
+export function getHistoryUrl(filePath: string): string {
+  return repoUrlPattern
+    ? format(repoUrlPattern, 'commits', getRepoPath(filePath))
+    : ''
+}
+
 export function getEditUrl(filePath: string): string {
-  return editUrlPattern ? format(editUrlPattern, getRepoPath(filePath)) : ''
+  return repoUrlPattern
+    ? format(repoUrlPattern, 'edit', getRepoPath(filePath))
+    : ''
 }
 
 /**

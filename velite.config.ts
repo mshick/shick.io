@@ -8,6 +8,7 @@ import {
   getAvailable,
   getContentPath,
   getEditUrl,
+  getHistoryUrl,
   getPermalink,
   getShareUrl,
   getSlugFromPath,
@@ -20,7 +21,7 @@ import {
 
 const EXCERPT_LENGTH = 260
 
-const icon = s.enum(['github', 'instagram', 'x'])
+const icon = s.enum(['github', 'x', 'signal', 'linkedin', 'whatsapp', 'email'])
 
 const count = s
   .object({ total: s.number(), posts: s.number(), pages: s.number() })
@@ -45,7 +46,7 @@ const meta = s
 
 const cover = s.object({
   image: s.image().optional(),
-  video: s.file().optional(),
+  video: s.string().optional(),
   title: s.string().optional(),
   alt: s.string().optional(),
   caption: s.string().optional()
@@ -63,7 +64,7 @@ const options = defineCollection({
     url: s.string(),
     keywords: s.array(s.string()),
     timezone: s.string(),
-    editUrlPattern: s.string().optional(),
+    repoUrlPattern: s.string().optional(),
     repoUrl: s.string().optional(),
     author: s.object({
       name: s.string(),
@@ -82,6 +83,7 @@ const options = defineCollection({
     socials: s.array(
       s.object({
         name: s.string(),
+        description: s.string().optional(),
         icon,
         link: s.string().optional(),
         image: s.image().optional()
@@ -105,7 +107,7 @@ const tags = defineCollection({
     .object({
       name: s.string().max(20),
       slug: s.slug('tags').optional(),
-      cover: s.image().optional(),
+      cover: cover.optional(),
       excerpt: s.markdown().optional(),
       date: s.isodate().optional(),
       content: s.markdown(),
@@ -121,7 +123,7 @@ const categories = defineCollection({
     .object({
       name: s.string().max(20),
       slug: s.slug('categories').optional(),
-      cover: s.image().optional(),
+      cover: cover.optional(),
       excerpt: s.markdown().optional(),
       date: s.isodate().optional(),
       content: s.markdown(),
@@ -188,6 +190,7 @@ const posts = defineCollection({
         author: data.author ?? updatedBy?.latestAuthorName ?? '',
         shareUrl: getShareUrl(permalink),
         editUrl: getEditUrl(meta.path),
+        historyUrl: getHistoryUrl(meta.path),
         updatedBy: updatedBy?.latestAuthorName ?? '',
         updatedByEmail: updatedBy?.latestAuthorEmail ?? '',
         publishedAt: getZonedDate(
@@ -232,6 +235,7 @@ const pages = defineCollection({
         permalink,
         shareUrl: getShareUrl(permalink),
         editUrl: getEditUrl(meta.path),
+        historyUrl: getHistoryUrl(meta.path),
         publishedAt: getZonedDate(
           updatedBy?.latestDate ?? new Date()
         ).toISOString(),

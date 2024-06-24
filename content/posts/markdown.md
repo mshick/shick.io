@@ -2,12 +2,14 @@
 title: Markdown
 date: 2024-06-20T09:17:00.000Z
 featured: true
-cover: image.png
+cover:
+  image: image.png
 excerpt: Super **cool** things you can do with _markdown_!
 tags:
   - markdown
   - make/it/safe
 ---
+
 :+1:
 
 DEMO MATERIAL! NOT MINE!!
@@ -15,7 +17,7 @@ DEMO MATERIAL! NOT MINE!!
 gatsby-theme-terminal supports the full set of
 [markdown shortcodes](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
-- - -
+---
 
 ## Heading
 
@@ -69,11 +71,11 @@ Combined emphasis with **asterisks and _underscores_**.
 Strikethrough uses two tildes. ~~Scratch this.~~
 ```
 
-Emphasis, aka italics, with *asterisks* or *underscores*.
+Emphasis, aka italics, with _asterisks_ or _underscores_.
 
 Strong emphasis, aka bold, with **asterisks** or **underscores**.
 
-Combined emphasis with **asterisks and *underscores***.
+Combined emphasis with **asterisks and _underscores_**.
 
 Strikethrough uses two tildes. ~~Scratch this.~~
 
@@ -103,9 +105,9 @@ Strikethrough uses two tildes. ~~Scratch this.~~
 4. And another item.
 5. Code in list `boop`
 
-* Unordered list can use asterisks
-* Or minuses
-* Or pluses
+- Unordered list can use asterisks
+- Or minuses
+- Or pluses
 
 <hr />
 
@@ -172,9 +174,10 @@ Reference-style: ![alt text][logo]
 Here's our logo (hover to see the title text):
 
 Inline-style:
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png 'Logo Title Text 1')
 
-Reference-style: ![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 2")
+Reference-style:
+![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png 'Logo Title Text 2')
 
 ## [Code and Syntax Highlighting](#code-and-syntax-highlighting)
 
@@ -287,7 +290,7 @@ can also use inline Markdown.
 
 | Markdown | Less      | Pretty     |
 | -------- | --------- | ---------- |
-| *Still*  | `renders` | **nicely** |
+| _Still_  | `renders` | **nicely** |
 | 1        | 2         | 3          |
 
 <hr />
@@ -312,7 +315,7 @@ Quote break.
 
 > This is a very long line that will still be quoted properly when it wraps. Oh
 > boy let's keep writing to make sure this is long enough to actually wrap for
-> everyone. Oh, you can *put* **Markdown** into a blockquote.
+> everyone. Oh, you can _put_ **Markdown** into a blockquote.
 
 ## [Inline HTML](#inline-html)
 
@@ -358,15 +361,15 @@ Underscores
 
 Three or more...
 
-- - -
+---
 
 Hyphens
 
-- - -
+---
 
 Asterisks
 
-- - -
+---
 
 Underscores
 
