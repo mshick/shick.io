@@ -109,7 +109,7 @@
     "typescript": "^5.4.5",
     "unified": "^10.1.2",
     "unist-util-remove": "^3.1.0",
-    "velite": "^0.1.0-rc.3",
+    "velite": "^0.1.0",
     "yaml": "^2.4.5",
     "yargs-parser": "^21.1.1"
   },

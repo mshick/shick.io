@@ -17,8 +17,6 @@ DEMO MATERIAL! NOT MINE!!
 gatsby-theme-terminal supports the full set of
 [markdown shortcodes](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
 
----
-
 ## Heading
 
 ```markdown
@@ -79,8 +77,6 @@ Combined emphasis with **asterisks and _underscores_**.
 
 Strikethrough uses two tildes. ~~Scratch this.~~
 
-<hr />
-
 ## [Lists](#lists)
 
 (In this example, leading and trailing spaces are shown with with dots: ⋅)
@@ -108,8 +104,6 @@ Strikethrough uses two tildes. ~~Scratch this.~~
 - Unordered list can use asterisks
 - Or minuses
 - Or pluses
-
-<hr />
 
 ## [Links](#links)
 
@@ -194,18 +188,39 @@ indented with four spaces. I recommend only using the fenced code blocks --
 they're easier and only they support syntax highlighting, but you must provide a
 language or none
 
-````markdown
+````md
 ```javascript
+// file.js
+
 var s = 'JavaScript syntax highlighting'
 alert(s)
 ```
 
+```ts
+// file.ts
+
+var s: SType = 'JavaScript syntax highlighting'
+alert(s)
+```
+
+`file.json`
+
+```json
+{
+  "message": "json syntax highlighting"
+}
+```
+
 ```python
+# file.py
+
 s = "Python syntax highlighting"
 print s
 ```
 
 ```html
+<!-- file.html -->
+
 <div>HTML syntax highlighting</div>
 ```
 
@@ -216,39 +231,43 @@ alert(s)
 ````
 
 ```javascript
+// file.js
+
 var s = 'JavaScript syntax highlighting'
 alert(s)
 ```
 
-````markdown
-```javascript
-var s = 'JavaScript syntax highlighting'
-alert(s)
+```ts
+// file.ts
+
+var s: SType = 'JavaScript syntax highlighting'
+console.log(s)
+```
+
+`file.json`
+
+```json
+{
+  "message": "json syntax highlighting"
+}
 ```
 
 ```python
+# file.py
+
 s = "Python syntax highlighting"
 print s
 ```
 
 ```html
+<!-- file.html -->
+
 <div>HTML syntax highlighting</div>
 ```
 
 ```none
 var s = "JavaScript syntax highlighting"
 alert(s)
-```
-````
-
-```javascript
-var s = 'JavaScript syntax highlighting'
-alert(s)
-```
-
-```python
-s = "Python syntax highlighting"
-print s
 ```
 
 ## [Tables](#tables)
@@ -278,11 +297,11 @@ can also use inline Markdown.
 
 Colons can be used to align columns.
 
-| Tables        | Are           | Cool  |
-| ------------- | ------------- | ----- |
+| Tables        |      Are      |  Cool |
+| :------------ | :-----------: | ----: |
 | col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      | $12   |
-| zebra stripes | are neat      | $1    |
+| col 2 is      |   centered    |   $12 |
+| zebra stripes |   are neat    |    $1 |
 
 There must be at least 3 dashes separating each header cell. The outer pipes (|)
 are optional, and you don't need to make the raw Markdown line up prettily. You
@@ -292,8 +311,6 @@ can also use inline Markdown.
 | -------- | --------- | ---------- |
 | _Still_  | `renders` | **nicely** |
 | 1        | 2         | 3          |
-
-<hr />
 
 ## [Blockquotes](#blockquotes)
 
@@ -338,8 +355,6 @@ You can also use raw HTML in your Markdown, and it'll mostly work pretty well.
   <dt>Markdown in HTML</dt>
   <dd>Does \\*not\\* work \\*\\*very\\*\\* well. Use HTML <em>tags</em>.</dd>
 </dl>
-
-<hr />
 
 ## [Horizontal Rule](#horizontal-rule)
 
@@ -388,4 +403,8 @@ _separate paragraph_.
 
 This line is also a separate paragraph, but... This line is only separated by a
 single newline, so it's a separate line in the _same paragraph_.
+```
+
+```
+
 ```

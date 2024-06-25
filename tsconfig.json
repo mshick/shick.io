@@ -32,6 +32,8 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
+    "**/*.md",
+    "**/*.mdx",
     ".next/types/**/*.ts",
     "tailwind.config.ts",
     ".contentlayer/generated",

@@ -252,11 +252,6 @@ const styles = (theme: PluginAPI['theme']) => ({
     '.newthought': {
       fontVariant: 'small-caps'
     },
-    hr: {
-      border: '0',
-      borderBottom: '1px dashed',
-      borderColor: 'muted'
-    },
     ol: {
       position: 'relative',
       listStyle: 'none',
@@ -294,35 +289,14 @@ const styles = (theme: PluginAPI['theme']) => ({
     li: {
       marginBottom: theme('spacing.1')
     },
-    table: {
-      width: '100%',
-      borderCollapse: 'collapse',
-      marginBottom: theme('spacing.3'),
-      border: 'none'
+    thead: {
+      borderBottomStyle: 'dashed'
     },
-    'table thead': {
-      border: '0'
+    tr: {
+      borderBottomStyle: 'dashed'
     },
-    'table thead tr th': {
-      border: '1px dashed var(--tw-prose-borders)',
-      paddingTop: theme('spacing.2'),
-      paddingBottom: theme('spacing.2'),
-      paddingLeft: em(16, 16),
-      paddingRight: em(16, 16),
-      textAlign: 'center'
-    },
-    'table tbody tr:nth-of-type(even)': {
+    'tr:nth-of-type(even)': {
       backgroundColor: 'var(--tw-prose-tr-even)'
-    },
-    'table tbody tr': {
-      border: '0'
-    },
-    'table tbody tr td': {
-      border: '1px dashed var(--tw-prose-borders)',
-      paddingTop: theme('spacing.2'),
-      paddingBottom: theme('spacing.2'),
-      paddingLeft: em(16, 16),
-      paddingRight: em(16, 16)
     },
     figure: {
       maxWidth: '100%',
@@ -446,15 +420,15 @@ export default {
                 '--tw-prose-code': theme('colors.black'),
                 '--tw-prose-pre-code': '#977d49',
                 '--tw-prose-pre-code-keyword': '#728fcb',
-                '--tw-prose-pre-code-comment': '#b6ad9a',
-                '--tw-prose-pre-code-tag': '#063289',
-                '--tw-prose-pre-code-function': '#b29762',
-                '--tw-prose-pre-code-selector': '#2d2006',
-                '--tw-prose-pre-code-attr-name': '#896724',
-                '--tw-prose-pre-code-variable': '#93abdc',
-                '--tw-prose-pre-code-inserted': '#2d2006',
-                '--tw-prose-pre-code-important': '#896724',
-                '--tw-prose-pre-code-highlight': '#896724',
+                '--tw-prose-pre-code-comment': '#9a949e',
+                '--tw-prose-pre-code-tag': '#a42375',
+                '--tw-prose-pre-code-function': '#a42375',
+                '--tw-prose-pre-code-selector': '#4b38dc',
+                '--tw-prose-pre-code-attr-name': '#4b38dc',
+                '--tw-prose-pre-code-variable': '#bd3a28',
+                '--tw-prose-pre-code-inserted': '#4b38dc',
+                '--tw-prose-pre-code-important': '#bd3a28',
+                '--tw-prose-pre-code-highlight': '#bd3a28',
                 '--tw-prose-pre-code-selection': '#f2ece4',
                 '--tw-prose-pre-bg': theme('colors.white'),
                 '--tw-prose-th-borders': theme('colors.gray.300'),

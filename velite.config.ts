@@ -108,9 +108,9 @@ const tags = defineCollection({
       name: s.string().max(20),
       slug: s.slug('tags').optional(),
       cover: cover.optional(),
-      excerpt: s.markdown().optional(),
+      excerpt: s.markdown({ gfm: false }).optional(),
       date: s.isodate().optional(),
-      content: s.markdown(),
+      content: s.markdown({ gfm: false }),
       count
     })
     .transform(createTaxonomyTransform('tags'))
@@ -124,9 +124,9 @@ const categories = defineCollection({
       name: s.string().max(20),
       slug: s.slug('categories').optional(),
       cover: cover.optional(),
-      excerpt: s.markdown().optional(),
+      excerpt: s.markdown({ gfm: false }).optional(),
       date: s.isodate().optional(),
-      content: s.markdown(),
+      content: s.markdown({ gfm: false }),
       count
     })
     .transform(createTaxonomyTransform('categories'))
@@ -142,8 +142,8 @@ const posts = defineCollection({
       cover: cover.optional(),
       meta,
       metadata: s.metadata(),
-      content: s.markdown(),
-      excerpt: s.markdown().optional(),
+      content: s.markdown({ gfm: false }),
+      excerpt: s.markdown({ gfm: false }).optional(),
       date: s.isodate().optional(),
       author: s.string().optional(),
       draft: s.boolean().default(false),
@@ -209,7 +209,7 @@ const pages = defineCollection({
   schema: s
     .object({
       title: s.string().max(99),
-      excerpt: s.markdown(),
+      excerpt: s.markdown({ gfm: false }),
       cover: cover.optional(),
       meta,
       slug: s.slug('global', ['admin']).optional(),

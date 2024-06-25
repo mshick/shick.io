@@ -3,16 +3,6 @@
 @tailwind utilities;
 
 @layer components {
-  .prose .qrcode {
-    @apply text-base lg:text-xl p-0 border-none overflow-hidden rounded-none;
-    font-family: ui-monospace, monospace;
-    line-height: 1.1;
-  }
-  
-  .prose .language-qrcode {
-    @apply border-0 text-gray-500 leading-none p-0;
-  }
-
   hr {
     height: 1px;
     overflow: hidden;

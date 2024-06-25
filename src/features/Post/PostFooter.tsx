@@ -47,33 +47,33 @@ function PostFooterMeta({
   )
 }
 
-function PostFooterActions({ shareUrl }: Pick<PostFooterProps, 'shareUrl'>) {
-  const encodedShareUrl = encodeURIComponent(shareUrl)
+// function PostFooterActions({ shareUrl }: Pick<PostFooterProps, 'shareUrl'>) {
+//   const encodedShareUrl = encodeURIComponent(shareUrl)
 
-  return (
-    <div className="flex flex-col gap-2">
-      <div className="flex flex-row gap-8">
-        {shareUrl ? (
-          <Link
-            href={`https://x.com/intent/post?url=${encodedShareUrl}`}
-            className="block no-underline hover:bg-blue-700 hover:text-white"
-          >
-            (share on x)
-          </Link>
-        ) : null}
+//   return (
+//     <div className="flex flex-col gap-2">
+//       <div className="flex flex-row gap-8">
+//         {shareUrl ? (
+//           <Link
+//             href={`https://x.com/intent/post?url=${encodedShareUrl}`}
+//             className="block no-underline hover:bg-blue-700 hover:text-white"
+//           >
+//             (share on x)
+//           </Link>
+//         ) : null}
 
-        {/* {editUrl ? (
-          <Link
-            href={editUrl}
-            className="block no-underline hover:bg-blue-700 hover:text-white"
-          >
-            (fork on github)
-          </Link>
-        ) : null} */}
-      </div>
-    </div>
-  )
-}
+//         {/* {editUrl ? (
+//           <Link
+//             href={editUrl}
+//             className="block no-underline hover:bg-blue-700 hover:text-white"
+//           >
+//             (fork on github)
+//           </Link>
+//         ) : null} */}
+//       </div>
+//     </div>
+//   )
+// }
 
 function PostFooterRelated({
   related
@@ -83,21 +83,19 @@ function PostFooterRelated({
   return (
     <div id="related-posts">
       <h2 className="text-2xl mb-4">Related posts</h2>
-      <ul className="space-y-2 mb-8">
+      <ul className="space-y-2">
         {related.map(({ permalink, publishedAt, title }) => (
-          <>
-            <li key={permalink}>
-              <Link
-                href={permalink}
-                className="flex flex-col items-start sm:items-center sm:flex-row-reverse justify-between sm:gap-4 no-underline hover:bg-blue-700 hover:text-white"
-              >
-                <time className="text-xs flex-shrink-0" dateTime={publishedAt}>
-                  {standardDate(publishedAt)}
-                </time>
-                <span>{title}</span>
-              </Link>
-            </li>
-          </>
+          <li key={permalink}>
+            <Link
+              href={permalink}
+              className="flex flex-col items-start sm:items-center sm:flex-row-reverse justify-between sm:gap-4 no-underline hover:bg-blue-700 hover:text-white"
+            >
+              <time className="text-xs flex-shrink-0" dateTime={publishedAt}>
+                {standardDate(publishedAt)}
+              </time>
+              <span>{title}</span>
+            </Link>
+          </li>
         ))}
       </ul>
     </div>
@@ -113,9 +111,7 @@ export function PostFooter(post: PostFooterProps) {
 
       {post.related ? <PostFooterRelated related={post.related} /> : null}
 
-      <hr className="my-8" />
-
-      {post.shareUrl ? <PostFooterActions {...post} /> : null}
+      <div className="mb-10"></div>
     </footer>
   )
 }
