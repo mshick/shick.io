@@ -1,6 +1,6 @@
-import { PostBody } from '#/features/Post/PostBody'
-import { PostFooter } from '#/features/Post/PostFooter'
-import { PostHeader } from '#/features/Post/PostHeader'
+import { PostBody } from '#/components/Post/PostBody'
+import { PostFooter } from '#/components/Post/PostFooter'
+import { PostHeader } from '#/components/Post/PostHeader'
 import { ServerProps } from '#/types/types'
 import { getPostBySlug, getPostWithRelated, getPosts } from '@/content'
 import { Metadata } from 'next'
@@ -36,7 +36,7 @@ export function generateMetadata({ params }: ServerProps<Params>): Metadata {
   }
 }
 
-export default function BlogPage({ params }: ServerProps<Params>) {
+export default function PostPage({ params }: ServerProps<Params>) {
   const post = getPostWithRelated(
     (p) => p.slug === params.slug.join('/'),
     undefined,

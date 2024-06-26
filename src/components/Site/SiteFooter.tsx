@@ -1,4 +1,5 @@
-import classNames from '#/utils/classNames'
+import { SignalMessengerIcon } from '#/components/SignalMessengerIcon'
+import classNames from '#/lib/utils/classNames'
 import { Options } from '@/content'
 import { IconType } from 'react-icons/lib'
 import {
@@ -8,7 +9,6 @@ import {
   TbBrandWhatsapp,
   TbBrandX
 } from 'react-icons/tb'
-import { SignalMessengerIcon } from './SignalMessengerIcon'
 
 const socialIcons: Record<Options['socials'][0]['icon'], IconType> = {
   linkedin: TbBrandLinkedin,

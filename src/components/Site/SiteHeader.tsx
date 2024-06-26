@@ -1,9 +1,9 @@
 'use client'
 
-import { ThemeToggle } from '#/features/Site/components/ThemeToggle'
-import { useFocus } from '#/hooks/useFocus'
-import { useMiniSearch } from '#/hooks/useMiniSearch'
-import { replaceState } from '#/utils/history'
+import { ThemeToggle } from '#/components/Site/components/ThemeToggle'
+import { useFocus } from '#/lib/hooks/useFocus'
+import { useMiniSearch } from '#/lib/hooks/useMiniSearch'
+import { replaceState } from '#/lib/utils/history'
 import { usePathname } from 'next/navigation'
 import {
   ChangeEventHandler,

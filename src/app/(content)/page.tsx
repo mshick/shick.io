@@ -1,6 +1,6 @@
+import { HomepageHero } from '#/components/Homepage/HomepageHero'
+import { HomepageList } from '#/components/Homepage/HomepageList'
 import { MDXContent } from '#/components/MDXContent'
-import { HomepageHero } from '#/features/Homepage/HomepageHero'
-import { HomepageList } from '#/features/Homepage/HomepageList'
 import { components } from '#/mdx'
 import { getOptions, getPage, getPosts } from '@/content'
 import { Metadata } from 'next'
@@ -13,7 +13,7 @@ export function generateMetadata(): Metadata {
   return page?.meta ?? {}
 }
 
-export default function IndexPage() {
+export default function HomePage() {
   const page = getPage((value) => value.slug === 'index')
 
   if (!page) {
@@ -21,7 +21,7 @@ export default function IndexPage() {
   }
 
   const { links } = getOptions(['links'])
-  const blogLink = links.find((link) => link.text === 'blog')
+  const postsLink = links.find((link) => link.text === 'posts')
 
   const posts = getPosts(
     ['permalink', 'title', 'excerpt', 'excerptHtml', 'publishedAt', 'featured'],
@@ -35,8 +35,8 @@ export default function IndexPage() {
     HomepagePostsList: () => (
       <HomepageList
         collectionName="posts"
-        heading={blogLink?.text ?? 'posts'}
-        href={blogLink?.path ?? '/posts/'}
+        heading={postsLink?.text ?? 'posts'}
+        href={postsLink?.path ?? '/posts/'}
         documents={posts}
       />
     )

@@ -1,9 +1,9 @@
-import { PageBody } from '#/features/Page/PageBody'
-import { getPagePageParams } from '#/features/Page/utils'
+import { PageBody } from '#/components/Page/PageBody'
+import { getPagePageParams } from '#/components/Page/utils'
 import Layout from '#/layouts/Page'
+import { getSeoProps } from '#/lib/utils/seo'
+import { getSingle } from '#/lib/utils/types'
 import { Page } from '#/types/types'
-import { getSeoProps } from '#/utils/seo'
-import { getSingle } from '#/utils/types'
 import { allPages } from 'contentlayer/generated'
 import { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
 

@@ -1,5 +1,5 @@
-import { SiteFooter } from '#/features/Site/SiteFooter'
-import { SiteHeader } from '#/features/Site/SiteHeader'
+import { SiteFooter } from '#/components/Site/SiteFooter'
+import { SiteHeader } from '#/components/Site/SiteHeader'
 import { plexMono } from '#/styles/fonts'
 import '#/styles/globals.css'
 import { getOptions } from '@/content'

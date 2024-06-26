@@ -1,4 +1,4 @@
-import { isReactElement } from '#/utils/types'
+import { isReactElement } from '#/lib/utils/types'
 import { HTMLAttributes, PropsWithChildren } from 'react'
 
 export function Pre(props: PropsWithChildren<HTMLAttributes<HTMLPreElement>>) {

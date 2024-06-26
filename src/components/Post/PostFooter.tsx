@@ -1,4 +1,4 @@
-import { standardDate } from '#/utils/text'
+import { standardDate } from '#/lib/utils/text'
 import type { Post, Tag } from '@/content'
 import Link from 'next/link'
 

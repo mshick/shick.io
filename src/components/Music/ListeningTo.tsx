@@ -1,8 +1,8 @@
 'use client'
 
 import Loading from '#/components/Loading'
-import classNames from '#/utils/classNames'
-import { get } from '#/utils/fetcher'
+import classNames from '#/lib/utils/classNames'
+import { get } from '#/lib/utils/fetcher'
 import { Popover } from '@headlessui/react'
 import { ChevronUpIcon, PlayPauseIcon } from '@heroicons/react/24/solid'
 import {

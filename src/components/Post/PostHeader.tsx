@@ -1,4 +1,4 @@
-import { standardDate } from '#/utils/text'
+import { standardDate } from '#/lib/utils/text'
 import type { Post, Tag } from '@/content'
 import Link from 'next/link'
 
@@ -13,7 +13,7 @@ export function PostHeader({ publishedAt, metadata, title }: PostHeaderProps) {
   return (
     <header id="post-header" className="space-y-3">
       <Link
-        href="/blog/"
+        href="/posts/"
         className="group flex flex-row gap-1 whitespace-nowrap text-xs mt-4"
       >
         <span>&lt;-</span>

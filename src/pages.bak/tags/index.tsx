@@ -1,5 +1,5 @@
 import { Link } from '#/components/Link'
-import { TagEntry, TagList } from '#/features/Tag/TagList'
+import { TagEntry, TagList } from '#/components/Tag/TagList'
 import Layout from '#/layouts/Default'
 import { DocumentTypes } from '#/types/types'
 import { pick } from '@contentlayer2/utils'

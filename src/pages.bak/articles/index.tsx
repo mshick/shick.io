@@ -1,5 +1,5 @@
-import { DocumentList } from '#/features/Document/DocumentList'
-import { DocumentListItem } from '#/features/Document/DocumentListItem'
+import { DocumentList } from '#/components/Document/DocumentList'
+import { DocumentListItem } from '#/components/Document/DocumentListItem'
 import Layout from '#/layouts/Default'
 import { Article } from '#/types/types'
 import { pick } from '@contentlayer2/utils'

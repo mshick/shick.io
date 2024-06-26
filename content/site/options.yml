@@ -17,7 +17,6 @@ repoUrlPattern: https://github.com/mshick/shick.io/%s/main/%s
 repoUrl: https://github.com/mshick/shick.io
 collectionPaths:
   pages: /
-  posts: /blog/
 socials:
   - name: GitHub
     icon: github
@@ -45,9 +44,9 @@ links:
     path: /
     match: ^/$
     type: navigation
-  - text: blog
-    path: /blog/
-    match: ^/blog/(.+)?
+  - text: posts
+    path: /posts/
+    match: ^/posts/(.+)?
     type: navigation
   - text: projects
     path: /projects/
