@@ -52,12 +52,6 @@ export default function AdminPage() {
           { label: 'Slug', name: 'slug', widget: 'string', required: false },
           { label: 'Draft', name: 'draft', widget: 'boolean', required: false },
           {
-            label: 'Private',
-            name: 'private',
-            widget: 'boolean',
-            required: false
-          },
-          {
             label: 'Featured',
             name: 'featured',
             widget: 'boolean',
@@ -176,12 +170,6 @@ export default function AdminPage() {
           { label: 'Date', name: 'date', widget: 'datetime', required: true },
           { label: 'Slug', name: 'slug', widget: 'string', required: false },
           { label: 'Draft', name: 'draft', widget: 'boolean', required: false },
-          {
-            label: 'Private',
-            name: 'private',
-            widget: 'boolean',
-            required: false
-          },
           {
             label: 'Cover',
             name: 'cover',

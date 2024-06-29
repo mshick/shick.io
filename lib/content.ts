@@ -12,8 +12,8 @@ type Taxonomy = {
 type Filter<T> = (value: T, index: number, array: T[]) => boolean
 type Sorter<T> = (a: T, b: T) => number
 
-const available = (item: { draft: boolean; private: boolean }) => {
-  return !isProduction || (!item.draft && !item.private)
+const available = (item: { draft: boolean }) => {
+  return !isProduction || !item.draft
 }
 
 export const filters = {

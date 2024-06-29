@@ -39,23 +39,19 @@ export default function Layout({ children }: PropsWithChildren) {
     'socials'
   ])
 
+  const navigationItems = links.filter((link) => link.type === 'navigation')
+
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${plexMono.variable} font-primary`}>
+      <body
+        className={`${plexMono.variable} font-primary h-svh mx-auto max-w-3xl px-8 flex flex-col`}
+      >
         <ThemeProvider attribute="class">
-          <div className="mx-auto max-w-3xl px-8">
-            <SiteHeader
-              siteName={name}
-              navigationItems={links.filter(
-                (link) => link.type === 'navigation'
-              )}
-            />
-
-            <main id="content">{children}</main>
-
-            {/* <SiteFooter showListeningTo={config.showListeningTo} /> */}
-            <SiteFooter repoUrl={repoUrl} socials={socials} />
-          </div>
+          <SiteHeader siteName={name} navigationItems={navigationItems} />
+          <main id="content" className="flex flex-col flex-1">
+            {children}
+          </main>
+          <SiteFooter repoUrl={repoUrl} socials={socials} />
         </ThemeProvider>
       </body>
     </html>

@@ -93,12 +93,12 @@ export function SiteHeader({ siteName, navigationItems }: SiteHeaderProps) {
   }, [handleClose])
 
   return (
-    <nav className="flex flex-col py-4">
+    <header className="flex flex-col py-4">
       {/* Branding - Desktop */}
       <div className="uppercase mt-4 mb-0 text-sm hidden sm:flex">
         # {siteName}
       </div>
-      <div className="flex justify-between items-center h-12 w-full z-30">
+      <nav className="flex justify-between items-center h-12 w-full z-30">
         <a href="#content" className="sr-only focus:not-sr-only">
           Skip to content
         </a>
@@ -154,7 +154,7 @@ export function SiteHeader({ siteName, navigationItems }: SiteHeaderProps) {
             <ThemeToggle />
           </div>
         </div>
-      </div>
+      </nav>
 
       <hr className="z-30" />
 
@@ -170,6 +170,6 @@ export function SiteHeader({ siteName, navigationItems }: SiteHeaderProps) {
           onClickLink={handleClose}
         />
       )}
-    </nav>
+    </header>
   )
 }

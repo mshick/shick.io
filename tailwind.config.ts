@@ -107,9 +107,16 @@ const styles = (theme: PluginAPI['theme']) => ({
       paddingBottom: em(16, 16)
     },
     a: {
+      textUnderlineOffset: em(8, 16),
+      '&:hover': {
+        textDecorationColor: 'var(--tw-prose-links-hover-bg)',
+        backgroundColor: 'var(--tw-prose-links-hover-bg)',
+        color: 'var(--tw-prose-links-hover-text)',
+        textShadow: 'none'
+      },
       '&::selection': {
         backgroundColor: theme('colors.gray.500'),
-        color: theme('colors.white'),
+        color: 'var(--tw-prose-pre-bg)',
         textShadow: 'none'
       }
     },
@@ -209,8 +216,8 @@ const styles = (theme: PluginAPI['theme']) => ({
       backgroundColor: 'var(--tw-prose-pre-bg)',
       paddingLeft: em(16, 16),
       paddingRight: em(16, 16),
-      paddingTop: theme('spacing.2'),
-      paddingBottom: theme('spacing.2'),
+      paddingTop: em(8, 16),
+      paddingBottom: em(8, 16),
       margin: '0',
       borderTopLeftRadius: '10px',
       borderTopRightRadius: '10px',
@@ -230,10 +237,10 @@ const styles = (theme: PluginAPI['theme']) => ({
       fontStyle: 'regular',
       border: '0',
       marginTop: '0',
-      marginLeft: theme('spacing.2'),
-      marginBottom: theme('spacing.3'),
+      marginLeft: em(8, 16),
+      marginBottom: em(12, 16),
       marginRight: '0',
-      paddingLeft: theme('spacing.3'),
+      paddingLeft: em(12, 16),
       p: {
         width: '100%'
       },
@@ -241,7 +248,7 @@ const styles = (theme: PluginAPI['theme']) => ({
         content: '">"',
         display: 'block',
         position: 'absolute',
-        left: '-8px',
+        left: em(-8, 16),
         color: 'inherit'
       }
     },
@@ -256,7 +263,7 @@ const styles = (theme: PluginAPI['theme']) => ({
       position: 'relative',
       listStyle: 'none',
       marginTop: '0',
-      marginBottom: theme('spacing.3'),
+      marginBottom: em(12, 16),
       padding: '0',
       marginLeft: theme('spacing.7')
     },
@@ -273,7 +280,7 @@ const styles = (theme: PluginAPI['theme']) => ({
       position: 'relative',
       listStyle: 'none',
       marginTop: '0',
-      marginBottom: theme('spacing.3'),
+      marginBottom: em(12, 16),
       padding: '0',
       marginLeft: theme('spacing.7')
     },
@@ -304,7 +311,7 @@ const styles = (theme: PluginAPI['theme']) => ({
       marginBottom: theme('spacing.5')
     },
     'figure > figcaption': {
-      marginTop: theme('spacing.2'),
+      marginTop: em(8, 16),
       color: 'var(--tw-prose-body)'
     },
     'figure.fullwidth': {
@@ -409,6 +416,8 @@ export default {
                 '--tw-prose-headings': theme('colors.black'),
                 '--tw-prose-lead': theme('colors.black'),
                 '--tw-prose-links': theme('colors.black'),
+                '--tw-prose-links-hover-bg': theme('colors.blue.700'),
+                '--tw-prose-links-hover-text': theme('colors.white'),
                 '--tw-prose-bold': theme('colors.black'),
                 '--tw-prose-counters': theme('colors.black'),
                 '--tw-prose-bullets': theme('colors.black'),

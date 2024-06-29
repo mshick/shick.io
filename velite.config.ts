@@ -147,7 +147,6 @@ const posts = defineCollection({
       date: s.isodate().optional(),
       author: s.string().optional(),
       draft: s.boolean().default(false),
-      private: s.boolean().default(false),
       toc: s.toc(),
       featured: s.boolean().default(false),
       categories: s.array(s.string()).default([]),
@@ -216,8 +215,7 @@ const pages = defineCollection({
       code: s.mdx(),
       categories: s.array(s.string()).default([]),
       tags: s.array(s.string()).default([]),
-      draft: s.boolean().default(false),
-      private: s.boolean().default(false)
+      draft: s.boolean().default(false)
     })
     .transform(async (data, ctx) => {
       const { meta } = ctx

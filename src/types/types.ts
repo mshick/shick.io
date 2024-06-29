@@ -4,7 +4,6 @@ import {
   Page as TPage
 } from 'contentlayer/generated'
 import { ReactElement } from 'react'
-import { ReadTimeResults } from 'reading-time'
 import { Merge, SetRequired } from 'type-fest'
 
 type Renderable = number | string | ReactElement | Renderable[]
@@ -24,7 +23,7 @@ export type Article = Merge<
   SetRequired<TArticle, 'excerpt'>,
   {
     tags: Tag[]
-    readingTime: ReadTimeResults
+    readingTime: any
     previous?: Pick<TArticle, 'title' | 'path'> | null
     next?: Pick<TArticle, 'title' | 'path'> | null
   }
@@ -33,7 +32,6 @@ export type Project = Merge<
   SetRequired<TArticle, 'excerpt'>,
   {
     tags: Tag[]
-    readingTime: ReadTimeResults
     previous?: Pick<TArticle, 'title' | 'path'> | null
     next?: Pick<TArticle, 'title' | 'path'> | null
   }

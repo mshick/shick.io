@@ -16,3 +16,10 @@ export function getSingle<T>(param?: T | T[]): T | undefined {
   }
   return param
 }
+
+/**
+ * Test whether a provided string is numeric, e.g., '9' is numeric while 'nine' is not.
+ */
+export function isNumericString(key: string | undefined): boolean {
+  return Boolean(key && !isNaN(Number(key)))
+}

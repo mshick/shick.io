@@ -136,8 +136,8 @@ export function getSlug(name: string) {
   return slug(name)
 }
 
-export function getAvailable(item: { draft: boolean; private: boolean }) {
-  return process.env.NODE_ENV !== 'production' || (!item.draft && !item.private)
+export function getAvailable(item: { draft: boolean }) {
+  return process.env.NODE_ENV !== 'production' || !item.draft
 }
 
 type TaxonomyData = {
