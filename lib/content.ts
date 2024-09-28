@@ -93,7 +93,7 @@ export function getOptions<F extends keyof Options>(
 
 export function getSiteUrl() {
   const { url } = getOptions(['url'])
-  return isProduction && url ? url : vercelUrl ?? localDevUrl
+  return isProduction && url ? url : (vercelUrl ?? localDevUrl)
 }
 
 export function getCategories<F extends keyof Category>(

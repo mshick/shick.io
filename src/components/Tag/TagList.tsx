@@ -1,12 +1,10 @@
-import { DocumentTypes, PropsWithCallableChildren, Tag } from '#/types/types'
+import { PropsWithCallableChildren } from '#/types/types'
+import type { Tag } from '@/content'
 
-export type TagEntry = {
-  tag: Tag
-  docs: Pick<
-    DocumentTypes,
-    'path' | 'title' | 'excerpt' | 'publishedAt' | 'tags'
-  >[]
-}
+export type TagEntry = Pick<
+  Tag,
+  'permalink' | 'name' | 'excerpt' | 'excerptHtml' | 'publishedAt' | 'count'
+>
 
 export type TagListProps = {
   tags: TagEntry[]
@@ -18,8 +16,8 @@ export function TagList({
 }: PropsWithCallableChildren<TagListProps, TagEntry>) {
   return (
     <ul className="flex flex-col m-0 p-0 list-none">
-      {tags.map(({ tag, docs }) => (
-        <li key={tag.slug}>{children({ tag, docs })}</li>
+      {tags.map((tag) => (
+        <li key={tag.permalink}>{children(tag)}</li>
       ))}
     </ul>
   )
