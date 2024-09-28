@@ -149,88 +149,18 @@ const styles = (theme: PluginAPI['theme']) => ({
       borderWidth: '1px',
       borderStyle: 'dashed',
       overflow: 'auto',
-      padding: em(16, 16),
-      marginTop: em(16, 16),
-      marginBottom: em(16, 16),
-      color: 'var(--tw-prose-pre-code)',
-      '.highlight': {
-        background: 'hsla(0, 0%, 70%, .5)'
-      },
-      '> code.highlight': {
-        outline: '.4em solid var(--tw-prose-pre-code-highlight)',
-        outlineOffset: '.4em'
-      }
-    },
-    '.token.comment,.token.prolog,.token.doctype,.token.cdata,.token.punctuation':
-      {
-        color: 'var(--tw-prose-pre-code-comment)'
-      },
-    '.token.namespace': {
-      opacity: '0.7'
-    },
-    '.token.tag,.token.operator,.token.number': {
-      color: 'var(--tw-prose-pre-code-tag)'
-    },
-    '.token.property,.token.function': {
-      color: 'var(--tw-prose-pre-code-function)'
-    },
-    '.token.tag-id,.token.selector,.token.atrule-id': {
-      color: 'var(--tw-prose-pre-code-selector)'
-    },
-    '.token.attr-name': {
-      color: 'var(--tw-prose-pre-code-attr-name)'
-    },
-    '.token.boolean,.token.string,.token.entity,.token.url,.token.attr-value,.token.keyword,.token.control,.token.directive,.token.unit,.token.statement,.token.regex,.token.at-rule':
-      {
-        color: 'var(--tw-prose-pre-code-keyword)'
-      },
-    '.token.placeholder,.token.variable': {
-      color: 'var(--tw-prose-pre-code-variable)'
-    },
-    '.token.deleted': {
-      textDecorationLine: 'line-through'
-    },
-    '.token.inserted': {
-      borderBottom: '1px dotted var(--tw-prose-pre-code-inserted)',
-      textDecoration: 'none'
-    },
-    '.token.italic': {
-      fontStyle: 'italic'
-    },
-    '.token.important,.bold': {
-      fontWeight: 'bold'
-    },
-    '.token.important': {
-      color: 'var(--tw-prose-pre-code-important)'
-    },
-    '.token.entity': {
-      cursor: 'help'
-    },
-    'code[class*="language-"],pre[class*="language-"]': {
-      '::selection': {
-        textShadow: 'none',
-        background: 'var(--tw-prose-pre-code-selection)'
-      }
-    },
-    '.rehype-code-title': {
-      backgroundColor: 'var(--tw-prose-pre-bg)',
-      paddingLeft: em(16, 16),
-      paddingRight: em(16, 16),
-      paddingTop: em(8, 16),
-      paddingBottom: em(8, 16),
-      margin: '0',
-      borderTopLeftRadius: '10px',
-      borderTopRightRadius: '10px',
-      borderColor: 'var(--tw-prose-borders)',
-      borderWidth: '1px',
-      borderStyle: 'dashed',
-      fontWeight: 'bold'
-    },
-    '.rehype-code-title + pre': {
-      marginTop: '0',
-      borderTopLeftRadius: '0',
-      borderTopRightRadius: '0',
-      borderTopWidth: '0'
+      backgroundColor: 'var(--tw-prose-pre-bg)'
+      // padding: em(16, 16),
+      // marginTop: em(16, 16),
+      // marginBottom: em(16, 16),
+      // color: 'var(--tw-prose-pre-code)',
+      // '.highlight': {
+      //   background: 'hsla(0, 0%, 70%, .5)'
+      // },
+      // '> code.highlight': {
+      //   outline: '.4em solid var(--tw-prose-pre-code-highlight)',
+      //   outlineOffset: '.4em'
+      // }
     },
     blockquote: {
       position: 'relative',
@@ -332,7 +262,7 @@ const styles = (theme: PluginAPI['theme']) => ({
 
 export default {
   content: ['./src/**/*.{ts,tsx}'],
-  safelist: ['aspect-video'],
+  safelist: ['aspect-video', 'inline-block', 'group-hover:inline-block'],
   darkMode: 'class',
   theme: {
     screens: {
@@ -439,7 +369,7 @@ export default {
                 '--tw-prose-pre-code-important': '#bd3a28',
                 '--tw-prose-pre-code-highlight': '#bd3a28',
                 '--tw-prose-pre-code-selection': '#f2ece4',
-                '--tw-prose-pre-bg': theme('colors.white'),
+                '--tw-prose-pre-bg': '#fafafa',
                 '--tw-prose-th-borders': theme('colors.gray.300'),
                 '--tw-prose-td-borders': theme('colors.gray.300'),
                 '--tw-prose-tr-even': theme('colors.gray.100'),

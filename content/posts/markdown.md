@@ -224,7 +224,7 @@ print s
 <div>HTML syntax highlighting</div>
 ```
 
-```none
+```
 var s = "JavaScript syntax highlighting"
 alert(s)
 ```
@@ -265,7 +265,7 @@ print s
 <div>HTML syntax highlighting</div>
 ```
 
-```none
+```
 var s = "JavaScript syntax highlighting"
 alert(s)
 ```

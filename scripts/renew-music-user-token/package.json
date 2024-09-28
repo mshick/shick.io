@@ -2,7 +2,6 @@
   "type": "module",
   "main": "main.js",
   "dependencies": {
-    "node-fetch": "^3.2.9",
     "yargs-parser": "^21.0.1"
   }
 }

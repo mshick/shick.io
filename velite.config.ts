@@ -1,5 +1,6 @@
 import rehypePresetTufted from '@mshick/tufted/rehype'
 import remarkPresetTufted from '@mshick/tufted/remark'
+import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import remarkGemoji from 'remark-gemoji'
 import { defineCollection, defineConfig, s } from 'velite'
 import { excerptFn } from './lib/excerpt'
@@ -244,6 +245,36 @@ const pages = defineCollection({
     })
 })
 
+const rehypeTufted = rehypePresetTufted({
+  assets: 'public/static',
+  base: '/static/',
+  plugins: {
+    rehypeShiki: {
+      themes: {
+        light: 'one-light',
+        dark: 'one-dark-pro'
+      }
+    },
+    rehypeAutolinkHeadings: {
+      behavior: 'append',
+      content: fromHtmlIsomorphic('#', {
+        fragment: true
+      }).children,
+      headingProperties: {
+        className: ['group']
+      },
+      properties: {
+        className: [
+          'heading-link',
+          'hidden',
+          'group-hover:inline-block',
+          'ml-2'
+        ]
+      }
+    }
+  }
+})
+
 export default defineConfig({
   root: 'content',
   output: {
@@ -262,16 +293,12 @@ export default defineConfig({
   },
   markdown: {
     // Bad velite types
-    rehypePlugins: [
-      rehypePresetTufted({ assets: 'public/static', base: '/static/' }) as any
-    ],
+    rehypePlugins: [rehypeTufted as any],
     remarkPlugins: [remarkGemoji, remarkPresetTufted() as any]
   },
   mdx: {
     // Bad velite types
-    rehypePlugins: [
-      rehypePresetTufted({ assets: 'public/static', base: '/static/' }) as any
-    ],
+    rehypePlugins: [rehypeTufted as any],
     remarkPlugins: [remarkGemoji, remarkPresetTufted() as any]
   },
   prepare: async (collections) => {
