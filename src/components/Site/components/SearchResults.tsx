@@ -7,10 +7,9 @@ import {
 } from '@heroicons/react/24/outline'
 
 export type SearchResultsItem = {
-  id: string
   title: string
-  path: string
-  excerpt: string
+  permalink: string
+  excerptHtml: string
   publishedAt: string
 }
 
@@ -67,7 +66,7 @@ export function SearchResults({
         )}
 
         {items?.length > 0 && (
-          <div className="w-full mt-4 max-w-none">
+          <div className="w-full mt-4 max-w-none not-prose">
             <DocumentList documents={items}>
               {(document) => (
                 <DocumentListItem

@@ -9,6 +9,7 @@ function main() {
     'permalink',
     'title',
     'excerpt',
+    'excerptHtml',
     'content',
     'tags',
     'publishedAt'
@@ -18,6 +19,7 @@ function main() {
     'permalink',
     'title',
     'excerpt',
+    'excerptHtml',
     'content',
     'tags',
     'publishedAt'
@@ -28,6 +30,7 @@ function main() {
     permalink: doc.permalink,
     title: doc.title,
     excerpt: doc.excerpt,
+    excerptHtml: doc.excerptHtml,
     content: doc.content,
     tags: doc.tags,
     publishedAt: doc.publishedAt
@@ -35,7 +38,7 @@ function main() {
 
   const miniSearch = new MiniSearch({
     fields: ['title', 'content', 'excerpt', 'tags'],
-    storeFields: ['title', 'excerpt', 'permalink', 'publishedAt']
+    storeFields: ['title', 'excerpt', 'excerptHtml', 'permalink', 'publishedAt']
   })
 
   miniSearch.addAll(docs)

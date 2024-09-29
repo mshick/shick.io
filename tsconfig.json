@@ -22,9 +22,6 @@
       ],
       "#/*": [
         "./src/*"
-      ],
-      "contentlayer/generated": [
-        "./.contentlayer/generated"
       ]
     }
   },
@@ -36,13 +33,10 @@
     "**/*.mdx",
     ".next/types/**/*.ts",
     "tailwind.config.ts",
-    ".contentlayer/generated",
     ".velite",
-    ".search",
-    "env"
+    ".search"
   ],
   "exclude": [
-    "src/pages.bak",
     "node_modules",
     ".github",
     "public"

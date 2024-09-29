@@ -62,7 +62,7 @@ Okay, enough talking. Let's build an app! Here's the
 - Data is read from the database at build time
 - Pages are dynamically built (e.g., `/songs/[id]`)
 
-![Next.js and Prisma](./prisma.gif)
+![Next.js and Prisma](./image.png)
 
 Before continuing, you'll need to have [Node.js](https://nodejs.org/en/)
 (version 10 or higher) installed on your machine.
@@ -94,7 +94,7 @@ We have two models: `Song` and `Artist`. A `Song` includes some necessary
 information like the `name` as well as a relation to an `Artist`. For the sake
 of this example, a `Song` can only have one `Artist`.
 
-```js:prisma/schema.prisma
+```js
 datasource db {
   provider = "sqlite"
   url      = "file:dev.db"
@@ -138,7 +138,7 @@ This file sets up the boilerplate for `getStaticProps` to allow us to query the
 database for our songs. Then, we iterate over our results and display them as a
 list.
 
-```js:pages/index.js
+```js
 export async function getStaticProps() {
   return {
     props: {
@@ -149,7 +149,7 @@ export async function getStaticProps() {
         }
       ]
     }
-  };
+  }
 }
 
 export const HomePage = ({ songs }) => (
@@ -158,9 +158,9 @@ export const HomePage = ({ songs }) => (
       <li key={song.id}>{song.name}</li>
     ))}
   </ul>
-);
+)
 
-export default HomePage;
+export default HomePage
 ```
 
 Next, let's get some real data on the screen. After adding the Prisma client, we
@@ -254,7 +254,7 @@ recognize the new changes.
 $ npx prisma generate
 ```
 
-![Prisma Flow](./prisma-flow.png)
+![Prisma Flow](./img.png)
 
 **That's it!** You now have two new fields available on the `Song` model. Now,
 let's update our database and populate those values. There's a variety of ways
@@ -271,12 +271,12 @@ another fancy tool called Prisma Studio that allows us to do just that.
 $ npx prisma studio --experimental
 ```
 
-![Prisma Studio](./studio.gif)
+![Prisma Studio](./image.png)
 
 For convenience, I've added these commands as scripts in the `package.json`
 already.
 
-```json:package.json
+```json
 {
   "scripts": {
     "db": "prisma studio --experimental",
@@ -297,7 +297,7 @@ Once again, I've included the page boilerplate to use `getStaticPaths` and
 `getStaticProps`. Try navigating to `/songs/1` in your browser. You should see a
 YouTube video.
 
-```js:pages/songs/[id].js
+```js
 export async function getStaticProps({ params }) {
   return {
     props: {
@@ -305,7 +305,7 @@ export async function getStaticProps({ params }) {
         youtubeId: 'N6SQ9QoSjCI'
       }
     }
-  };
+  }
 }
 
 export async function getStaticPaths() {
@@ -318,7 +318,7 @@ export async function getStaticPaths() {
       }
     ],
     fallback: false
-  };
+  }
 }
 
 const HomePage = ({ song }) => (
@@ -330,9 +330,9 @@ const HomePage = ({ song }) => (
     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
     allowFullScreen
   />
-);
+)
 
-export default HomePage;
+export default HomePage
 ```
 
 Now, let's hook this up to real data.

@@ -1,4 +1,4 @@
-import { fromZonedTime } from 'date-fns-tz'
+import { TZDate } from '@date-fns/tz'
 import { readFileSync } from 'node:fs'
 import { basename, join, relative, resolve } from 'node:path'
 import { format } from 'node:util'
@@ -24,7 +24,7 @@ const { timezone, repoUrlPattern, collectionPaths, url }: Options = parseYaml(
 )
 
 function getSiteUrl(): string {
-  return isProduction && url ? url : vercelUrl ?? localDevUrl
+  return isProduction && url ? url : (vercelUrl ?? localDevUrl)
 }
 
 function getRepoPath(filePath: string): string {
@@ -44,7 +44,12 @@ export async function getUpdatedBy(
 }
 
 export function getZonedDate(date: string | Date): Date {
-  return fromZonedTime(date, timezone)
+  // Some TS weirdness here
+  if (typeof date === 'string') {
+    return new TZDate(date, timezone)
+  }
+
+  return new TZDate(date, timezone)
 }
 
 export function getShareUrl(path: string): string {

@@ -3,11 +3,13 @@ import MiniSearch, { SearchOptions, SearchResult } from 'minisearch'
 import { Dispatch, useEffect, useRef, useState } from 'react'
 
 export type IndexedResult = {
-  id: string
   title: string
-  path: string
+  permalink: string
   excerpt: string
+  excerptHtml: string
   publishedAt: string
+  content: string
+  tags: string[]
 }
 
 export type MiniSearchResult = SearchResult & IndexedResult
@@ -48,7 +50,13 @@ export function useMiniSearch({ searchOptions }: UseMiniSearchProps = {}): [
       const { index } = await import('../../generated/search/index.json')
       minisearch.current = MiniSearch.loadJSON<IndexedResult>(index, {
         fields: ['title', 'tags', 'excerpt', 'content'],
-        storeFields: ['title', 'excerpt', 'permalink', 'publishedAt'],
+        storeFields: [
+          'title',
+          'excerpt',
+          'excerptHtml',
+          'permalink',
+          'publishedAt'
+        ],
         searchOptions
       })
       setIsReady(true)

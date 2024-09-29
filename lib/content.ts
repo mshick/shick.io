@@ -2,7 +2,7 @@ import { isProduction, localDevUrl, vercelUrl } from '@/env'
 import type { Category, Options, Page, Post, Tag } from '_/.velite'
 import { categories, options, pages, posts, tags } from '_/.velite'
 
-export type { Category, Options, Page, Post, Tag }
+type Document = Page | Post
 
 type Taxonomy = {
   categories: { [P in 'name' | 'slug' | 'permalink']: Category[P] }[]
@@ -11,6 +11,18 @@ type Taxonomy = {
 
 type Filter<T> = (value: T, index: number, array: T[]) => boolean
 type Sorter<T> = (a: T, b: T) => number
+
+export type {
+  Category,
+  Document,
+  Filter,
+  Options,
+  Page,
+  Post,
+  Sorter,
+  Tag,
+  Taxonomy
+}
 
 const available = (item: { draft: boolean }) => {
   return !isProduction || !item.draft

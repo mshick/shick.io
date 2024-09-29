@@ -1,23 +1,24 @@
-import { DocumentTypes, PropsWithCallableChildren } from '#/types/types'
+import type { PropsWithCallableChildren } from '#/types/types'
+import type { Document } from '@/content'
 
-type Document = Pick<
-  DocumentTypes,
-  'path' | 'title' | 'excerpt' | 'publishedAt'
+type DocumentListItem = Pick<
+  Document,
+  'permalink' | 'title' | 'excerptHtml' | 'publishedAt'
 >
 
 export type DocumentListProps = {
-  documents: Document[]
+  documents: DocumentListItem[]
 }
 
 export function DocumentList({
   documents,
   children
-}: PropsWithCallableChildren<DocumentListProps, Document>) {
+}: PropsWithCallableChildren<DocumentListProps, DocumentListItem>) {
   return (
-    <ul className="flex flex-col m-0 p-0 list-none">
-      {documents.map((document) => (
-        <li key={document.path} className="mb-6">
-          {children(document)}
+    <ul className="space-y-6">
+      {documents.map((doc) => (
+        <li key={doc.permalink} className="space-y-1">
+          {children(doc)}
         </li>
       ))}
     </ul>

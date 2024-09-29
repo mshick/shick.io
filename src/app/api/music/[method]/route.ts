@@ -1,5 +1,5 @@
 import { createMusicKit } from '#/lib/musickit/musickit'
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 const _musickitPrivateKey = process.env.MUSICKIT_PRIVATE_KEY ?? ''
 const musickitPrivateKey = _musickitPrivateKey.replace(/\\n/g, '\n')
@@ -8,22 +8,23 @@ const musickitTeamId = process.env.MUSICKIT_TEAM_ID
 const musickitMusicUserToken = process.env.MUSICKIT_MUSIC_USER_TOKEN
 const apiSecret = process.env.API_SECRET
 
-export const config = {
-  runtime: 'edge'
+export const runtime = 'experimental-edge'
+
+type Params = {
+  method: string
 }
 
-export default async function handler(req: NextRequest) {
-  const { pathname, searchParams } = new URL(req.url)
-  const method = pathname.match(/([^/]+)\/?$/)?.[1]
+export async function GET(req: NextRequest, context: { params: Params }) {
+  const { searchParams } = req.nextUrl
+  const { method } = context.params
 
   if (!musickitMusicUserToken || !musickitTeamId || !musickitKeyId) {
-    return new Response(
-      JSON.stringify({ errors: [{ title: 'Not configured' }] }),
+    return NextResponse.json(
       {
-        status: 500,
-        headers: {
-          'content-type': 'application/json'
-        }
+        errors: [{ title: 'Not configured' }]
+      },
+      {
+        status: 500
       }
     )
   }
@@ -87,14 +88,13 @@ export default async function handler(req: NextRequest) {
       break
 
     default:
-      results = { errors: [{ title: 'Not found' }] }
+      results = {
+        errors: [{ title: 'Not found' }]
+      }
       status = 404
   }
 
-  return new Response(JSON.stringify(results), {
-    status,
-    headers: {
-      'content-type': 'application/json'
-    }
+  return NextResponse.json(results, {
+    status
   })
 }
