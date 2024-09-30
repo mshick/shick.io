@@ -38,7 +38,7 @@ export function generateMetadata({
   const { currentPage } = getPagination(
     searchParams,
     getOptions(['pagination']).pagination,
-    getDocumentsCount(filters.none)
+    getDocumentsCount()
   )
 
   if (currentPage > 1) {

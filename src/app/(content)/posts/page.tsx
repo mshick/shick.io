@@ -2,27 +2,36 @@ import { DocumentList } from '#/components/Document/DocumentList'
 import { DocumentListHeader } from '#/components/Document/DocumentListHeader'
 import { DocumentListItem } from '#/components/Document/DocumentListItem'
 import { DocumentListPagination } from '#/components/Document/DocumentListPagination'
-import { filters, getPosts, getPostsCount, sorters } from '#/content'
-import { getSingle, isNumericString } from '#/lib/utils/types'
+import {
+  filters,
+  getOptions,
+  getPosts,
+  getPostsCount,
+  sorters
+} from '#/content'
+import { getPagination } from '#/lib/utils/pagination'
 import { type ServerProps } from '#/types/types'
+import { type Metadata } from 'next'
 import slug from 'slug'
 
-const PER_PAGE = 4
 const HEADING = 'posts'
 
 export const revalidate = 60
 
-// export function generateMetadata(): Metadata {
-//   const page = getPage((value) => value.slug === 'index')
-//   return page?.meta ?? {}
-// }
+export function generateMetadata(): Metadata {
+  return {
+    title: HEADING
+  }
+}
 
 export default function PostsPage({ searchParams }: ServerProps) {
-  const currentPage = isNumericString(getSingle(searchParams['page']))
-    ? Number(searchParams['page'])
-    : 1
-  const perPage = PER_PAGE
-  const pageOffset = perPage * (currentPage - 1)
+  const heading = HEADING
+
+  const { currentPage, perPage, pageOffset, totalPages } = getPagination(
+    searchParams,
+    getOptions(['pagination']).pagination,
+    getPostsCount()
+  )
 
   const posts = getPosts(
     ['permalink', 'title', 'excerpt', 'excerptHtml', 'publishedAt'],
@@ -33,15 +42,11 @@ export default function PostsPage({ searchParams }: ServerProps) {
     pageOffset
   )
 
-  const totalPosts = getPostsCount(filters.none)
-
-  const totalPages = Math.ceil(totalPosts / perPage)
-
   return (
     <>
       <div className="prose prose-sm prose-tufted dark:prose-invert max-w-none">
-        <section id={`list-${slug(HEADING)}`} className="not-prose py-3.5">
-          <DocumentListHeader heading={HEADING} />
+        <section id={`list-${slug(heading)}`} className="not-prose py-3.5">
+          <DocumentListHeader heading={heading} />
           <DocumentList documents={posts}>
             {(item) => <DocumentListItem className="py-2 px-4" {...item} />}
           </DocumentList>

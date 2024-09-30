@@ -1,17 +1,21 @@
 import { Link } from '#/components/Link'
 import { TagList } from '#/components/Tag/TagList'
 import { getTags } from '#/content'
+import { type Metadata } from 'next'
 import slug from 'slug'
+
+const HEADING = 'Tags'
 
 export const revalidate = 60
 
-// export function generateMetadata(): Metadata {
-//   const page = getPage((value) => value.slug === 'index')
-//   return page?.meta ?? {}
-// }
+export function generateMetadata(): Metadata {
+  return {
+    title: HEADING
+  }
+}
 
 export default function TagsPage() {
-  const heading = 'Tags'
+  const heading = HEADING
 
   const tags = getTags(['permalink', 'name', 'excerpt', 'publishedAt', 'count'])
 
