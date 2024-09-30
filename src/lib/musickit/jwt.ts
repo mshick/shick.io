@@ -22,9 +22,9 @@ async function signJwt(
 }
 
 export type DeveloperKeyCredentials = {
-  privateKey: string
-  teamId: string
-  keyId: string
+  privateKey?: string
+  teamId?: string
+  keyId?: string
 }
 
 export async function createDeveloperKey(

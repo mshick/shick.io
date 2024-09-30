@@ -135,12 +135,16 @@ function renewMusicUserToken({
   developerToken,
   musicUserToken
 }: RequestContext) {
-  return async () => {
+  return async (): Promise<{
+    ['music-token']: string
+    error?: string
+    error_description?: string
+  }> => {
     const response = await fetch(renewUrl, {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${developerToken}`,
-        'Music-User-Token': musicUserToken,
+        'X-Apple-Music-User-Token': musicUserToken,
         'Content-Type': 'application/json',
         Accept: 'application/json'
       }
