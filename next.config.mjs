@@ -1,19 +1,7 @@
 import { withSentryConfig } from '@sentry/nextjs'
 
-const sentryDsn = process.env.NEXT_PUBLIC_SENTRY_DSN
-
 const isDev = process.argv.includes('dev')
-const isBuild = process.argv.includes('build')
 
-if (!process.env.VELITE_STARTED && isDev) {
-  process.env.VELITE_STARTED = '1'
-  const { build } = await import('velite')
-  await build({ watch: isDev, clean: !isDev })
-}
-
-/**
- * Add your own CSP here...
- */
 // https://securityheaders.com
 const ContentSecurityPolicy = `
   default-src * 'unsafe-inline' 'unsafe-eval' data:;
@@ -65,83 +53,59 @@ const nextConfig = {
   swcMinify: true,
   reactStrictMode: true,
   trailingSlash: true,
-  // async headers() {
-  //   return [
-  //     {
-  //       source: '/(.*)',
-  //       headers: securityHeaders
-  //     },
-  //     {
-  //       source: '/_next/image(.*)',
-  //       headers: [
-  //         {
-  //           key: 'Cache-Control',
-  //           value: 'public, max-age=31536000, immutable'
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       source: '/fonts/bitstream-vera-sans-mono-regular.woff2',
-  //       headers: [
-  //         {
-  //           key: 'Cache-Control',
-  //           value: 'public, max-age=31536000, immutable'
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       source: '/fonts/bitstream-vera-sans-mono-bold.woff2',
-  //       headers: [
-  //         {
-  //           key: 'Cache-Control',
-  //           value: 'public, max-age=31536000, immutable'
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       source: '/fonts/bitstream-vera-sans-mono-italic.woff2',
-  //       headers: [
-  //         {
-  //           key: 'Cache-Control',
-  //           value: 'public, max-age=31536000, immutable'
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       source: '/fonts/bitstream-vera-sans-mono-bold-italic.woff2',
-  //       headers: [
-  //         {
-  //           key: 'Cache-Control',
-  //           value: 'public, max-age=31536000, immutable'
-  //         }
-  //       ]
-  //     }
-  //   ]
-  // },
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/michael-shick-2022.pdf',
-  //       destination: 'https://read.cv/mshick',
-  //       permanent: false
-  //     },
-  //     {
-  //       source: '/resume',
-  //       destination: 'https://read.cv/mshick',
-  //       permanent: false
-  //     },
-  //     {
-  //       source: '/30',
-  //       destination: 'https://calendly.com/michaelshick/30min',
-  //       permanent: false
-  //     },
-  //     {
-  //       source: '/15',
-  //       destination: 'https://calendly.com/michaelshick/15min',
-  //       permanent: false
-  //     }
-  //   ]
-  // },
+  // headers prevents next export
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: securityHeaders
+      },
+      {
+        source: '/static/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
+      },
+      {
+        source: '/_next/image(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable'
+          }
+        ]
+      }
+    ]
+  },
+  // redirects prevents next export
+  async redirects() {
+    return [
+      {
+        source: '/michael-shick-2022.pdf',
+        destination: 'https://read.cv/mshick',
+        permanent: false
+      },
+      {
+        source: '/resume',
+        destination: 'https://read.cv/mshick',
+        permanent: false
+      },
+      {
+        source: '/30',
+        destination: 'https://calendly.com/michaelshick/30min',
+        permanent: false
+      },
+      {
+        source: '/15',
+        destination: 'https://calendly.com/michaelshick/15min',
+        permanent: false
+      }
+    ]
+  },
+  // output: 'export',
   eslint: {
     dirs: ['src', 'lib']
   },
@@ -165,7 +129,7 @@ const nextConfig = {
       }
     ]
   },
-  // output: 'export',
+  // Doesn't seem to work in Vercel builds
   experimental: {
     turbo: {
       rules: {
@@ -177,25 +141,19 @@ const nextConfig = {
   }
 }
 
-/**
- * @param {Array<(config: import('next').NextConfig) => any>} plugins
- * @param {import('next').NextConfig} config
- */
-const withPlugins = (plugins, config) => () =>
-  plugins.reduce((acc, plugin) => plugin(acc), {
-    ...config
-  })
+if (!process.env.VELITE_STARTED && isDev) {
+  process.env.VELITE_STARTED = '1'
+  const { build } = await import('velite')
+  await build({ watch: true, clean: false })
+}
 
-export default withPlugins(
-  [
-    (config) => (isBuild ? config : config),
-    (config) =>
-      sentryDsn
-        ? withSentryConfig(
-            { ...config, sentry: { hideSourceMaps: true } },
-            { silent: true }
-          )
-        : config
-  ],
-  nextConfig
-)
+let config = nextConfig
+
+if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+  config = withSentryConfig(
+    { ...nextConfig, sentry: { hideSourceMaps: true } },
+    { silent: true }
+  )
+}
+
+export default config
