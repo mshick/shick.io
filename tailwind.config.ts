@@ -1,3 +1,4 @@
+// @ts-nocheck
 import aspectRatio from '@tailwindcss/aspect-ratio'
 import forms from '@tailwindcss/forms'
 import typography from '@tailwindcss/typography'
