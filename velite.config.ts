@@ -1,4 +1,10 @@
-import { defineCollection, defineConfig, s } from 'velite'
+import rehypePresetTufted from '@mshick/tufted/rehype'
+import remarkPresetTufted from '@mshick/tufted/remark'
+import type { ElementContent } from 'hast'
+import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
+import remarkGemoji from 'remark-gemoji'
+import { defineCollection, defineConfig, MarkdownOptions, Output, s } from 'velite'
+import { rehypeCopyLinkedFiles } from './lib/assets'
 import { excerptFn } from './lib/excerpt'
 import {
   createTaxonomyTransform,
@@ -11,11 +17,52 @@ import {
   getUpdatedBy,
   getZonedDate
 } from './lib/fields'
-import { markdown } from './lib/markdown'
 import { generateSearchIndex } from './lib/search'
 import { prepareTaxonomy } from './lib/taxonomy'
 
-// https://github.com/zce/velite/issues/134
+const output: Output =   {
+  data: '.velite',
+  assets: 'public/static',
+  base: '/static/',
+  name: '[name]-[hash:6].[ext]',
+  clean: true
+}
+
+const rehypeTufted = rehypePresetTufted({
+  plugins: {
+    rehypeShiki: {
+      themes: {
+        light: 'one-light',
+        dark: 'one-dark-pro'
+      }
+    },
+    rehypeAutolinkHeadings: {
+      behavior: 'append',
+      content: fromHtmlIsomorphic('#', {
+        fragment: true
+      }).children as ElementContent[],
+      headingProperties: {
+        className: ['group']
+      },
+      properties: {
+        className: [
+          'heading-link',
+          'hidden',
+          'group-hover:inline-block',
+          'ml-2'
+        ]
+      }
+    }
+  }
+})
+
+const markdownWithTufted: MarkdownOptions = {
+  gfm: false,
+  remarkPlugins: [remarkGemoji, remarkPresetTufted() as any],
+  rehypePlugins: [[rehypeCopyLinkedFiles, output], rehypeTufted as any],
+  removeComments: true,
+  copyLinkedFiles: false
+}
 
 const EXCERPT_LENGTH = 260
 
@@ -108,7 +155,7 @@ const tags = defineCollection({
       cover: cover.optional(),
       excerpt: s.markdown({ gfm: false }).optional(),
       date: s.isodate().optional(),
-      content: s.markdown({ gfm: false }),
+      content: s.markdown(markdownWithTufted),
       count
     })
     .transform(createTaxonomyTransform('tags'))
@@ -124,7 +171,7 @@ const categories = defineCollection({
       cover: cover.optional(),
       excerpt: s.markdown({ gfm: false }).optional(),
       date: s.isodate().optional(),
-      content: s.markdown({ gfm: false }),
+      content: s.markdown(markdownWithTufted),
       count
     })
     .transform(createTaxonomyTransform('categories'))
@@ -140,8 +187,8 @@ const posts = defineCollection({
       cover: cover.optional(),
       meta,
       metadata: s.metadata(),
-      content: markdown({ gfm: false, tufted: true }),
-      excerpt: markdown({ gfm: false, tufted: false }).optional(),
+      content: s.markdown(markdownWithTufted),
+      excerpt: s.markdown({ gfm: false }).optional(),
       date: s.isodate().optional(),
       author: s.string().optional(),
       draft: s.boolean().default(false),
@@ -206,11 +253,11 @@ const pages = defineCollection({
   schema: s
     .object({
       title: s.string().max(99),
-      excerpt: markdown({ gfm: false, tufted: false }),
+      excerpt: s.markdown(),
       cover: cover.optional(),
       meta,
       slug: s.slug('global', ['admin']).optional(),
-      code: s.mdx(),
+      code: s.mdx({gfm: false, copyLinkedFiles: false}),
       categories: s.array(s.string()).default([]),
       tags: s.array(s.string()).default([]),
       draft: s.boolean().default(false)
@@ -257,6 +304,11 @@ export default defineConfig({
     categories,
     tags,
     options
+  },
+  mdx: {
+    // TODO The MDX types incorrectly disallow these as input options to s.mdx()
+    remarkPlugins: [remarkGemoji, remarkPresetTufted()],
+    rehypePlugins: [[rehypeCopyLinkedFiles, output], rehypeTufted],
   },
   async prepare(collections) {
     console.log('Preparing taxonomy...')

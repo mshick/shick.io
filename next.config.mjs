@@ -142,27 +142,8 @@ const nextConfig = {
   //     }
   //   ]
   // },
-  // webpack(config) {
-  //   // Contentlayer generates many warnings:
-  //   // Build dependencies behind this expression are ignored and might cause incorrect cache invalidation
-  //   config.infrastructureLogging = {
-  //     level: 'error'
-  //   }
-
-  //   config.module = {
-  //     ...config.module,
-  //     rules: config.module.rules.concat([
-  //       {
-  //         test: /\.txt$/,
-  //         type: 'asset/source'
-  //       }
-  //     ])
-  //   }
-
-  //   return config
-  // },
   eslint: {
-    dirs: ['src', 'lib', 'env']
+    dirs: ['src', 'lib']
   },
   images: {
     minimumCacheTTL: 60,

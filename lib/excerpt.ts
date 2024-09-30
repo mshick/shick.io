@@ -65,7 +65,6 @@ export function excerptFn(
 
     const output = exHast ?? truncate(rawHast, { size: length, ellipsis: '…' })
 
-    // await rehypeCopyLinkedFiles(config.output)(output, { path })
     return format === 'html' ? toHtml(output) : toText(output)
   } catch (err: any) {
     ctx?.addIssue?.({ fatal: true, code: 'custom', message: err.message })

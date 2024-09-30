@@ -1,5 +1,6 @@
 ## Notes
 
+- Handling relationships in Velite - https://github.com/zce/velite/issues/134
 - Apple Music played tracks:
   https://developer.apple.com/documentation/applemusicapi/get_recently_played_tracks
 - Design inspiration: https://datatracker.ietf.org/doc/html/rfc6570
@@ -12,12 +13,6 @@
 - https://github.com/panr/hugo-theme-terminal
 - https://j3s.sh
 - BBS design
-
-https://matrix.to/#/@mshick:matrix.org
-https://discordapp.com/users/312396147073220619
-
-This is a [Next.js](https://nextjs.org/) project bootstrapped with
-[`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Process for MusicKit MUT updates
 
