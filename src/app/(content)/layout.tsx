@@ -7,12 +7,7 @@ import { Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { PropsWithChildren } from 'react'
 
-const { title, url, description, locale } = getOptions([
-  'title',
-  'url',
-  'description',
-  'locale'
-])
+const { title, url, description } = getOptions(['title', 'url', 'description'])
 
 export const metadata: Metadata = {
   title: {
@@ -42,18 +37,16 @@ export default function Layout({ children }: PropsWithChildren) {
   const navigationItems = links.filter((link) => link.type === 'navigation')
 
   return (
-    <html lang={locale} suppressHydrationWarning>
-      <body
-        className={`${plexMono.variable} font-primary h-svh mx-auto max-w-3xl px-8 flex flex-col`}
-      >
-        <ThemeProvider attribute="class">
-          <SiteHeader siteName={name} navigationItems={navigationItems} />
-          <main id="content" className="flex flex-col flex-1">
-            {children}
-          </main>
-          <SiteFooter repoUrl={repoUrl} socials={socials} />
-        </ThemeProvider>
-      </body>
-    </html>
+    <body
+      className={`${plexMono.variable} font-primary h-svh mx-auto max-w-3xl px-8 flex flex-col`}
+    >
+      <ThemeProvider attribute="class">
+        <SiteHeader siteName={name} navigationItems={navigationItems} />
+        <main id="content" className="flex flex-col flex-1">
+          {children}
+        </main>
+        <SiteFooter repoUrl={repoUrl} socials={socials} />
+      </ThemeProvider>
+    </body>
   )
 }

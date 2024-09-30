@@ -5,6 +5,7 @@ import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import type { Root as Mdast } from 'mdast'
 import rehypeRaw from 'rehype-raw'
 import rehypeStringify from 'rehype-stringify'
+import remarkGemoji from 'remark-gemoji'
 import remarkGfm from 'remark-gfm'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
@@ -39,6 +40,36 @@ const rehypeMetaString = () => (tree: Hast) => {
   })
 }
 
+const rehypeTufted = rehypePresetTufted({
+  assets: 'public/static',
+  base: '/static/',
+  plugins: {
+    rehypeShiki: {
+      themes: {
+        light: 'one-light',
+        dark: 'one-dark-pro'
+      }
+    },
+    rehypeAutolinkHeadings: {
+      behavior: 'append',
+      content: fromHtmlIsomorphic('#', {
+        fragment: true
+      }).children as ElementContent[],
+      headingProperties: {
+        className: ['group']
+      },
+      properties: {
+        className: [
+          'heading-link',
+          'hidden',
+          'group-hover:inline-block',
+          'ml-2'
+        ]
+      }
+    }
+  }
+})
+
 type Options = MarkdownOptions & {
   tufted?: boolean
 }
@@ -60,7 +91,7 @@ export const markdown = (options: Options = {}) =>
       const removeComments = options.removeComments ?? true
       const copyLinkedFiles = options.copyLinkedFiles ?? true
 
-      const remarkPlugins = [] as PluggableList
+      const remarkPlugins = [remarkGemoji] as PluggableList
       const rehypePlugins = [] as PluggableList
 
       // support gfm (autolink literals, footnotes, strikethrough, tables, tasklists).
@@ -81,37 +112,6 @@ export const markdown = (options: Options = {}) =>
       // apply remark plugins
       if (enableTufted) {
         remarkPlugins.push(remarkPresetTufted())
-
-        const rehypeTufted = rehypePresetTufted({
-          assets: 'public/static',
-          base: '/static/',
-          plugins: {
-            rehypeShiki: {
-              themes: {
-                light: 'one-light',
-                dark: 'one-dark-pro'
-              }
-            },
-            rehypeAutolinkHeadings: {
-              behavior: 'append',
-              content: fromHtmlIsomorphic('#', {
-                fragment: true
-              }).children as ElementContent[],
-              headingProperties: {
-                className: ['group']
-              },
-              properties: {
-                className: [
-                  'heading-link',
-                  'hidden',
-                  'group-hover:inline-block',
-                  'ml-2'
-                ]
-              }
-            }
-          }
-        })
-
         rehypePlugins.push(rehypeTufted)
       }
 
