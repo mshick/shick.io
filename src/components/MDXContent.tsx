@@ -8,6 +8,7 @@ const sharedComponents = {
 }
 
 const useMDXComponent = (code: string) => {
+  // @ts-expect-error: https://github.com/mdx-js/mdx/pull/2465#discussion_r1553974317
   return runSync(code, { ...runtime, baseUrl: import.meta.url }).default
 }
 
