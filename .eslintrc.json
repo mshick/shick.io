@@ -8,7 +8,7 @@
     "plugin:prettier/recommended"
   ],
   "parserOptions": {
-    "ecmaVersion": 12,
+    "ecmaVersion": 13,
     "project": true,
     "tsconfigRootDir": "./",
     "sourceType": "module"
@@ -95,8 +95,15 @@
         "mdx/language-mapper": {}
       },
       "globals": {
-        "HomepagePostsList": true,
-        "HomepageHero": true
+        "HomepagePostsList": true
+      }
+    },
+    {
+      "files": [
+        "**/*.md/**"
+      ],
+      "parserOptions": {
+        "project": null
       }
     }
   ],
