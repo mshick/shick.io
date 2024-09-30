@@ -1,4 +1,3 @@
-import { HomepageHero } from '#/components/Homepage/HomepageHero'
 import { HomepageList } from '#/components/Homepage/HomepageList'
 import { components } from '#/components/mdx'
 import { MDXContent } from '#/components/MDXContent'
@@ -31,7 +30,6 @@ export default function HomePage() {
 
   const bodyComponents = {
     ...components,
-    HomepageHero,
     HomepagePostsList: () => (
       <HomepageList
         collectionName="posts"
