@@ -1,5 +1,5 @@
-import classNames from '#/lib/utils/classNames'
-import { PropsWithChildren } from 'react'
+import { classNames } from '#/lib/utils/classNames'
+import { type PropsWithChildren } from 'react'
 
 export type DocumentListPaginationProps = {
   path: string

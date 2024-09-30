@@ -13,6 +13,12 @@
     "tsconfigRootDir": "./",
     "sourceType": "module"
   },
+  "settings": {
+    "import/resolver": {
+      "typescript": true,
+      "node": true
+    }
+  },
   "overrides": [
     {
       "files": [
@@ -23,7 +29,9 @@
         "next/core-web-vitals",
         "plugin:@typescript-eslint/recommended-type-checked",
         "plugin:@typescript-eslint/stylistic-type-checked",
-        "plugin:prettier/recommended"
+        "plugin:import/recommended",
+        "plugin:prettier/recommended",
+        "plugin:import/typescript"
       ],
       "rules": {
         "@typescript-eslint/consistent-type-definitions": "off",
@@ -58,6 +66,18 @@
           {
             "allowIndexSignaturePropertyAccess": true
           }
+        ],
+        "@typescript-eslint/consistent-type-exports": [
+          "error",
+          {
+            "fixMixedExportsWithInlineTypeSpecifier": true
+          }
+        ],
+        "@typescript-eslint/consistent-type-imports": [
+          "error",
+          {
+            "fixStyle": "inline-type-imports"
+          }
         ]
       }
     },
@@ -81,8 +101,8 @@
     }
   ],
   "ignorePatterns": [
+    "package-lock.json",
     "tsconfig.json",
-    "**/generated/**/*",
-    "src/pages.bak"
+    "**/generated/**/*"
   ]
 }

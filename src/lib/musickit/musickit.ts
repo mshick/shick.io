@@ -1,4 +1,4 @@
-import { createDeveloperKey, DeveloperKeyCredentials } from './jwt'
+import { createDeveloperKey, type DeveloperKeyCredentials } from './jwt'
 
 const baseUrl = 'https://api.music.apple.com'
 const renewUrl =

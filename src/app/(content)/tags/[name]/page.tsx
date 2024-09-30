@@ -8,7 +8,7 @@ import {
   sorters
 } from '#/content'
 import { getSingle, isNumericString } from '#/lib/utils/types'
-import { ServerProps } from '#/types/types'
+import { type ServerProps } from '#/types/types'
 import { notFound } from 'next/navigation'
 
 const PER_PAGE = 3

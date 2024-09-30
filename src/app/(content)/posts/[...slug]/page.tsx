@@ -2,8 +2,8 @@ import { PostBody } from '#/components/Post/PostBody'
 import { PostFooter } from '#/components/Post/PostFooter'
 import { PostHeader } from '#/components/Post/PostHeader'
 import { getPostBySlug, getPostWithRelated, getPosts } from '#/content'
-import { ServerProps } from '#/types/types'
-import { Metadata } from 'next'
+import { type ServerProps } from '#/types/types'
+import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 export const revalidate = 300

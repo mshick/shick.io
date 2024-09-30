@@ -1,5 +1,8 @@
-import Link from '#/components/Link'
-import { DocumentTypes, PropsWithCallableChildren } from '#/types/types'
+import { Link } from '#/components/Link'
+import {
+  type DocumentTypes,
+  type PropsWithCallableChildren
+} from '#/types/types'
 
 type Document = Pick<
   DocumentTypes,

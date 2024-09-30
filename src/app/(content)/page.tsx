@@ -2,7 +2,7 @@ import { HomepageList } from '#/components/Homepage/HomepageList'
 import { components } from '#/components/mdx'
 import { MDXContent } from '#/components/MDXContent'
 import { getOptions, getPage, getPosts } from '#/content'
-import { Metadata } from 'next'
+import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 export const revalidate = 60

@@ -4,7 +4,7 @@ import { DocumentListItem } from '#/components/Document/DocumentListItem'
 import { DocumentListPagination } from '#/components/Document/DocumentListPagination'
 import { filters, getPosts, getPostsCount, sorters } from '#/content'
 import { getSingle, isNumericString } from '#/lib/utils/types'
-import { ServerProps } from '#/types/types'
+import { type ServerProps } from '#/types/types'
 import slug from 'slug'
 
 const PER_PAGE = 4

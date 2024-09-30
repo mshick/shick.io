@@ -1,7 +1,7 @@
 import {
-  ChangeEventHandler,
-  FocusEventHandler,
-  ForwardedRef,
+  type ChangeEventHandler,
+  type FocusEventHandler,
+  type ForwardedRef,
   forwardRef
 } from 'react'
 

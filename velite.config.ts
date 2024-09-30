@@ -1,9 +1,15 @@
 import rehypePresetTufted from '@mshick/tufted/rehype'
 import remarkPresetTufted from '@mshick/tufted/remark'
-import type { ElementContent } from 'hast'
+import { type ElementContent } from 'hast'
 import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
 import remarkGemoji from 'remark-gemoji'
-import { defineCollection, defineConfig, MarkdownOptions, Output, s } from 'velite'
+import {
+  defineCollection,
+  defineConfig,
+  type MarkdownOptions,
+  type Output,
+  s
+} from 'velite'
 import { rehypeCopyLinkedFiles } from './lib/assets'
 import { excerptFn } from './lib/excerpt'
 import {
@@ -20,7 +26,7 @@ import {
 import { generateSearchIndex } from './lib/search'
 import { prepareTaxonomy } from './lib/taxonomy'
 
-const output: Output =   {
+const output: Output = {
   data: '.velite',
   assets: 'public/static',
   base: '/static/',
@@ -257,7 +263,7 @@ const pages = defineCollection({
       cover: cover.optional(),
       meta,
       slug: s.slug('global', ['admin']).optional(),
-      code: s.mdx({gfm: false, copyLinkedFiles: false}),
+      code: s.mdx({ gfm: false, copyLinkedFiles: false }),
       categories: s.array(s.string()).default([]),
       tags: s.array(s.string()).default([]),
       draft: s.boolean().default(false)
@@ -308,7 +314,7 @@ export default defineConfig({
   mdx: {
     // TODO The MDX types incorrectly disallow these as input options to s.mdx()
     remarkPlugins: [remarkGemoji, remarkPresetTufted()],
-    rehypePlugins: [[rehypeCopyLinkedFiles, output], rehypeTufted],
+    rehypePlugins: [[rehypeCopyLinkedFiles, output], rehypeTufted]
   },
   async prepare(collections) {
     console.log('Preparing taxonomy...')

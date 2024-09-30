@@ -6,7 +6,7 @@ import { useMiniSearch } from '#/lib/hooks/useMiniSearch'
 import { replaceState } from '#/lib/utils/history'
 import { usePathname } from 'next/navigation'
 import {
-  ChangeEventHandler,
+  type ChangeEventHandler,
   useCallback,
   useEffect,
   useMemo,
@@ -17,7 +17,7 @@ import { NavigationMenu } from './components/NavigationMenu'
 import { NavigationToggle } from './components/NavigationToggle'
 import { SearchInput } from './components/SearchInput'
 import { SearchResults } from './components/SearchResults'
-import { NavigationItem } from './types'
+import { type NavigationItem } from './types'
 
 export type SiteHeaderProps = {
   siteName: string

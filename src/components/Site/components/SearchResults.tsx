@@ -1,6 +1,6 @@
 import { DocumentList } from '#/components/Document/DocumentList'
 import { DocumentListItem } from '#/components/Document/DocumentListItem'
-import Loading from '#/components/Loading'
+import { Loading } from '#/components/Loading'
 import {
   DocumentMagnifyingGlassIcon,
   ExclamationTriangleIcon

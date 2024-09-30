@@ -1,6 +1,6 @@
-import Link from '#/components/Link'
-import classNames from '#/lib/utils/classNames'
-import { NavigationItem } from '../types'
+import { Link } from '#/components/Link'
+import { classNames } from '#/lib/utils/classNames'
+import { type NavigationItem } from '../types'
 
 export type NavigationMenuProps = {
   items: NavigationItem[]

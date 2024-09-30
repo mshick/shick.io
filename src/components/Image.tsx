@@ -1,5 +1,5 @@
-import NextImage, { ImageProps } from 'next/image'
-import { DetailedHTMLProps, ImgHTMLAttributes } from 'react'
+import NextImage, { type ImageProps } from 'next/image'
+import { type DetailedHTMLProps, type ImgHTMLAttributes } from 'react'
 
 export const Image = ({
   className,
@@ -31,5 +31,3 @@ export const Image = ({
     />
   )
 }
-
-export default Image

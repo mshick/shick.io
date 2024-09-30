@@ -1,4 +1,4 @@
-import pino, { LoggerOptions } from 'pino'
+import pino, { type LoggerOptions } from 'pino'
 import { commitSha, isDevelopment, logLevel, vercelEnv } from './env'
 
 const config: LoggerOptions = {

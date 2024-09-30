@@ -3,9 +3,9 @@ import { SiteHeader } from '#/components/Site/SiteHeader'
 import { getOptions } from '#/content'
 import { plexMono } from '#/styles/fonts'
 import '#/styles/globals.css'
-import { Metadata } from 'next'
+import { type Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
-import { PropsWithChildren } from 'react'
+import { type PropsWithChildren } from 'react'
 
 const { title, url, description } = getOptions(['title', 'url', 'description'])
 

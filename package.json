@@ -70,6 +70,8 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.13",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.3",
+    "eslint-plugin-import": "^2.30.0",
     "eslint-plugin-json-format": "^2.0.1",
     "eslint-plugin-mdx": "^3.1.5",
     "eslint-plugin-prettier": "^5.2.1",
@@ -90,7 +92,7 @@
     "simple-git": "^3.27.0",
     "tailwindcss": "^3.4.13",
     "type-fest": "^4.26.1",
-    "typescript": "^5.6.2",
+    "typescript": "5.5.4",
     "unified": "^11.0.5",
     "velite": "^0.1.1",
     "yaml": "^2.5.1"

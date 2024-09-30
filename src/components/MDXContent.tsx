@@ -1,5 +1,5 @@
 import { runSync } from '@mdx-js/mdx'
-import { MDXComponents } from 'mdx/types'
+import { type MDXComponents } from 'mdx/types'
 import Image from 'next/image'
 import * as runtime from 'react/jsx-runtime'
 

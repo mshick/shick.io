@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { type ReactElement } from 'react'
 import { isElement } from 'react-is'
 
 export function isReactElement(

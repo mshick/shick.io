@@ -1,5 +1,5 @@
 import { createMusicKit } from '#/lib/musickit/musickit'
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 
 const _musickitPrivateKey = process.env.MUSICKIT_PRIVATE_KEY ?? ''
 const musickitPrivateKey = _musickitPrivateKey.replace(/\\n/g, '\n')

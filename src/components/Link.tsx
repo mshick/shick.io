@@ -1,5 +1,5 @@
 import NextLink from 'next/link'
-import { AnchorHTMLAttributes, DetailedHTMLProps } from 'react'
+import { type AnchorHTMLAttributes, type DetailedHTMLProps } from 'react'
 
 export const Link = ({
   children,
@@ -20,5 +20,3 @@ export const Link = ({
     </NextLink>
   )
 }
-
-export default Link

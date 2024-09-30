@@ -1,4 +1,4 @@
-import { HTMLAttributes, PropsWithChildren } from 'react'
+import { type HTMLAttributes, type PropsWithChildren } from 'react'
 
 export function Qrcode({
   children

@@ -1,7 +1,7 @@
 import { SignalMessengerIcon } from '#/components/SignalMessengerIcon'
-import { Options } from '#/content'
-import classNames from '#/lib/utils/classNames'
-import { IconType } from 'react-icons/lib'
+import { type Options } from '#/content'
+import { classNames } from '#/lib/utils/classNames'
+import { type IconType } from 'react-icons/lib'
 import {
   TbAt,
   TbBrandGithub,

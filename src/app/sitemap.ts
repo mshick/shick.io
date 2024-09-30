@@ -1,5 +1,5 @@
 import { getPages, getPosts } from '#/content'
-import { MetadataRoute } from 'next'
+import { type MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const docs = [

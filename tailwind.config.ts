@@ -1,10 +1,9 @@
-// @ts-nocheck
 import aspectRatio from '@tailwindcss/aspect-ratio'
 import forms from '@tailwindcss/forms'
 import typography from '@tailwindcss/typography'
-import parser, { Pseudo } from 'postcss-selector-parser'
+import parser, { type Pseudo } from 'postcss-selector-parser'
 import plugin from 'tailwindcss/plugin'
-import { PluginAPI } from 'tailwindcss/types/config'
+import { type Config, type PluginAPI } from 'tailwindcss/types/config'
 
 const parseSelector = parser()
 
@@ -26,6 +25,7 @@ function commonTrailingPseudos(selector: string) {
     }
   }
 
+  // @ts-expect-error
   const trailingPseudos = parser.selector()
 
   // At this point the pseudo elements are in a column-major 2D array
@@ -46,6 +46,8 @@ function commonTrailingPseudos(selector: string) {
     }
 
     pseudos.forEach((pseudo) => pseudo.remove())
+
+    // @ts-expect-error
     trailingPseudos.prepend(pseudos[0])
   }
 
@@ -85,18 +87,18 @@ const round = (num: number) =>
     .replace(/(\.[0-9]+?)0+$/, '$1')
     .replace(/\.0$/, '')
 
-const rem = (px: number) => `${round(px / 16)}rem`
+// const rem = (px: number) => `${round(px / 16)}rem`
 
 const em = (px: number, base: number) => `${round(px / base)}em`
 
-const hexToRgb = (hex: string) => {
-  hex = hex.replace('#', '')
-  hex = hex.length === 3 ? hex.replace(/./g, '$&$&') : hex
-  const r = parseInt(hex.substring(0, 2), 16)
-  const g = parseInt(hex.substring(2, 4), 16)
-  const b = parseInt(hex.substring(4, 6), 16)
-  return `${r} ${g} ${b}`
-}
+// const hexToRgb = (hex: string) => {
+//   hex = hex.replace('#', '')
+//   hex = hex.length === 3 ? hex.replace(/./g, '$&$&') : hex
+//   const r = parseInt(hex.substring(0, 2), 16)
+//   const g = parseInt(hex.substring(2, 4), 16)
+//   const b = parseInt(hex.substring(4, 6), 16)
+//   return `${r} ${g} ${b}`
+// }
 
 const styles = (theme: PluginAPI['theme']) => ({
   DEFAULT: {
@@ -313,100 +315,96 @@ export default {
     forms,
     typography,
     aspectRatio,
-    plugin.withOptions<{ className?: string; target?: 'modern' }>(
-      ({ className = 'prose', target = 'modern' } = {}) =>
-        ({
-          addUtilities,
-          addComponents,
-          addBase,
-          e,
-          config,
-          corePlugins,
-          theme,
-          ...plugin
-        }) => {
-          const { prefix } = plugin as any
-          const styleProfile = styles(theme)
+    plugin.withOptions<{ className?: string; target?: 'modern' }>(function ({
+      className = 'prose'
+      // target = 'modern'
+    } = {}) {
+      return function (api) {
+        const { e, config, theme, ...rest } = api
+        const { prefix } = rest as any
+        const styleProfile = styles(theme)
 
-          const prefixed = Object.keys(styleProfile).map((modifier) => ({
-            [modifier === 'DEFAULT'
-              ? `.${className}`
-              : `.${className}-${modifier}`]: Object.fromEntries(
-              Object.keys(styleProfile[modifier]).map((prop) => [
-                `${inWhere(prop, { className, modifier, prefix })}`,
-                styleProfile[modifier][prop]
-              ])
-            )
-          }))
+        const prefixed = Object.keys(styleProfile).map((modifier) => ({
+          [modifier === 'DEFAULT'
+            ? `.${className}`
+            : `.${className}-${modifier}`]: Object.fromEntries(
+            // @ts-expect-error
+            Object.keys(styleProfile[modifier]).map((prop) => [
+              `${inWhere(prop, { className, modifier, prefix })}`,
+              // @ts-expect-error
+              styleProfile[modifier][prop]
+            ])
+          )
+        }))
 
-          addComponents([
-            ...prefixed,
-            {
-              [`.${className}-tufted`]: {
-                '--tw-prose-body': theme('colors.black'),
-                '--tw-prose-headings': theme('colors.black'),
-                '--tw-prose-lead': theme('colors.black'),
-                '--tw-prose-links': theme('colors.black'),
-                '--tw-prose-links-hover-bg': theme('colors.blue.700'),
-                '--tw-prose-links-hover-text': theme('colors.white'),
-                '--tw-prose-bold': theme('colors.black'),
-                '--tw-prose-counters': theme('colors.black'),
-                '--tw-prose-bullets': theme('colors.black'),
-                '--tw-prose-hr': theme('colors.black'),
-                '--tw-prose-quotes': theme('colors.black'),
-                '--tw-prose-quote-borders': theme('colors.black'),
-                '--tw-prose-captions': theme('colors.black'),
-                '--tw-prose-borders': theme('colors.gray.300'),
-                '--tw-prose-code': theme('colors.black'),
-                '--tw-prose-pre-code': '#977d49',
-                '--tw-prose-pre-code-keyword': '#728fcb',
-                '--tw-prose-pre-code-comment': '#9a949e',
-                '--tw-prose-pre-code-tag': '#a42375',
-                '--tw-prose-pre-code-function': '#a42375',
-                '--tw-prose-pre-code-selector': '#4b38dc',
-                '--tw-prose-pre-code-attr-name': '#4b38dc',
-                '--tw-prose-pre-code-variable': '#bd3a28',
-                '--tw-prose-pre-code-inserted': '#4b38dc',
-                '--tw-prose-pre-code-important': '#bd3a28',
-                '--tw-prose-pre-code-highlight': '#bd3a28',
-                '--tw-prose-pre-code-selection': '#f2ece4',
-                '--tw-prose-pre-bg': '#fafafa',
-                '--tw-prose-th-borders': theme('colors.gray.300'),
-                '--tw-prose-td-borders': theme('colors.gray.300'),
-                '--tw-prose-tr-even': theme('colors.gray.100'),
-                '--tw-prose-invert-body': theme('colors.white'),
-                '--tw-prose-invert-headings': theme('colors.white'),
-                '--tw-prose-invert-lead': theme('colors.white'),
-                '--tw-prose-invert-links': theme('colors.white'),
-                '--tw-prose-invert-bold': theme('colors.white'),
-                '--tw-prose-invert-counters': theme('colors.white'),
-                '--tw-prose-invert-bullets': theme('colors.white'),
-                '--tw-prose-invert-hr': theme('colors.white'),
-                '--tw-prose-invert-quotes': theme('colors.white'),
-                '--tw-prose-invert-quote-borders': theme('colors.white'),
-                '--tw-prose-invert-captions': theme('colors.white'),
-                '--tw-prose-invert-borders': theme('colors.gray.700'),
-                '--tw-prose-invert-code': theme('colors.white'),
-                '--tw-prose-invert-pre-code': '#b3ace8',
-                '--tw-prose-invert-pre-code-keyword': '#ffcc99',
-                '--tw-prose-invert-pre-code-comment': '#6c6783',
-                '--tw-prose-invert-pre-code-tag': '#e09142',
-                '--tw-prose-invert-pre-code-function': '#9a86fd',
-                '--tw-prose-invert-pre-code-selector': '#eeebff',
-                '--tw-prose-invert-pre-code-attr-name': '#c4b9fe',
-                '--tw-prose-invert-pre-code-variable': '#ffcc99',
-                '--tw-prose-invert-pre-code-inserted': '#eeebff',
-                '--tw-prose-invert-pre-code-important': '#c4b9fe',
-                '--tw-prose-invert-pre-code-highlight': '#8a75f5',
-                '--tw-prose-invert-pre-code-selection': '#6a51e6',
-                '--tw-prose-invert-pre-bg': theme('colors.black'),
-                '--tw-prose-invert-th-borders': theme('colors.gray.700'),
-                '--tw-prose-invert-td-borders': theme('colors.gray.700'),
-                '--tw-prose-invert-tr-even': theme('colors.gray.900')
-              }
+        api.addComponents([
+          ...prefixed,
+          {
+            [`.${className}-tufted`]: {
+              '--tw-prose-body': theme('colors.black'),
+              '--tw-prose-headings': theme('colors.black'),
+              '--tw-prose-lead': theme('colors.black'),
+              '--tw-prose-links': theme('colors.black'),
+              '--tw-prose-links-hover-bg': theme('colors.blue.700'),
+              '--tw-prose-links-hover-text': theme('colors.white'),
+              '--tw-prose-bold': theme('colors.black'),
+              '--tw-prose-counters': theme('colors.black'),
+              '--tw-prose-bullets': theme('colors.black'),
+              '--tw-prose-hr': theme('colors.black'),
+              '--tw-prose-quotes': theme('colors.black'),
+              '--tw-prose-quote-borders': theme('colors.black'),
+              '--tw-prose-captions': theme('colors.black'),
+              '--tw-prose-borders': theme('colors.gray.300'),
+              '--tw-prose-code': theme('colors.black'),
+              '--tw-prose-pre-code': '#977d49',
+              '--tw-prose-pre-code-keyword': '#728fcb',
+              '--tw-prose-pre-code-comment': '#9a949e',
+              '--tw-prose-pre-code-tag': '#a42375',
+              '--tw-prose-pre-code-function': '#a42375',
+              '--tw-prose-pre-code-selector': '#4b38dc',
+              '--tw-prose-pre-code-attr-name': '#4b38dc',
+              '--tw-prose-pre-code-variable': '#bd3a28',
+              '--tw-prose-pre-code-inserted': '#4b38dc',
+              '--tw-prose-pre-code-important': '#bd3a28',
+              '--tw-prose-pre-code-highlight': '#bd3a28',
+              '--tw-prose-pre-code-selection': '#f2ece4',
+              '--tw-prose-pre-bg': '#fafafa',
+              '--tw-prose-th-borders': theme('colors.gray.300'),
+              '--tw-prose-td-borders': theme('colors.gray.300'),
+              '--tw-prose-tr-even': theme('colors.gray.100'),
+              '--tw-prose-invert-body': theme('colors.white'),
+              '--tw-prose-invert-headings': theme('colors.white'),
+              '--tw-prose-invert-lead': theme('colors.white'),
+              '--tw-prose-invert-links': theme('colors.white'),
+              '--tw-prose-invert-bold': theme('colors.white'),
+              '--tw-prose-invert-counters': theme('colors.white'),
+              '--tw-prose-invert-bullets': theme('colors.white'),
+              '--tw-prose-invert-hr': theme('colors.white'),
+              '--tw-prose-invert-quotes': theme('colors.white'),
+              '--tw-prose-invert-quote-borders': theme('colors.white'),
+              '--tw-prose-invert-captions': theme('colors.white'),
+              '--tw-prose-invert-borders': theme('colors.gray.700'),
+              '--tw-prose-invert-code': theme('colors.white'),
+              '--tw-prose-invert-pre-code': '#b3ace8',
+              '--tw-prose-invert-pre-code-keyword': '#ffcc99',
+              '--tw-prose-invert-pre-code-comment': '#6c6783',
+              '--tw-prose-invert-pre-code-tag': '#e09142',
+              '--tw-prose-invert-pre-code-function': '#9a86fd',
+              '--tw-prose-invert-pre-code-selector': '#eeebff',
+              '--tw-prose-invert-pre-code-attr-name': '#c4b9fe',
+              '--tw-prose-invert-pre-code-variable': '#ffcc99',
+              '--tw-prose-invert-pre-code-inserted': '#eeebff',
+              '--tw-prose-invert-pre-code-important': '#c4b9fe',
+              '--tw-prose-invert-pre-code-highlight': '#8a75f5',
+              '--tw-prose-invert-pre-code-selection': '#6a51e6',
+              '--tw-prose-invert-pre-bg': theme('colors.black'),
+              '--tw-prose-invert-th-borders': theme('colors.gray.700'),
+              '--tw-prose-invert-td-borders': theme('colors.gray.700'),
+              '--tw-prose-invert-tr-even': theme('colors.gray.900')
             }
-          ])
-        }
-    )
+          }
+        ])
+      }
+    })
   ]
 } satisfies Config

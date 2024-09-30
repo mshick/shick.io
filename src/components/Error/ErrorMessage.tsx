@@ -1,5 +1,5 @@
-import Link from '#/components/Link'
-import { PropsWithChildren } from 'react'
+import { Link } from '#/components/Link'
+import { type PropsWithChildren } from 'react'
 
 export interface ErrorMessageProps {
   headline: string

@@ -1,7 +1,7 @@
 import { MDXContent } from '#/components/MDXContent'
 import { getPage } from '#/content'
-import { ServerProps } from '#/types/types'
-import { Metadata } from 'next'
+import { type ServerProps } from '#/types/types'
+import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
 export const revalidate = 60

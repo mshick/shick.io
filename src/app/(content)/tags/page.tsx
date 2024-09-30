@@ -1,4 +1,4 @@
-import Link from '#/components/Link'
+import { Link } from '#/components/Link'
 import { TagList } from '#/components/Tag/TagList'
 import { getTags } from '#/content'
 import slug from 'slug'

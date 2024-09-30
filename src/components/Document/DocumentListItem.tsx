@@ -1,7 +1,7 @@
 'use client'
 
-import Link from '#/components/Link'
-import { Document } from '#/content'
+import { Link } from '#/components/Link'
+import { type Document } from '#/content'
 import { format } from 'date-fns'
 
 const formatDate = (date: string) => format(new Date(date), 'yyyy-MM-dd')

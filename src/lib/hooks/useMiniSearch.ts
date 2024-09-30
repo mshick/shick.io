@@ -1,6 +1,12 @@
 import { searchFields, searchStoreFields } from '@/env'
-import MiniSearch, { SearchOptions, SearchResult } from 'minisearch'
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import MiniSearch, { type SearchOptions, type SearchResult } from 'minisearch'
+import {
+  type Dispatch,
+  type SetStateAction,
+  useEffect,
+  useRef,
+  useState
+} from 'react'
 
 export type IndexedResult = {
   title: string

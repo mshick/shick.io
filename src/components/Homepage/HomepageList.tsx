@@ -1,4 +1,4 @@
-import Link from '#/components/Link'
+import { Link } from '#/components/Link'
 import slug from 'slug'
 import { DocumentList } from '../Document/DocumentList'
 import { DocumentListItem } from '../Document/DocumentListItem'

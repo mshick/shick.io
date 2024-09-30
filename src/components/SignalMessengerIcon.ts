@@ -1,4 +1,4 @@
-import { GenIcon, IconBaseProps } from 'react-icons/lib'
+import { GenIcon, type IconBaseProps } from 'react-icons/lib'
 
 export function SignalMessengerIcon(props: IconBaseProps) {
   return GenIcon({

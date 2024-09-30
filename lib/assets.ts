@@ -1,6 +1,6 @@
 import type { Element, Root as Hast } from 'hast'
 import { visit } from 'unist-util-visit'
-import { Image, isRelativePath, Output, processAsset } from 'velite'
+import { type Image, isRelativePath, type Output, processAsset } from 'velite'
 import type { VFile } from 'vfile'
 
 export type CopyLinkedFilesOptions = Omit<Output, 'data' | 'clean'>
@@ -42,8 +42,8 @@ export const rehypeCopyLinkedFiles =
           return
         }
 
-        let linkedUrl: string;
-        let image: Image;
+        let linkedUrl: string
+        let image: Image
 
         if (typeof urlOrImage === 'string') {
           if (urlOrImage === url) {
@@ -53,7 +53,7 @@ export const rehypeCopyLinkedFiles =
           linkedUrl = urlOrImage
         } else {
           linkedUrl = urlOrImage.src
-          image = urlOrImage;
+          image = urlOrImage
         }
 
         elements.forEach((node) => {
