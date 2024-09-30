@@ -1,19 +1,16 @@
 import type { Tag } from '#/content'
 import { type PropsWithCallableChildren } from '#/types/types'
 
-export type TagEntry = Pick<
-  Tag,
-  'permalink' | 'name' | 'excerpt' | 'excerptHtml' | 'publishedAt' | 'count'
->
+export type TagListItem = Pick<Tag, 'permalink'>
 
-export type TagListProps = {
-  tags: TagEntry[]
+export type TagListProps<ListItem> = {
+  tags: ListItem[]
 }
 
-export function TagList({
+export function TagList<ListItem extends TagListItem = TagListItem>({
   tags,
   children
-}: PropsWithCallableChildren<TagListProps, TagEntry>) {
+}: PropsWithCallableChildren<TagListProps<ListItem>, ListItem>) {
   return (
     <ul className="flex flex-col m-0 p-0 list-none">
       {tags.map((tag) => (

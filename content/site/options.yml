@@ -12,6 +12,8 @@ author:
   name: Michael Shick
   email: m@shick.us
   url: https://shick.us
+pagination:
+  perPage: 3
 showListeningTo: true
 repoUrlPattern: https://github.com/mshick/shick.io/%s/main/%s
 repoUrl: https://github.com/mshick/shick.io
@@ -51,7 +53,7 @@ links:
   - text: projects
     path: /projects/
     match: ^/projects/(.+)?
-    type: navigation    
+    type: navigation
   - text: Contact
     path: /contact/
     match: /contact/

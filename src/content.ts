@@ -332,3 +332,31 @@ export function getPostBySlug<
 ): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined {
   return getPost((i) => i.slug === slug, fields, includes)
 }
+
+export function getDocuments<
+  F extends keyof Omit<Document, I>,
+  I extends keyof Taxonomy = never
+>(
+  fields?: F[],
+  includes?: I[],
+  filter: Filter<Document> = filters.none,
+  sorter: Sorter<Document> = sorters.publishedAtDesc,
+  limit = Infinity,
+  offset = 0
+): ({ [P in F]: Document[P] } & { [P in I]: Taxonomy[P] })[] {
+  return posts
+    .filter(available)
+    .filter(filter)
+    .sort(sorter)
+    .slice(offset, offset + limit)
+    .map((doc) => ({
+      ...pick(doc, fields),
+      ...include(doc, includes)
+    }))
+}
+
+export function getDocumentsCount(
+  filter: Filter<Document> = filters.none
+): number {
+  return [...posts, ...pages].filter(available).filter(filter).length
+}

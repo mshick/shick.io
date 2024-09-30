@@ -122,6 +122,9 @@ const options = defineCollection({
       email: s.string().email(),
       url: s.string().url()
     }),
+    pagination: s.object({
+      perPage: s.number()
+    }),
     links: s.array(
       s.object({
         text: s.string(),

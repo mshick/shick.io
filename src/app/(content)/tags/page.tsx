@@ -13,14 +13,7 @@ export const revalidate = 60
 export default function TagsPage() {
   const heading = 'Tags'
 
-  const tags = getTags([
-    'permalink',
-    'name',
-    'excerpt',
-    'excerptHtml',
-    'publishedAt',
-    'count'
-  ])
+  const tags = getTags(['permalink', 'name', 'excerpt', 'publishedAt', 'count'])
 
   return (
     <section id={`list-${slug(heading)}`} className="not-prose py-3.5">
