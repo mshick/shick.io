@@ -2,6 +2,7 @@ import pick from 'lodash-es/pick.js'
 import MiniSearch from 'minisearch'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
+import { searchFields, searchStoreFields } from './env'
 
 const documentFields = [
   'permalink',
@@ -12,10 +13,6 @@ const documentFields = [
   'categories',
   'publishedAt'
 ]
-
-export const fields = ['title', 'content', 'excerpt', 'tags']
-
-export const storeFields = ['title', 'excerpt', 'permalink', 'publishedAt']
 
 type Document = {
   permalink: string
@@ -37,8 +34,8 @@ export async function generateSearchIndex(
   }))
 
   const miniSearch = new MiniSearch({
-    fields,
-    storeFields
+    fields: searchFields,
+    storeFields: searchStoreFields
   })
 
   miniSearch.addAll(searchDocs)

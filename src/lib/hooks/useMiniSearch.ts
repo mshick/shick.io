@@ -1,14 +1,12 @@
-import { SetStateAction } from 'jotai'
+import { searchFields, searchStoreFields } from '@/env'
 import MiniSearch, { SearchOptions, SearchResult } from 'minisearch'
-import { Dispatch, useEffect, useRef, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
 
 export type IndexedResult = {
   title: string
   permalink: string
   excerpt: string
   publishedAt: string
-  content: string
-  tags: string[]
 }
 
 export type MiniSearchResult = SearchResult & IndexedResult
@@ -48,8 +46,8 @@ export function useMiniSearch({ searchOptions }: UseMiniSearchProps = {}): [
     async function loadSearchIndex() {
       const { index } = await import('../../generated/search/index.json')
       minisearch.current = MiniSearch.loadJSON<IndexedResult>(index, {
-        fields: ['title', 'tags', 'excerpt', 'content'],
-        storeFields: ['title', 'excerpt', 'permalink', 'publishedAt'],
+        fields: searchFields,
+        storeFields: searchStoreFields,
         searchOptions
       })
       setIsReady(true)

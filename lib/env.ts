@@ -15,8 +15,21 @@ export const localDevUrl =
 
 export const commitSha = process.env.VERCEL_GITHUB_COMMIT_SHA ?? ''
 
+/**
+ * CMS
+ */
 export const githubClientId = process.env.OAUTH_GITHUB_CLIENT_ID
 export const githubClientSecret = process.env.OAUTH_GITHUB_CLIENT_SECRET
-
 export const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}`
 export const githubTokenUrl = 'https://github.com/login/oauth/access_token'
+
+/**
+ * Search
+ */
+export const searchFields = ['title', 'content', 'excerpt', 'tags']
+export const searchStoreFields = [
+  'title',
+  'excerpt',
+  'permalink',
+  'publishedAt'
+]

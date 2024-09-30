@@ -7,5 +7,4 @@ export const components: MDXComponents = {
   a: Link,
   img: Image,
   iframe: Iframe
-  // qrcode: Qrcode
 }

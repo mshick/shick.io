@@ -1,5 +1,3 @@
-import { generateSearchIndex } from 'lib/search-index'
-import { prepareTaxonomy } from 'lib/taxonomy'
 import { defineCollection, defineConfig, s } from 'velite'
 import { excerptFn } from './lib/excerpt'
 import {
@@ -14,6 +12,8 @@ import {
   getZonedDate
 } from './lib/fields'
 import { markdown } from './lib/markdown'
+import { generateSearchIndex } from './lib/search'
+import { prepareTaxonomy } from './lib/taxonomy'
 
 // https://github.com/zce/velite/issues/134
 
