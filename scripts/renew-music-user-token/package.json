@@ -1,7 +1,0 @@
-{
-  "type": "module",
-  "main": "main.js",
-  "dependencies": {
-    "yargs-parser": "^21.0.1"
-  }
-}

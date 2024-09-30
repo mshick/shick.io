@@ -1,21 +1,62 @@
-#!/usr/bin/env node
-import parser from 'yargs-parser'
+#!/usr/bin/env -S npx tsx
 
 const defaultEnvVar = 'MUSICKIT_MUSIC_USER_TOKEN'
 const defaultTarget = 'production'
 const vercelApiBase = 'https://api.vercel.com'
 
-const argv = parser(process.argv.slice(2), {
-  boolean: ['debug'],
-  configuration: {
-    'boolean-negation': false
-  }
-})
+type StringFlags = {
+  'site-url'?: string
+  'site-token'?: string
+  'vercel-token'?: string
+  target?: string
+  'env-var'?: string
+}
 
-/**
- * @param {{bearerToken: string; baseUrl: string}} params
- */
-function getMusicUserToken({ bearerToken, baseUrl }) {
+type BooleanFlags = {
+  debug?: boolean
+  'no-deploy'?: boolean
+}
+
+type Args = {
+  _: string[]
+} & StringFlags &
+  BooleanFlags
+
+function getArgs(argv: string[]) {
+  const args: Args = { _: [] }
+
+  for (let i = 2; i < argv.length; i++) {
+    const arg = argv[i]
+
+    if (arg === undefined) {
+      break
+    }
+
+    if (arg.startsWith('--')) {
+      const [key, value] = arg.slice(2).split('=')
+
+      if (key === 'debug' || key === 'no-deploy') {
+        args[key] = value === 'true' ? true : false
+      }
+
+      if (key !== undefined) {
+        args[key as keyof StringFlags] = value
+      }
+    } else {
+      args._.push(arg)
+    }
+  }
+
+  return args
+}
+
+function getMusicUserToken({
+  bearerToken,
+  baseUrl
+}: {
+  bearerToken: string
+  baseUrl: string
+}) {
   return async () => {
     const url = new URL('/api/music/renew-token/', baseUrl)
     const response = await fetch(url, {
@@ -29,14 +70,14 @@ function getMusicUserToken({ bearerToken, baseUrl }) {
   }
 }
 
-/**
- * @param {{bearerToken: string; baseUrl: string}} params
- */
-function getEnvVarByKey({ bearerToken, baseUrl }) {
-  /**
-   * @param {{key: string}} params
-   */
-  return async ({ key }) => {
+function getEnvVarByKey({
+  bearerToken,
+  baseUrl
+}: {
+  bearerToken: string
+  baseUrl: string
+}) {
+  return async ({ key }: { key: string }) => {
     const url = new URL('/v9/projects/shick-io/env?decrypt=true', baseUrl)
     const response = await fetch(url, {
       headers: {
@@ -44,23 +85,21 @@ function getEnvVarByKey({ bearerToken, baseUrl }) {
       }
     })
 
-    /**
-     * @type {{envs: Array<{id: string; key: string; value: string}>}}
-     */
-    const result = await response.json()
+    const result: { envs: { id: string; key: string; value: string }[] } =
+      await response.json()
 
     return result.envs.find((envVar) => envVar.key === key)
   }
 }
 
-/**
- * @param {{bearerToken: string; baseUrl: string}} params
- */
-function updateEnvVar({ bearerToken, baseUrl }) {
-  /**
-   * @param {{id: string; value: string}} params
-   */
-  return async ({ id, value }) => {
+function updateEnvVar({
+  bearerToken,
+  baseUrl
+}: {
+  bearerToken: string
+  baseUrl: string
+}) {
+  return async ({ id, value }: { id: string; value: string }) => {
     const url = new URL(`/v9/projects/shick-io/env/${id}`, baseUrl)
     const response = await fetch(url, {
       method: 'PATCH',
@@ -76,14 +115,14 @@ function updateEnvVar({ bearerToken, baseUrl }) {
   }
 }
 
-/**
- * @param {{bearerToken: string; baseUrl: string}} params
- */
-function getLatestDeployment({ bearerToken, baseUrl }) {
-  /**
-   * @param {{target: string}} params
-   */
-  return async ({ target }) => {
+function getLatestDeployment({
+  bearerToken,
+  baseUrl
+}: {
+  bearerToken: string
+  baseUrl: string
+}) {
+  return async ({ target }: { target: string }) => {
     const url = new URL(`/v6/deployments?target=${target}&limit=1`, baseUrl)
     const response = await fetch(url, {
       headers: {
@@ -96,15 +135,27 @@ function getLatestDeployment({ bearerToken, baseUrl }) {
   }
 }
 
-/**
- * @param {{bearerToken: string; baseUrl: string}} params
- */
-function reploy({ bearerToken, baseUrl }) {
-  /**
-   * @param {{deployment: {name: string; meta: {githubOrg: string; githubRepo: string; githubCommitRef: string; githubCommitSha: string}}; target: string}} params
-   * @returns {Promise<any>}
-   */
-  return async ({ deployment, target }) => {
+type DeploymentParams = {
+  deployment: {
+    name: string
+    meta: {
+      githubOrg: string
+      githubRepo: string
+      githubCommitRef: string
+      githubCommitSha: string
+    }
+  }
+  target: string
+}
+
+function reploy({
+  bearerToken,
+  baseUrl
+}: {
+  bearerToken: string
+  baseUrl: string
+}) {
+  return async ({ deployment, target }: DeploymentParams): Promise<any> => {
     const url = new URL(`/v13/deployments?forceNew=1&withCache=1`, baseUrl)
 
     const { name, meta } = deployment
@@ -132,10 +183,17 @@ function reploy({ bearerToken, baseUrl }) {
   }
 }
 
-/**
- * @param {{siteToken: string; siteUrl: string; vercelToken: string; vercelUrl: string}} params
- */
-function getRequests({ siteToken, siteUrl, vercelToken, vercelUrl }) {
+function getRequests({
+  siteToken,
+  siteUrl,
+  vercelToken,
+  vercelUrl
+}: {
+  siteToken: string
+  siteUrl: string
+  vercelToken: string
+  vercelUrl: string
+}) {
   return {
     getMusicUserToken: getMusicUserToken({
       bearerToken: siteToken,
@@ -161,9 +219,11 @@ function getRequests({ siteToken, siteUrl, vercelToken, vercelUrl }) {
 }
 
 async function main() {
-  const siteUrl = argv['site-url'] ?? process.env.SITE_URL
-  const siteToken = argv['site-token'] ?? process.env.SITE_TOKEN
-  const vercelToken = argv['vercel-token'] ?? process.env.VERCEL_TOKEN
+  const args = getArgs(process.argv)
+
+  const siteUrl = args['site-url'] ?? process.env.SITE_URL
+  const siteToken = args['site-token'] ?? process.env.SITE_TOKEN
+  const vercelToken = args['vercel-token'] ?? process.env.VERCEL_TOKEN
 
   if (!siteUrl || !siteToken || !vercelToken) {
     console.error(
@@ -172,10 +232,10 @@ async function main() {
     process.exit(1)
   }
 
-  const debug = argv['debug'] ?? process.env.DEBUG ?? false
-  const envVarKey = argv['env-var'] ?? process.env.ENV_VAR_KEY ?? defaultEnvVar
-  const target = argv['target'] ?? defaultTarget
-  const noDeploy = argv['no-deploy'] ?? process.env.NO_DEPLOY ?? false
+  const debug = args.debug ?? process.env.DEBUG ?? false
+  const envVarKey = args['env-var'] ?? process.env.ENV_VAR_KEY ?? defaultEnvVar
+  const target = args.target ?? defaultTarget
+  const noDeploy = args['no-deploy'] ?? process.env.NO_DEPLOY ?? false
 
   const requests = getRequests({
     siteUrl,
@@ -186,8 +246,6 @@ async function main() {
 
   const musicUserToken = await requests.getMusicUserToken()
 
-  // console.log({ musicUserToken })
-
   const envVar = await requests.getEnvVarByKey({ key: envVarKey })
 
   if (!envVar) {
@@ -197,11 +255,11 @@ async function main() {
 
   if (envVar.value === musicUserToken) {
     console.log('Token has not changed, renewal halted')
-    process.exit(0)
+    return
   }
 
   if (noDeploy) {
-    process.exit(0)
+    return
   }
 
   await requests.updateEnvVar({
@@ -225,7 +283,14 @@ async function main() {
   console.log(
     `Deployment is ${deploymentResult.status} on target ${deploymentResult.target}`
   )
-  process.exit(0)
 }
 
-main()
+main().then(
+  () => {
+    process.exit(0)
+  },
+  (e) => {
+    console.error(e)
+    process.exit(1)
+  }
+)

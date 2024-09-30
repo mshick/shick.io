@@ -16,6 +16,10 @@ declare global {
       API_SECRET?: string
       OAUTH_GITHUB_CLIENT_ID?: string
       OAUTH_GITHUB_CLIENT_SECRET?: string
+      ENV_VAR_KEY?: string
+      SITE_URL?: string
+      SITE_TOKEN?: string
+      VERCEL_TOKEN?: string
     }
   }
 }
