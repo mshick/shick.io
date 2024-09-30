@@ -6,7 +6,6 @@ export type IndexedResult = {
   title: string
   permalink: string
   excerpt: string
-  excerptHtml: string
   publishedAt: string
   content: string
   tags: string[]
@@ -50,13 +49,7 @@ export function useMiniSearch({ searchOptions }: UseMiniSearchProps = {}): [
       const { index } = await import('../../generated/search/index.json')
       minisearch.current = MiniSearch.loadJSON<IndexedResult>(index, {
         fields: ['title', 'tags', 'excerpt', 'content'],
-        storeFields: [
-          'title',
-          'excerpt',
-          'excerptHtml',
-          'permalink',
-          'publishedAt'
-        ],
+        storeFields: ['title', 'excerpt', 'permalink', 'publishedAt'],
         searchOptions
       })
       setIsReady(true)

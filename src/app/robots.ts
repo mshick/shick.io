@@ -1,4 +1,4 @@
-import { getSiteUrl } from '@/content'
+import { getSiteUrl } from '#/content'
 import { isProduction } from '@/env'
 import { MetadataRoute } from 'next'
 

@@ -1,20 +1,24 @@
+'use client'
+
 import Link from '#/components/Link'
-import { Document } from '@/content'
+import { Document } from '#/content'
 import { format } from 'date-fns'
 
 const formatDate = (date: string) => format(new Date(date), 'yyyy-MM-dd')
 
-export type DocumentListItemProps = Pick<
+export type DocumentListItem = Pick<
   Document,
-  'title' | 'excerptHtml' | 'permalink' | 'publishedAt'
-> & {
+  'title' | 'excerpt' | 'permalink' | 'publishedAt'
+>
+
+export type DocumentListItemProps = DocumentListItem & {
   className?: string
   onClickLink?: () => void
 }
 
 export function DocumentListItem({
   title,
-  excerptHtml,
+  excerpt,
   permalink,
   publishedAt,
   onClickLink
@@ -37,10 +41,10 @@ export function DocumentListItem({
       >
         <h2 className="text-xl">{title}</h2>
       </Link>
-      {excerptHtml && (
+      {excerpt && (
         <div
           className="block prose text-gray-700 dark:text-gray-100"
-          dangerouslySetInnerHTML={{ __html: excerptHtml }}
+          dangerouslySetInnerHTML={{ __html: excerpt }}
         ></div>
       )}
     </>

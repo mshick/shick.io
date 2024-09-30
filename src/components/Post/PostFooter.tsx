@@ -1,5 +1,5 @@
+import type { Post, Tag } from '#/content'
 import { standardDate } from '#/lib/utils/text'
-import type { Post, Tag } from '@/content'
 import Link from 'next/link'
 
 export type PostFooterProps = Pick<

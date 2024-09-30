@@ -1,4 +1,4 @@
-import type { Post } from '@/content'
+import type { Post } from '#/content'
 
 export type PostBodyProps = Pick<Post, 'content'>
 

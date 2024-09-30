@@ -1,10 +1,14 @@
+import { DocumentList } from '#/components/Document/DocumentList'
+import { DocumentListHeader } from '#/components/Document/DocumentListHeader'
+import { DocumentListItem } from '#/components/Document/DocumentListItem'
 import { DocumentListPagination } from '#/components/Document/DocumentListPagination'
-import { HomepageList } from '#/components/Homepage/HomepageList'
+import { filters, getPosts, getPostsCount, sorters } from '#/content'
 import { getSingle, isNumericString } from '#/lib/utils/types'
 import { ServerProps } from '#/types/types'
-import { filters, getPosts, getPostsCount, sorters } from '@/content'
+import slug from 'slug'
 
 const PER_PAGE = 4
+const HEADING = 'posts'
 
 export const revalidate = 60
 
@@ -36,12 +40,12 @@ export default function PostsPage({ searchParams }: ServerProps) {
   return (
     <>
       <div className="prose prose-sm prose-tufted dark:prose-invert max-w-none">
-        <HomepageList
-          collectionName="posts"
-          heading={'posts'}
-          href={'/posts/'}
-          documents={posts}
-        />
+        <section id={`list-${slug(HEADING)}`} className="not-prose py-3.5">
+          <DocumentListHeader heading={HEADING} />
+          <DocumentList documents={posts}>
+            {(item) => <DocumentListItem className="py-2 px-4" {...item} />}
+          </DocumentList>
+        </section>
       </div>
       <DocumentListPagination
         currentPage={currentPage}

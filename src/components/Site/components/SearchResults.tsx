@@ -9,7 +9,7 @@ import {
 export type SearchResultsItem = {
   title: string
   permalink: string
-  excerptHtml: string
+  excerpt: string
   publishedAt: string
 }
 
@@ -68,11 +68,11 @@ export function SearchResults({
         {items?.length > 0 && (
           <div className="w-full mt-4 max-w-none not-prose">
             <DocumentList documents={items}>
-              {(document) => (
+              {(item) => (
                 <DocumentListItem
                   className="py-2 px-4"
                   onClickLink={onClickLink}
-                  {...document}
+                  {...item}
                 />
               )}
             </DocumentList>

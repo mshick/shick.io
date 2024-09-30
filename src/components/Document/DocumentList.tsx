@@ -1,19 +1,16 @@
 import type { PropsWithCallableChildren } from '#/types/types'
-import type { Document } from '@/content'
+import type { DocumentListItem } from './DocumentListItem'
 
-type DocumentListItem = Pick<
-  Document,
-  'permalink' | 'title' | 'excerptHtml' | 'publishedAt'
->
-
-export type DocumentListProps = {
-  documents: DocumentListItem[]
+export type DocumentListProps<ListItem> = {
+  documents: ListItem[]
 }
 
-export function DocumentList({
+export function DocumentList<
+  ListItem extends DocumentListItem = DocumentListItem
+>({
   documents,
   children
-}: PropsWithCallableChildren<DocumentListProps, DocumentListItem>) {
+}: PropsWithCallableChildren<DocumentListProps<ListItem>, ListItem>) {
   return (
     <ul className="space-y-6">
       {documents.map((doc) => (

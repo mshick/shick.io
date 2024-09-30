@@ -5,7 +5,7 @@ import { format } from 'node:util'
 import slug from 'slug'
 import { z } from 'velite'
 import { parse as parseYaml } from 'yaml'
-import { isProduction, localDevUrl, vercelUrl } from '../env'
+import { isProduction, localDevUrl, vercelUrl } from './env'
 import { excerptFn } from './excerpt'
 import { getGitFileInfo, type GitFileInfo } from './git'
 

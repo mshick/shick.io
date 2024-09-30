@@ -1,4 +1,4 @@
-import { getPages, getPosts } from '@/content'
+import { getPages, getPosts } from '#/content'
 import { MetadataRoute } from 'next'
 
 export default function sitemap(): MetadataRoute.Sitemap {

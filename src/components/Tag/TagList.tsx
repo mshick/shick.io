@@ -1,5 +1,5 @@
+import type { Tag } from '#/content'
 import { PropsWithCallableChildren } from '#/types/types'
-import type { Tag } from '@/content'
 
 export type TagEntry = Pick<
   Tag,

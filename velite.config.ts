@@ -1,22 +1,19 @@
-import rehypePresetTufted from '@mshick/tufted/rehype'
-import remarkPresetTufted from '@mshick/tufted/remark'
-import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic'
-import remarkGemoji from 'remark-gemoji'
+import { generateSearchIndex } from 'lib/search-index'
+import { prepareTaxonomy } from 'lib/taxonomy'
 import { defineCollection, defineConfig, s } from 'velite'
 import { excerptFn } from './lib/excerpt'
 import {
   createTaxonomyTransform,
-  getAvailable,
   getContentPath,
   getEditUrl,
   getHistoryUrl,
   getPermalink,
   getShareUrl,
   getSlugFromPath,
-  getTaxonomy,
   getUpdatedBy,
   getZonedDate
 } from './lib/fields'
+import { markdown } from './lib/markdown'
 
 // https://github.com/zce/velite/issues/134
 
@@ -143,8 +140,8 @@ const posts = defineCollection({
       cover: cover.optional(),
       meta,
       metadata: s.metadata(),
-      content: s.markdown({ gfm: false }),
-      excerpt: s.markdown({ gfm: false }).optional(),
+      content: markdown({ gfm: false, tufted: true }),
+      excerpt: markdown({ gfm: false, tufted: false }).optional(),
       date: s.isodate().optional(),
       author: s.string().optional(),
       draft: s.boolean().default(false),
@@ -209,7 +206,7 @@ const pages = defineCollection({
   schema: s
     .object({
       title: s.string().max(99),
-      excerpt: s.markdown({ gfm: false }),
+      excerpt: markdown({ gfm: false, tufted: false }),
       cover: cover.optional(),
       meta,
       slug: s.slug('global', ['admin']).optional(),
@@ -245,36 +242,6 @@ const pages = defineCollection({
     })
 })
 
-const rehypeTufted = rehypePresetTufted({
-  assets: 'public/static',
-  base: '/static/',
-  plugins: {
-    rehypeShiki: {
-      themes: {
-        light: 'one-light',
-        dark: 'one-dark-pro'
-      }
-    },
-    rehypeAutolinkHeadings: {
-      behavior: 'append',
-      content: fromHtmlIsomorphic('#', {
-        fragment: true
-      }).children,
-      headingProperties: {
-        className: ['group']
-      },
-      properties: {
-        className: [
-          'heading-link',
-          'hidden',
-          'group-hover:inline-block',
-          'ml-2'
-        ]
-      }
-    }
-  }
-})
-
 export default defineConfig({
   root: 'content',
   output: {
@@ -291,55 +258,31 @@ export default defineConfig({
     tags,
     options
   },
-  markdown: {
-    // Bad velite types
-    rehypePlugins: [rehypeTufted as any],
-    remarkPlugins: [remarkGemoji, remarkPresetTufted() as any]
+  async prepare(collections) {
+    console.log('Preparing taxonomy...')
+
+    const { tagCount: tagsCount, categoryCount: categoriesCount } =
+      await prepareTaxonomy(collections)
+
+    console.log(
+      `Taxonomy prepared with ${tagsCount} tags and ${categoriesCount} categories`
+    )
   },
-  mdx: {
-    // Bad velite types
-    rehypePlugins: [rehypeTufted as any],
-    remarkPlugins: [remarkGemoji, remarkPresetTufted() as any]
-  },
-  prepare: async (collections) => {
-    const { categories, tags, posts, pages } = collections
 
-    const docs = [...posts.filter(getAvailable), ...pages.filter(getAvailable)]
+  async complete(collections) {
+    const filePath = './src/generated/search/index.json'
 
-    const categoriesInDocs = new Set(docs.map((item) => item.categories).flat())
+    console.log(`Writing search index to '${filePath}' ...`)
 
-    const categoriesFromDocs = await getTaxonomy(
-      'content',
-      'categories',
-      Array.from(categoriesInDocs).filter(
-        (i) => categories.find((j) => j.name === i) == null
-      )
+    const { documentCount, termCount } = await generateSearchIndex(
+      [...collections.posts, ...collections.pages],
+      {
+        filePath
+      }
     )
 
-    categories.push(...categoriesFromDocs)
-
-    categories.forEach((i) => {
-      i.count.posts = posts.filter((j) => j.categories.includes(i.name)).length
-      i.count.pages = pages.filter((j) => j.categories.includes(i.name)).length
-      i.count.total = i.count.posts + i.count.pages
-    })
-
-    const tagsInDocs = new Set(docs.map((item) => item.tags).flat())
-
-    const tagsFromDocs = await getTaxonomy(
-      'content',
-      'tags',
-      Array.from(tagsInDocs).filter(
-        (i) => tags.find((j) => j.name === i) == null
-      )
+    console.log(
+      `Search index written with ${documentCount} documents and ${termCount} terms`
     )
-
-    tags.push(...tagsFromDocs)
-
-    tags.forEach((i) => {
-      i.count.posts = posts.filter((j) => j.tags.includes(i.name)).length
-      i.count.pages = pages.filter((j) => j.tags.includes(i.name)).length
-      i.count.total = i.count.posts + i.count.pages
-    })
   }
 })

@@ -1,14 +1,14 @@
 import { DocumentListPagination } from '#/components/Document/DocumentListPagination'
 import { HomepageList } from '#/components/Homepage/HomepageList'
-import { getSingle, isNumericString } from '#/lib/utils/types'
-import { ServerProps } from '#/types/types'
 import {
   filters,
   getPosts,
   getPostsCount,
   getTagByName,
   sorters
-} from '@/content'
+} from '#/content'
+import { getSingle, isNumericString } from '#/lib/utils/types'
+import { ServerProps } from '#/types/types'
 import { notFound } from 'next/navigation'
 
 const PER_PAGE = 3

@@ -6,19 +6,16 @@
   ],
   "compilerOptions": {
     "checkJs": false,
+    "noPropertyAccessFromIndexSignature": false,
     "exactOptionalPropertyTypes": false,
-    "strictNullChecks": true,
     "pretty": true,
     "baseUrl": ".",
     "paths": {
       "_/.velite": [
         "./.velite"
-      ],      
-      "@/content": [
-        "./lib/content"
-      ],      
-      "@/env": [
-        "./env"
+      ],          
+      "@/*": [
+        "./lib/*"
       ],
       "#/*": [
         "./src/*"

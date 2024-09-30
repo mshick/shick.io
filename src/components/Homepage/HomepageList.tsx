@@ -1,19 +1,14 @@
 import Link from '#/components/Link'
-import type { Page, Post } from '@/content'
-import { format } from 'date-fns'
 import slug from 'slug'
+import { DocumentList } from '../Document/DocumentList'
+import { DocumentListItem } from '../Document/DocumentListItem'
 
 export type HomepageListProps = {
   collectionName: string
   heading: string
   href: string
-  documents: Pick<
-    Post | Page,
-    'permalink' | 'title' | 'excerptHtml' | 'publishedAt'
-  >[]
+  documents: DocumentListItem[]
 }
-
-const formatDate = (date: string) => format(new Date(date), 'yyyy-MM-dd')
 
 export function HomepageList({
   collectionName,
@@ -27,27 +22,9 @@ export function HomepageList({
         {heading}
       </h2>
 
-      <ul className="space-y-6">
-        {documents.map((doc) => (
-          <li key={doc.permalink} className="space-y-1">
-            <time className="block" dateTime={doc.publishedAt}>
-              {formatDate(doc.publishedAt)}
-            </time>
-            <Link
-              href={doc.permalink}
-              className="no-underline inline-block hover:bg-blue-700 hover:text-white cursor-pointer"
-            >
-              <h2 className="text-xl">{doc.title}</h2>
-            </Link>
-            {doc.excerptHtml && (
-              <div
-                className="block prose text-gray-700 dark:text-gray-100"
-                dangerouslySetInnerHTML={{ __html: doc.excerptHtml }}
-              ></div>
-            )}
-          </li>
-        ))}
-      </ul>
+      <DocumentList documents={documents}>
+        {(item) => <DocumentListItem className="py-2 px-4" {...item} />}
+      </DocumentList>
 
       <Link
         href={href}

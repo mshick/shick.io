@@ -1,8 +1,8 @@
 import { HomepageHero } from '#/components/Homepage/HomepageHero'
 import { HomepageList } from '#/components/Homepage/HomepageList'
 import { MDXContent } from '#/components/MDXContent'
+import { getOptions, getPage, getPosts } from '#/content'
 import { components } from '#/mdx'
-import { getOptions, getPage, getPosts } from '@/content'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
