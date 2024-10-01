@@ -65,6 +65,10 @@ function getMusicUserToken({
       }
     })
 
+    if (!response.ok) {
+      throw new Error('Failed to get renew token')
+    }
+
     const result = await response.json()
     return result['music-token']
   }
@@ -226,10 +230,9 @@ async function main() {
   const vercelToken = args['vercel-token'] ?? process.env.VERCEL_TOKEN
 
   if (!siteUrl || !siteToken || !vercelToken) {
-    console.error(
+    throw new Error(
       'Missing variables: site-url, site-token and vercel-token are all required.'
     )
-    process.exit(1)
   }
 
   const debug = args.debug ?? process.env.DEBUG ?? false
@@ -250,7 +253,7 @@ async function main() {
 
   if (!envVar) {
     console.log('No envVar found')
-    process.exit(0)
+    return
   }
 
   if (envVar.value === musicUserToken) {
