@@ -229,8 +229,7 @@ other serif fonts like Palatino and Georgia.
 
 [^2]: See Tufte's comment in the [Tufte book fonts][bembo-thread] thread.
 
-[bembo-thread]:
-  http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000Vt
+[bembo-thread]: http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000Vt
 [et-book]: https://github.com/edwardtufte/et-book
 
 Also notice how Tufte CSS includes separate font files for bold (strong) and
@@ -369,7 +368,7 @@ note goes in a regular margin note inside the figure. For example, most of the
 time one should introduce a figure directly into the main flow of discussion,
 like so:
 
-:::figure{.fullwidth}
+:::figure
 
 ![Exports and Imports to and from Denmark & Norway from 1700 to 1780](./exports-imports.png)
 

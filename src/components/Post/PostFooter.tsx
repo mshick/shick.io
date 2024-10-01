@@ -15,9 +15,9 @@ function PostFooterMeta({
   tags
 }: Pick<PostFooterProps, 'updatedAt' | 'historyUrl' | 'tags'>) {
   return (
-    <div className="flex flex-col items-start sm:items-center sm:flex-row-reverse justify-between gap-2 sm:gap-4">
+    <div className="flex flex-col items-start sm:items-center sm:flex-row-reverse justify-between gap-8 sm:gap-4">
       {updatedAt && (
-        <div className="flex flex-row">
+        <div className="flex flex-row sm:justify-end sm:shrink-0 sm:w-1/2">
           <time className="text-xs" dateTime={updatedAt}>
             last updated:{' '}
             <a
@@ -30,7 +30,7 @@ function PostFooterMeta({
         </div>
       )}
       {tags ? (
-        <ul className="list-none flex flex-row gap-4">
+        <ul className="list-none flex flex-row gap-x-4 gap-y-2 flex-wrap">
           {tags.map((tag) => (
             <li key={tag.slug} className="leading-none">
               <Link
@@ -46,34 +46,6 @@ function PostFooterMeta({
     </div>
   )
 }
-
-// function PostFooterActions({ shareUrl }: Pick<PostFooterProps, 'shareUrl'>) {
-//   const encodedShareUrl = encodeURIComponent(shareUrl)
-
-//   return (
-//     <div className="flex flex-col gap-2">
-//       <div className="flex flex-row gap-8">
-//         {shareUrl ? (
-//           <Link
-//             href={`https://x.com/intent/post?url=${encodedShareUrl}`}
-//             className="block no-underline hover:bg-blue-700 hover:text-white"
-//           >
-//             (share on x)
-//           </Link>
-//         ) : null}
-
-//         {/* {editUrl ? (
-//           <Link
-//             href={editUrl}
-//             className="block no-underline hover:bg-blue-700 hover:text-white"
-//           >
-//             (fork on github)
-//           </Link>
-//         ) : null} */}
-//       </div>
-//     </div>
-//   )
-// }
 
 function PostFooterRelated({
   related
@@ -104,7 +76,7 @@ function PostFooterRelated({
 
 export function PostFooter(post: PostFooterProps) {
   return (
-    <footer id="post-footer">
+    <footer id="post-footer" className="mt-8">
       {post.updatedAt || post.tags ? <PostFooterMeta {...post} /> : null}
 
       <hr className="my-8" />

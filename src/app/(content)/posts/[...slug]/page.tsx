@@ -48,10 +48,10 @@ export default function PostPage({ params }: ServerProps<Params>) {
   }
 
   return (
-    <>
+    <article>
       <PostHeader {...post} />
       <PostBody {...post} />
       <PostFooter {...post} />
-    </>
+    </article>
   )
 }

@@ -100,8 +100,13 @@ const em = (px: number, base: number) => `${round(px / base)}em`
 //   return `${r} ${g} ${b}`
 // }
 
+const sidenoteCounter = 'sidenote-counter'
+
 const styles = (theme: PluginAPI['theme']) => ({
   DEFAULT: {
+    '&': {
+      counterReset: sidenoteCounter
+    },
     '[class~="lead"]': {
       fontStyle: 'italic'
     },
@@ -190,6 +195,7 @@ const styles = (theme: PluginAPI['theme']) => ({
       textAlign: 'right'
     },
     '.newthought': {
+      fontSize: '1.2rem',
       fontVariant: 'small-caps'
     },
     ol: {
@@ -259,6 +265,82 @@ const styles = (theme: PluginAPI['theme']) => ({
     '.video-wrapper > iframe': {
       height: '100%',
       width: '100%'
+    },
+    // Inline marginnotes / sidenotes
+    '.sidenote-number': {
+      counterIncrement: sidenoteCounter,
+      display: 'inline-block',
+      maxHeight: '2rem'
+    },
+    '.sidenote-number::after': {
+      content: `counter(${sidenoteCounter})`,
+      fontSize: '0.6rem',
+      top: '-0.4rem',
+      left: '0.15rem',
+      position: 'relative',
+      verticalAlign: 'baseline'
+    },
+    '.sidenote-definition, .marginnote-definition': {
+      fontSize: '0.8rem',
+      position: 'relative',
+      verticalAlign: 'baseline',
+      clear: 'both',
+      display: 'none',
+      float: 'left',
+      left: '1rem',
+      margin: '1rem 2.5%',
+      width: '95%'
+    },
+    '.sidenote-definition::before': {
+      content: `counter(${sidenoteCounter})`,
+      fontSize: '0.6rem',
+      top: '-0.4rem',
+      left: '-0.2rem',
+      position: 'relative',
+      verticalAlign: 'baseline'
+    },
+    '.sidenote input.margin-toggle': {
+      display: 'none'
+    },
+    '.sidenote .margin-toggle:checked + .sidenote-definition': {
+      display: 'block'
+    },
+    '.marginnote .margin-toggle:checked + .marginnote-definition': {
+      display: 'block'
+    },
+    '.sidenote label.margin-toggle': {
+      cursor: 'pointer',
+      pointerEvents: 'initial'
+    },
+    '.marginnote input.margin-toggle': {
+      display: 'none'
+    },
+    '.marginnote label.margin-toggle': {
+      display: 'inline',
+      cursor: 'pointer',
+      pointerEvents: 'initial'
+    }
+  },
+  sidenotes: {
+    // Sidenotes to the side
+    '.sidenote-definition, .marginnote-definition': {
+      position: 'relative',
+      verticalAlign: 'baseline',
+      clear: 'right',
+      display: 'block',
+      float: 'right',
+      left: 0,
+      margin: '0.3rem -34% 0 0',
+      width: '26%'
+    },
+    '.sidenote > label.margin-toggle': {
+      cursor: 'default',
+      pointerEvents: 'none'
+    },
+    '.marginnote > label.margin-toggle': {
+      display: 'none',
+      cursor: 'default',
+      pointerEvents: 'none'
     }
   }
 })
@@ -324,18 +406,20 @@ export default {
         const { prefix } = rest as any
         const styleProfile = styles(theme)
 
-        const prefixed = Object.keys(styleProfile).map((modifier) => ({
-          [modifier === 'DEFAULT'
-            ? `.${className}`
-            : `.${className}-${modifier}`]: Object.fromEntries(
-            // @ts-expect-error
-            Object.keys(styleProfile[modifier]).map((prop) => [
-              `${inWhere(prop, { className, modifier, prefix })}`,
+        const prefixed = Object.keys(styleProfile).map((modifier) => {
+          return {
+            [modifier === 'DEFAULT'
+              ? `.${className}`
+              : `.${className}-${modifier}`]: Object.fromEntries(
               // @ts-expect-error
-              styleProfile[modifier][prop]
-            ])
-          )
-        }))
+              Object.keys(styleProfile[modifier]).map((prop) => [
+                `${inWhere(prop, { className, modifier, prefix })}`,
+                // @ts-expect-error
+                styleProfile[modifier][prop]
+              ])
+            )
+          }
+        })
 
         api.addComponents([
           ...prefixed,
