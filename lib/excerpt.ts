@@ -7,6 +7,8 @@ import { fromMarkdown } from 'mdast-util-from-markdown'
 import { toHast } from 'mdast-util-to-hast'
 import { z } from 'velite'
 
+export const DEFAULT_EXCERPT_LENGTH = 260
+
 export interface ExcerptOptions {
   /**
    * Excerpt format.
@@ -37,7 +39,11 @@ type ExcerptFnCtx = {
 }
 
 export function excerptFn(
-  { separator = 'more', length = 260, format = 'html' }: ExcerptOptions = {},
+  {
+    separator = 'more',
+    length = DEFAULT_EXCERPT_LENGTH,
+    format = 'html'
+  }: ExcerptOptions = {},
   value?: string,
   ctx?: ExcerptFnCtx
 ) {
