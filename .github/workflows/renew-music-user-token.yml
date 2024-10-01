@@ -1,9 +1,9 @@
-name: Renew Music User Token (Weekly)
+name: Renew Music User Token (Daily)
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * 0'
+    - cron: '5 14 * * *'
 
 env:
   SITE_URL: 'https://shick.io'
