@@ -1,5 +1,5 @@
 ---
-title: FOO BAR
+title: FOO BAR BAZ
 date: 2024-06-20T09:39:00.000Z
 ---
 Hello FOOBAR
