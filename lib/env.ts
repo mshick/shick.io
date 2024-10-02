@@ -1,24 +1,25 @@
 export const vercelEnv = process.env.VERCEL_ENV ?? 'development'
+export const logLevel = process.env.NEXT_PUBLIC_LOG_LEVEL ?? 'info'
+export const commitSha = process.env.VERCEL_GITHUB_COMMIT_SHA ?? ''
+
+/**
+ * Environment flags
+ */
 export const isLocal = process.env.VERCEL !== '1'
 export const isProduction = vercelEnv === 'production'
 export const isDevelopment = vercelEnv === 'development'
 export const isPreview = vercelEnv === 'preview'
 export const isTest = process.env.NODE_ENV === 'test'
 
-export const logLevel = process.env.NEXT_PUBLIC_LOG_LEVEL ?? 'info'
-
-export const vercelUrl =
+/**
+ * URLs
+ */
+export const vercelDevUrl =
   process.env.NEXT_PUBLIC_VERCEL_URL &&
   `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-
 export const localDevUrl =
   process.env.NEXT_PUBLIC_LOCAL_URL ?? 'http://localhost:1337'
-
-export const siteUrl = isProduction
-  ? process.env.NEXT_PUBLIC_SITE_URL
-  : (vercelUrl ?? localDevUrl)
-
-export const commitSha = process.env.VERCEL_GITHUB_COMMIT_SHA ?? ''
+export const devUrl = vercelDevUrl ?? localDevUrl
 
 /**
  * CMS

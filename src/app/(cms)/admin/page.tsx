@@ -1,11 +1,14 @@
 'use client'
 
-import { isLocal, siteUrl } from '@/env'
+import { getOptions } from '#/content'
+import { devUrl, isLocal, isProduction } from '@/env'
 
 const CMS_SCRIPT_SRC = 'https://unpkg.com/decap-cms@^3.3.3/dist/decap-cms.js'
 
 export default function AdminPage() {
-  const url = new URL(siteUrl)
+  const siteUrl = getOptions(['url']).url
+
+  const url = new URL(isProduction ? siteUrl : devUrl)
 
   const config = {
     local_backend: isLocal,

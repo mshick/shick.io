@@ -3,7 +3,7 @@ import { basename, join, relative, resolve } from 'node:path'
 import { format } from 'node:util'
 import slug from 'slug'
 import { type z } from 'velite'
-import { isProduction, localDevUrl, vercelUrl } from './env'
+import { devUrl, isProduction } from './env'
 import { excerptFn } from './excerpt'
 import { getGitFileInfo, type GitFileInfo } from './git'
 import { collectionPaths, repoUrlPattern, timezone, url } from './options'
@@ -12,7 +12,7 @@ const __dirname = import.meta.dirname
 const baseDir = resolve(__dirname, '..')
 
 function getSiteUrl(): string {
-  return isProduction && url ? url : (vercelUrl ?? localDevUrl)
+  return isProduction && url ? url : devUrl
 }
 
 function getRepoPath(filePath: string): string {
