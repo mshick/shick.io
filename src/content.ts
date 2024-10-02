@@ -1,4 +1,4 @@
-import { isProduction, localDevUrl, vercelUrl } from '@/env'
+import { devUrl, isProduction } from '@/env'
 import type { Category, Options, Page, Post, Tag } from '_/.velite'
 import { categories, options, pages, posts, tags } from '_/.velite'
 import { keyBy } from './lib/utils/nodash'
@@ -126,7 +126,7 @@ export function getOptions<F extends keyof Options>(
 
 export function getSiteUrl() {
   const { url } = getOptions(['url'])
-  return isProduction && url ? url : (vercelUrl ?? localDevUrl)
+  return isProduction && url ? url : devUrl
 }
 
 export function getCategories<F extends keyof Category>(

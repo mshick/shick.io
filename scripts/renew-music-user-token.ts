@@ -3,12 +3,12 @@
 const defaultEnvVar = 'MUSICKIT_MUSIC_USER_TOKEN'
 const defaultTarget = 'production'
 const vercelApiBase = 'https://api.vercel.com'
-const projectName = 'shick-io'
 
 type StringFlags = {
   'site-url'?: string
   'site-token'?: string
   'vercel-token'?: string
+  'vercel-project-name'?: string
   target?: string
   'env-var'?: string
 }
@@ -91,10 +91,12 @@ type EnvVar = {
 
 function getEnvVarByKey({
   bearerToken,
-  baseUrl
+  baseUrl,
+  projectName
 }: {
   bearerToken: string
   baseUrl: string
+  projectName: string
 }) {
   return async ({ key }: { key: string }) => {
     const envVarsUrl = new URL(`/v9/projects/${projectName}/env`, baseUrl)
@@ -140,10 +142,12 @@ function getEnvVarByKey({
 
 function updateEnvVar({
   bearerToken,
-  baseUrl
+  baseUrl,
+  projectName
 }: {
   bearerToken: string
   baseUrl: string
+  projectName: string
 }) {
   return async ({ id, value }: { id: string; value: string }) => {
     const url = new URL(`/v9/projects/${projectName}/env/${id}`, baseUrl)
@@ -230,11 +234,13 @@ function reploy({
 }
 
 function getRequests({
+  projectName,
   siteToken,
   siteUrl,
   vercelToken,
   vercelUrl
 }: {
+  projectName: string
   siteToken: string
   siteUrl: string
   vercelToken: string
@@ -247,11 +253,13 @@ function getRequests({
     }),
     getEnvVarByKey: getEnvVarByKey({
       bearerToken: vercelToken,
-      baseUrl: vercelUrl
+      baseUrl: vercelUrl,
+      projectName
     }),
     updateEnvVar: updateEnvVar({
       bearerToken: vercelToken,
-      baseUrl: vercelUrl
+      baseUrl: vercelUrl,
+      projectName
     }),
     getLatestDeployment: getLatestDeployment({
       bearerToken: vercelToken,
@@ -270,8 +278,10 @@ async function main() {
   const siteUrl = args['site-url'] ?? process.env.SITE_URL
   const siteToken = args['site-token'] ?? process.env.SITE_TOKEN
   const vercelToken = args['vercel-token'] ?? process.env.VERCEL_TOKEN
+  const projectName =
+    args['vercel-project-name'] ?? process.env.VERCEL_PROJECT_NAME
 
-  if (!siteUrl || !siteToken || !vercelToken) {
+  if (!siteUrl || !siteToken || !vercelToken || !projectName) {
     throw new Error(
       'Missing variables: site-url, site-token and vercel-token are all required.'
     )
@@ -283,6 +293,7 @@ async function main() {
   const noDeploy = args['no-deploy'] ?? process.env.NO_DEPLOY ?? false
 
   const requests = getRequests({
+    projectName,
     siteUrl,
     siteToken,
     vercelToken,

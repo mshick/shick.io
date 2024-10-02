@@ -21,6 +21,9 @@ declare global {
       SITE_URL?: string
       SITE_TOKEN?: string
       VERCEL_TOKEN?: string
+      NO_DEPLOY?: string
+      DEBUG?: string
+      VERCEL_PROJECT_NAME?: string
     }
   }
 }

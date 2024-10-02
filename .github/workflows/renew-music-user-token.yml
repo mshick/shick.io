@@ -7,6 +7,7 @@ on:
 
 env:
   SITE_URL: 'https://shick.io'
+  VERCEL_PROJECT_NAME: 'shick-io'
 
 jobs:
   run:
