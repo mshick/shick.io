@@ -1,7 +1,7 @@
 name: Michael Shick
 title: Michael Shick
 description: My personal site.
-url: https://shick.us
+url: https://shick.io
 timezone: America/New_York
 locale: en-US
 keywords:
@@ -11,7 +11,7 @@ keywords:
 author:
   name: Michael Shick
   email: m@shick.us
-  url: https://shick.us
+  url: https://shick.io
 pagination:
   perPage: 3
 showListeningTo: true
