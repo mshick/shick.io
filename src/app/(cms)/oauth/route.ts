@@ -1,10 +1,8 @@
-import { githubAuthUrl, isDevelopment } from '@/env'
+import { githubAuthUrl, siteUrl } from '@/env'
 import { NextResponse } from 'next/server'
 
 export function GET() {
-  const redirectUri = isDevelopment
-    ? `${githubAuthUrl}&redirect_uri=http://localhost:1337/oauth/callback`
-    : githubAuthUrl
-
-  return NextResponse.redirect(redirectUri)
+  return NextResponse.redirect(
+    `${githubAuthUrl}&redirect_uri=${siteUrl}/oauth/callback`
+  )
 }

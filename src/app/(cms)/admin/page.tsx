@@ -1,20 +1,21 @@
 'use client'
 
-const CMS_SCRIPT_SRC = 'https://unpkg.com/decap-cms@^3.1.10/dist/decap-cms.js'
-// const CMS_SCRIPT_SRC = 'https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js'
+import { isLocal, siteUrl } from '@/env'
+
+const CMS_SCRIPT_SRC = 'https://unpkg.com/decap-cms@^3.3.3/dist/decap-cms.js'
 
 export default function AdminPage() {
+  const url = new URL(siteUrl)
+
   const config = {
-    // local_backend: true,
+    local_backend: isLocal,
 
     backend: {
       name: 'github',
       repo: 'mshick/shick.io',
       branch: 'main',
-      // site_domain: 'new-shick-io.vercel.app',
-      // base_url: 'https://new-shick-io.vercel.app',
-      site_domain: 'localhost:1337',
-      base_url: 'http://localhost:1337',
+      site_domain: url.host,
+      base_url: url.origin,
       auth_endpoint: 'oauth'
     },
 

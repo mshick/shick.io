@@ -3,6 +3,7 @@ declare global {
     interface ProcessEnv {
       // A hack to make unlisted values less useful
       [key: string]: symbol
+      VERCEL?: string
       VERCEL_GITHUB_COMMIT_SHA?: string
       VERCEL_ENV?: string
       NEXT_PUBLIC_LOG_LEVEL?: string
