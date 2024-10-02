@@ -1,27 +1,15 @@
 import { TZDate } from '@date-fns/tz'
-import { readFileSync } from 'node:fs'
 import { basename, join, relative, resolve } from 'node:path'
 import { format } from 'node:util'
 import slug from 'slug'
 import { type z } from 'velite'
-import { parse as parseYaml } from 'yaml'
 import { isProduction, localDevUrl, vercelUrl } from './env'
 import { excerptFn } from './excerpt'
 import { getGitFileInfo, type GitFileInfo } from './git'
+import { collectionPaths, repoUrlPattern, timezone, url } from './options'
 
 const __dirname = import.meta.dirname
 const baseDir = resolve(__dirname, '..')
-
-type Options = {
-  timezone: string
-  repoUrlPattern?: string
-  collectionPaths?: Record<string, string>
-  url: string
-}
-
-const { timezone, repoUrlPattern, collectionPaths, url }: Options = parseYaml(
-  readFileSync(join(__dirname, '../content/site/options.yml'), 'utf8')
-)
 
 function getSiteUrl(): string {
   return isProduction && url ? url : (vercelUrl ?? localDevUrl)

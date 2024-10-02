@@ -7,6 +7,7 @@ declare global {
       VERCEL_GITHUB_COMMIT_SHA?: string
       VERCEL_ENV?: string
       NEXT_PUBLIC_LOG_LEVEL?: string
+      NEXT_PUBLIC_SITE_URL?: string
       NEXT_PUBLIC_VERCEL_URL?: string
       NEXT_PUBLIC_LOCAL_URL?: string
       MUSICKIT_PRIVATE_KEY?: string

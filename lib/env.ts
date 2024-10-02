@@ -14,7 +14,9 @@ export const vercelUrl =
 export const localDevUrl =
   process.env.NEXT_PUBLIC_LOCAL_URL ?? 'http://localhost:1337'
 
-export const siteUrl = vercelUrl ?? localDevUrl
+export const siteUrl = isProduction
+  ? process.env.NEXT_PUBLIC_SITE_URL
+  : (vercelUrl ?? localDevUrl)
 
 export const commitSha = process.env.VERCEL_GITHUB_COMMIT_SHA ?? ''
 
