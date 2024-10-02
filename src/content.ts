@@ -1,8 +1,25 @@
 import { isProduction, localDevUrl, vercelUrl } from '@/env'
 import type { Category, Options, Page, Post, Tag } from '_/.velite'
 import { categories, options, pages, posts, tags } from '_/.velite'
+import { keyBy } from './lib/utils/nodash'
 
 type Document = Page | Post
+
+const documents: Document[] = [...posts, ...pages]
+
+const documentsByPermalink = keyBy(documents, 'permalink');
+
+const relatedFields = [
+  'title',
+  'publishedAt',
+  'permalink',
+  'excerpt',
+  'excerptHtml'
+] as const
+
+type Related = {
+  related: { [P in (typeof relatedFields)[number]]: Document[P] }[]
+}
 
 type Taxonomy = {
   categories: { [P in 'name' | 'slug' | 'permalink']: Category[P] }[]
@@ -19,6 +36,7 @@ export type {
   Options,
   Page,
   Post,
+  Related,
   Sorter,
   Tag,
   Taxonomy
@@ -66,6 +84,9 @@ function pick<T extends object, K extends keyof T>(
 
   return Object.fromEntries(keys.map((k) => [k, obj[k]])) as { [P in K]: T[P] }
 }
+
+const intersection = (arr: string[], ...args: string[][]) =>
+  arr.filter((item) => args.every((arr) => arr.includes(item)))
 
 function include<I extends keyof Taxonomy = never>(
   data: { [P in keyof Taxonomy]: string[] },
@@ -257,43 +278,15 @@ export function getPost<
   includes?: I[]
 ): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined {
   const post = posts.find(filter)
-  return (
-    post && {
-      ...pick(post, fields),
-      ...include(post, includes)
-    }
-  )
-}
 
-const intersection = (arr: string[], ...args: string[][]) =>
-  arr.filter((item) => args.every((arr) => arr.includes(item)))
+  if (!post) {
+    return
+  }
 
-export function getPostWithRelated<
-  F extends keyof Omit<Post, I>,
-  I extends keyof Taxonomy = never
->(
-  filter: Filter<Post>,
-  fields?: F[],
-  includes?: I[]
-): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined {
-  const post = posts.find(filter)
-  const related = posts
-    .filter(
-      (p) =>
-        p.permalink !== post?.permalink &&
-        (intersection(p.categories, post?.categories ?? []).length ||
-          intersection(p.tags, post?.tags ?? []).length)
-    )
-    .slice(0, 4)
-    .map((p) => pick(p, ['title', 'publishedAt', 'permalink', 'excerptHtml']))
-
-  return (
-    post && {
-      ...pick(post, fields),
-      ...include(post, includes),
-      related
-    }
-  )
+  return {
+    ...pick(post, fields),
+    ...include(post, includes)
+  }
 }
 
 export function getPostWithPager<
@@ -325,12 +318,28 @@ export function getPostWithPager<
 export function getPostBySlug<
   F extends keyof Omit<Post, I>,
   I extends keyof Taxonomy = never
+>(slug: string, fields?: F[], includes?: I[]) {
+  return getPost((i) => i.slug === slug, fields, includes)
+}
+
+export function getDocumentByPermalink<
+  F extends keyof Omit<Document, I>,
+  I extends keyof Taxonomy = never
 >(
-  slug: string,
+  permalink: string,
   fields?: F[],
   includes?: I[]
-): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined {
-  return getPost((i) => i.slug === slug, fields, includes)
+): ({ [P in F]: Document[P] } & { [P in I]: Taxonomy[P] }) | undefined {
+  const doc = documentsByPermalink.get(permalink)
+
+  if (!doc || !available(doc)) {
+    return
+  }
+
+  return {
+    ...pick(doc, fields),
+    ...include(doc, includes)
+  }
 }
 
 export function getDocuments<
@@ -344,7 +353,7 @@ export function getDocuments<
   limit = Infinity,
   offset = 0
 ): ({ [P in F]: Document[P] } & { [P in I]: Taxonomy[P] })[] {
-  return posts
+  return documents
     .filter(available)
     .filter(filter)
     .sort(sorter)
@@ -358,5 +367,50 @@ export function getDocuments<
 export function getDocumentsCount(
   filter: Filter<Document> = filters.none
 ): number {
-  return [...posts, ...pages].filter(available).filter(filter).length
+  return documents.filter(available).filter(filter).length
+}
+
+export function getRelated(
+  doc: Pick<Document, 'permalink' | 'related' | '__type'> & Partial<Taxonomy>,
+  limit = 3
+) {
+  const categories = doc?.categories?.map((d) => d.name) ?? []
+  const tags = doc?.tags?.map((d) => d.name) ?? []
+
+  const related: Related['related'] = [];
+
+  if (doc.related) {
+    for (const permalink of doc.related) {
+      const relatedDoc = documentsByPermalink.get(permalink)
+      if (relatedDoc) {
+        related.push({
+          ...pick(relatedDoc, [...relatedFields])
+        })
+      }
+    }
+  }
+
+  if (related.length >= limit) {
+    return related.slice(0, limit)
+  }
+
+  related.push(...getDocuments([...relatedFields], undefined, (d) => (
+      d.permalink !== doc?.permalink && !related.some(r => r.permalink === d.permalink) &&
+      Boolean(
+        intersection(d.categories, categories).length ||
+          intersection(d.tags, tags).length
+      )
+    )
+  ))
+
+  if (related.length >= limit) {
+    return related.slice(0, limit)  
+  }
+
+  related.push(...getDocuments([...relatedFields], undefined, (d) => (
+      d.__type === doc.__type && d.permalink !== doc?.permalink && !related.some(r => r.permalink === d.permalink)
+    )
+  ))
+  
+  return related.slice(0, limit)
 }

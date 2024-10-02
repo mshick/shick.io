@@ -8,6 +8,8 @@ excerpt: Super **cool** things you can do with _markdown_!
 tags:
   - markdown
   - make/it/safe
+related:
+  - /posts/tufte-css/
 ---
 
 :+1:

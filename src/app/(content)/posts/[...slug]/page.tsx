@@ -1,7 +1,7 @@
 import { PostBody } from '#/components/Post/PostBody'
 import { PostFooter } from '#/components/Post/PostFooter'
 import { PostHeader } from '#/components/Post/PostHeader'
-import { getPostBySlug, getPostWithRelated, getPosts } from '#/content'
+import { getPostBySlug, getPosts, getRelated } from '#/content'
 import { type ServerProps } from '#/types/types'
 import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -37,21 +37,22 @@ export function generateMetadata({ params }: ServerProps<Params>): Metadata {
 }
 
 export default function PostPage({ params }: ServerProps<Params>) {
-  const post = getPostWithRelated(
-    (p) => p.slug === params.slug.join('/'),
-    undefined,
-    ['tags']
-  )
+  const post = getPostBySlug(params.slug.join('/'), undefined, [
+    'tags',
+    'categories'
+  ])
 
   if (!post) {
     return notFound()
   }
 
+  const related = getRelated(post)
+
   return (
     <article>
       <PostHeader {...post} />
       <PostBody {...post} />
-      <PostFooter {...post} />
+      <PostFooter {...post} related={related} />
     </article>
   )
 }

@@ -1,13 +1,13 @@
-import type { Post, Tag } from '#/content'
+import type { Post, Related, Taxonomy } from '#/content'
 import { standardDate } from '#/lib/utils/text'
 import Link from 'next/link'
 
 export type PostFooterProps = Pick<
   Post,
-  'historyUrl' | 'shareUrl' | 'related' | 'updatedAt'
-> & {
-  tags: Pick<Tag, 'name' | 'slug' | 'permalink'>[]
-}
+  'historyUrl' | 'shareUrl' | 'updatedAt'
+> &
+  Related &
+  Taxonomy
 
 function PostFooterMeta({
   updatedAt,
@@ -49,12 +49,10 @@ function PostFooterMeta({
 
 function PostFooterRelated({
   related
-}: {
-  related: NonNullable<Post['related']>
-}) {
+}: Related) {
   return (
     <div id="related-posts">
-      <h2 className="text-2xl mb-4">Related posts</h2>
+      <h2 className="text-2xl mb-4">Related</h2>
       <ul className="space-y-2">
         {related.map(({ permalink, publishedAt, title }) => (
           <li key={permalink}>

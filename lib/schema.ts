@@ -27,15 +27,6 @@ const count = s
   .object({ total: s.number(), posts: s.number(), pages: s.number() })
   .default({ total: 0, posts: 0, pages: 0 })
 
-const preview = s.object({
-  title: s.string(),
-  permalink: s.string(),
-  excerptHtml: s.string(),
-  publishedAt: s.string()
-})
-
-const related = s.array(preview)
-
 const meta = s
   .object({
     title: s.string().optional(),
@@ -116,6 +107,7 @@ export const category = s
 
 export const post = s
   .object({
+    __type: s.literal('post').default('post'),
     slug: s.slug('posts').optional(),
     title: s.string().max(99),
     cover: cover.optional(),
@@ -130,7 +122,7 @@ export const post = s
     featured: s.boolean().default(false),
     categories: s.array(s.string()).default([]),
     tags: s.array(s.string()).default([]),
-    related: related.optional()
+    related: s.array(s.string()).optional()
   })
   .transform(async (data, ctx) => {
     const { meta } = ctx
@@ -176,6 +168,7 @@ export const post = s
 
 export const page = s
   .object({
+    __type: s.literal('page').default('page'),
     title: s.string().max(99),
     excerpt: s.markdown(),
     cover: cover.optional(),
@@ -184,7 +177,8 @@ export const page = s
     code: s.mdx({ gfm: false, copyLinkedFiles: false }),
     categories: s.array(s.string()).default([]),
     tags: s.array(s.string()).default([]),
-    draft: s.boolean().default(false)
+    draft: s.boolean().default(false),
+    related: s.array(s.string()).optional()
   })
   .transform(async (data, ctx) => {
     const { meta } = ctx

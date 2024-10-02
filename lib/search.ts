@@ -1,4 +1,4 @@
-import pick from 'lodash-es/pick.js'
+import pick from 'lodash/pick.js'
 import MiniSearch from 'minisearch'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname } from 'node:path'

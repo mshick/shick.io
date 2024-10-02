@@ -37,4 +37,4 @@ npm-debug.log*
 /src/generated/
 
 # images
-/pubic/static/
+/public/static/
