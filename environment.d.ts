@@ -3,7 +3,6 @@ declare global {
     interface ProcessEnv {
       // A hack to make unlisted values less useful
       [key: string]: symbol
-      NODE_ENV?: string
       VERCEL_GITHUB_COMMIT_SHA?: string
       VERCEL_ENV?: string
       NEXT_PUBLIC_LOG_LEVEL?: string
@@ -14,8 +13,8 @@ declare global {
       MUSICKIT_TEAM_ID?: string
       MUSICKIT_MUSIC_USER_TOKEN?: string
       API_SECRET?: string
-      OAUTH_GITHUB_CLIENT_ID?: string
-      OAUTH_GITHUB_CLIENT_SECRET?: string
+      GITHUB_CLIENT_ID?: string
+      GITHUB_CLIENT_SECRET?: string
       ENV_VAR_KEY?: string
       SITE_URL?: string
       SITE_TOKEN?: string

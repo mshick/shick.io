@@ -3,6 +3,7 @@
 const defaultEnvVar = 'MUSICKIT_MUSIC_USER_TOKEN'
 const defaultTarget = 'production'
 const vercelApiBase = 'https://api.vercel.com'
+const projectName = 'shick-io'
 
 type StringFlags = {
   'site-url'?: string
@@ -35,8 +36,14 @@ function getArgs(argv: string[]) {
     if (arg.startsWith('--')) {
       const [key, value] = arg.slice(2).split('=')
 
-      if (key === 'debug' || key === 'no-deploy') {
-        args[key] = value === 'true' ? true : false
+      if (key === 'debug') {
+        args[key] = true
+        continue
+      }
+
+      if (key === 'no-deploy') {
+        args[key] = true
+        continue
       }
 
       if (key !== undefined) {
@@ -74,6 +81,14 @@ function getMusicUserToken({
   }
 }
 
+type EnvVar = {
+  type: string
+  value: string
+  target: string[]
+  id: string
+  key: string
+}
+
 function getEnvVarByKey({
   bearerToken,
   baseUrl
@@ -82,17 +97,44 @@ function getEnvVarByKey({
   baseUrl: string
 }) {
   return async ({ key }: { key: string }) => {
-    const url = new URL('/v9/projects/shick-io/env?decrypt=true', baseUrl)
-    const response = await fetch(url, {
+    const envVarsUrl = new URL(`/v9/projects/${projectName}/env`, baseUrl)
+    const envVarsResponse = await fetch(envVarsUrl, {
       headers: {
         Authorization: `Bearer ${bearerToken}`
       }
     })
 
-    const result: { envs: { id: string; key: string; value: string }[] } =
-      await response.json()
+    const envVarsResult: {
+      envs: { id: string; key: string; value: string }[]
+    } = await envVarsResponse.json()
 
-    return result.envs.find((envVar) => envVar.key === key)
+    if (!Array.isArray(envVarsResult?.envs)) {
+      throw new Error('invalid envVars response')
+    }
+
+    const envVar = envVarsResult.envs.find((envVar) => envVar.key === key)
+
+    if (!envVar) {
+      throw new Error(`envVar ${key} not found`)
+    }
+
+    const secretUrl = new URL(
+      `/v1/projects/${projectName}/env/${envVar.id}`,
+      baseUrl
+    )
+    const secretResponse = await fetch(secretUrl, {
+      headers: {
+        Authorization: `Bearer ${bearerToken}`
+      }
+    })
+
+    const secretResult: EnvVar = await secretResponse.json()
+
+    if (secretResult?.key !== key) {
+      throw new Error()
+    }
+
+    return secretResult
   }
 }
 
@@ -104,7 +146,7 @@ function updateEnvVar({
   baseUrl: string
 }) {
   return async ({ id, value }: { id: string; value: string }) => {
-    const url = new URL(`/v9/projects/shick-io/env/${id}`, baseUrl)
+    const url = new URL(`/v9/projects/${projectName}/env/${id}`, baseUrl)
     const response = await fetch(url, {
       method: 'PATCH',
       headers: {
@@ -260,6 +302,8 @@ async function main() {
     console.log('Token has not changed, renewal halted')
     return
   }
+
+  console.log('Found a new music user token!')
 
   if (noDeploy) {
     return

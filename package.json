@@ -7,12 +7,12 @@
     "build": "next build",
     "dev": "next dev --turbo --port 1337",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx,.json",
-    "music:create-developer-key": "dotenv -e .env.local -e .env ./scripts/create-developer-key.ts",
-    "music:renew-music-user-token": "dotenv -e .env.local -e .env ./scripts/renew-music-user-token.ts",
+    "music:create-developer-key": "dotenv -e .env.local -e .env ./scripts/create-developer-key.ts --",
+    "music:renew-music-user-token": "dotenv -e .env.local -e .env ./scripts/renew-music-user-token.ts --",
     "start": "next start",
     "test": "npm run lint && npm run typecheck",
     "typecheck": "tsc --noEmit",
-    "velite": "dotenv -e .env.local -e .env velite --clean"
+    "velite": "dotenv -e .env.local -e .env velite -- --clean"
   },
   "prettier": {
     "arrowParens": "always",

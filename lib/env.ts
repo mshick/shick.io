@@ -11,15 +11,15 @@ export const vercelUrl =
   `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
 
 export const localDevUrl =
-  process.env.NEXT_PUBLIC_LOCAL_URL ?? 'http://localhost:3000'
+  process.env.NEXT_PUBLIC_LOCAL_URL ?? 'http://localhost:1337'
 
 export const commitSha = process.env.VERCEL_GITHUB_COMMIT_SHA ?? ''
 
 /**
  * CMS
  */
-export const githubClientId = process.env.OAUTH_GITHUB_CLIENT_ID
-export const githubClientSecret = process.env.OAUTH_GITHUB_CLIENT_SECRET
+export const githubClientId = process.env.GITHUB_CLIENT_ID
+export const githubClientSecret = process.env.GITHUB_CLIENT_SECRET
 export const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}`
 export const githubTokenUrl = 'https://github.com/login/oauth/access_token'
 
