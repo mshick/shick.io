@@ -11,5 +11,4 @@ export function keyBy<T extends Record<string, unknown>, K extends keyof T>(
   }
 
   return map
-
 }

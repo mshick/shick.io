@@ -7,7 +7,7 @@ type Document = Page | Post
 
 const documents: Document[] = [...posts, ...pages]
 
-const documentsByPermalink = keyBy(documents, 'permalink');
+const documentsByPermalink = keyBy(documents, 'permalink')
 
 const relatedFields = [
   'title',
@@ -377,7 +377,7 @@ export function getRelated(
   const categories = doc?.categories?.map((d) => d.name) ?? []
   const tags = doc?.tags?.map((d) => d.name) ?? []
 
-  const related: Related['related'] = [];
+  const related: Related['related'] = []
 
   if (doc.related) {
     for (const permalink of doc.related) {
@@ -394,23 +394,34 @@ export function getRelated(
     return related.slice(0, limit)
   }
 
-  related.push(...getDocuments([...relatedFields], undefined, (d) => (
-      d.permalink !== doc?.permalink && !related.some(r => r.permalink === d.permalink) &&
-      Boolean(
-        intersection(d.categories, categories).length ||
-          intersection(d.tags, tags).length
-      )
+  related.push(
+    ...getDocuments(
+      [...relatedFields],
+      undefined,
+      (d) =>
+        d.permalink !== doc?.permalink &&
+        !related.some((r) => r.permalink === d.permalink) &&
+        Boolean(
+          intersection(d.categories, categories).length ||
+            intersection(d.tags, tags).length
+        )
     )
-  ))
+  )
 
   if (related.length >= limit) {
-    return related.slice(0, limit)  
+    return related.slice(0, limit)
   }
 
-  related.push(...getDocuments([...relatedFields], undefined, (d) => (
-      d.__type === doc.__type && d.permalink !== doc?.permalink && !related.some(r => r.permalink === d.permalink)
+  related.push(
+    ...getDocuments(
+      [...relatedFields],
+      undefined,
+      (d) =>
+        d.__type === doc.__type &&
+        d.permalink !== doc?.permalink &&
+        !related.some((r) => r.permalink === d.permalink)
     )
-  ))
-  
+  )
+
   return related.slice(0, limit)
 }

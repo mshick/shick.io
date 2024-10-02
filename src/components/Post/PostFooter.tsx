@@ -47,9 +47,7 @@ function PostFooterMeta({
   )
 }
 
-function PostFooterRelated({
-  related
-}: Related) {
+function PostFooterRelated({ related }: Related) {
   return (
     <div id="related-posts">
       <h2 className="text-2xl mb-4">Related</h2>
