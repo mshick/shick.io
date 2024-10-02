@@ -62,16 +62,10 @@ export function getEditUrl(filePath: string): string {
 export function getPermalink(
   collectionName: string,
   path: string,
-  pathSlug = getSlugFromPath(collectionName, path)
+  customSlug?: string
 ) {
   const basePath = collectionPaths?.[collectionName] ?? `/${collectionName}`
-
-  const nakedPath = path
-    .replace(`${collectionName}/`, '')
-    .replace(/\/index$/, '')
-
-  const slugPath = nakedPath.replace(basename(nakedPath), pathSlug)
-
+  const slugPath = customSlug ?? getSlugFromPath(collectionName, path)
   // Enforce trailing slash
   return join(basePath, slugPath).concat('/')
 }
