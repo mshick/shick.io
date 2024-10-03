@@ -37,7 +37,8 @@ export function generateMetadata({
 
   const { currentPage } = getPagination(
     searchParams,
-    getOptions(['pagination']).pagination,
+    getOptions(['collections']).collections?.find((c) => c.name === 'tags')
+      ?.pagination ?? { perPage: 3 },
     getDocumentsCount()
   )
 
@@ -62,7 +63,8 @@ export default function TagPage({ params, searchParams }: ServerProps<Params>) {
 
   const { currentPage, perPage, pageOffset, totalPages } = getPagination(
     searchParams,
-    getOptions(['pagination']).pagination,
+    getOptions(['collections']).collections?.find((c) => c.name === 'tags')
+      ?.pagination ?? { perPage: 3 },
     getDocumentsCount(filters.none)
   )
 
