@@ -27,10 +27,10 @@ export const metadata: Metadata = {
 }
 
 export default function Layout({ children }: PropsWithChildren) {
-  const { name, links, repoUrl, socials } = getOptions([
+  const { name, links, repo, socials } = getOptions([
     'name',
     'links',
-    'repoUrl',
+    'repo',
     'socials'
   ])
 
@@ -45,7 +45,10 @@ export default function Layout({ children }: PropsWithChildren) {
         <main id="content" className="flex flex-col flex-1">
           {children}
         </main>
-        <SiteFooter repoUrl={repoUrl} socials={socials} />
+        <SiteFooter
+          repoUrl={`https://github.com/${repo.name}`}
+          socials={socials}
+        />
       </ThemeProvider>
     </body>
   )

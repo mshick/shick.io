@@ -1,4 +1,4 @@
-import { s } from 'velite'
+import { s, type z } from 'velite'
 import { DEFAULT_EXCERPT_LENGTH, excerptFn } from './excerpt'
 import {
   createTaxonomyTransform,
@@ -43,15 +43,15 @@ export const options = s.object({
   url: s.string(),
   keywords: s.array(s.string()),
   timezone: s.string(),
-  repoUrlPattern: s.string().optional(),
-  repoUrl: s.string().optional(),
+  repo: s.object({
+    provider: s.enum(['github']),
+    name: s.string(),
+    branch: s.string().default('main')
+  }),
   author: s.object({
     name: s.string(),
     email: s.string().email(),
     url: s.string().url()
-  }),
-  pagination: s.object({
-    perPage: s.number()
   }),
   links: s.array(
     s.object({
@@ -71,15 +71,22 @@ export const options = s.object({
       image: s.image().optional()
     })
   ),
-  collectionPaths: s
-    .object({
-      pages: s.string().optional(),
-      posts: s.string().optional(),
-      tags: s.string().optional(),
-      categories: s.string().optional()
-    })
+  collections: s
+    .array(
+      s.object({
+        name: s.enum(['pages', 'posts', 'tags', 'categories']),
+        path: s.string().optional(),
+        pagination: s
+          .object({
+            perPage: s.number()
+          })
+          .optional()
+      })
+    )
     .optional()
 })
+
+export type Options = z.infer<typeof options>
 
 export const tag = s
   .object({
@@ -93,6 +100,8 @@ export const tag = s
   })
   .transform(createTaxonomyTransform('tags'))
 
+export type Tag = z.infer<typeof tag>
+
 export const category = s
   .object({
     name: s.string().max(20),
@@ -104,6 +113,8 @@ export const category = s
     count
   })
   .transform(createTaxonomyTransform('categories'))
+
+export type Category = z.infer<typeof category>
 
 export const post = s
   .object({
@@ -166,6 +177,8 @@ export const post = s
     }
   })
 
+export type Post = z.infer<typeof post>
+
 export const page = s
   .object({
     __type: s.literal('page').default('page'),
@@ -203,3 +216,5 @@ export const page = s
       updatedAt: getZonedDate(updatedBy?.latestDate ?? new Date()).toISOString()
     }
   })
+
+export type Page = z.infer<typeof page>

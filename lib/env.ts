@@ -32,7 +32,13 @@ export const githubTokenUrl = 'https://github.com/login/oauth/access_token'
 /**
  * Search
  */
-export const searchFields = ['title', 'content', 'excerpt', 'tags']
+export const searchFields = [
+  'title',
+  'content',
+  'excerpt',
+  'tags',
+  'categories'
+]
 export const searchStoreFields = [
   'title',
   'excerpt',

@@ -3,29 +3,12 @@ import MiniSearch from 'minisearch'
 import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname } from 'node:path'
 import { searchFields, searchStoreFields } from './env'
+import { type Page, type Post } from './schema'
 
-const documentFields = [
-  'permalink',
-  'title',
-  'excerpt',
-  'content',
-  'tags',
-  'categories',
-  'publishedAt'
-]
-
-type Document = {
-  permalink: string
-  title: string
-  excerpt?: string
-  content?: string
-  publishedAt: string
-  tags: string[]
-  categories: string[]
-}
+const documentFields = [...new Set([...searchFields, ...searchStoreFields])]
 
 export async function generateSearchIndex(
-  docs: Document[],
+  docs: (Page | Post)[],
   { filePath }: { filePath: string }
 ) {
   const searchDocs = docs.map((doc) => ({

@@ -4,9 +4,8 @@ const isDev = process.argv.includes('dev')
 
 // https://securityheaders.com
 const ContentSecurityPolicy = `
-  default-src * 'unsafe-inline' 'unsafe-eval' data:;
+  default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;
   script-src * 'unsafe-inline' 'unsafe-eval' data:;
-  worker-src * blob:;
 `
 
 const securityHeaders = [

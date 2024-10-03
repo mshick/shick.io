@@ -21,7 +21,7 @@ const socialIcons: Record<Options['socials'][0]['icon'], IconType> = {
 
 export type SiteFooterProps = {
   showListeningTo?: boolean
-  repoUrl?: Options['repoUrl']
+  repoUrl?: string
   socials?: Options['socials']
 }
 

@@ -1,12 +1,11 @@
 import { TZDate } from '@date-fns/tz'
 import { basename, join, relative, resolve } from 'node:path'
-import { format } from 'node:util'
 import slug from 'slug'
 import { type z } from 'velite'
 import { devUrl, isProduction } from './env'
 import { excerptFn } from './excerpt'
 import { getGitFileInfo, type GitFileInfo } from './git'
-import { collectionPaths, repoUrlPattern, timezone, url } from './options'
+import { collections, repo, timezone, url } from './options'
 
 const __dirname = import.meta.dirname
 const baseDir = resolve(__dirname, '..')
@@ -44,17 +43,22 @@ export function getShareUrl(path: string): string {
   return new URL(path, getSiteUrl()).href
 }
 
+function formatRepoUrl(action: 'commits' | 'edit', filePath: string) {
+  return `https://github.com/${repo.name}/${action}/${repo.branch}/${filePath}`
+}
+
 export function getHistoryUrl(filePath: string): string {
-  return repoUrlPattern
-    ? format(repoUrlPattern, 'commits', getRepoPath(filePath))
-    : ''
+  return formatRepoUrl('commits', getRepoPath(filePath))
 }
 
 export function getEditUrl(filePath: string): string {
-  return repoUrlPattern
-    ? format(repoUrlPattern, 'edit', getRepoPath(filePath))
-    : ''
+  return formatRepoUrl('edit', getRepoPath(filePath))
 }
+
+const collectionPaths: Record<string, string> | undefined = collections?.reduce(
+  (p, v) => ({ ...p, [v.name]: v.path }),
+  {}
+)
 
 /**
  * Get the permalink path
