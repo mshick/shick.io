@@ -64,6 +64,8 @@ export default defineConfig({
       }
     )
 
+    // TODO Process schemas and turn into decap cms config, write to generated
+
     console.log(
       `Search index written with ${documentCount} documents and ${termCount} terms`
     )
