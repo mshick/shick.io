@@ -1,9 +1,11 @@
 'use client'
 
 import { ThemeToggle } from '#/components/Site/components/ThemeToggle'
+import { type Options } from '#/content'
 import { useFocus } from '#/lib/hooks/useFocus'
 import { useMiniSearch } from '#/lib/hooks/useMiniSearch'
 import { replaceState } from '#/lib/utils/history'
+import { searchStoreBoost, searchStoreFields } from '@/env'
 import { usePathname } from 'next/navigation'
 import {
   type ChangeEventHandler,
@@ -17,11 +19,10 @@ import { NavigationMenu } from './components/NavigationMenu'
 import { NavigationToggle } from './components/NavigationToggle'
 import { SearchInput } from './components/SearchInput'
 import { SearchResults } from './components/SearchResults'
-import { type NavigationItem } from './types'
 
 export type SiteHeaderProps = {
   siteName: string
-  navigationItems: NavigationItem[]
+  navigationItems: Options['links']
 }
 
 export function SiteHeader({ siteName, navigationItems }: SiteHeaderProps) {
@@ -40,7 +41,13 @@ export function SiteHeader({ siteName, navigationItems }: SiteHeaderProps) {
   const [isSearchFocused, setIsSearchFocused] = useState(false)
   const [inputRef, setInputFocus] = useFocus()
 
-  const [setQuery, { isLoading, isReady, query, results }] = useMiniSearch()
+  const [setQuery, { isLoading, isReady, query, results }] = useMiniSearch(
+    [...searchStoreFields],
+    {
+      boost: searchStoreBoost,
+      prefix: true
+    }
+  )
 
   const handleClose = useCallback(() => {
     setIsOpen(false)

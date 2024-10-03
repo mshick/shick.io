@@ -1,9 +1,9 @@
 import { Link } from '#/components/Link'
+import { type Options } from '#/content'
 import { classNames } from '#/lib/utils/classNames'
-import { type NavigationItem } from '../types'
 
 export type MobileMenuProps = {
-  items: NavigationItem[]
+  items: Options['links']
 }
 
 export function MobileMenu({ items }: MobileMenuProps) {

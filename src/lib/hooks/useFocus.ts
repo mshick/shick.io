@@ -1,3 +1,5 @@
+'use client'
+
 import { type MutableRefObject, useCallback, useRef } from 'react'
 
 export function useFocus(): [

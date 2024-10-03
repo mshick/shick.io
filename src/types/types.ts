@@ -6,12 +6,6 @@ export type PropsWithCallableChildren<P, Q> = P & {
   children: (arg: Q) => Renderable | undefined
 }
 
-export type Tag = {
-  name: string
-  path: string
-  slug: string
-}
-
 export type ServerParams = Record<string, string | string[]>
 
 export type ServerProps<Params = ServerParams> = {

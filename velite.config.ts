@@ -1,3 +1,4 @@
+import { searchIndexOutputPath } from '@/env'
 import { defineCollection, defineConfig } from 'velite'
 import * as schema from './lib/schema'
 import { generateSearchIndex } from './lib/search'
@@ -52,7 +53,7 @@ export default defineConfig({
   },
 
   async complete(collections) {
-    const filePath = './src/generated/search/index.json'
+    const filePath = `./src/${searchIndexOutputPath}`
 
     console.log(`Writing search index to '${filePath}' ...`)
 

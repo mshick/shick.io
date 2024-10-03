@@ -17,8 +17,8 @@ export async function generateSearchIndex(
   }))
 
   const miniSearch = new MiniSearch({
-    fields: searchFields,
-    storeFields: searchStoreFields
+    fields: [...searchFields],
+    storeFields: [...searchStoreFields]
   })
 
   miniSearch.addAll(searchDocs)

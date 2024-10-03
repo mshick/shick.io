@@ -1,17 +1,17 @@
 import { DocumentList } from '#/components/Document/DocumentList'
 import { DocumentListItem } from '#/components/Document/DocumentListItem'
 import { Loading } from '#/components/Loading'
+import { type Document } from '#/content'
+import { type searchStoreFields } from '@/env'
 import {
   DocumentMagnifyingGlassIcon,
   ExclamationTriangleIcon
 } from '@heroicons/react/24/outline'
 
-export type SearchResultsItem = {
-  title: string
-  permalink: string
-  excerpt: string
-  publishedAt: string
-}
+export type SearchResultsItem = Pick<
+  Document,
+  (typeof searchStoreFields)[number]
+>
 
 export type SearchResultsProps = {
   isLoading: boolean

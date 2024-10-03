@@ -100,7 +100,8 @@
     "unist-util-visit": "^5.0.0",
     "velite": "^0.1.1",
     "vfile": "^6.0.3",
-    "yaml": "^2.5.1"
+    "yaml": "^2.5.1",
+    "zod-to-json-schema": "^3.23.3"
   },
   "packageManager": "npm@10.4.0",
   "engines": {

@@ -32,16 +32,26 @@ export const githubTokenUrl = 'https://github.com/login/oauth/access_token'
 /**
  * Search
  */
+
+/**
+ * Relative to ./src
+ */
+export const searchIndexOutputPath = 'generated/search/index.json'
 export const searchFields = [
   'title',
   'content',
   'excerpt',
   'tags',
   'categories'
-]
+] as const
 export const searchStoreFields = [
   'title',
   'excerpt',
   'permalink',
   'publishedAt'
-]
+] as const
+export const searchStoreBoost = {
+  title: 2,
+  tags: 2,
+  excerpt: 1.5
+}
