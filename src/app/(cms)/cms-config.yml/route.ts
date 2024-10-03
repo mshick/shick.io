@@ -1,4 +1,5 @@
 import { getOptions } from '#/content'
+import { type CmsConfig } from '#/types/decap-cms'
 import { devUrl, isLocal, isProduction } from '@/env'
 import { NextResponse } from 'next/server'
 import yaml from 'yaml'
@@ -7,7 +8,7 @@ const { url: siteUrl, repo } = getOptions(['url', 'repo'])
 
 const url = new URL(isProduction ? siteUrl : devUrl)
 
-const config = {
+const config: CmsConfig = {
   local_backend: isLocal,
   backend: {
     name: repo.provider,
@@ -27,9 +28,10 @@ const config = {
   collections: [
     {
       name: 'posts',
+      type: 'folder_based_collection',
+      folder: 'content/posts',
       label: 'Posts',
       label_singular: 'Post',
-      folder: 'content/posts',
       create: true,
       media_folder: '',
       public_folder: '',
@@ -64,7 +66,6 @@ const config = {
           label: 'Cover',
           name: 'cover',
           widget: 'object',
-          allow_multiple: false,
           required: false,
           collapsed: true,
           fields: [
@@ -150,9 +151,10 @@ const config = {
     },
     {
       name: 'pages',
+      type: 'folder_based_collection',
+      folder: 'content/pages',
       label: 'Pages',
       label_singular: 'Page',
-      folder: 'content/pages',
       extension: 'mdx',
       format: 'frontmatter',
       create: true,
@@ -183,7 +185,6 @@ const config = {
           label: 'Cover',
           name: 'cover',
           widget: 'object',
-          allow_multiple: false,
           required: false,
           collapsed: true,
           fields: [
@@ -269,6 +270,7 @@ const config = {
     },
     {
       name: 'site',
+      type: 'file_based_collection',
       label: 'Site',
       media_folder: '',
       public_folder: '',
