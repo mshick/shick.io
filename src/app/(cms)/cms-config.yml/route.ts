@@ -51,7 +51,6 @@ const config: CmsConfig = {
           label: 'Date',
           name: 'date',
           widget: 'datetime',
-          default: '{{now}}',
           required: true
         },
         { label: 'Slug', name: 'slug', widget: 'string', required: false },
@@ -176,7 +175,6 @@ const config: CmsConfig = {
           label: 'Date',
           name: 'date',
           widget: 'datetime',
-          default: '{{now}}',
           required: true
         },
         { label: 'Slug', name: 'slug', widget: 'string', required: false },

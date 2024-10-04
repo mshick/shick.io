@@ -13,6 +13,10 @@ import {
 } from './fields'
 import { markdownOptions } from './velite'
 
+export const MARKDOWN = '__MARKDOWN__'
+export const ISODATE = '__ISODATE__'
+export const ENUM_MULTIPLE = '__ENUM_MULTIPLE__'
+
 const icon = s.enum(['github', 'x', 'signal', 'linkedin', 'whatsapp', 'email'])
 
 const cover = s.object({
@@ -93,9 +97,9 @@ export const tag = s
     name: s.string().max(20),
     slug: s.slug('tags').optional(),
     cover: cover.optional(),
-    excerpt: s.markdown({ gfm: false }).optional(),
-    date: s.isodate().optional(),
-    content: s.markdown(markdownOptions),
+    excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
+    date: s.isodate().describe(ISODATE).optional(),
+    content: s.markdown(markdownOptions).describe(MARKDOWN),
     count
   })
   .transform(createTaxonomyTransform('tags'))
@@ -107,9 +111,9 @@ export const category = s
     name: s.string().max(20),
     slug: s.slug('categories').optional(),
     cover: cover.optional(),
-    excerpt: s.markdown({ gfm: false }).optional(),
-    date: s.isodate().optional(),
-    content: s.markdown(markdownOptions),
+    excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
+    date: s.isodate().describe(ISODATE).optional(),
+    content: s.markdown(markdownOptions).describe(MARKDOWN),
     count
   })
   .transform(createTaxonomyTransform('categories'))
@@ -124,9 +128,9 @@ export const post = s
     cover: cover.optional(),
     meta,
     metadata: s.metadata(),
-    content: s.markdown(markdownOptions),
-    excerpt: s.markdown({ gfm: false }).optional(),
-    date: s.isodate().optional(),
+    content: s.markdown(markdownOptions).describe(MARKDOWN),
+    excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
+    date: s.isodate().optional().describe(ISODATE),
     author: s.string().optional(),
     draft: s.boolean().default(false),
     toc: s.toc(),
@@ -183,7 +187,7 @@ export const page = s
   .object({
     __type: s.literal('page').default('page'),
     title: s.string().max(99),
-    excerpt: s.markdown(),
+    excerpt: s.markdown().describe(MARKDOWN),
     cover: cover.optional(),
     meta,
     slug: s.slug('global', ['admin']).optional(),
