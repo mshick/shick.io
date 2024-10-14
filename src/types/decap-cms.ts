@@ -34,15 +34,16 @@ export interface CmsSelectWidgetOptionObject {
   value: unknown
 }
 
-export type CmsCollectionFormatType =
-  | 'yml'
-  | 'yaml'
-  | 'toml'
-  | 'json'
-  | 'frontmatter'
-  | 'yaml-frontmatter'
-  | 'toml-frontmatter'
-  | 'json-frontmatter'
+export enum CmsCollectionFormatType {
+  YML = 'yml',
+  YAML = 'yaml',
+  TOML = 'toml',
+  JSON = 'json',
+  Frontmatter = 'frontmatter',
+  YAMLFrontmatter = 'yaml-frontmatter',
+  TOMLFrontmatter = 'toml-frontmatter',
+  JSONFrontmatter = 'json-frontmatter'
+}
 
 export type CmsAuthScope = 'repo' | 'public_repo'
 
@@ -320,7 +321,7 @@ export interface CmsCollection {
    * You may also specify a custom extension not included in the list above, by specifying the format value.
    */
   extension?: string
-  format?: CmsCollectionFormatType
+  format?: `${CmsCollectionFormatType}`
 
   frontmatter_delimiter?: string[] | string
   fields?: CmsField[]
@@ -390,7 +391,6 @@ export interface CmsConfig {
   show_preview_links?: boolean
   media_folder?: string
   public_folder?: string
-  media_folder_relative?: boolean
   media_library?: CmsMediaLibrary
   publish_mode?: CmsPublishMode
   load_config_file?: boolean

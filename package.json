@@ -6,6 +6,7 @@
     "prebuild": "npm run velite",
     "build": "next build",
     "dev": "concurrently --kill-others decap-server \"next dev --turbo --port 1337\"",
+    "dev:tina": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"next dev --turbo --port 1337\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx,.json",
     "music:create-developer-key": "dotenv -e .env.local -e .env ./scripts/create-developer-key.ts --",
     "music:renew-music-user-token": "dotenv -e .env.local -e .env ./scripts/renew-music-user-token.ts --",
@@ -99,7 +100,7 @@
     "typescript": "5.5.4",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.0.0",
-    "velite": "^0.1.1",
+    "velite": "^0.2.0",
     "vfile": "^6.0.3",
     "yaml": "^2.5.1"
   },

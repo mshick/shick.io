@@ -12,7 +12,8 @@ export const output: Output = {
   assets: 'public/static',
   base: '/static/',
   name: '[name]-[hash:6].[ext]',
-  clean: true
+  clean: true,
+  format: 'esm'
 }
 
 export const rehypeTufted = rehypePresetTufted({

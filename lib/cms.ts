@@ -1,21 +1,23 @@
 import {
-  CmsFieldBoolean,
-  CmsFieldList,
-  CmsFieldNumber,
-  CmsFieldSelect,
-  CmsFieldStringOrText,
+  CmsCollectionFormatType,
   type CmsCollection,
+  type CmsConfig,
   type CmsField,
   type CmsFieldBase,
+  type CmsFieldBoolean,
   type CmsFieldDateTime,
+  type CmsFieldList,
   type CmsFieldMarkdown,
-  type CmsFieldObject
+  type CmsFieldNumber,
+  type CmsFieldObject,
+  type CmsFieldSelect,
+  type CmsFieldStringOrText
 } from '#/types/decap-cms'
 import capitalize from 'lodash/capitalize.js'
-import { dirname, join, relative } from 'node:path'
+import { dirname, extname, join, relative } from 'node:path'
 import { cwd } from 'node:process'
-import { Collection, Config, z } from 'velite'
-import { ENUM_MULTIPLE, ISODATE, MARKDOWN } from './schema'
+import { z, type Collection, type Config } from 'velite'
+import { ENUM_MULTIPLE, ISODATE, MARKDOWN, type Options } from './schema'
 
 type FieldAcc = Pick<CmsFieldBase, 'label' | 'name' | 'required'> & {
   default?: unknown
@@ -117,14 +119,17 @@ function convertObject(schema: z.ZodObject<any>) {
         fields: convertObject(shapeBaseType)
       }
       fields.push(field)
-      continue     
+      continue
     }
-    
+
     if (shapeBaseType instanceof z.ZodNumber) {
       const field: CmsFieldBase & CmsFieldNumber = {
         ...fieldBase,
         default:
-          typeof fieldBase.default === 'string' || typeof fieldBase.default === 'number' ? fieldBase.default : undefined,
+          typeof fieldBase.default === 'string' ||
+          typeof fieldBase.default === 'number'
+            ? fieldBase.default
+            : undefined,
         widget: 'number',
         max: shapeBaseType.maxValue ?? undefined,
         min: shapeBaseType.minValue ?? undefined
@@ -132,9 +137,10 @@ function convertObject(schema: z.ZodObject<any>) {
       fields.push(field)
       continue
     }
-    
+
     if (shapeBaseType instanceof z.ZodString) {
-      const maxValue = shapeBaseType._def.checks.find(c => c.kind === 'max')?.value ?? 0
+      const maxValue =
+        shapeBaseType._def.checks.find((c) => c.kind === 'max')?.value ?? 0
       const field: CmsFieldBase & CmsFieldStringOrText = {
         ...fieldBase,
         default:
@@ -144,18 +150,20 @@ function convertObject(schema: z.ZodObject<any>) {
       fields.push(field)
       continue
     }
-    
+
     if (shapeBaseType instanceof z.ZodBoolean) {
       const field: CmsFieldBase & CmsFieldBoolean = {
         ...fieldBase,
         default:
-          typeof fieldBase.default === 'boolean' ? fieldBase.default : undefined,
+          typeof fieldBase.default === 'boolean'
+            ? fieldBase.default
+            : undefined,
         widget: 'boolean'
       }
       fields.push(field)
       continue
     }
-    
+
     if (shapeBaseType instanceof z.ZodEnum) {
       const field: CmsFieldBase & CmsFieldSelect = {
         ...fieldBase,
@@ -184,22 +192,26 @@ function convertObject(schema: z.ZodObject<any>) {
   return fields
 }
 
-    // posts: { name: 'Post', pattern: 'posts/**/*.md', schema: [ZodEffects] },
-    // pages: { name: 'Page', pattern: 'pages/**/*.mdx', schema: [ZodEffects] },
-    // categories: {
-    //   name: 'Category',
-    //   pattern: 'categories/*.md',
-    //   schema: [ZodEffects]
-    // },
-    // tags: { name: 'Tag', pattern: 'tags/*.md', schema: [ZodEffects] },
-    // options: {
-    //   name: 'Options',
-    //   pattern: 'options.yml',
-    //   single: true,
-    //   schema: [ZodObject]
-    // }
+// posts: { name: 'Post', pattern: 'posts/**/*.md', schema: [ZodEffects] },
+// pages: { name: 'Page', pattern: 'pages/**/*.mdx', schema: [ZodEffects] },
+// categories: {
+//   name: 'Category',
+//   pattern: 'categories/*.md',
+//   schema: [ZodEffects]
+// },
+// tags: { name: 'Tag', pattern: 'tags/*.md', schema: [ZodEffects] },
+// options: {
+//   name: 'Options',
+//   pattern: 'options.yml',
+//   single: true,
+//   schema: [ZodObject]
+// }
 
-function createCmsCollection(basePath: string, name: string, collection: Collection) {
+function createCmsCollection(
+  basePath: string,
+  name: string,
+  collection: Collection
+): CmsCollection {
   const schema = findBaseType(collection.schema, {})
 
   if (!(schema instanceof z.ZodObject)) {
@@ -213,27 +225,66 @@ function createCmsCollection(basePath: string, name: string, collection: Collect
     public_folder: ''
   }
 
-  const pattern = Array.isArray(collection.pattern) ? collection.pattern[0] : collection.pattern
+  const pattern = Array.isArray(collection.pattern)
+    ? collection.pattern[0]
+    : collection.pattern
+
   if (!pattern) {
     throw new Error(`Invalid pattern in collection ${collection.name}`)
   }
 
   if (collection.single) {
     cmsCollection.type = 'file_based_collection'
-    cmsCollection.files = [{
-      file: pattern,
-      name: pattern,
-      label: pattern,
-      fields: convertObject(schema)
-    }]
+    cmsCollection.files = [
+      {
+        file: pattern,
+        name: pattern,
+        label: pattern,
+        fields: convertObject(schema)
+      }
+    ]
   } else {
     cmsCollection.type = 'folder_based_collection'
     cmsCollection.folder = join(basePath, dirname(pattern))
     cmsCollection.fields = convertObject(schema)
     cmsCollection.create = true
+
+    // If config allows nested content, allow for setting a path
+    if (pattern.includes('**')) {
+      cmsCollection.meta = {
+        path: {
+          widget: 'string',
+          label: 'Path',
+          index_file: 'index'
+        }
+      }
+      // The default nested depth in this case
+      // TODO Support overiding collection config via options
+      cmsCollection.nested = {
+        depth: 3
+      }
+    }
+
+    cmsCollection.extension = extname(pattern).toLowerCase()
+
+    if (['yml', 'yaml'].includes(cmsCollection.extension)) {
+      cmsCollection.format = CmsCollectionFormatType.YAML
+    }
+
+    if (['toml'].includes(cmsCollection.extension)) {
+      cmsCollection.format = CmsCollectionFormatType.TOML
+    }
+
+    if (['json'].includes(cmsCollection.extension)) {
+      cmsCollection.format = CmsCollectionFormatType.JSON
+    }
+
+    if (['md', 'markdown', 'mdx'].includes(cmsCollection.extension)) {
+      cmsCollection.format = CmsCollectionFormatType.Frontmatter
+    }
   }
 
-  return cmsCollection
+  return cmsCollection as CmsCollection
 }
 
 // {
@@ -295,14 +346,31 @@ function createCmsCollection(basePath: string, name: string, collection: Collect
 //   ],
 //   strict: false
 // }
-export function getCmsConfig(config: Config) {
+export function getCmsConfig(
+  config: Config,
+  options: Pick<Options, 'repo' | 'collections'>
+) {
   const basePath = relative(cwd(), config.root)
 
-  const cmsCollections = [];
+  const collections: CmsCollection[] = []
 
   for (const [name, collection] of Object.entries(config.collections)) {
-    cmsCollections.push(createCmsCollection(basePath, name, collection))
+    collections.push(createCmsCollection(basePath, name, collection))
   }
 
-  console.log(JSON.stringify(cmsCollections, null, 2))
+  const cmsConfig: CmsConfig = {
+    backend: {
+      name: options.repo.provider
+    },
+    publish_mode: 'simple',
+    media_folder: basePath,
+    public_folder: config.output.base,
+    show_preview_links: true,
+    editor: {
+      preview: false
+    },
+    collections
+  }
+
+  console.log(JSON.stringify(cmsConfig, null, 2))
 }

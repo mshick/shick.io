@@ -19,8 +19,8 @@ const config: CmsConfig = {
     auth_endpoint: 'oauth'
   },
   publish_mode: 'simple',
-  media_folder: 'content/posts',
-  public_folder: '/static',
+  media_folder: 'public/uploads',
+  public_folder: '/uploads/',
   show_preview_links: true,
   editor: {
     preview: false
@@ -33,18 +33,20 @@ const config: CmsConfig = {
       label: 'Posts',
       label_singular: 'Post',
       create: true,
-      media_folder: '',
-      public_folder: '',
-      meta: {
-        path: {
-          widget: 'string',
-          label: 'Path',
-          index_file: 'index'
-        }
-      },
-      nested: {
-        depth: 3
-      },
+      // media_folder: 'content/assets',
+      // public_folder: '',
+      // media_folder: '',
+      // public_folder: '',
+      // meta: {
+      //   path: {
+      //     widget: 'parent',
+      //     label: 'Parent',
+      //     index_file: 'index'
+      //   }
+      // },
+      // nested: {
+      //   depth: 3
+      // },
       fields: [
         { label: 'Title', name: 'title', widget: 'string', required: true },
         {
@@ -157,8 +159,8 @@ const config: CmsConfig = {
       extension: 'mdx',
       format: 'frontmatter',
       create: true,
-      media_folder: '{{dirname}}',
-      public_folder: '',
+      // media_folder: '',
+      // public_folder: '',
       meta: {
         path: {
           widget: 'string',

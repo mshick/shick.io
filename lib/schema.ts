@@ -11,6 +11,7 @@ import {
   getUpdatedBy,
   getZonedDate
 } from './fields'
+import { image } from './image'
 import { markdownOptions } from './velite'
 
 export const MARKDOWN = '__MARKDOWN__'
@@ -20,7 +21,7 @@ export const ENUM_MULTIPLE = '__ENUM_MULTIPLE__'
 const icon = s.enum(['github', 'x', 'signal', 'linkedin', 'whatsapp', 'email'])
 
 const cover = s.object({
-  image: s.image().optional(),
+  image: image({ absoluteRoot: 'public' }).optional(),
   video: s.string().optional(),
   title: s.string().optional(),
   alt: s.string().optional(),

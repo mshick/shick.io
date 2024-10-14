@@ -13,14 +13,15 @@
     "paths": {
       "_/.velite": [
         "./.velite"
-      ],          
+      ],
       "@/*": [
         "./lib/*"
       ],
       "#/*": [
         "./src/*"
       ]
-    }
+    },
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",

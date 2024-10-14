@@ -1,9 +1,17 @@
 import type { Element, Root as Hast } from 'hast'
+import { join } from 'node:path'
 import { visit } from 'unist-util-visit'
 import { type Image, isRelativePath, type Output, processAsset } from 'velite'
 import type { VFile } from 'vfile'
+import { UPLOADS_BASE } from './constants'
+
+const ABSOLUTE_ROOT = 'public'
 
 export type CopyLinkedFilesOptions = Omit<Output, 'data' | 'clean'>
+
+const isUploadsPath = (uploadsBase: string, url: string) => {
+  return url.startsWith(uploadsBase)
+}
 
 /**
  * rehype (markdown) plugin to copy linked files to public path and replace their urls with public urls
@@ -14,12 +22,21 @@ export type CopyLinkedFilesOptions = Omit<Output, 'data' | 'clean'>
  */
 export const rehypeCopyLinkedFiles =
   (options: CopyLinkedFilesOptions) => async (tree: Hast, file: VFile) => {
+    if (!UPLOADS_BASE.startsWith('/') || !UPLOADS_BASE.endsWith('/')) {
+      throw new Error('Uploads base must start and end with a /')
+    }
+
     const links = new Map<string, Element[]>()
     const linkedPropertyNames = ['href', 'src', 'poster']
     visit(tree, 'element', (node) => {
       linkedPropertyNames.forEach((name) => {
         const value = node.properties[name]
-        if (typeof value === 'string' && isRelativePath(value)) {
+
+        if (
+          typeof value === 'string' &&
+          (isRelativePath(value) ||
+            (isUploadsPath(UPLOADS_BASE, value) && ABSOLUTE_ROOT))
+        ) {
           const elements = links.get(value) ?? []
           elements.push(node)
           links.set(value, elements)
@@ -29,10 +46,11 @@ export const rehypeCopyLinkedFiles =
     await Promise.all(
       Array.from(links.entries()).map(async ([url, elements]) => {
         const isImage = elements.some((element) => element.tagName === 'img')
+        const isUploads = isUploadsPath(UPLOADS_BASE, url)
 
         const urlOrImage: string | Image = await processAsset(
-          url,
-          file.path,
+          isUploads ? join(ABSOLUTE_ROOT, url) : url,
+          isUploads ? join(process.cwd(), ABSOLUTE_ROOT) : file.path,
           options.name,
           options.base,
           isImage ? true : undefined

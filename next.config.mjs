@@ -55,10 +55,10 @@ const nextConfig = {
   // headers prevents next export
   async headers() {
     return [
-      {
-        source: '/(.*)',
-        headers: securityHeaders
-      },
+      // {
+      //   source: '/(.*)',
+      //   headers: securityHeaders
+      // },
       {
         source: '/static/(.*)',
         headers: [

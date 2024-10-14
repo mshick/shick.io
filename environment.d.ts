@@ -24,6 +24,18 @@ declare global {
       NO_DEPLOY?: string
       DEBUG?: string
       VERCEL_PROJECT_NAME?: string
+      // Tina
+      TINA_PUBLIC_IS_LOCAL?: string
+      VERCEL_GIT_REPO_OWNER?: string
+      GITHUB_PERSONAL_ACCESS_TOKEN?: string
+      GITHUB_OWNER?: string
+      GITHUB_REPO?: string
+      VERCEL_GIT_REPO_SLUG?: string
+      GITHUB_BRANCH?: string
+      VERCEL_GIT_COMMIT_REF?: string
+      KV_REST_API_URL?: string
+      KV_REST_API_TOKEN?: string
+      NEXTAUTH_SECRET?: string
     }
   }
 }
