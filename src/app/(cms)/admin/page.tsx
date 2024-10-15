@@ -22,49 +22,7 @@ export default function AdminPage() {
     <title>Content Manager</title>
   </head>
   <body>
-    <script src="https://unpkg.com/decap-cms/dist/decap-cms.js"></script>
-    <script>
-      const image = {
-        label: 'Image666',
-        id: 'image666',
-        fromBlock: match =>
-          match && {
-            image: match[2],
-            alt: match[1],
-            title: match[4],
-          },
-        toBlock: (params, a, b) => {
-          console.log('toBlock', params, a, b)
-          const { alt, image, title } = params
-          return \`![\${alt || ''}](\${image || ''}\${title ? \` "\${title.replace(/"/g, '\\"')}"\` : ''})\`
-        },
-        toPreview: ({ alt, image, title }, getAsset, fields) => {
-          const imageField = fields?.find(f => f.get('widget') === 'image');
-          const src = getAsset(image, imageField);
-          return \`<img src="\${src || ''}" alt="\${alt || ''}" title="\${title || ''}" />\`;
-        },
-        pattern: /^!\[(.*)\]\((.*?)(\s"(.*)")?\)$/,
-        fields: [
-          {
-            label: 'Image',
-            name: 'image',
-            widget: 'image',
-            media_library: {
-              allow_multiple: false,
-            },
-          },
-          {
-            label: 'Alt Text',
-            name: 'alt',
-          },
-          {
-            label: 'Title',
-            name: 'title',
-          },
-        ],
-      };
-      CMS.registerEditorComponent(image);
-    </script>    
+    <script src="https://unpkg.com/decap-cms/dist/decap-cms.js"></script>  
   </body>
 </html>`
       }}
