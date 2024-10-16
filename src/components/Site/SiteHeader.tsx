@@ -3,9 +3,8 @@
 import { ThemeToggle } from '#/components/Site/components/ThemeToggle'
 import { type Options } from '#/content'
 import { useFocus } from '#/lib/hooks/useFocus'
-import { useMiniSearch } from '#/lib/hooks/useMiniSearch'
+import { useSearch } from '#/lib/hooks/useSearch'
 import { replaceState } from '#/lib/utils/history'
-import { searchStoreBoost, searchStoreFields } from '@/env'
 import { usePathname } from 'next/navigation'
 import {
   type ChangeEventHandler,
@@ -41,13 +40,7 @@ export function SiteHeader({ siteName, navigationItems }: SiteHeaderProps) {
   const [isSearchFocused, setIsSearchFocused] = useState(false)
   const [inputRef, setInputFocus] = useFocus()
 
-  const [setQuery, { isLoading, isReady, query, results }] = useMiniSearch(
-    [...searchStoreFields],
-    {
-      boost: searchStoreBoost,
-      prefix: true
-    }
-  )
+  const [setQuery, { isLoading, query, results }] = useSearch()
 
   const handleClose = useCallback(() => {
     setIsOpen(false)
@@ -171,8 +164,8 @@ export function SiteHeader({ siteName, navigationItems }: SiteHeaderProps) {
       {/* Search Results */}
       {isOpen && isSearchFocused && (
         <SearchResults
-          isInitial={isReady && query.length < 2 && results.length === 0}
-          isLoading={!isReady || isLoading}
+          isInitial={query.length < 2 && results.length === 0}
+          isLoading={isLoading}
           items={results}
           onClickLink={handleClose}
         />

@@ -1,8 +1,8 @@
 'use client'
 
 import { Loading } from '#/components/Loading'
+import { FetchError } from '#/lib/errors'
 import { classNames } from '#/lib/utils/classNames'
-import { get } from '#/lib/utils/fetcher'
 import { Popover } from '@headlessui/react'
 import { ChevronUpIcon, PlayPauseIcon } from '@heroicons/react/24/solid'
 import {
@@ -12,7 +12,7 @@ import {
   useRef,
   useState
 } from 'react'
-import useSWR from 'swr'
+import useSWR, { type Fetcher } from 'swr'
 
 type Track = {
   id: string
@@ -44,6 +44,20 @@ type ListeningToTrackProps = {
   isActiveTrack: boolean
   onPlay: () => void
 }
+
+const fetcher: Fetcher<Track[], string> = (limit) =>
+  fetch(`/api/music/recent-tracks?limit=${limit}&types=songs`)
+    .then((res) => Promise.all([res, res.json()]))
+    .then(([res, body]) => {
+      if (!res.ok) {
+        throw new FetchError('An error occurred while fetching the data.', {
+          info: body,
+          status: res.status
+        })
+      }
+
+      return body.data
+    })
 
 function ListeningToTrack({
   audio,
@@ -122,11 +136,13 @@ export type ListeningToProps = {
 }
 
 export function ListeningToPopover({ limit }: ListeningToProps) {
-  const { data: recentTracks, error: recentTracksError } = useSWR<{
-    data: Track[]
-  }>(`/api/music/recent-tracks?limit=${limit ?? 10}&types=songs`, get, {
-    refreshInterval: 60000
-  })
+  const { data: recentTracks, error: recentTracksError } = useSWR(
+    String(limit ?? 10),
+    fetcher,
+    {
+      refreshInterval: 60000
+    }
+  )
 
   const [activeTrackId, setActiveTrackId] = useState<string | null>(null)
   const audio = useRef<HTMLAudioElement>(new Audio())
@@ -139,8 +155,7 @@ export function ListeningToPopover({ limit }: ListeningToProps) {
     return <Loading />
   }
 
-  const tracks = recentTracks.data
-  const mostRecentTrack = tracks[0]
+  const mostRecentTrack = recentTracks[0]
   const { name, artistName } = mostRecentTrack?.attributes ?? {}
 
   return (
@@ -170,7 +185,7 @@ export function ListeningToPopover({ limit }: ListeningToProps) {
               Recent listens <span>(courtesy of Apple Music)</span>
             </div>
             <ul>
-              {tracks.map((track, trackIdx) => (
+              {recentTracks.map((track, trackIdx) => (
                 <li key={`${track.id}_${trackIdx}`}>
                   <ListeningToTrack
                     audio={audio}
