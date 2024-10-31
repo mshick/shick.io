@@ -1,5 +1,5 @@
 import { TZDate } from '@date-fns/tz'
-import isEmpty from 'lodash/isEmpty'
+import isEmpty from 'lodash/isEmpty.js'
 import { basename, join, relative, resolve } from 'node:path'
 import slug from 'slug'
 import { type z } from 'velite'
