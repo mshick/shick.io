@@ -14,3 +14,7 @@ export type ServerProps<Params = ServerParams> = {
 }
 
 export type DocumentTypes = Record<string, string>
+
+export type SegmentData<Params = ServerParams> = {
+  params: Promise<Params>
+}

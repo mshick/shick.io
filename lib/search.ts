@@ -28,7 +28,7 @@ export async function generateSearchIndex(
   await writeFile(
     filePath,
     // Double-stringify the index, a string is required for import
-    JSON.stringify({ index: JSON.stringify(miniSearch) })
+    JSON.stringify({ searchIndex: JSON.stringify(miniSearch) })
   )
 
   return {

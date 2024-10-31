@@ -1,4 +1,5 @@
 import { createMusicKit } from '#/lib/musickit/musickit'
+import { type SegmentData } from '#/types/types'
 import { type NextRequest, NextResponse } from 'next/server'
 
 const _musickitPrivateKey = process.env.MUSICKIT_PRIVATE_KEY ?? ''
@@ -14,9 +15,9 @@ type Params = {
 
 export const runtime = 'edge'
 
-export async function GET(req: NextRequest, context: { params: Params }) {
+export async function GET(req: NextRequest, segmentData: SegmentData<Params>) {
   const { searchParams } = req.nextUrl
-  const { method } = context.params
+  const { method } = await segmentData.params
 
   if (!musickitMusicUserToken || !musickitTeamId || !musickitKeyId) {
     return NextResponse.json(

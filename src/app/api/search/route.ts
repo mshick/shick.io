@@ -1,12 +1,12 @@
 import { type Document } from '#/content'
-import { index } from '#/generated/search/index.json'
+import { searchIndex } from '#/generated/search/index.json'
 import { searchFields, searchStoreBoost, searchStoreFields } from '@/env'
 import MiniSearch, { type SearchResult } from 'minisearch'
 import { type NextRequest, NextResponse } from 'next/server'
 
 type StoredDocument = Pick<Document, (typeof searchStoreFields)[number]>
 
-const miniSearch = MiniSearch.loadJSON<StoredDocument>(index, {
+const miniSearch = MiniSearch.loadJSON<StoredDocument>(searchIndex, {
   fields: [...searchFields],
   storeFields: [...searchStoreFields],
   searchOptions: {
