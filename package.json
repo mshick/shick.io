@@ -6,7 +6,6 @@
     "prebuild": "npm run velite:build",
     "build": "next build",
     "dev": "npm run velite:build && concurrently --kill-others decap-server \"npm run velite:watch\" \"next dev --turbo --port 1337\"",
-    "dev:tina": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"next dev --turbo --port 1337\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx,.json",
     "music:create-developer-key": "dotenv -e .env.local -e .env ./scripts/create-developer-key.ts --",
     "music:renew-music-user-token": "dotenv -e .env.local -e .env ./scripts/renew-music-user-token.ts --",
