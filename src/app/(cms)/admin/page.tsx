@@ -1,6 +1,9 @@
 /* eslint-disable no-useless-escape */
 'use client'
 
+// const SCRIPT = 'https://unpkg.com/decap-cms/dist/decap-cms.js'
+const SCRIPT = 'https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js'
+
 export default function AdminPage() {
   return (
     <html
@@ -19,7 +22,7 @@ export default function AdminPage() {
     <title>Content Manager</title>
   </head>
   <body>
-    <script src="https://unpkg.com/decap-cms/dist/decap-cms.js"></script>  
+    <script src="${SCRIPT}"></script>
   </body>
 </html>`
       }}
