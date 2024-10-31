@@ -3,6 +3,7 @@ import { SiteHeader } from '#/components/Site/SiteHeader'
 import { getOptions } from '#/content'
 import { plexMono } from '#/styles/fonts'
 import '#/styles/globals.css'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { type Metadata } from 'next'
 import { ThemeProvider } from 'next-themes'
 import { type PropsWithChildren } from 'react'
@@ -50,6 +51,7 @@ export default function Layout({ children }: PropsWithChildren) {
           socials={socials}
         />
       </ThemeProvider>
+      <SpeedInsights />
     </body>
   )
 }

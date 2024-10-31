@@ -1,6 +1,6 @@
 import { getOptions } from '#/content'
 import '#/styles/globals.css'
-import { SpeedInsights } from '@vercel/speed-insights/next'
+import { isDevelopment } from '@/env'
 import { type Metadata } from 'next'
 import { type PropsWithChildren } from 'react'
 
@@ -30,9 +30,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
-    <html lang={locale} suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning={isDevelopment}>
       {children}
-      <SpeedInsights />
     </html>
   )
 }
