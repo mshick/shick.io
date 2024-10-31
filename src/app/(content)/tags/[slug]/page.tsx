@@ -21,10 +21,12 @@ type Params = {
   slug: string
 }
 
-export function generateMetadata({
-  params,
-  searchParams
-}: ServerProps<Params>): Metadata {
+export async function generateMetadata(
+  props: ServerProps<Params>
+): Promise<Metadata> {
+  const params = await props.params
+  const searchParams = await props.searchParams
+
   const tag = getTagBySlug(params.slug)
 
   if (!tag) {
@@ -52,7 +54,10 @@ export function generateMetadata({
   }
 }
 
-export default function TagPage({ params, searchParams }: ServerProps<Params>) {
+export default async function TagPage(props: ServerProps<Params>) {
+  const params = await props.params
+  const searchParams = await props.searchParams
+
   const tag = getTagBySlug(params.slug)
 
   if (!tag) {

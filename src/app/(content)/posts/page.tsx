@@ -24,7 +24,9 @@ export function generateMetadata(): Metadata {
   }
 }
 
-export default function PostsPage({ searchParams }: ServerProps) {
+export default async function PostsPage(props: ServerProps) {
+  const searchParams = await props.searchParams
+
   const heading = HEADING
 
   const { currentPage, perPage, pageOffset, totalPages } = getPagination(

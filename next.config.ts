@@ -1,6 +1,5 @@
 import { withSentryConfig } from '@sentry/nextjs'
-
-const isDev = process.argv.includes('dev')
+import type { NextConfig } from 'next'
 
 // https://securityheaders.com
 const ContentSecurityPolicy = `
@@ -8,7 +7,8 @@ const ContentSecurityPolicy = `
   script-src * 'unsafe-inline' 'unsafe-eval' data:;
 `
 
-const securityHeaders = [
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const securityHeaders: { key: string; value: string }[] = [
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
   {
     key: 'Content-Security-Policy',
@@ -47,14 +47,12 @@ const securityHeaders = [
   }
 ]
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  swcMinify: true,
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
-  // headers prevents next export
+  // headers prevents `next export`
   async headers() {
-    return [
+    return Promise.resolve([
       // {
       //   source: '/(.*)',
       //   headers: securityHeaders
@@ -77,11 +75,11 @@ const nextConfig = {
           }
         ]
       }
-    ]
+    ])
   },
-  // redirects prevents next export
+  // redirects prevents `next export`
   async redirects() {
-    return [
+    return Promise.resolve([
       {
         source: '/michael-shick-2022.pdf',
         destination: 'https://read.cv/mshick',
@@ -102,7 +100,7 @@ const nextConfig = {
         destination: 'https://calendly.com/michaelshick/15min',
         permanent: false
       }
-    ]
+    ])
   },
   // output: 'export',
   eslint: {
@@ -140,19 +138,17 @@ const nextConfig = {
   }
 }
 
-if (!process.env.VELITE_STARTED && isDev) {
-  process.env.VELITE_STARTED = '1'
-  const { build } = await import('velite')
-  await build({ watch: true, clean: false })
+function defineConfig(config: NextConfig) {
+  return () => {
+    if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
+      config = withSentryConfig(
+        { ...nextConfig, sentry: { hideSourceMaps: true } },
+        { silent: true }
+      )
+    }
+
+    return config
+  }
 }
 
-let config = nextConfig
-
-if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
-  config = withSentryConfig(
-    { ...nextConfig, sentry: { hideSourceMaps: true } },
-    { silent: true }
-  )
-}
-
-export default config
+export default defineConfig(nextConfig)

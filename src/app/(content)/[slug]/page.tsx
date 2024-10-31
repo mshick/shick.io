@@ -15,7 +15,8 @@ export function generateMetadata(): Metadata {
   return page?.meta ?? {}
 }
 
-export default function PagePage({ params }: ServerProps<Params>) {
+export default async function PagePage(props: ServerProps<Params>) {
+  const params = await props.params
   const page = getPage((value) => value.slug === params.slug)
 
   if (!page) {

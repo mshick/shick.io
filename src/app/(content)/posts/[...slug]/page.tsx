@@ -22,7 +22,10 @@ export function generateStaticParams() {
   return posts.map((post) => ({ slug: post.slug.split('/') }))
 }
 
-export function generateMetadata({ params }: ServerProps<Params>): Metadata {
+export async function generateMetadata(
+  props: ServerProps<Params>
+): Promise<Metadata> {
+  const params = await props.params
   const post = getPostBySlug(params.slug.join('/'))
 
   if (!post) {
@@ -36,7 +39,8 @@ export function generateMetadata({ params }: ServerProps<Params>): Metadata {
   }
 }
 
-export default function PostPage({ params }: ServerProps<Params>) {
+export default async function PostPage(props: ServerProps<Params>) {
+  const params = await props.params
   const post = getPostBySlug(params.slug.join('/'), undefined, [
     'tags',
     'categories'

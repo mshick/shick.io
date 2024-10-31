@@ -9,8 +9,8 @@ export type PropsWithCallableChildren<P, Q> = P & {
 export type ServerParams = Record<string, string | string[]>
 
 export type ServerProps<Params = ServerParams> = {
-  params: Params
-  searchParams: ServerParams
+  params: Promise<Params>
+  searchParams: Promise<ServerParams>
 }
 
 export type DocumentTypes = Record<string, string>

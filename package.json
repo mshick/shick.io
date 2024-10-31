@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "prebuild": "npm run velite",
+    "prebuild": "npm run velite:build",
     "build": "next build",
-    "dev": "concurrently --kill-others decap-server \"next dev --turbo --port 1337\"",
+    "dev": "npm run velite:build && concurrently --kill-others decap-server \"npm run velite:watch\" \"next dev --turbo --port 1337\"",
     "dev:tina": "TINA_PUBLIC_IS_LOCAL=true tinacms dev -c \"next dev --turbo --port 1337\"",
     "lint": "eslint . --ext .js,.ts,.jsx,.tsx,.json",
     "music:create-developer-key": "dotenv -e .env.local -e .env ./scripts/create-developer-key.ts --",
@@ -13,7 +13,9 @@
     "start": "next start",
     "test": "npm run lint && npm run typecheck",
     "typecheck": "tsc --noEmit",
-    "velite": "dotenv -e .env.local -e .env velite -- --clean"
+    "velite": "dotenv -e .env.local -e .env velite --",
+    "velite:build": "npm run velite -- --clean",
+    "velite:watch": "npm run velite -- --watch"
   },
   "prettier": {
     "arrowParens": "always",
@@ -34,7 +36,7 @@
     "@sentry/nextjs": "^8.36.0",
     "date-fns": "^4.1.0",
     "minisearch": "^7.1.0",
-    "next": "^14.2.13",
+    "next": "^15.0.2",
     "next-themes": "^0.3.0",
     "raw-loader": "^4.0.2",
     "react": "^18.3.1",
@@ -69,7 +71,7 @@
     "decap-server": "^3.1.2",
     "dotenv-cli": "^7.4.2",
     "eslint": "^8.57.0",
-    "eslint-config-next": "^14.2.13",
+    "eslint-config-next": "^15.0.2",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-import": "^2.31.0",
