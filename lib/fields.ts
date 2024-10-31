@@ -1,4 +1,5 @@
 import { TZDate } from '@date-fns/tz'
+import isEmpty from 'lodash/isEmpty'
 import { basename, join, relative, resolve } from 'node:path'
 import slug from 'slug'
 import { type z } from 'velite'
@@ -69,9 +70,12 @@ export function getPermalink(
   customSlug?: string
 ) {
   const basePath = collectionPaths?.[collectionName] ?? `/${collectionName}`
-  const slugPath = customSlug ?? getSlugFromPath(collectionName, path)
+  const slugPath = isEmpty(customSlug)
+    ? getSlugFromPath(collectionName, path)
+    : customSlug!
+  const joinedPath = join(basePath, slugPath)
   // Enforce trailing slash
-  return join(basePath, slugPath).concat('/')
+  return joinedPath.endsWith('/') ? joinedPath : joinedPath.concat('/')
 }
 
 /**
@@ -103,14 +107,15 @@ export function getSlugFromPath(
   // posts/baz/bam.md -> baz/bam
   const nakedPath = contentPath
     .replace(`${collectionName}/`, '')
-    .replace(/\/index$/, '')
+    .replace(/index$/, '')
+    .replace(/\/$/, '')
 
   // foo -> foo
   // bar -> bar
   // baz/bam -> bam
   const slugPath = nakedPath.replace(
     basename(nakedPath),
-    userSlug ?? basename(nakedPath)
+    isEmpty(userSlug) ? basename(nakedPath) : userSlug!
   )
 
   return slugPath

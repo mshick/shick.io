@@ -3,6 +3,7 @@ import { raw } from 'hast-util-raw'
 import { toHtml } from 'hast-util-to-html'
 import { toText } from 'hast-util-to-text'
 import { truncate } from 'hast-util-truncate'
+import isEmpty from 'lodash/isEmpty'
 import { fromMarkdown } from 'mdast-util-from-markdown'
 import { toHast } from 'mdast-util-to-hast'
 import { z } from 'velite'
@@ -47,7 +48,7 @@ export function excerptFn(
   value?: string,
   ctx?: ExcerptFnCtx
 ) {
-  if (value == null && ctx?.meta.content != null) {
+  if (isEmpty(value) && ctx?.meta.content != null) {
     value = ctx?.meta.content
   }
 
