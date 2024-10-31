@@ -7,6 +7,7 @@ const ContentSecurityPolicy = `
   script-src * 'unsafe-inline' 'unsafe-eval' data:;
 `
 
+// @ts-expect-error
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const securityHeaders: { key: string; value: string }[] = [
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP

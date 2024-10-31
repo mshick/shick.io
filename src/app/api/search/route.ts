@@ -1,19 +1,22 @@
 import { type Document } from '#/content'
-import { searchIndex } from '#/generated/search/index.json'
+import searchIndexData from '#/generated/search/index.json'
 import { searchFields, searchStoreBoost, searchStoreFields } from '@/env'
 import MiniSearch, { type SearchResult } from 'minisearch'
 import { type NextRequest, NextResponse } from 'next/server'
 
 type StoredDocument = Pick<Document, (typeof searchStoreFields)[number]>
 
-const miniSearch = MiniSearch.loadJSON<StoredDocument>(searchIndex, {
-  fields: [...searchFields],
-  storeFields: [...searchStoreFields],
-  searchOptions: {
-    boost: searchStoreBoost,
-    prefix: true
+const miniSearch = MiniSearch.loadJSON<StoredDocument>(
+  searchIndexData.searchIndex,
+  {
+    fields: [...searchFields],
+    storeFields: [...searchStoreFields],
+    searchOptions: {
+      boost: searchStoreBoost,
+      prefix: true
+    }
   }
-})
+)
 
 export const runtime = 'edge'
 

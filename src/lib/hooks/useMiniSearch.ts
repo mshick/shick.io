@@ -36,16 +36,19 @@ export function useMiniSearch<
 
   useEffect(() => {
     async function loadSearchIndex() {
-      const { searchIndex } = (await import(
+      const searchIndexData = (await import(
         `../../generated/search/index.json`
       )) as {
         searchIndex: string
       }
-      minisearch.current = MiniSearch.loadJSON<StoredDocument>(searchIndex, {
-        fields: [...searchFields],
-        storeFields: [...searchStoreFields],
-        searchOptions
-      })
+      minisearch.current = MiniSearch.loadJSON<StoredDocument>(
+        searchIndexData.searchIndex,
+        {
+          fields: [...searchFields],
+          storeFields: [...searchStoreFields],
+          searchOptions
+        }
+      )
       setIsReady(true)
     }
 
