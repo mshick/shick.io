@@ -8,11 +8,11 @@ const musickitTeamId = process.env.MUSICKIT_TEAM_ID
 const musickitMusicUserToken = process.env.MUSICKIT_MUSIC_USER_TOKEN
 const apiSecret = process.env.API_SECRET
 
-export const runtime = 'experimental-edge'
-
 type Params = {
   method: string
 }
+
+export const runtime = 'edge'
 
 export async function GET(req: NextRequest, context: { params: Params }) {
   const { searchParams } = req.nextUrl

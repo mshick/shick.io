@@ -15,6 +15,8 @@ const miniSearch = MiniSearch.loadJSON<StoredDocument>(index, {
   }
 })
 
+export const runtime = 'edge'
+
 export function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl
   const query = searchParams.get('query')
