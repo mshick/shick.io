@@ -1,9 +1,6 @@
 /* eslint-disable no-useless-escape */
 'use client'
 
-// const SCRIPT = 'https://unpkg.com/decap-cms/dist/decap-cms.js'
-// const SCRIPT = 'https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js'
-
 export default function AdminPage() {
   return (
     <html

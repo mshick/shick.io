@@ -9,6 +9,7 @@ const { url: siteUrl, repo } = getOptions(['url', 'repo'])
 const url = new URL(isProduction ? siteUrl : devUrl)
 
 const config: CmsConfig = {
+  site_url: url.toString(),
   local_backend: isLocal,
   backend: {
     name: repo.provider,
