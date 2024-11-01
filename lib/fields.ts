@@ -1,6 +1,6 @@
 import { TZDate } from '@date-fns/tz'
 import isEmpty from 'lodash/isEmpty.js'
-import { basename, join, relative, resolve } from 'node:path'
+import { basename, dirname, join, relative, resolve } from 'node:path'
 import slug from 'slug'
 import { type z } from 'velite'
 import { devUrl, isProduction } from './env'
@@ -61,6 +61,18 @@ const collectionPaths: Record<string, string> | undefined = collections?.reduce(
   {}
 )
 
+function stripIndex(path: string) {
+  if (path.endsWith('/index')) {
+    return dirname(path)
+  }
+
+  if (path.endsWith('index')) {
+    return ''
+  }
+
+  return path
+}
+
 /**
  * Get the permalink path
  */
@@ -73,7 +85,7 @@ export function getPermalink(
   const slugPath = isEmpty(customSlug)
     ? getSlugFromPath(collectionName, path)
     : customSlug!
-  const joinedPath = join(basePath, slugPath)
+  const joinedPath = join(basePath, stripIndex(slugPath))
   // Enforce trailing slash
   return joinedPath.endsWith('/') ? joinedPath : joinedPath.concat('/')
 }
@@ -107,7 +119,6 @@ export function getSlugFromPath(
   // posts/baz/bam.md -> baz/bam
   const nakedPath = contentPath
     .replace(`${collectionName}/`, '')
-    .replace(/index$/, '')
     .replace(/\/$/, '')
 
   // foo -> foo

@@ -1,15 +1,9 @@
 ---
-title: Hello world
+title: Hello worldd
 date: 2024-06-05T13:22:00
 slug: hello-world
 draft: false
 featured: true
-cover:
-  image: /uploads/sample-house.jpg
-  video: ''
-  title: ''
-  alt: ''
-  caption: ''
 excerpt: ''
 tags:
   - needs slug conversion

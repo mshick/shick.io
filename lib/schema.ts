@@ -21,11 +21,11 @@ export const ENUM_MULTIPLE = '__ENUM_MULTIPLE__'
 const icon = s.enum(['github', 'x', 'signal', 'linkedin', 'whatsapp', 'email'])
 
 const cover = s.object({
-  image: image({ absoluteRoot: 'public' }).default(''),
-  video: s.string().default(''),
-  title: s.string().default(''),
-  alt: s.string().default(''),
-  caption: s.string().default('')
+  image: image({ absoluteRoot: 'public' }).optional(),
+  video: s.string().optional(),
+  title: s.string().optional(),
+  alt: s.string().optional(),
+  caption: s.string().optional()
 })
 
 const count = s
@@ -34,8 +34,8 @@ const count = s
 
 const meta = s
   .object({
-    title: s.string().default(''),
-    description: s.string().default(''),
+    title: s.string().optional(),
+    description: s.string().optional(),
     keywords: s.array(s.string()).optional()
   })
   .default({})
@@ -70,9 +70,9 @@ export const options = s.object({
   socials: s.array(
     s.object({
       name: s.string(),
-      description: s.string().default(''),
+      description: s.string().optional(),
       icon,
-      link: s.string().default(''),
+      link: s.string(),
       image: s.image().optional()
     })
   ),
@@ -80,7 +80,7 @@ export const options = s.object({
     .array(
       s.object({
         name: s.enum(['pages', 'posts', 'tags', 'categories']),
-        path: s.string().default(''),
+        path: s.string().optional(),
         pagination: s
           .object({
             perPage: s.number()
@@ -96,9 +96,9 @@ export type Options = z.infer<typeof options>
 export const tag = s
   .object({
     name: s.string().max(20),
-    slug: s.slug('tags').default(''),
+    slug: s.slug('tags').optional(),
     cover: cover.optional(),
-    excerpt: s.markdown({ gfm: false }).default('').describe(MARKDOWN),
+    excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
     date: s.isodate().describe(ISODATE).optional(),
     content: s.markdown(markdownOptions).describe(MARKDOWN),
     count
@@ -110,9 +110,9 @@ export type Tag = z.infer<typeof tag>
 export const category = s
   .object({
     name: s.string().max(20),
-    slug: s.slug('categories').default(''),
+    slug: s.slug('categories').optional(),
     cover: cover.optional(),
-    excerpt: s.markdown({ gfm: false }).default('').describe(MARKDOWN),
+    excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
     date: s.isodate().describe(ISODATE).optional(),
     content: s.markdown(markdownOptions).describe(MARKDOWN),
     count
@@ -130,7 +130,7 @@ export const post = s
     meta,
     metadata: s.metadata(),
     content: s.markdown(markdownOptions).describe(MARKDOWN),
-    excerpt: s.markdown({ gfm: false }).default('').describe(MARKDOWN),
+    excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
     date: s.isodate().optional().describe(ISODATE),
     author: s.string().optional(),
     draft: s.boolean().default(false),
@@ -191,7 +191,7 @@ export const page = s
     excerpt: s.markdown().describe(MARKDOWN),
     cover: cover.optional(),
     meta,
-    slug: s.slug('global', ['admin']).default(''),
+    slug: s.slug('global', ['admin']).optional(),
     code: s.mdx({ gfm: false, copyLinkedFiles: false }),
     categories: s.array(s.string()).default([]),
     tags: s.array(s.string()).default([]),

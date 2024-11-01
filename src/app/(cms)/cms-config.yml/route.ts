@@ -273,8 +273,8 @@ const config: CmsConfig = {
       name: 'site',
       type: 'file_based_collection',
       label: 'Site',
-      media_folder: '',
-      public_folder: '',
+      // media_folder: '',
+      // public_folder: '',
       files: [
         {
           file: 'content/site/options.yml',
