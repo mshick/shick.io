@@ -25,7 +25,7 @@ export default async function PagePage(props: ServerProps<Params>) {
 
   return (
     <div className="prose prose-sm prose-tufted dark:prose-invert max-w-none">
-      <MDXContent code={page.code} />
+      <MDXContent code={page.body} />
     </div>
   )
 }

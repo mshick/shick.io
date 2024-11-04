@@ -42,7 +42,7 @@ export default function HomePage() {
 
   return (
     <div className="prose prose-sm prose-tufted dark:prose-invert max-w-none">
-      <MDXContent code={page.code} components={bodyComponents} />
+      <MDXContent code={page.body} components={bodyComponents} />
     </div>
   )
 }

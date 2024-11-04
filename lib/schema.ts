@@ -256,12 +256,14 @@ export const page = s
     const path = getContentPath(meta.config.root, meta.path)
     const slug = getSlugFromPath('pages', path)
     const permalink = getPermalink('pages', path, slug)
-    const excerptHtml = excerptFn({ format: 'html' }, data.excerpt, ctx)
     return {
       ...data,
-      // Provide a unified content as well as excerpt — should be html
-      body: excerptHtml,
-      excerptHtml,
+      excerpt: excerptFn({ format: 'text' }, data.excerpt, ctx),
+      excerptHtml: excerptFn(
+        { format: 'html', length: DEFAULT_EXCERPT_LENGTH + 40 },
+        data.excerpt,
+        ctx
+      ),
       slug,
       permalink,
       shareUrl: getShareUrl(permalink),
