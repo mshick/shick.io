@@ -1,5 +1,5 @@
 import { getAvailable, getTaxonomy } from './fields'
-import { Category, Page, Post, Tag } from './schema'
+import { type Category, type Page, type Post, type Tag } from './schema'
 
 type Collections = {
   categories: Category[]
@@ -13,7 +13,9 @@ export async function prepareTaxonomy(collections: Collections) {
 
   const docs = [...posts.filter(getAvailable), ...pages.filter(getAvailable)]
 
-  const categoriesInDocs = new Set(docs.map((item) => item.categories ?? []).flat())
+  const categoriesInDocs = new Set(
+    docs.map((item) => item.categories ?? []).flat()
+  )
 
   const categoriesFromDocs = await getTaxonomy(
     'content',
@@ -26,7 +28,7 @@ export async function prepareTaxonomy(collections: Collections) {
   if (categoriesFromDocs) {
     categories.push(...categoriesFromDocs)
   }
-  
+
   categories.forEach((i) => {
     i.count.posts = posts.filter((j) => j.categories?.includes(i.name)).length
     i.count.pages = pages.filter((j) => j.categories?.includes(i.name)).length

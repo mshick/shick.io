@@ -24,7 +24,7 @@ import { getCollectionBasePath } from './fields'
 import { ENUM_MULTIPLE, ISODATE, MARKDOWN, type Options } from './schema'
 
 const veliteFields = ['metadata', 'toc']
-const bodyFieldName = 'body';
+const bodyFieldName = 'body'
 
 type FieldAcc = Pick<CmsFieldBase, 'label' | 'name' | 'required'> & {
   default?: unknown
@@ -227,7 +227,7 @@ function schemaToFields(schema: z.ZodObject<any>) {
 }
 
 function sortSchemaFields(fields: CmsField[]) {
-  const bodyFieldIndex = fields.findIndex(f => f.name === bodyFieldName)
+  const bodyFieldIndex = fields.findIndex((f) => f.name === bodyFieldName)
 
   if (bodyFieldIndex > -1) {
     fields.push(fields.splice(bodyFieldIndex, 1)[0]!)
@@ -305,7 +305,7 @@ function createCmsCollection(
 
     if (['mdx'].includes(cmsCollection.extension)) {
       cmsCollection.format = CmsCollectionFormatType.Frontmatter
-    }    
+    }
   }
 
   const overrides = options.collections?.find((c) => c.name === name)

@@ -83,14 +83,16 @@ export const options = s.object({
         .object({
           preview: s.boolean()
         })
-        .nullable().optional(),
+        .nullable()
+        .optional(),
       slug: s
         .object({
           encoding: s.enum(['unicode', 'ascii']),
           clean_accents: s.boolean(),
           sanitize_replacement: s.string()
         })
-        .nullable().optional(),
+        .nullable()
+        .optional(),
       i18n: s.object({
         structure: s.enum([
           'multiple_folders',
@@ -101,7 +103,8 @@ export const options = s.object({
         default_locale: s.string()
       })
     })
-    .nullable().optional(),
+    .nullable()
+    .optional(),
   collections: s
     .array(
       s.object({
@@ -111,27 +114,35 @@ export const options = s.object({
           .object({
             perPage: s.number()
           })
-          .nullable().optional(),
-        cms: s.object({
-          name: s.string().optional(),
-          label: s.string().optional(),
-          label_singular: s.string().optional(),
-          description: s.string().optional(),
-          identifier_field: s.string().optional(),
-          summary: s.string().optional(),
-          slug: s.string().optional(),
-          preview_path: s.string().optional(),
-          preview_path_date_field: s.string().optional(),
-          create: s.boolean().optional().default(true),
-          delete: s.boolean().optional().default(true),
-          editor: s.object({
-            preview: s.boolean().optional().default(true)
-          }).nullable().optional(),
-          publish: s.boolean().optional().default(true)
-        }).nullable().optional()
+          .nullable()
+          .optional(),
+        cms: s
+          .object({
+            name: s.string().optional(),
+            label: s.string().optional(),
+            label_singular: s.string().optional(),
+            description: s.string().optional(),
+            identifier_field: s.string().optional(),
+            summary: s.string().optional(),
+            slug: s.string().optional(),
+            preview_path: s.string().optional(),
+            preview_path_date_field: s.string().optional(),
+            create: s.boolean().optional().default(true),
+            delete: s.boolean().optional().default(true),
+            editor: s
+              .object({
+                preview: s.boolean().optional().default(true)
+              })
+              .nullable()
+              .optional(),
+            publish: s.boolean().optional().default(true)
+          })
+          .nullable()
+          .optional()
       })
     )
-    .nullable().optional()
+    .nullable()
+    .optional()
 })
 
 export type Options = z.infer<typeof options>
