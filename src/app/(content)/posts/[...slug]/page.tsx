@@ -50,7 +50,7 @@ export default async function PostPage(props: ServerProps<Params>) {
     return notFound()
   }
 
-  const related = getRelated(post)
+  const related = getRelated(post, 'posts')
 
   return (
     <article>

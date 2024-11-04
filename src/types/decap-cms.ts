@@ -192,6 +192,11 @@ export interface CmsFieldSelect {
   multiple?: boolean
   min?: number
   max?: number
+
+  /**
+   * Sveltia-specific
+   */
+  dropdown_threshold?: number
 }
 
 export interface CmsFieldRelation {
@@ -200,7 +205,7 @@ export interface CmsFieldRelation {
 
   collection: string
   value_field: string
-  search_fields: string[]
+  search_fields?: string[]
   file?: string
   display_fields?: string[]
   multiple?: boolean
@@ -222,6 +227,11 @@ export interface CmsFieldRelation {
    * @deprecated Use options_length instead
    */
   optionsLength?: number
+
+  /**
+   * Sveltia-only
+   */
+  dropdown_threshold?: number
 }
 
 export interface CmsFieldHidden {

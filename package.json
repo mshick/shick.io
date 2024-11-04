@@ -16,16 +16,6 @@
     "velite:build": "npm run velite -- --clean",
     "velite:watch": "npm run velite -- --watch"
   },
-  "prettier": {
-    "arrowParens": "always",
-    "endOfLine": "lf",
-    "printWidth": 80,
-    "proseWrap": "preserve",
-    "semi": false,
-    "singleQuote": true,
-    "tabWidth": 2,
-    "trailingComma": "none"
-  },
   "dependencies": {
     "@date-fns/tz": "^1.2.0",
     "@headlessui/react": "^2.2.0",

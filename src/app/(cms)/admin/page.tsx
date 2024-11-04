@@ -1,9 +1,8 @@
 /* eslint-disable no-useless-escape */
 'use client'
 
-import pkg from '../../../../package.json'
+import prettierConfig from '../../../../.prettierrc.json'
 
-// const CMS = 'https://unpkg.com/decap-cms/dist/decap-cms.js'
 const CMS = 'https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js'
 
 export default function AdminPage() {
@@ -39,16 +38,11 @@ export default function AdminPage() {
       import prettier from 'prettier'
       import prettierMarkdown from 'prettierMarkdown'
 
-      const prettierConfig = ${JSON.stringify(pkg.prettier)}
+      const prettierConfig = ${JSON.stringify(prettierConfig)}
+      const delimiter = '---';
 
-      const formatYAML = (content) => {
-        for (const [k, c] of Object.entries(content)) {
-          if (k === 'excerpt' && c === '') {
-            delete content[k];
-          }
-        }
-
-        return YAML.stringify(content, null, {
+      const formatYAML = (frontmatter) => {
+        return YAML.stringify(frontmatter, null, {
           lineWidth: 0,
           defaultKeyType: 'PLAIN',
           defaultStringType: 'PLAIN',
@@ -56,21 +50,22 @@ export default function AdminPage() {
         }).trim();
       }
 
-      const toFile = async ({body, ...content}) => {
-        const delimiter = '---';
-        
+      const formatContents = (body, frontmatter) => {
         body = body ? body + '\\n' : '';
-        const out = delimiter + '\\n' + formatYAML(content) + '\\n' + delimiter + '\\n\\n' + body;
+        return delimiter + '\\n' + formatYAML(frontmatter) + '\\n' + delimiter + '\\n\\n' + body;
+      }
 
-        return prettier.format(out, {
+      const formatter = async ({body, ...frontmatter}) => {
+        const contents = formatContents(body, frontmatter)
+        return prettier.format(contents, {
           parser: 'markdown',
           plugins: [prettierMarkdown],
           ...prettierConfig
         })
       }
 
-      CMS.registerCustomFormat('yaml-frontmatter', 'md', {toFile});
-      CMS.registerCustomFormat('frontmatter', 'mdx', {toFile});
+      CMS.registerCustomFormat('yaml-frontmatter', 'md', {toFile: formatter});
+      CMS.registerCustomFormat('frontmatter', 'mdx', {toFile: formatter});
     </script>
   </body>
 </html>`

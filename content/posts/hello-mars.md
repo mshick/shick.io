@@ -11,6 +11,8 @@ categories:
   - foo
   - bar
   - baz
+related:
+  - foo-bar
 ---
 
 Mars!!

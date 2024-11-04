@@ -9,6 +9,11 @@ const documents: Document[] = [...posts, ...pages]
 
 const documentsByPermalink = keyBy(documents, 'permalink')
 
+const bySlug = {
+  posts: keyBy(posts, 'slug'),
+  pages: keyBy(pages, 'slug')
+}
+
 const relatedFields = [
   'title',
   'publishedAt',
@@ -374,6 +379,7 @@ export function getDocumentsCount(
 
 export function getRelated(
   doc: Pick<Document, 'permalink' | 'related' | '__type'> & Partial<Taxonomy>,
+  collection: keyof typeof bySlug,
   limit = 3
 ) {
   const categories = doc?.categories?.map((d) => d.name) ?? []
@@ -383,7 +389,7 @@ export function getRelated(
 
   if (doc.related) {
     for (const permalink of doc.related) {
-      const relatedDoc = documentsByPermalink.get(permalink)
+      const relatedDoc = bySlug[collection].get(permalink)
       if (relatedDoc) {
         related.push({
           ...pick(relatedDoc, [...relatedFields])

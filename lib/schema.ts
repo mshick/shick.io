@@ -15,6 +15,7 @@ import { image } from './image'
 import { markdownOptions } from './velite'
 
 export const MARKDOWN = '__MARKDOWN__'
+export const RELATION = '__RELATION__'
 export const ISODATE = '__ISODATE__'
 export const ENUM_MULTIPLE = '__ENUM_MULTIPLE__'
 
@@ -77,31 +78,34 @@ export const options = s.object({
   cms: s
     .object({
       publish_mode: s.enum(['simple', 'editorial_workflow']),
-      show_preview_links: s.boolean(),
-      locale: s.string(),
+      show_preview_links: s.boolean().default(true),
+      locale: s.string().optional(),
       editor: s
         .object({
-          preview: s.boolean()
+          preview: s.boolean().default(true)
         })
         .nullable()
         .optional(),
       slug: s
         .object({
           encoding: s.enum(['unicode', 'ascii']),
-          clean_accents: s.boolean(),
-          sanitize_replacement: s.string()
+          clean_accents: s.boolean().default(true),
+          sanitize_replacement: s.string().optional()
         })
         .nullable()
         .optional(),
-      i18n: s.object({
-        structure: s.enum([
-          'multiple_folders',
-          'multiple_files',
-          'single_file'
-        ]),
-        locales: s.array(s.string()).default([]),
-        default_locale: s.string()
-      })
+      i18n: s
+        .object({
+          structure: s.enum([
+            'multiple_folders',
+            'multiple_files',
+            'single_file'
+          ]),
+          locales: s.array(s.string()).optional(),
+          default_locale: s.string().optional()
+        })
+        .nullable()
+        .optional()
     })
     .nullable()
     .optional(),
@@ -150,7 +154,7 @@ export type Options = z.infer<typeof options>
 const baseTag = s.object({
   name: s.string().max(20),
   cover: cover.optional(),
-  excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
+  excerpt: s.markdown().optional().describe(MARKDOWN),
   date: s.isodate().describe(ISODATE).optional(),
   body: s.markdown(markdownOptions).describe(MARKDOWN),
   count
@@ -164,7 +168,7 @@ export type Tag = z.infer<typeof tag>
 export const baseCategory = s.object({
   name: s.string().max(20),
   cover: cover.optional(),
-  excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
+  excerpt: s.markdown().optional().describe(MARKDOWN),
   date: s.isodate().describe(ISODATE).optional(),
   body: s.markdown(markdownOptions).describe(MARKDOWN),
   count
@@ -183,7 +187,7 @@ export const post = s
     meta: meta.nullable().optional(),
     metadata: s.metadata(),
     body: s.markdown(markdownOptions).describe(MARKDOWN),
-    excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
+    excerpt: s.markdown().optional().describe(MARKDOWN),
     date: s.isodate().optional().describe(ISODATE),
     author: s.string().optional(),
     draft: s.boolean().optional().default(false),
@@ -191,7 +195,7 @@ export const post = s
     featured: s.boolean().optional().default(false),
     categories: s.array(s.string()).optional(),
     tags: s.array(s.string()).optional(),
-    related: s.array(s.string()).optional()
+    related: s.array(s.string()).optional().describe(RELATION)
   })
   .transform(async (data, ctx) => {
     const { meta } = ctx
