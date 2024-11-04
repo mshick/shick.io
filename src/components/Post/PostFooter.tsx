@@ -52,7 +52,7 @@ function PostFooterRelated({ related }: Related) {
     <div id="related-posts">
       <h2 className="text-2xl mb-4">Related</h2>
       <ul className="space-y-2">
-        {related.map(({ permalink, publishedAt, title }) => (
+        {related?.map(({ permalink, publishedAt, title }) => (
           <li key={permalink}>
             <Link
               href={permalink}

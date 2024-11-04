@@ -76,7 +76,7 @@ export default async function TagPage(props: ServerProps<Params>) {
   const documents = getDocuments(
     ['permalink', 'title', 'excerpt', 'excerptHtml', 'publishedAt'],
     ['tags'],
-    (item) => item.tags.includes(tag.name),
+    (item) => item.tags?.includes(tag.name) ?? false,
     sorters.publishedAtDesc,
     perPage,
     pageOffset

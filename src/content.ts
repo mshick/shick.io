@@ -18,12 +18,12 @@ const relatedFields = [
 ] as const
 
 type Related = {
-  related: { [P in (typeof relatedFields)[number]]: Document[P] }[]
+  related?: { [P in (typeof relatedFields)[number]]: Document[P] }[]
 }
 
 type Taxonomy = {
-  categories: { [P in 'name' | 'slug' | 'permalink']: Category[P] }[]
-  tags: { [P in 'name' | 'slug' | 'permalink']: Tag[P] }[]
+  categories?: { [P in 'name' | 'slug' | 'permalink']: Category[P] }[]
+  tags?: { [P in 'name' | 'slug' | 'permalink']: Tag[P] }[]
 }
 
 type Filter<T> = (value: T, index: number, array: T[]) => boolean
@@ -100,15 +100,17 @@ function include<I extends keyof Taxonomy = never>(
     if (include === 'categories') {
       return [
         include,
-        getCategories(['name', 'slug', 'permalink'], (i) =>
-          data.categories.includes(i.name)
+        getCategories(
+          ['name', 'slug', 'permalink'],
+          (i) => data.categories?.includes(i.name) ?? false
         ) satisfies Taxonomy['categories']
       ]
     } else if (include === 'tags') {
       return [
         include,
-        getTags(['name', 'slug', 'permalink'], (i) =>
-          data.tags.includes(i.name)
+        getTags(
+          ['name', 'slug', 'permalink'],
+          (i) => data.tags?.includes(i.name) ?? false
         ) satisfies Taxonomy['tags']
       ]
     }
@@ -402,8 +404,8 @@ export function getRelated(
         d.permalink !== doc?.permalink &&
         !related.some((r) => r.permalink === d.permalink) &&
         Boolean(
-          intersection(d.categories, categories).length ||
-            intersection(d.tags, tags).length
+          intersection(d.categories ?? [], categories).length ||
+            intersection(d.tags ?? [], tags).length
         )
     )
   )

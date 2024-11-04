@@ -6,7 +6,7 @@ export type PostHeaderProps = Pick<
   Post,
   'publishedAt' | 'updatedAt' | 'title' | 'author' | 'metadata'
 > & {
-  tags: Pick<Tag, 'name' | 'slug' | 'permalink'>[]
+  tags?: Pick<Tag, 'name' | 'slug' | 'permalink'>[]
 }
 
 export function PostHeader({ publishedAt, metadata, title }: PostHeaderProps) {
