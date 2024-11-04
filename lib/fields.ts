@@ -2,11 +2,14 @@ import { TZDate } from '@date-fns/tz'
 import isEmpty from 'lodash/isEmpty.js'
 import { basename, dirname, join, relative, resolve } from 'node:path'
 import slug from 'slug'
-import { type z } from 'velite'
+import { type PickDeep, type SetOptional } from 'type-fest'
+import { type ZodMeta } from 'velite'
+import { type RefinementCtx } from 'zod'
 import { devUrl, isProduction } from './env'
 import { excerptFn } from './excerpt'
 import { getGitFileInfo, type GitFileInfo } from './git'
 import { collections, repo, timezone, url } from './options'
+import { type BaseCategory, type BaseTag } from './schema'
 
 const __dirname = import.meta.dirname
 const baseDir = resolve(__dirname, '..')
@@ -66,11 +69,15 @@ function stripIndex(path: string) {
     return dirname(path)
   }
 
-  if (path.endsWith('index')) {
+  if (path === 'index') {
     return ''
   }
 
   return path
+}
+
+export function getCollectionBasePath(collectionName: string) {
+  return collectionPaths?.[collectionName] ?? `/${collectionName}`
 }
 
 /**
@@ -81,7 +88,7 @@ export function getPermalink(
   path: string,
   customSlug?: string
 ) {
-  const basePath = collectionPaths?.[collectionName] ?? `/${collectionName}`
+  const basePath = getCollectionBasePath(collectionName)
   const slugPath = isEmpty(customSlug)
     ? getSlugFromPath(collectionName, path)
     : customSlug!
@@ -124,10 +131,11 @@ export function getSlugFromPath(
   // foo -> foo
   // bar -> bar
   // baz/bam -> bam
-  const slugPath = nakedPath.replace(
-    basename(nakedPath),
-    isEmpty(userSlug) ? basename(nakedPath) : userSlug!
-  )
+  let slugPath = nakedPath
+
+  if (!isEmpty(userSlug)) {
+    slugPath = nakedPath.replace(basename(nakedPath), userSlug!)
+  }
 
   return slugPath
 }
@@ -147,45 +155,28 @@ export function getAvailable(item: { draft: boolean }) {
   return process.env.NODE_ENV !== 'production' || !item.draft
 }
 
-type TaxonomyData = {
-  [key: string]: unknown
-  name: string
-  count: {
-    total: number
-    posts: number
-    pages: number
-  }
-  slug?: string
-  content?: string
-  excerpt?: string
-  date?: string
-}
-
-type TaxonomyCtx = {
-  addIssue?: (arg: z.IssueData) => void
-  meta: {
-    content?: string
-    path: string
-    config: {
-      root: string
-    }
-  }
-}
-
 export function createTaxonomyTransform(taxonomyName: string) {
-  return async (data: TaxonomyData, ctx: TaxonomyCtx) => {
+  return async (
+    data: BaseTag | BaseCategory,
+    ctx: SetOptional<RefinementCtx, 'addIssue'> & {
+      meta: PickDeep<ZodMeta, 'content' | 'path' | 'config.root'>
+    }
+  ) => {
     const { meta } = ctx
     const updatedBy = await getUpdatedBy(meta.path)
     const path = getContentPath(meta.config.root, meta.path)
-    const slug = getSlugFromPath(taxonomyName, path, data.slug)
+    const slug = getSlugFromPath(taxonomyName, path)
+    const permalink = getPermalink(taxonomyName, path, slug)
     const excerpt = data.excerpt ?? `${data.name} ${taxonomyName}.`
     return {
       ...data,
-      content: data.content ?? excerptFn({ format: 'html' }, excerpt, ctx),
+      body: isEmpty(data.body)
+        ? excerptFn({ format: 'html' }, excerpt, ctx)
+        : data.body,
       excerpt: excerptFn({ format: 'text' }, excerpt, ctx),
       excerptHtml: excerptFn({ format: 'html' }, excerpt, ctx),
       slug,
-      permalink: getPermalink(taxonomyName, path, slug),
+      permalink,
       publishedAt: getZonedDate(
         data.date ?? updatedBy?.latestDate ?? new Date()
       ).toISOString(),
@@ -197,8 +188,12 @@ export function createTaxonomyTransform(taxonomyName: string) {
 export async function getTaxonomy(
   root: string,
   collectionName: string,
-  terms: string[]
+  terms?: string[]
 ) {
+  if (!terms) {
+    return
+  }
+
   const transform = createTaxonomyTransform(collectionName)
   return Promise.all(
     terms.map((term) => {
@@ -206,7 +201,7 @@ export async function getTaxonomy(
       return transform(
         {
           name: term,
-          slug: termSlug,
+          body: '',
           count: {
             total: 0,
             posts: 0,
@@ -214,8 +209,10 @@ export async function getTaxonomy(
           }
         },
         {
+          path: [],
           meta: {
-            path: `${collectionName}/${termSlug}`,
+            content: '',
+            path: `${root}/${collectionName}/${termSlug}`,
             config: {
               root
             }

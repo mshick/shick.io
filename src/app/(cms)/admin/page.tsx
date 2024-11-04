@@ -1,7 +1,9 @@
 /* eslint-disable no-useless-escape */
 'use client'
 
-// const SCRIPT = 'https://unpkg.com/decap-cms/dist/decap-cms.js'
+import pkg from '../../../../package.json'
+
+// const CMS = 'https://unpkg.com/decap-cms/dist/decap-cms.js'
 const CMS = 'https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js'
 
 export default function AdminPage() {
@@ -27,48 +29,48 @@ export default function AdminPage() {
       {
         "imports": {
           "yaml": "https://esm.sh/yaml@2.6.0",
-          "prettier": "https://esm.sh/prettier@2.8.8",
-          "prettierMarkdownParser": "https://esm.sh/prettier@2.8.8/parser-markdown.mjs"
+          "prettier": "https://esm.sh/prettier@3.3.3",
+          "prettierMarkdown": "https://esm.sh/prettier@3.3.3/plugins/markdown.mjs"
         }
       }
     </script>
     <script type="module">
       import YAML from 'yaml'
       import prettier from 'prettier'
-      import prettierMarkdownParser from 'prettierMarkdownParser'
+      import prettierMarkdown from 'prettierMarkdown'
 
-      const formatYAML = (value) =>
-        YAML.stringify(value, null, {
+      const prettierConfig = ${JSON.stringify(pkg.prettier)}
+
+      const formatYAML = (content) => {
+        for (const [k, c] of Object.entries(content)) {
+          if (k === 'excerpt' && c === '') {
+            delete content[k];
+          }
+        }
+
+        return YAML.stringify(content, null, {
           lineWidth: 0,
           defaultKeyType: 'PLAIN',
           defaultStringType: 'PLAIN',
           singleQuote: true
-        }).trim();      
+        }).trim();
+      }
 
-      CMS.registerCustomFormat('yaml-frontmatter', 'md', {
-        // fromFile: text => JSON5.parse(text),
-        toFile(content) {
-          const delimiter = '---';
-          const body = content.body ? content.body + '\\n' : '';
+      const toFile = async ({body, ...content}) => {
+        const delimiter = '---';
+        
+        body = body ? body + '\\n' : '';
+        const out = delimiter + '\\n' + formatYAML(content) + '\\n' + delimiter + '\\n\\n' + body;
 
-          delete content.body;
+        return prettier.format(out, {
+          parser: 'markdown',
+          plugins: [prettierMarkdown],
+          ...prettierConfig
+        })
+      }
 
-          const out = delimiter + '\\n' + formatYAML(content) + '\\n' + delimiter + '\\n\\n' + body;
-
-          return prettier.format(out, {
-            parser: 'markdown',
-            plugins: [prettierMarkdownParser],
-            arrowParens: 'always',
-            endOfLine: 'lf',
-            printWidth: 80,
-            proseWrap: 'preserve',
-            semi: false,
-            singleQuote: true,
-            tabWidth: 2,
-            trailingComma: 'none'
-          })
-        }
-      });
+      CMS.registerCustomFormat('yaml-frontmatter', 'md', {toFile});
+      CMS.registerCustomFormat('frontmatter', 'mdx', {toFile});
     </script>
   </body>
 </html>`

@@ -1,25 +1,11 @@
 import { getAvailable, getTaxonomy } from './fields'
-
-type Taxonomy = {
-  name: string
-  count: {
-    posts: number
-    pages: number
-    total: number
-  }
-}
-
-type Document = {
-  draft: boolean
-  categories: string[]
-  tags: string[]
-}
+import { Category, Page, Post, Tag } from './schema'
 
 type Collections = {
-  categories: Taxonomy[]
-  tags: Taxonomy[]
-  posts: Document[]
-  pages: Document[]
+  categories: Category[]
+  tags: Tag[]
+  posts: Post[]
+  pages: Page[]
 }
 
 export async function prepareTaxonomy(collections: Collections) {
@@ -27,7 +13,7 @@ export async function prepareTaxonomy(collections: Collections) {
 
   const docs = [...posts.filter(getAvailable), ...pages.filter(getAvailable)]
 
-  const categoriesInDocs = new Set(docs.map((item) => item.categories).flat())
+  const categoriesInDocs = new Set(docs.map((item) => item.categories ?? []).flat())
 
   const categoriesFromDocs = await getTaxonomy(
     'content',
@@ -37,15 +23,17 @@ export async function prepareTaxonomy(collections: Collections) {
     )
   )
 
-  categories.push(...categoriesFromDocs)
-
+  if (categoriesFromDocs) {
+    categories.push(...categoriesFromDocs)
+  }
+  
   categories.forEach((i) => {
-    i.count.posts = posts.filter((j) => j.categories.includes(i.name)).length
-    i.count.pages = pages.filter((j) => j.categories.includes(i.name)).length
+    i.count.posts = posts.filter((j) => j.categories?.includes(i.name)).length
+    i.count.pages = pages.filter((j) => j.categories?.includes(i.name)).length
     i.count.total = i.count.posts + i.count.pages
   })
 
-  const tagsInDocs = new Set(docs.map((item) => item.tags).flat())
+  const tagsInDocs = new Set(docs.map((item) => item.tags ?? []).flat())
 
   const tagsFromDocs = await getTaxonomy(
     'content',
@@ -53,11 +41,13 @@ export async function prepareTaxonomy(collections: Collections) {
     Array.from(tagsInDocs).filter((i) => tags.find((j) => j.name === i) == null)
   )
 
-  tags.push(...tagsFromDocs)
+  if (tagsFromDocs) {
+    tags.push(...tagsFromDocs)
+  }
 
   tags.forEach((i) => {
-    i.count.posts = posts.filter((j) => j.tags.includes(i.name)).length
-    i.count.pages = pages.filter((j) => j.tags.includes(i.name)).length
+    i.count.posts = posts.filter((j) => j.tags?.includes(i.name)).length
+    i.count.pages = pages.filter((j) => j.tags?.includes(i.name)).length
     i.count.total = i.count.posts + i.count.pages
   })
 

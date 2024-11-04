@@ -32,7 +32,7 @@ function PostFooterMeta({
       {tags ? (
         <ul className="list-none flex flex-row gap-x-4 gap-y-2 flex-wrap">
           {tags.map((tag) => (
-            <li key={tag.slug} className="leading-none">
+            <li key={tag.permalink} className="leading-none">
               <Link
                 href={tag.permalink}
                 className="text-xs no-underline before:content-['#'] hover:bg-blue-700 hover:text-white"

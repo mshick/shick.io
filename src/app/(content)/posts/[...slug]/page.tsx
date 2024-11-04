@@ -6,7 +6,7 @@ import { type ServerProps } from '#/types/types'
 import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
 
-export const revalidate = 300
+// export const revalidate = 300
 
 type Params = {
   slug: string[]

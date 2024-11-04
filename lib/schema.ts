@@ -32,13 +32,11 @@ const count = s
   .object({ total: s.number(), posts: s.number(), pages: s.number() })
   .default({ total: 0, posts: 0, pages: 0 })
 
-const meta = s
-  .object({
-    title: s.string().optional(),
-    description: s.string().optional(),
-    keywords: s.array(s.string()).optional()
-  })
-  .default({})
+const meta = s.object({
+  title: s.string().optional(),
+  description: s.string().optional(),
+  keywords: s.array(s.string()).optional()
+})
 
 export const options = s.object({
   name: s.string().max(20),
@@ -76,6 +74,34 @@ export const options = s.object({
       image: s.image().optional()
     })
   ),
+  cms: s
+    .object({
+      publish_mode: s.enum(['simple', 'editorial_workflow']),
+      show_preview_links: s.boolean(),
+      locale: s.string(),
+      editor: s
+        .object({
+          preview: s.boolean()
+        })
+        .nullable().optional(),
+      slug: s
+        .object({
+          encoding: s.enum(['unicode', 'ascii']),
+          clean_accents: s.boolean(),
+          sanitize_replacement: s.string()
+        })
+        .nullable().optional(),
+      i18n: s.object({
+        structure: s.enum([
+          'multiple_folders',
+          'multiple_files',
+          'single_file'
+        ]),
+        locales: s.array(s.string()).default([]),
+        default_locale: s.string()
+      })
+    })
+    .nullable().optional(),
   collections: s
     .array(
       s.object({
@@ -85,59 +111,75 @@ export const options = s.object({
           .object({
             perPage: s.number()
           })
-          .optional()
+          .nullable().optional(),
+        cms: s.object({
+          name: s.string().optional(),
+          label: s.string().optional(),
+          label_singular: s.string().optional(),
+          description: s.string().optional(),
+          identifier_field: s.string().optional(),
+          summary: s.string().optional(),
+          slug: s.string().optional(),
+          preview_path: s.string().optional(),
+          preview_path_date_field: s.string().optional(),
+          create: s.boolean().optional().default(true),
+          delete: s.boolean().optional().default(true),
+          editor: s.object({
+            preview: s.boolean().optional().default(true)
+          }).nullable().optional(),
+          publish: s.boolean().optional().default(true)
+        }).nullable().optional()
       })
     )
-    .optional()
+    .nullable().optional()
 })
 
 export type Options = z.infer<typeof options>
 
-export const tag = s
-  .object({
-    name: s.string().max(20),
-    slug: s.slug('tags').optional(),
-    cover: cover.optional(),
-    excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
-    date: s.isodate().describe(ISODATE).optional(),
-    content: s.markdown(markdownOptions).describe(MARKDOWN),
-    count
-  })
-  .transform(createTaxonomyTransform('tags'))
+const baseTag = s.object({
+  name: s.string().max(20),
+  cover: cover.optional(),
+  excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
+  date: s.isodate().describe(ISODATE).optional(),
+  body: s.markdown(markdownOptions).describe(MARKDOWN),
+  count
+})
 
+export const tag = baseTag.transform(createTaxonomyTransform('tags'))
+
+export type BaseTag = z.infer<typeof baseTag>
 export type Tag = z.infer<typeof tag>
 
-export const category = s
-  .object({
-    name: s.string().max(20),
-    slug: s.slug('categories').optional(),
-    cover: cover.optional(),
-    excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
-    date: s.isodate().describe(ISODATE).optional(),
-    content: s.markdown(markdownOptions).describe(MARKDOWN),
-    count
-  })
-  .transform(createTaxonomyTransform('categories'))
+export const baseCategory = s.object({
+  name: s.string().max(20),
+  cover: cover.optional(),
+  excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
+  date: s.isodate().describe(ISODATE).optional(),
+  body: s.markdown(markdownOptions).describe(MARKDOWN),
+  count
+})
 
+export const category = baseTag.transform(createTaxonomyTransform('categories'))
+
+export type BaseCategory = z.infer<typeof baseCategory>
 export type Category = z.infer<typeof category>
 
 export const post = s
   .object({
     __type: s.literal('post').default('post'),
-    slug: s.slug('posts').optional(),
     title: s.string().max(99),
-    cover: cover.optional(),
-    meta,
+    cover: cover.nullable().optional(),
+    meta: meta.nullable().optional(),
     metadata: s.metadata(),
-    content: s.markdown(markdownOptions).describe(MARKDOWN),
+    body: s.markdown(markdownOptions).describe(MARKDOWN),
     excerpt: s.markdown({ gfm: false }).optional().describe(MARKDOWN),
     date: s.isodate().optional().describe(ISODATE),
     author: s.string().optional(),
-    draft: s.boolean().default(false),
+    draft: s.boolean().optional().default(false),
     toc: s.toc(),
-    featured: s.boolean().default(false),
-    categories: s.array(s.string()).default([]),
-    tags: s.array(s.string()).default([]),
+    featured: s.boolean().optional().default(false),
+    categories: s.array(s.string()).optional(),
+    tags: s.array(s.string()).optional(),
     related: s.array(s.string()).optional()
   })
   .transform(async (data, ctx) => {
@@ -150,12 +192,12 @@ export const post = s
     const path = getContentPath(meta.config.root, meta.path)
 
     // posts/foo.md -> posts/foo -> foo
-    // posts/bar/index.md -> posts/bar/index -> bar
+    // posts/bar/index.md -> posts/bar/index -> bar/index
     // posts/baz/bam.md -> posts/baz/bam -> baz/bam
-    const slug = getSlugFromPath('posts', path, data.slug)
+    const slug = getSlugFromPath('posts', path)
 
-    // posts/foo.md -> posts/foo -> foo -> /foo/
-    // posts/bar/index.md -> posts/bar/index -> bar -> /bar/
+    // posts/foo.md -> posts/foo -> foo -> /posts/foo/
+    // posts/bar/index.md -> posts/bar/index -> bar/index -> /posts/bar/
     // posts/baz/bam.md -> posts/baz/bam -> baz/bam -> /posts/baz/bam/
     const permalink = getPermalink('posts', path, slug)
 
@@ -189,12 +231,11 @@ export const page = s
     __type: s.literal('page').default('page'),
     title: s.string().max(99),
     excerpt: s.markdown().describe(MARKDOWN),
-    cover: cover.optional(),
-    meta,
-    slug: s.slug('global', ['admin']).optional(),
-    code: s.mdx({ gfm: false, copyLinkedFiles: false }),
-    categories: s.array(s.string()).default([]),
-    tags: s.array(s.string()).default([]),
+    cover: cover.nullable().optional(),
+    meta: meta.nullable().optional(),
+    body: s.mdx({ gfm: false, copyLinkedFiles: false }).describe(MARKDOWN),
+    categories: s.array(s.string()).optional(),
+    tags: s.array(s.string()).optional(),
     draft: s.boolean().default(false),
     related: s.array(s.string()).optional()
   })
@@ -202,13 +243,13 @@ export const page = s
     const { meta } = ctx
     const updatedBy = await getUpdatedBy(meta.path)
     const path = getContentPath(meta.config.root, meta.path)
-    const slug = getSlugFromPath('pages', path, data.slug)
+    const slug = getSlugFromPath('pages', path)
     const permalink = getPermalink('pages', path, slug)
     const excerptHtml = excerptFn({ format: 'html' }, data.excerpt, ctx)
     return {
       ...data,
       // Provide a unified content as well as excerpt — should be html
-      content: excerptHtml,
+      body: excerptHtml,
       excerptHtml,
       slug,
       permalink,

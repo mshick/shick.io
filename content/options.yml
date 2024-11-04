@@ -21,6 +21,7 @@ links:
     path: /
     match: ^/$
     type: navigation
+    current: false
   - text: posts
     path: /posts/
     match: ^/posts/(.+)?

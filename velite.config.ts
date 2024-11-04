@@ -1,3 +1,4 @@
+import { generateCmsConfig } from '@/cms'
 import { searchIndexOutputPath } from '@/env'
 import { defineCollection, defineConfig } from 'velite'
 import * as schema from './lib/schema'
@@ -52,7 +53,7 @@ export default defineConfig({
     )
   },
 
-  async complete(collections) {
+  async complete(collections, ctx) {
     const filePath = `./src/${searchIndexOutputPath}`
 
     console.log(`Writing search index to '${filePath}' ...`)
@@ -64,11 +65,19 @@ export default defineConfig({
       }
     )
 
-    // TODO Process schemas and turn into decap cms config, write to generated
-    // getCmsConfig(ctx.config, collections.options)
-
     console.log(
       `Search index written with ${documentCount} documents and ${termCount} terms`
     )
+
+    const cmsConfigFilePath = `./src/generated/cms/config.json`
+
+    console.log(`Writing CMS config to '${cmsConfigFilePath}' ...`)
+
+    // TODO Process schemas and turn into decap cms config, write to generated
+    await generateCmsConfig(ctx.config, collections.options, {
+      filePath: cmsConfigFilePath
+    })
+
+    console.log(`CMS config written`)
   }
 })

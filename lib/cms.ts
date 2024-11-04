@@ -13,62 +13,72 @@ import {
   type CmsFieldSelect,
   type CmsFieldStringOrText
 } from '#/types/decap-cms'
-import capitalize from 'lodash/capitalize.js'
-import { dirname, extname, join, relative } from 'node:path'
+import merge from 'lodash/merge.js'
+import trim from 'lodash/trim.js'
+import { mkdir, writeFile } from 'node:fs/promises'
+import { dirname, extname, join, relative, sep } from 'node:path'
 import { cwd } from 'node:process'
 import { z, type Collection, type Config } from 'velite'
+import { UPLOADS_BASE, UPLOADS_PATH } from './constants'
+import { getCollectionBasePath } from './fields'
 import { ENUM_MULTIPLE, ISODATE, MARKDOWN, type Options } from './schema'
+
+const veliteFields = ['metadata', 'toc']
+const bodyFieldName = 'body';
 
 type FieldAcc = Pick<CmsFieldBase, 'label' | 'name' | 'required'> & {
   default?: unknown
 }
 
-function findBaseType(
+function cleanOptionals(obj: Record<string, unknown>) {
+  return JSON.parse(
+    JSON.stringify(obj, (_key, value) => {
+      return value === null || value === '' ? undefined : value
+    })
+  )
+}
+
+function getSchemaBaseType(
   schema: z.ZodSchema<any>,
   acc: { required?: boolean; default?: unknown }
 ) {
   if (schema instanceof z.ZodEffects) {
-    return findBaseType(schema.sourceType(), acc)
+    return getSchemaBaseType(schema.sourceType(), acc)
   }
 
   if (schema instanceof z.ZodOptional || schema instanceof z.ZodNullable) {
     acc.required = false
-    return findBaseType(schema.unwrap(), acc)
+    return getSchemaBaseType(schema.unwrap(), acc)
   }
 
   if (schema instanceof z.ZodPipeline) {
-    return findBaseType(schema._def.in, acc)
+    return getSchemaBaseType(schema._def.in, acc)
   }
-
-  // if (schema instanceof z.ZodArray) {
-  //   return findBaseType(schema.element, acc)
-  // }
 
   if (schema instanceof z.ZodDefault) {
     acc.default = schema._def.defaultValue()
-    return findBaseType(schema._def.innerType, acc)
+    return getSchemaBaseType(schema._def.innerType, acc)
   }
 
   if ('unwrap' in schema && typeof schema.unwrap === 'function') {
     // Default handler for any unwrappable type
-    return findBaseType(schema.unwrap(), acc)
+    return getSchemaBaseType(schema.unwrap(), acc)
   }
 
   return schema
 }
 
-function convertObject(schema: z.ZodObject<any>) {
+function schemaToFields(schema: z.ZodObject<any>) {
   const fields: CmsField[] = []
 
   for (const shapeName in schema.shape) {
     const fieldBase: FieldAcc = {
-      label: capitalize(shapeName),
       name: shapeName,
       required: true
     }
 
     const shapeField = schema.shape[shapeName]
-    const shapeBaseType = findBaseType(shapeField, fieldBase)
+    const shapeBaseType = getSchemaBaseType(shapeField, fieldBase)
 
     if (shapeField.description === MARKDOWN) {
       const field: CmsFieldBase & CmsFieldMarkdown = {
@@ -96,14 +106,15 @@ function convertObject(schema: z.ZodObject<any>) {
       const field: CmsFieldBase & CmsFieldList = {
         ...fieldBase,
         widget: 'list',
+        collapsed: true,
         max: shapeField._def.maxLength?.value ?? undefined,
         min: shapeField._def.minLength?.value ?? undefined
       }
 
-      const arrayBaseType = findBaseType(shapeBaseType.element, {})
+      const arrayBaseType = getSchemaBaseType(shapeBaseType.element, {})
 
       if (arrayBaseType instanceof z.ZodObject) {
-        field.fields = convertObject(arrayBaseType)
+        field.fields = schemaToFields(arrayBaseType)
       }
 
       fields.push(field)
@@ -111,14 +122,32 @@ function convertObject(schema: z.ZodObject<any>) {
     }
 
     if (shapeBaseType instanceof z.ZodObject) {
-      const field: CmsFieldBase & CmsFieldObject = {
-        ...fieldBase,
-        default:
-          typeof fieldBase.default === 'string' ? fieldBase.default : undefined,
-        widget: 'object',
-        fields: convertObject(shapeBaseType)
+      const objectFields = schemaToFields(shapeBaseType)
+
+      if (objectFields.length) {
+        const field: CmsFieldBase & CmsFieldObject = {
+          ...fieldBase,
+          default:
+            typeof fieldBase.default === 'string'
+              ? fieldBase.default
+              : undefined,
+          widget: 'object',
+          fields: objectFields,
+          collapsed: true
+        }
+        fields.push(field)
+      } else {
+        const field: CmsFieldBase & CmsFieldStringOrText = {
+          ...fieldBase,
+          default:
+            typeof fieldBase.default === 'string'
+              ? fieldBase.default
+              : undefined,
+          widget: 'string'
+        }
+        fields.push(field)
       }
-      fields.push(field)
+
       continue
     }
 
@@ -182,7 +211,12 @@ function convertObject(schema: z.ZodObject<any>) {
       continue
     }
 
-    console.log({
+    if (shapeBaseType instanceof z.ZodAny && veliteFields.includes(shapeName)) {
+      // Do nothing
+      continue
+    }
+
+    console.log('unhandled field', {
       fieldName: shapeName,
       field: shapeBaseType,
       description: shapeBaseType.description
@@ -192,27 +226,31 @@ function convertObject(schema: z.ZodObject<any>) {
   return fields
 }
 
-// posts: { name: 'Post', pattern: 'posts/**/*.md', schema: [ZodEffects] },
-// pages: { name: 'Page', pattern: 'pages/**/*.mdx', schema: [ZodEffects] },
-// categories: {
-//   name: 'Category',
-//   pattern: 'categories/*.md',
-//   schema: [ZodEffects]
-// },
-// tags: { name: 'Tag', pattern: 'tags/*.md', schema: [ZodEffects] },
-// options: {
-//   name: 'Options',
-//   pattern: 'options.yml',
-//   single: true,
-//   schema: [ZodObject]
-// }
+function sortSchemaFields(fields: CmsField[]) {
+  const bodyFieldIndex = fields.findIndex(f => f.name === bodyFieldName)
+
+  if (bodyFieldIndex > -1) {
+    fields.push(fields.splice(bodyFieldIndex, 1)[0]!)
+  }
+
+  return fields
+}
+
+function getCollectionFolder(basePath: string, pattern: string) {
+  const parts = pattern.split(sep)
+  const globRe = /[*|[]/
+  const globStart = parts.findIndex((p) => globRe.exec(p))
+  const pathParts = globStart > -1 ? parts.slice(0, globStart) : parts
+  return join(basePath, ...pathParts)
+}
 
 function createCmsCollection(
   basePath: string,
   name: string,
-  collection: Collection
+  collection: Collection,
+  options: Pick<Options, 'repo' | 'collections'>
 ): CmsCollection {
-  const schema = findBaseType(collection.schema, {})
+  const schema = getSchemaBaseType(collection.schema, {})
 
   if (!(schema instanceof z.ZodObject)) {
     throw new Error('Invalid schema provided, must be of type object')
@@ -221,8 +259,7 @@ function createCmsCollection(
   const cmsCollection: Partial<CmsCollection> = {
     label: collection.name,
     name,
-    media_folder: '',
-    public_folder: ''
+    preview_path: join(getCollectionBasePath(name), '{{slug}}')
   }
 
   const pattern = Array.isArray(collection.pattern)
@@ -237,35 +274,18 @@ function createCmsCollection(
     cmsCollection.type = 'file_based_collection'
     cmsCollection.files = [
       {
-        file: pattern,
+        file: getCollectionFolder(basePath, pattern),
         name: pattern,
         label: pattern,
-        fields: convertObject(schema)
+        fields: sortSchemaFields(schemaToFields(schema))
       }
     ]
   } else {
     cmsCollection.type = 'folder_based_collection'
-    cmsCollection.folder = join(basePath, dirname(pattern))
-    cmsCollection.fields = convertObject(schema)
+    cmsCollection.folder = getCollectionFolder(basePath, pattern)
+    cmsCollection.fields = sortSchemaFields(schemaToFields(schema))
     cmsCollection.create = true
-
-    // If config allows nested content, allow for setting a path
-    if (pattern.includes('**')) {
-      cmsCollection.meta = {
-        path: {
-          widget: 'string',
-          label: 'Path',
-          index_file: 'index'
-        }
-      }
-      // The default nested depth in this case
-      // TODO Support overiding collection config via options
-      cmsCollection.nested = {
-        depth: 3
-      }
-    }
-
-    cmsCollection.extension = extname(pattern).toLowerCase()
+    cmsCollection.extension = trim(extname(pattern).toLowerCase(), '.')
 
     if (['yml', 'yaml'].includes(cmsCollection.extension)) {
       cmsCollection.format = CmsCollectionFormatType.YAML
@@ -280,97 +300,66 @@ function createCmsCollection(
     }
 
     if (['md', 'markdown', 'mdx'].includes(cmsCollection.extension)) {
-      cmsCollection.format = CmsCollectionFormatType.Frontmatter
+      cmsCollection.format = CmsCollectionFormatType.YAMLFrontmatter
     }
+
+    if (['mdx'].includes(cmsCollection.extension)) {
+      cmsCollection.format = CmsCollectionFormatType.Frontmatter
+    }    
   }
 
-  return cmsCollection as CmsCollection
+  const overrides = options.collections?.find((c) => c.name === name)
+
+  return merge(
+    cmsCollection,
+    overrides?.cms ? cleanOptionals(overrides.cms) : undefined
+  ) as CmsCollection
 }
 
-// {
-//   root: '/Users/mshick/Code/mshick/shick.io/content',
-//   output: {
-//     data: '/Users/mshick/Code/mshick/shick.io/.velite',
-//     assets: '/Users/mshick/Code/mshick/shick.io/public/static',
-//     base: '/static/',
-//     name: '[name]-[hash:6].[ext]',
-//     clean: true
-//   },
-//   collections: {
-//     posts: { name: 'Post', pattern: 'posts/**/*.md', schema: [ZodEffects] },
-//     pages: { name: 'Page', pattern: 'pages/**/*.mdx', schema: [ZodEffects] },
-//     categories: {
-//       name: 'Category',
-//       pattern: 'categories/*.md',
-//       schema: [ZodEffects]
-//     },
-//     tags: { name: 'Tag', pattern: 'tags/*.md', schema: [ZodEffects] },
-//     options: {
-//       name: 'Options',
-//       pattern: 'options.yml',
-//       single: true,
-//       schema: [ZodObject]
-//     }
-//   },
-//   mdx: {
-//     remarkPlugins: [ [Function: remarkGemoji], [Object] ],
-//     rehypePlugins: [ [Array], [Object] ]
-//   },
-//   prepare: [AsyncFunction: prepare],
-//   complete: [AsyncFunction: complete],
-//   configPath: '/Users/mshick/Code/mshick/shick.io/velite.config.ts',
-//   configImports: [
-//     '/Users/mshick/Code/mshick/shick.io/lib/excerpt.ts',
-//     '/Users/mshick/Code/mshick/shick.io/lib/env.ts',
-//     '/Users/mshick/Code/mshick/shick.io/lib/logger.ts',
-//     '/Users/mshick/Code/mshick/shick.io/lib/git.ts',
-//     '/Users/mshick/Code/mshick/shick.io/lib/options.ts',
-//     '/Users/mshick/Code/mshick/shick.io/lib/fields.ts',
-//     '/Users/mshick/Code/mshick/shick.io/lib/assets.ts',
-//     '/Users/mshick/Code/mshick/shick.io/lib/velite.ts',
-//     '/Users/mshick/Code/mshick/shick.io/lib/schema.ts',
-//     '/Users/mshick/Code/mshick/shick.io/lib/cms.ts',
-//     '/Users/mshick/Code/mshick/shick.io/lib/search.ts',
-//     '/Users/mshick/Code/mshick/shick.io/lib/taxonomy.ts',
-//     '/Users/mshick/Code/mshick/shick.io/velite.config.ts'
-//   ],
-//   cache: Map(3) {
-//     'schemas:slug:posts:hello-world' => '/Users/mshick/Code/mshick/shick.io/content/posts/hello-world.md',
-//     'schemas:slug:posts:tufte-css' => '/Users/mshick/Code/mshick/shick.io/content/posts/tufte-css.md',
-//     'schemas:slug:posts:not-comitted' => '/Users/mshick/Code/mshick/shick.io/content/posts/uncommitted.md'
-//   },
-//   loaders: [
-//     { test: /\.json$/, load: [Function: load] },
-//     { test: /\.(yaml|yml)$/, load: [Function: load] },
-//     { test: /\.(md|mdx)$/, load: [AsyncFunction: load] }
-//   ],
-//   strict: false
-// }
 export function getCmsConfig(
   config: Config,
-  options: Pick<Options, 'repo' | 'collections'>
+  options: Pick<Options, 'url' | 'repo' | 'collections' | 'cms'>
 ) {
   const basePath = relative(cwd(), config.root)
 
   const collections: CmsCollection[] = []
 
   for (const [name, collection] of Object.entries(config.collections)) {
-    collections.push(createCmsCollection(basePath, name, collection))
+    collections.push(createCmsCollection(basePath, name, collection, options))
   }
+
+  const url = new URL(options.url)
 
   const cmsConfig: CmsConfig = {
+    site_url: url.toString(),
     backend: {
-      name: options.repo.provider
+      name: options.repo.provider,
+      repo: options.repo.name,
+      branch: options.repo.branch,
+      site_domain: url.host,
+      base_url: url.origin,
+      auth_endpoint: 'oauth'
     },
     publish_mode: 'simple',
-    media_folder: basePath,
-    public_folder: config.output.base,
+    media_folder: UPLOADS_BASE,
+    public_folder: UPLOADS_PATH,
     show_preview_links: true,
     editor: {
-      preview: false
+      preview: true
     },
-    collections
+    collections,
+    ...(options.cms ? cleanOptionals(options.cms) : undefined)
   }
 
-  console.log(JSON.stringify(cmsConfig, null, 2))
+  return cmsConfig
+}
+
+export async function generateCmsConfig(
+  config: Config,
+  options: Pick<Options, 'url' | 'repo' | 'collections' | 'cms'>,
+  { filePath }: { filePath: string }
+) {
+  const cmsConfig = getCmsConfig(config, options)
+  await mkdir(dirname(filePath), { recursive: true })
+  await writeFile(filePath, JSON.stringify(cmsConfig, null, 2))
 }
