@@ -31,8 +31,8 @@ export default async function PostsPage(props: ServerProps) {
 
   const { currentPage, perPage, pageOffset, totalPages } = getPagination(
     searchParams,
-    getOptions(['collections']).collections?.find((c) => c.name === 'posts')
-      ?.pagination ?? { perPage: 3 },
+    getOptions(['collections']).collections?.find((c) => c.name === 'post')
+      ?.pagination ?? { per_page: 3 },
     getPostsCount()
   )
 

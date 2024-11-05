@@ -1,7 +1,7 @@
 import { PostBody } from '#/components/Post/PostBody'
 import { PostFooter } from '#/components/Post/PostFooter'
 import { PostHeader } from '#/components/Post/PostHeader'
-import { getPostBySlug, getPosts, getRelated } from '#/content'
+import { getPost, getPosts, getRelated } from '#/content'
 import { type ServerProps } from '#/types/types'
 import { type Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -26,7 +26,7 @@ export async function generateMetadata(
   props: ServerProps<Params>
 ): Promise<Metadata> {
   const params = await props.params
-  const post = getPostBySlug(params.slug.join('/'))
+  const post = getPost(params.slug.join('/'))
 
   if (!post) {
     return {
@@ -41,16 +41,13 @@ export async function generateMetadata(
 
 export default async function PostPage(props: ServerProps<Params>) {
   const params = await props.params
-  const post = getPostBySlug(params.slug.join('/'), undefined, [
-    'tags',
-    'categories'
-  ])
+  const post = getPost(params.slug.join('/'), undefined, ['tags', 'categories'])
 
   if (!post) {
     return notFound()
   }
 
-  const related = getRelated(post, 'posts')
+  const related = getRelated(post)
 
   return (
     <article>

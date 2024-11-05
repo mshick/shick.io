@@ -10,24 +10,24 @@ export default defineConfig({
   root: 'content',
   output,
   collections: {
-    posts: defineCollection({
+    post: defineCollection({
       name: 'Post',
-      pattern: 'posts/**/*.md',
+      pattern: 'post/**/*.md',
       schema: schema.post
     }),
-    pages: defineCollection({
+    page: defineCollection({
       name: 'Page',
-      pattern: 'pages/**/*.mdx',
+      pattern: 'page/**/*.mdx',
       schema: schema.page
     }),
-    categories: defineCollection({
+    category: defineCollection({
       name: 'Category',
-      pattern: 'categories/*.md',
+      pattern: 'category/*.md',
       schema: schema.category
     }),
-    tags: defineCollection({
+    tag: defineCollection({
       name: 'Tag',
-      pattern: 'tags/*.md',
+      pattern: 'tag/*.md',
       schema: schema.tag
     }),
     options: defineCollection({
@@ -59,7 +59,7 @@ export default defineConfig({
     console.log(`Writing search index to '${filePath}' ...`)
 
     const { documentCount, termCount } = await generateSearchIndex(
-      [...collections.posts, ...collections.pages],
+      [...collections.post, ...collections.page],
       {
         filePath
       }

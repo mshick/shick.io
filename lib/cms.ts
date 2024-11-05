@@ -34,7 +34,10 @@ import { makeSparse } from './util'
 const veliteFields = ['metadata', 'toc']
 const bodyFieldName = 'body'
 
-type FieldAcc = Pick<CmsFieldBase, 'label' | 'name' | 'required'> & {
+type FieldAcc = Pick<
+  CmsFieldBase,
+  'label' | 'name' | 'required' | 'comment'
+> & {
   default?: unknown
 }
 
@@ -127,6 +130,8 @@ function schemaToFields(
       fields.push(field)
       continue
     }
+
+    fieldBase.comment = shapeField.description
 
     if (shapeBaseType instanceof z.ZodArray) {
       const field: CmsFieldBase & CmsFieldList = {

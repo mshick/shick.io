@@ -6,7 +6,7 @@ import {
   getDocuments,
   getDocumentsCount,
   getOptions,
-  getTagBySlug,
+  getTag,
   sorters
 } from '#/content'
 import { getPagination } from '#/lib/utils/pagination'
@@ -27,7 +27,7 @@ export async function generateMetadata(
   const params = await props.params
   const searchParams = await props.searchParams
 
-  const tag = getTagBySlug(params.slug)
+  const tag = getTag(params.slug)
 
   if (!tag) {
     return {
@@ -39,8 +39,8 @@ export async function generateMetadata(
 
   const { currentPage } = getPagination(
     searchParams,
-    getOptions(['collections']).collections?.find((c) => c.name === 'tags')
-      ?.pagination ?? { perPage: 3 },
+    getOptions(['collections']).collections?.find((c) => c.name === 'tag')
+      ?.pagination ?? { per_page: 3 },
     getDocumentsCount()
   )
 
@@ -58,7 +58,7 @@ export default async function TagPage(props: ServerProps<Params>) {
   const params = await props.params
   const searchParams = await props.searchParams
 
-  const tag = getTagBySlug(params.slug)
+  const tag = getTag(params.slug)
 
   if (!tag) {
     return notFound()
@@ -68,8 +68,8 @@ export default async function TagPage(props: ServerProps<Params>) {
 
   const { currentPage, perPage, pageOffset, totalPages } = getPagination(
     searchParams,
-    getOptions(['collections']).collections?.find((c) => c.name === 'tags')
-      ?.pagination ?? { perPage: 3 },
+    getOptions(['collections']).collections?.find((c) => c.name === 'tag')
+      ?.pagination ?? { per_page: 3 },
     getDocumentsCount(filters.none)
   )
 

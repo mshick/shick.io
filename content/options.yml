@@ -65,12 +65,20 @@ socials:
     icon: email
     link: mailto:m@shick.us
 collections:
-  - name: pages
+  - name: page
     path: /
     pagination:
-      perPage: 3
-  - name: posts
+      per_page: 3
+  - name: post
     path: /posts
     pagination:
-      perPage: 3
+      per_page: 3
+  - name: tag
+    path: /tags
+    pagination:
+      per_page: 3
+  - name: category
+    path: /categories
+    pagination:
+      per_page: 3
 showListeningTo: true

@@ -17,3 +17,11 @@ export function makeSparse<T extends Record<string, unknown>>(
     })
   )
 }
+
+export function safeParseJsonString(str: string) {
+  try {
+    return JSON.parse(str)
+  } catch {
+    return str
+  }
+}

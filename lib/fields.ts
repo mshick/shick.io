@@ -94,6 +94,7 @@ export function getPermalink(
     : customSlug!
   const joinedPath = join(basePath, stripIndex(slugPath))
   // Enforce trailing slash
+  // TODO Match next config settings
   return joinedPath.endsWith('/') ? joinedPath : joinedPath.concat('/')
 }
 
@@ -112,18 +113,18 @@ export function getContentPath(root: string, path: string) {
  * Gets a slug from a path inside the content folder
  *
  * @example
- * posts/foo.md -> posts/foo -> foo
- * posts/bar/index.md -> posts/bar/index -> blah
- * posts/baz/bam.md -> posts/baz/bam -> baz/bam
+ * post/foo.md -> post/foo -> foo
+ * post/bar/index.md -> post/bar/index -> blah
+ * post/baz/bam.md -> post/baz/bam -> baz/bam
  */
 export function getSlugFromPath(
   collectionName: string,
   contentPath: string,
   userSlug?: string
 ) {
-  // posts/foo -> foo
-  // posts/bar/index.md -> bar
-  // posts/baz/bam.md -> baz/bam
+  // post/foo -> foo
+  // post/bar/index.md -> bar
+  // post/baz/bam.md -> baz/bam
   const nakedPath = contentPath
     .replace(`${collectionName}/`, '')
     .replace(/\/$/, '')
@@ -204,8 +205,8 @@ export async function getTaxonomy(
           body: '',
           count: {
             total: 0,
-            posts: 0,
-            pages: 0
+            post: 0,
+            page: 0
           }
         },
         {

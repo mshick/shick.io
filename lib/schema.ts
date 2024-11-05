@@ -30,8 +30,8 @@ const cover = s.object({
 })
 
 const count = s
-  .object({ total: s.number(), posts: s.number(), pages: s.number() })
-  .default({ total: 0, posts: 0, pages: 0 })
+  .object({ total: s.number(), post: s.number(), page: s.number() })
+  .default({ total: 0, post: 0, page: 0 })
 
 const meta = s.object({
   title: s.string().optional(),
@@ -107,16 +107,17 @@ export const options = s.object({
         .nullable()
         .optional()
     })
+    .describe('Configuration overrides for the CMS')
     .nullable()
     .optional(),
   collections: s
     .array(
       s.object({
-        name: s.enum(['pages', 'posts', 'tags', 'categories']),
+        name: s.enum(['page', 'post', 'tag', 'category']),
         path: s.string().optional(),
         pagination: s
           .object({
-            perPage: s.number()
+            per_page: s.number()
           })
           .nullable()
           .optional(),
@@ -160,7 +161,7 @@ const baseTag = s.object({
   count
 })
 
-export const tag = baseTag.transform(createTaxonomyTransform('tags'))
+export const tag = baseTag.transform(createTaxonomyTransform('tag'))
 
 export type BaseTag = z.infer<typeof baseTag>
 export type Tag = z.infer<typeof tag>
@@ -174,7 +175,7 @@ export const baseCategory = s.object({
   count
 })
 
-export const category = baseTag.transform(createTaxonomyTransform('categories'))
+export const category = baseTag.transform(createTaxonomyTransform('category'))
 
 export type BaseCategory = z.infer<typeof baseCategory>
 export type Category = z.infer<typeof category>
@@ -200,21 +201,9 @@ export const post = s
   .transform(async (data, ctx) => {
     const { meta } = ctx
     const updatedBy = await getUpdatedBy(meta.path)
-
-    // posts/foo.md -> posts/foo
-    // posts/bar/index.md -> posts/bar/index
-    // posts/baz/bam.md -> posts/baz/bam
     const path = getContentPath(meta.config.root, meta.path)
-
-    // posts/foo.md -> posts/foo -> foo
-    // posts/bar/index.md -> posts/bar/index -> bar/index
-    // posts/baz/bam.md -> posts/baz/bam -> baz/bam
-    const slug = getSlugFromPath('posts', path)
-
-    // posts/foo.md -> posts/foo -> foo -> /posts/foo/
-    // posts/bar/index.md -> posts/bar/index -> bar/index -> /posts/bar/
-    // posts/baz/bam.md -> posts/baz/bam -> baz/bam -> /posts/baz/bam/
-    const permalink = getPermalink('posts', path, slug)
+    const slug = getSlugFromPath('post', path)
+    const permalink = getPermalink('post', path, slug)
 
     return {
       ...data,
@@ -258,8 +247,8 @@ export const page = s
     const { meta } = ctx
     const updatedBy = await getUpdatedBy(meta.path)
     const path = getContentPath(meta.config.root, meta.path)
-    const slug = getSlugFromPath('pages', path)
-    const permalink = getPermalink('pages', path, slug)
+    const slug = getSlugFromPath('page', path)
+    const permalink = getPermalink('page', path, slug)
     return {
       ...data,
       excerpt: excerptFn({ format: 'text' }, data.excerpt, ctx),
