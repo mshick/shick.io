@@ -14,6 +14,7 @@ import {
   type CmsFieldSelect,
   type CmsFieldStringOrText
 } from '#/types/decap-cms'
+import isPlainObject from 'lodash/isPlainObject.js'
 import merge from 'lodash/merge.js'
 import trim from 'lodash/trim.js'
 import { mkdir, writeFile } from 'node:fs/promises'
@@ -22,14 +23,8 @@ import { cwd } from 'node:process'
 import { z, type Collection, type Config } from 'velite'
 import { UPLOADS_BASE, UPLOADS_PATH } from './constants'
 import { getCollectionBasePath } from './fields'
-import {
-  ENUM_MULTIPLE,
-  ISODATE,
-  MARKDOWN,
-  RELATION,
-  type Options
-} from './schema'
-import { makeSparse } from './util'
+import { ISODATE, MARKDOWN, RELATION, type Options } from './schema'
+import { makeSparse, safeParseJsonString } from './util'
 
 const veliteFields = ['metadata', 'toc']
 const bodyFieldName = 'body'
@@ -71,9 +66,48 @@ function getSchemaBaseType(
   return schema
 }
 
+export const cmsField = z
+  .object({
+    widget: z
+      .enum([
+        'color',
+        'relation',
+        'boolean',
+        'string',
+        'text',
+        'code',
+        'datetime',
+        'file',
+        'image',
+        'object',
+        'list',
+        'markdown',
+        'map',
+        'number',
+        'select',
+        'hidden'
+      ])
+      .optional(),
+    name: z.string().optional()
+  })
+  .passthrough()
+
+function getFieldCustom(description: string): Partial<CmsField> | undefined {
+  const maybeJson = safeParseJsonString(description)
+
+  if (typeof maybeJson === 'string') {
+    return cmsField.safeParse({ widget: maybeJson }).data
+  } else if (isPlainObject(maybeJson)) {
+    return cmsField.safeParse(maybeJson).data
+  }
+
+  return
+}
+
 function schemaToFields(
   schema: z.ZodObject<any>,
-  collection: Pick<CmsCollection, 'name' | 'identifier_field'>
+  collection: Pick<CmsCollection, 'name' | 'identifier_field'>,
+  collections: Pick<CmsCollection, 'name' | 'identifier_field'>[]
 ) {
   const fields: CmsField[] = []
 
@@ -86,47 +120,65 @@ function schemaToFields(
     const shapeField = schema.shape[shapeName]
     const shapeBaseType = getSchemaBaseType(shapeField, fieldBase)
 
-    if (shapeField.description === MARKDOWN) {
+    const fieldCustom = getFieldCustom(shapeField.description)
+
+    if (fieldCustom?.widget === MARKDOWN) {
       const field: CmsFieldBase & CmsFieldMarkdown = {
         ...fieldBase,
         default:
           typeof fieldBase.default === 'string' ? fieldBase.default : undefined,
-        widget: 'markdown'
+        ...fieldCustom,
+        widget: fieldCustom.widget
       }
       fields.push(field)
       continue
     }
 
-    if (shapeField.description === ISODATE) {
+    if (fieldCustom?.widget === ISODATE) {
       const field: CmsFieldBase & CmsFieldDateTime = {
         ...fieldBase,
         default:
           typeof fieldBase.default === 'string' ? fieldBase.default : undefined,
-        widget: 'datetime'
+        ...fieldCustom,
+        widget: fieldCustom.widget
       }
       fields.push(field)
       continue
     }
 
-    if (shapeField.description === RELATION) {
+    if (fieldCustom?.widget === RELATION) {
       const defaultVal =
         Array.isArray(fieldBase.default) ||
         typeof fieldBase.default === 'string'
           ? fieldBase.default
           : undefined
 
+      const collectionName =
+        (fieldCustom as CmsFieldRelation)?.collection ?? collection.name
+      const relationCollection = collections.find(
+        (c) => c.name === collectionName
+      )
+
+      if (!relationCollection) {
+        throw new Error(`Invalid collection name '${collectionName}'`)
+      }
+
       const field: CmsFieldBase & CmsFieldRelation = {
         ...fieldBase,
         default: defaultVal,
         multiple: shapeBaseType instanceof z.ZodArray,
-        collection: collection.name,
+        collection: collectionName,
         value_field: '{{slug}}',
-        widget: 'relation',
         display_fields: [
-          collection.identifier_field ? collection.identifier_field : 'title'
+          relationCollection.identifier_field
+            ? relationCollection.identifier_field
+            : 'title'
         ],
-        dropdown_threshold: 0
+        dropdown_threshold: 0,
+        ...fieldCustom,
+        widget: fieldCustom.widget
       }
+
       fields.push(field)
       continue
     }
@@ -136,16 +188,17 @@ function schemaToFields(
     if (shapeBaseType instanceof z.ZodArray) {
       const field: CmsFieldBase & CmsFieldList = {
         ...fieldBase,
-        widget: 'list',
         collapsed: true,
         max: shapeField._def.maxLength?.value ?? undefined,
-        min: shapeField._def.minLength?.value ?? undefined
+        min: shapeField._def.minLength?.value ?? undefined,
+        ...fieldCustom,
+        widget: 'list'
       }
 
       const arrayBaseType = getSchemaBaseType(shapeBaseType.element, {})
 
       if (arrayBaseType instanceof z.ZodObject) {
-        field.fields = schemaToFields(arrayBaseType, collection)
+        field.fields = schemaToFields(arrayBaseType, collection, collections)
       }
 
       fields.push(field)
@@ -153,27 +206,29 @@ function schemaToFields(
     }
 
     if (shapeBaseType instanceof z.ZodObject) {
-      const objectFields = schemaToFields(shapeBaseType, collection)
+      const objectFields = schemaToFields(
+        shapeBaseType,
+        collection,
+        collections
+      )
+      const fieldDefault =
+        fieldBase.default ?? (fieldCustom as CmsFieldStringOrText)?.default
 
       if (objectFields.length) {
         const field: CmsFieldBase & CmsFieldObject = {
           ...fieldBase,
-          default:
-            typeof fieldBase.default === 'string'
-              ? fieldBase.default
-              : undefined,
-          widget: 'object',
           fields: objectFields,
-          collapsed: true
+          collapsed: true,
+          ...fieldCustom,
+          default: typeof fieldDefault === 'string' ? fieldDefault : undefined,
+          widget: 'object'
         }
         fields.push(field)
       } else {
         const field: CmsFieldBase & CmsFieldStringOrText = {
           ...fieldBase,
-          default:
-            typeof fieldBase.default === 'string'
-              ? fieldBase.default
-              : undefined,
+          ...fieldCustom,
+          default: typeof fieldDefault === 'string' ? fieldDefault : undefined,
           widget: 'string'
         }
         fields.push(field)
@@ -183,28 +238,34 @@ function schemaToFields(
     }
 
     if (shapeBaseType instanceof z.ZodNumber) {
+      const fieldDefault =
+        fieldBase.default ?? (fieldCustom as CmsFieldNumber)?.default
+
       const field: CmsFieldBase & CmsFieldNumber = {
         ...fieldBase,
-        default:
-          typeof fieldBase.default === 'string' ||
-          typeof fieldBase.default === 'number'
-            ? fieldBase.default
-            : undefined,
-        widget: 'number',
         max: shapeBaseType.maxValue ?? undefined,
-        min: shapeBaseType.minValue ?? undefined
+        min: shapeBaseType.minValue ?? undefined,
+        ...fieldCustom,
+        default:
+          typeof fieldDefault === 'string' || typeof fieldDefault === 'number'
+            ? fieldDefault
+            : undefined,
+        widget: 'number'
       }
       fields.push(field)
       continue
     }
 
     if (shapeBaseType instanceof z.ZodString) {
+      const fieldDefault =
+        fieldBase.default ?? (fieldCustom as CmsFieldStringOrText)?.default
+
       const maxValue =
         shapeBaseType._def.checks.find((c) => c.kind === 'max')?.value ?? 0
       const field: CmsFieldBase & CmsFieldStringOrText = {
         ...fieldBase,
-        default:
-          typeof fieldBase.default === 'string' ? fieldBase.default : undefined,
+        ...fieldCustom,
+        default: typeof fieldDefault === 'string' ? fieldDefault : undefined,
         widget: maxValue > 120 ? 'text' : 'string'
       }
       fields.push(field)
@@ -212,12 +273,13 @@ function schemaToFields(
     }
 
     if (shapeBaseType instanceof z.ZodBoolean) {
+      const fieldDefault =
+        fieldBase.default ?? (fieldCustom as CmsFieldBoolean)?.default
+
       const field: CmsFieldBase & CmsFieldBoolean = {
         ...fieldBase,
-        default:
-          typeof fieldBase.default === 'boolean'
-            ? fieldBase.default
-            : undefined,
+        ...fieldCustom,
+        default: typeof fieldDefault === 'boolean' ? fieldDefault : undefined,
         widget: 'boolean'
       }
       fields.push(field)
@@ -225,14 +287,16 @@ function schemaToFields(
     }
 
     if (shapeBaseType instanceof z.ZodEnum) {
+      const fieldDefault =
+        fieldBase.default ?? (fieldCustom as CmsFieldSelect)?.default
+
       const field: CmsFieldBase & CmsFieldSelect = {
         ...fieldBase,
-        default:
-          typeof fieldBase.default === 'string' ? fieldBase.default : undefined,
-        widget: 'select',
-        multiple: shapeField.description === ENUM_MULTIPLE,
         options: shapeBaseType._def.values,
-        dropdown_threshold: 0
+        dropdown_threshold: 0,
+        ...fieldCustom,
+        default: typeof fieldDefault === 'string' ? fieldDefault : undefined,
+        widget: 'select'
       }
       fields.push(field)
       continue
@@ -282,12 +346,6 @@ function createCmsCollection(
   collection: Collection,
   overrides?: Partial<CmsCollection>
 ): CmsCollection {
-  const schema = getSchemaBaseType(collection.schema, {})
-
-  if (!(schema instanceof z.ZodObject)) {
-    throw new Error('Invalid schema provided, must be of type object')
-  }
-
   const cmsCollection: Partial<CmsCollection> = {
     label: collection.name,
     name,
@@ -304,17 +362,12 @@ function createCmsCollection(
 
   if (collection.single) {
     cmsCollection.type = 'file_based_collection'
-
-    merge(cmsCollection, overrides)
-
     cmsCollection.files = [
       {
         file: getCollectionFolder(basePath, pattern),
         name: pattern,
         label: pattern,
-        fields: sortSchemaFields(
-          schemaToFields(schema, cmsCollection as CmsCollection)
-        )
+        fields: []
       }
     ]
   } else {
@@ -342,15 +395,31 @@ function createCmsCollection(
     if (['mdx'].includes(cmsCollection.extension)) {
       cmsCollection.format = CmsCollectionFormatType.Frontmatter
     }
-
-    merge(cmsCollection, overrides)
-
-    cmsCollection.fields = sortSchemaFields(
-      schemaToFields(schema, cmsCollection as CmsCollection)
-    )
   }
 
-  return cmsCollection as CmsCollection
+  return merge(cmsCollection, overrides) as CmsCollection
+}
+
+function addCollectionFields(
+  collection: Collection,
+  cmsCollection: CmsCollection,
+  cmsCollections: CmsCollection[]
+) {
+  const schema = getSchemaBaseType(collection.schema, {})
+
+  if (!(schema instanceof z.ZodObject)) {
+    throw new Error('Invalid schema provided, must be of type object')
+  }
+
+  if ('files' in cmsCollection) {
+    cmsCollection.files![0]!.fields = sortSchemaFields(
+      schemaToFields(schema, cmsCollection, cmsCollections)
+    )
+  } else {
+    cmsCollection.fields = sortSchemaFields(
+      schemaToFields(schema, cmsCollection, cmsCollections)
+    )
+  }
 }
 
 export function getCmsConfig(
@@ -359,7 +428,7 @@ export function getCmsConfig(
 ) {
   const basePath = relative(cwd(), config.root)
 
-  const collections: CmsCollection[] = []
+  const cmsCollections: CmsCollection[] = []
 
   for (const [name, collection] of Object.entries(config.collections)) {
     const collectionOptions = options.collections?.find((c) => c.name === name)
@@ -367,7 +436,18 @@ export function getCmsConfig(
       ? makeSparse(collectionOptions.cms)
       : undefined
 
-    collections.push(createCmsCollection(basePath, name, collection, overrides))
+    cmsCollections.push(
+      createCmsCollection(basePath, name, collection, overrides)
+    )
+  }
+
+  for (const [name, collection] of Object.entries(config.collections)) {
+    const cmsCollection = cmsCollections.find((c) => c.name === name)
+    if (!cmsCollection) {
+      throw new Error(`Invalid collection name '${name}'`)
+    }
+
+    addCollectionFields(collection, cmsCollection, cmsCollections)
   }
 
   const url = new URL(options.url)
@@ -389,7 +469,7 @@ export function getCmsConfig(
     editor: {
       preview: true
     },
-    collections
+    collections: cmsCollections
   }
 
   return merge(cmsConfig, options.cms ? makeSparse(options.cms) : undefined)

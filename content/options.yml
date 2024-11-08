@@ -81,4 +81,7 @@ collections:
     path: /categories
     pagination:
       per_page: 3
+  - name: author
+    cms:
+      identifier_field: name
 showListeningTo: true

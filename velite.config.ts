@@ -30,6 +30,11 @@ export default defineConfig({
       pattern: 'tag/*.md',
       schema: schema.tag
     }),
+    author: defineCollection({
+      name: 'Author',
+      pattern: 'author/*.yml',
+      schema: schema.authors
+    }),
     options: defineCollection({
       name: 'Options',
       pattern: 'options.yml',

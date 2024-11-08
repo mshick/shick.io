@@ -4,7 +4,7 @@ cover: null
 meta: null
 excerpt: Mars!
 date: 2024-11-01T12:31:00
-author: ''
+author: michael-shick
 draft: true
 featured: false
 categories:

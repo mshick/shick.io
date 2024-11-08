@@ -14,10 +14,9 @@ import {
 import { image } from './image'
 import { markdownOptions } from './velite'
 
-export const MARKDOWN = '__MARKDOWN__'
-export const RELATION = '__RELATION__'
-export const ISODATE = '__ISODATE__'
-export const ENUM_MULTIPLE = '__ENUM_MULTIPLE__'
+export const MARKDOWN = 'markdown'
+export const RELATION = 'relation'
+export const ISODATE = 'datetime'
 
 const icon = s.enum(['github', 'x', 'signal', 'linkedin', 'whatsapp', 'email'])
 
@@ -38,6 +37,14 @@ const meta = s.object({
   description: s.string().optional(),
   keywords: s.array(s.string()).optional()
 })
+
+export const authors = s.object({
+  name: s.string(),
+  email: s.string().email(),
+  url: s.string().url()
+})
+
+export type Authors = z.infer<typeof authors>
 
 export const options = s.object({
   name: s.string().max(20),
@@ -113,7 +120,7 @@ export const options = s.object({
   collections: s
     .array(
       s.object({
-        name: s.enum(['page', 'post', 'tag', 'category']),
+        name: s.enum(['page', 'post', 'tag', 'category', 'author']),
         path: s.string().optional(),
         pagination: s
           .object({
@@ -190,13 +197,24 @@ export const post = s
     body: s.markdown(markdownOptions).describe(MARKDOWN),
     excerpt: s.markdown().optional().describe(MARKDOWN),
     date: s.isodate().optional().describe(ISODATE),
-    author: s.string().optional(),
+    author: s
+      .string()
+      .optional()
+      .describe(
+        JSON.stringify({
+          widget: 'relation',
+          collection: 'author'
+        })
+      ),
     draft: s.boolean().optional().default(false),
     toc: s.toc(),
     featured: s.boolean().optional().default(false),
     categories: s.array(s.string()).optional(),
     tags: s.array(s.string()).optional(),
-    related: s.array(s.string()).optional().describe(RELATION)
+    related: s
+      .array(s.string())
+      .optional()
+      .describe(JSON.stringify({ widget: 'relation' }))
   })
   .transform(async (data, ctx) => {
     const { meta } = ctx
