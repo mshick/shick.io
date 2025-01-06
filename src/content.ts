@@ -3,8 +3,6 @@ import type { Category, Options, Page, Post, Tag } from '_/.velite'
 import { category, options, page, post, tag } from '_/.velite'
 import { intersection, keyBy, pick } from './lib/utils/nodash'
 
-// False positive?
-// eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 type Document = Page | Post
 
 const documents: Document[] = [...post, ...page]

@@ -22,7 +22,8 @@
   "overrides": [
     {
       "files": [
-        "**/*.{ts,tsx}"
+        "**/*.ts",
+        "**/*.tsx"
       ],
       "extends": [
         "eslint:recommended",
@@ -83,7 +84,8 @@
     },
     {
       "files": [
-        "**/*.{md,mdx}"
+        "**/*.md",
+        "**/*.mdx"
       ],
       "extends": [
         "eslint:recommended",
