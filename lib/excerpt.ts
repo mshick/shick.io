@@ -6,7 +6,7 @@ import { truncate } from 'hast-util-truncate'
 import isEmpty from 'lodash/isEmpty.js'
 import { fromMarkdown } from 'mdast-util-from-markdown'
 import { toHast } from 'mdast-util-to-hast'
-import { z } from 'velite'
+import { z, type ZodMeta } from 'velite'
 
 export const DEFAULT_EXCERPT_LENGTH = 260
 
@@ -33,10 +33,8 @@ export interface ExcerptOptions {
 }
 
 type ExcerptFnCtx = {
-  addIssue?: (arg: z.IssueData) => void
-  meta: {
-    content?: string
-  }
+  addIssue?: z.RefinementCtx['addIssue']
+  meta: Pick<ZodMeta, 'content'>
 }
 
 export function excerptFn(

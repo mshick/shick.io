@@ -16,3 +16,5 @@ related:
 ---
 
 Mars!!
+
+![](/uploads/sample-castle.jpg)

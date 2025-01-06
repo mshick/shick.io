@@ -21,6 +21,7 @@ import { mkdir, writeFile } from 'node:fs/promises'
 import { dirname, extname, join, relative, sep } from 'node:path'
 import { cwd } from 'node:process'
 import { z, type Collection, type Config } from 'velite'
+import { UPLOADS_BASE, UPLOADS_PATH } from './constants'
 import { getCollectionBasePath } from './fields'
 import { ISODATE, MARKDOWN, RELATION, type Options } from './schema'
 import { makeSparse, safeParseJsonString } from './util'
@@ -462,8 +463,8 @@ export function getCmsConfig(
       auth_endpoint: 'oauth'
     },
     publish_mode: 'simple',
-    media_folder: 'public/uploads',
-    public_folder: '/uploads',
+    media_folder: UPLOADS_PATH,
+    public_folder: UPLOADS_BASE,
     show_preview_links: true,
     editor: {
       preview: true

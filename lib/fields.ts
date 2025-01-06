@@ -2,9 +2,7 @@ import { TZDate } from '@date-fns/tz'
 import isEmpty from 'lodash/isEmpty.js'
 import { basename, dirname, join, relative, resolve } from 'node:path'
 import slug from 'slug'
-import { type PickDeep, type SetOptional } from 'type-fest'
-import { type ZodMeta } from 'velite'
-import { type RefinementCtx } from 'zod'
+import { type ZodMeta, type z } from 'velite'
 import { devUrl, isProduction } from './env'
 import { excerptFn } from './excerpt'
 import { getGitFileInfo, type GitFileInfo } from './git'
@@ -156,13 +154,16 @@ export function getAvailable(item: { draft: boolean }) {
   return process.env.NODE_ENV !== 'production' || !item.draft
 }
 
+type TransformCtx = {
+  addIssue?: z.RefinementCtx['addIssue']
+  path: (string | number)[]
+  meta: Pick<ZodMeta, 'content' | 'path'> & {
+    config: Pick<ZodMeta['config'], 'root'>
+  }
+}
+
 export function createTaxonomyTransform(taxonomyName: string) {
-  return async (
-    data: BaseTag | BaseCategory,
-    ctx: SetOptional<RefinementCtx, 'addIssue'> & {
-      meta: PickDeep<ZodMeta, 'content' | 'path' | 'config.root'>
-    }
-  ) => {
+  return async (data: BaseTag | BaseCategory, ctx: TransformCtx) => {
     const { meta } = ctx
     const updatedBy = await getUpdatedBy(meta.path)
     const path = getContentPath(meta.config.root, meta.path)
@@ -198,7 +199,6 @@ export async function getTaxonomy(
   const transform = createTaxonomyTransform(collectionName)
   return Promise.all(
     terms.map((term) => {
-      const termSlug = getSlug(term.replaceAll('/', '_'))
       return transform(
         {
           name: term,
@@ -213,7 +213,7 @@ export async function getTaxonomy(
           path: [],
           meta: {
             content: '',
-            path: `${root}/${collectionName}/${termSlug}`,
+            path: `${root}/${collectionName}/${getSlug(term.replaceAll('/', '_'))}`,
             config: {
               root
             }
