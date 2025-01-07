@@ -1,40 +1,40 @@
-import { DocumentList } from '#/components/Document/DocumentList'
-import { DocumentListHeader } from '#/components/Document/DocumentListHeader'
-import { DocumentListItem } from '#/components/Document/DocumentListItem'
-import { DocumentListPagination } from '#/components/Document/DocumentListPagination'
+import type { Metadata } from 'next';
+import slug from 'slug';
+import { DocumentList } from '#/components/Document/DocumentList';
+import { DocumentListHeader } from '#/components/Document/DocumentListHeader';
+import { DocumentListItem } from '#/components/Document/DocumentListItem';
+import { DocumentListPagination } from '#/components/Document/DocumentListPagination';
 import {
   filters,
   getOptions,
   getPosts,
   getPostsCount,
-  sorters
-} from '#/content'
-import { getPagination } from '#/lib/utils/pagination'
-import { type ServerProps } from '#/types/types'
-import { type Metadata } from 'next'
-import slug from 'slug'
+  sorters,
+} from '#/content';
+import { getPagination } from '#/lib/utils/pagination';
+import type { ServerProps } from '#/types/types';
 
-const HEADING = 'posts'
+const HEADING = 'posts';
 
-export const revalidate = 60
+export const revalidate = 60;
 
 export function generateMetadata(): Metadata {
   return {
-    title: HEADING
-  }
+    title: HEADING,
+  };
 }
 
 export default async function PostsPage(props: ServerProps) {
-  const searchParams = await props.searchParams
+  const searchParams = await props.searchParams;
 
-  const heading = HEADING
+  const heading = HEADING;
 
   const { currentPage, perPage, pageOffset, totalPages } = getPagination(
     searchParams,
     getOptions(['collections']).collections?.find((c) => c.name === 'post')
       ?.pagination ?? { per_page: 3 },
-    getPostsCount()
-  )
+    getPostsCount(),
+  );
 
   const posts = getPosts(
     ['permalink', 'title', 'excerpt', 'excerptHtml', 'publishedAt'],
@@ -42,8 +42,8 @@ export default async function PostsPage(props: ServerProps) {
     filters.none,
     sorters.publishedAtDesc,
     perPage,
-    pageOffset
-  )
+    pageOffset,
+  );
 
   return (
     <>
@@ -61,5 +61,5 @@ export default async function PostsPage(props: ServerProps) {
         path="/posts/"
       />
     </>
-  )
+  );
 }

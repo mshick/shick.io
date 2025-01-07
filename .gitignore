@@ -34,10 +34,13 @@ npm-debug.log*
 .sentryclirc
 
 # generated files
-/src/generated/
+/src/generated/**/*
 
 # images
-/public/static/
+/public/static/**/*
 
 # vscode
-.vscode
+/.vscode/**/*
+
+# images
+/.scratch/**/*

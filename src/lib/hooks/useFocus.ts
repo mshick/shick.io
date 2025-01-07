@@ -1,16 +1,16 @@
-'use client'
+'use client';
 
-import { type MutableRefObject, useCallback, useRef } from 'react'
+import { type MutableRefObject, useCallback, useRef } from 'react';
 
 export function useFocus(): [
   MutableRefObject<HTMLInputElement | null>,
-  () => void
+  () => void,
 ] {
-  const htmlElRef = useRef<HTMLInputElement>(null)
+  const htmlElRef = useRef<HTMLInputElement>(null);
 
   const setFocus = useCallback(() => {
-    setTimeout(() => htmlElRef.current?.focus())
-  }, [])
+    setTimeout(() => htmlElRef.current?.focus());
+  }, []);
 
-  return [htmlElRef, setFocus]
+  return [htmlElRef, setFocus];
 }

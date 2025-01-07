@@ -1,20 +1,17 @@
-import { Link } from '#/components/Link'
-import {
-  type DocumentTypes,
-  type PropsWithCallableChildren
-} from '#/types/types'
+import { Link } from '#/components/Link';
+import type { DocumentTypes, PropsWithCallableChildren } from '#/types/types';
 
 type Document = Pick<
   DocumentTypes,
   '_id' | 'slug' | 'path' | 'title' | 'excerpt' | 'publishedAt'
->
+>;
 
 export type FeaturedArticlesProps = {
-  documents: Document[]
-}
+  documents: Document[];
+};
 
 export function FeaturedArticles({
-  documents
+  documents,
 }: PropsWithCallableChildren<FeaturedArticlesProps, Document>) {
   return (
     <ul className="flex flex-col m-0 p-0 list-none">
@@ -34,5 +31,5 @@ export function FeaturedArticles({
         </li>
       ))}
     </ul>
-  )
+  );
 }

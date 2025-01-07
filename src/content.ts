@@ -1,40 +1,40 @@
-import { devUrl, isProduction } from '@/env'
-import type { Category, Options, Page, Post, Tag } from '_/.velite'
-import { category, options, page, post, tag } from '_/.velite'
-import { intersection, keyBy, pick } from './lib/utils/nodash'
+import { devUrl, isProduction } from '@/env';
+import type { Category, Options, Page, Post, Tag } from '_/.velite';
+import { category, options, page, post, tag } from '_/.velite';
+import { intersection, keyBy, pick } from './lib/utils/nodash';
 
-type Document = Page | Post
+type Document = Page | Post;
 
-const documents: Document[] = [...post, ...page]
+const documents: Document[] = [...post, ...page];
 
 const bySlug = {
   post: keyBy(post, 'slug'),
   page: keyBy(page, 'slug'),
   tag: keyBy(tag, 'slug'),
-  category: keyBy(category, 'slug')
-}
+  category: keyBy(category, 'slug'),
+};
 
 const relatedFields = [
   'title',
   'publishedAt',
   'permalink',
   'excerpt',
-  'excerptHtml'
-] as const
+  'excerptHtml',
+] as const;
 
 type Related = {
   related?: {
-    [P in (typeof relatedFields)[number]]: Document[P]
-  }[]
-}
+    [P in (typeof relatedFields)[number]]: Document[P];
+  }[];
+};
 
 type Taxonomy = {
-  categories?: { [P in 'name' | 'slug' | 'permalink']: Category[P] }[]
-  tags?: { [P in 'name' | 'slug' | 'permalink']: Tag[P] }[]
-}
+  categories?: { [P in 'name' | 'slug' | 'permalink']: Category[P] }[];
+  tags?: { [P in 'name' | 'slug' | 'permalink']: Tag[P] }[];
+};
 
-type Filter<T> = (value: T, index: number, array: T[]) => boolean
-type Sorter<T> = (a: T, b: T) => number
+type Filter<T> = (value: T, index: number, array: T[]) => boolean;
+type Sorter<T> = (a: T, b: T) => number;
 
 export type {
   Category,
@@ -46,17 +46,17 @@ export type {
   Related,
   Sorter,
   Tag,
-  Taxonomy
-}
+  Taxonomy,
+};
 
 const available = (item: { draft: boolean }) => {
-  return !isProduction || !item.draft
-}
+  return !isProduction || !item.draft;
+};
 
 export const filters = {
   none: (): boolean => true,
-  featured: (item: { featured: boolean }) => item.featured
-}
+  featured: (item: { featured: boolean }) => item.featured,
+};
 
 export const sorters = {
   publishedAtAsc: <I extends { publishedAt: string }>(a: I, b: I): number =>
@@ -78,15 +78,15 @@ export const sorters = {
   titleAsc: <I extends { title: string }>(a: I, b: I): number =>
     a.title > b.title ? 1 : -1,
   titleDesc: <I extends { title: string }>(a: I, b: I): number =>
-    a.title > b.title ? -1 : 1
-}
+    a.title > b.title ? -1 : 1,
+};
 
 function include<I extends keyof Taxonomy = never>(
   data: { [P in keyof Taxonomy]: string[] },
-  includes?: I[]
+  includes?: I[],
 ): { [P in I]: Taxonomy[P] } {
   if (includes == null) {
-    return {} as { [P in I]: Taxonomy[P] }
+    return {} as { [P in I]: Taxonomy[P] };
   }
 
   const entities = includes.map((include) => {
@@ -95,148 +95,151 @@ function include<I extends keyof Taxonomy = never>(
         include,
         getCategories(
           ['name', 'slug', 'permalink'],
-          (i) => data.categories?.includes(i.name) ?? false
-        ) satisfies Taxonomy['categories']
-      ]
-    } else if (include === 'tags') {
+          (i) => data.categories?.includes(i.name) ?? false,
+        ) satisfies Taxonomy['categories'],
+      ];
+    }
+
+    if (include === 'tags') {
       return [
         include,
         getTags(
           ['name', 'slug', 'permalink'],
-          (i) => data.tags?.includes(i.name) ?? false
-        ) satisfies Taxonomy['tags']
-      ]
+          (i) => data.tags?.includes(i.name) ?? false,
+        ) satisfies Taxonomy['tags'],
+      ];
     }
-    return [include, []]
-  })
 
-  return Object.fromEntries(entities)
+    return [include, []];
+  });
+
+  return Object.fromEntries(entities);
 }
 
 export function getOptions<F extends keyof Options>(
-  fields?: F[]
+  fields?: F[],
 ): { [P in F]: Options[P] } {
-  return pick(options, fields)
+  return pick(options, fields);
 }
 
 export function getSiteUrl() {
-  const { url } = getOptions(['url'])
-  return isProduction && url ? url : devUrl
+  const { url } = getOptions(['url']);
+  return isProduction && url ? url : devUrl;
 }
 
 export function getCategories<F extends keyof Category>(
   fields?: F[],
   filter: Filter<Category> = filters.none,
-  limit = Infinity,
-  offset = 0
+  limit = Number.POSITIVE_INFINITY,
+  offset = 0,
 ): { [P in F]: Category[P] }[] {
   return category
     .filter(filter)
     .sort((a, b) => (a.count.total > b.count.total ? -1 : 1))
     .slice(offset, offset + limit)
-    .map((author) => pick(author, fields))
+    .map((author) => pick(author, fields));
 }
 
 export function getCategoriesCount(
-  filter: Filter<Category> = filters.none
+  filter: Filter<Category> = filters.none,
 ): number {
-  return category.filter(filter).length
+  return category.filter(filter).length;
 }
 
 export function getCategory<F extends keyof Category>(
   filterOrSlug: Filter<Category> | string,
-  fields?: F[]
+  fields?: F[],
 ): { [P in F]: Category[P] } | undefined {
   const c =
     typeof filterOrSlug === 'string'
       ? bySlug.category.get(filterOrSlug)
-      : category.find(filterOrSlug)
-  return c && pick(c, fields)
+      : category.find(filterOrSlug);
+  return c && pick(c, fields);
 }
 
 export function getCategoryByName<F extends keyof Category>(
   name: string,
-  fields?: F[]
+  fields?: F[],
 ): { [P in F]: Category[P] } | undefined {
-  return getCategory((i) => i.name === name, fields)
+  return getCategory((i) => i.name === name, fields);
 }
 
 export function getTags<F extends keyof Tag>(
   fields?: F[],
   filter: Filter<Tag> = filters.none,
-  limit = Infinity,
-  offset = 0
+  limit = Number.POSITIVE_INFINITY,
+  offset = 0,
 ): { [P in F]: Tag[P] }[] {
   return tag
     .filter(filter)
     .sort((a, b) => (a.count.total > b.count.total ? -1 : 1))
     .slice(offset, offset + limit)
-    .map((tag) => pick(tag, fields))
+    .map((tag) => pick(tag, fields));
 }
 
 export function getTagsCount(filter: Filter<Tag> = filters.none): number {
-  return tag.filter(filter).length
+  return tag.filter(filter).length;
 }
 
 export function getTag<F extends keyof Tag>(
   filterOrSlug: Filter<Tag> | string,
-  fields?: F[]
+  fields?: F[],
 ): { [P in F]: Tag[P] } | undefined {
   const t =
     typeof filterOrSlug === 'string'
       ? bySlug.tag.get(filterOrSlug)
-      : tag.find(filterOrSlug)
-  return t && pick(t, fields)
+      : tag.find(filterOrSlug);
+  return t && pick(t, fields);
 }
 
 export function getTagByName<F extends keyof Tag>(
   name: string,
-  fields?: F[]
+  fields?: F[],
 ): { [P in F]: Tag[P] } | undefined {
-  return getTag((i) => i.name === name, fields)
+  return getTag((i) => i.name === name, fields);
 }
 
 export function getPages<F extends keyof Page>(
   fields?: F[],
   filter: Filter<Page> = filters.none,
   sorter: Sorter<Page> = sorters.titleAsc,
-  limit = Infinity,
-  offset = 0
+  limit = Number.POSITIVE_INFINITY,
+  offset = 0,
 ): { [P in F]: Page[P] }[] {
   return page
     .filter(available)
     .filter(filter)
     .sort(sorter)
     .slice(offset, offset + limit)
-    .map((p) => pick(p, fields))
+    .map((p) => pick(p, fields));
 }
 
 export function getPagesCount(filter: Filter<Page> = filters.none): number {
-  return page.filter(available).filter(filter).length
+  return page.filter(available).filter(filter).length;
 }
 
 export function getPage<F extends keyof Page>(
   filterOrSlug: Filter<Page> | string,
-  fields?: F[]
+  fields?: F[],
 ): { [P in F]: Page[P] } | undefined {
   const p =
     typeof filterOrSlug === 'string'
       ? bySlug.page.get(filterOrSlug)
-      : page.find(filterOrSlug)
+      : page.find(filterOrSlug);
 
-  return p && pick(p, fields)
+  return p && pick(p, fields);
 }
 
 export function getPosts<
   F extends keyof Omit<Post, I>,
-  I extends keyof Taxonomy = never
+  I extends keyof Taxonomy = never,
 >(
   fields?: F[],
   includes?: I[],
   filter: Filter<Post> = filters.none,
   sorter: Sorter<Post> = sorters.publishedAtDesc,
-  limit = Infinity,
-  offset = 0
+  limit = Number.POSITIVE_INFINITY,
+  offset = 0,
 ): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] })[] {
   return post
     .filter(available)
@@ -245,47 +248,47 @@ export function getPosts<
     .slice(offset, offset + limit)
     .map((p) => ({
       ...pick(p, fields),
-      ...include(p, includes)
-    }))
+      ...include(p, includes),
+    }));
 }
 
 export function getPostsCount(filter: Filter<Post> = filters.none): number {
-  return post.filter(available).filter(filter).length
+  return post.filter(available).filter(filter).length;
 }
 
 export function getPost<
   F extends keyof Omit<Post, I>,
-  I extends keyof Taxonomy = never
+  I extends keyof Taxonomy = never,
 >(
   filterOrSlug: Filter<Post> | string,
   fields?: F[],
-  includes?: I[]
+  includes?: I[],
 ): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined {
   const p =
     typeof filterOrSlug === 'string'
       ? bySlug.post.get(filterOrSlug)
-      : post.find(filterOrSlug)
+      : post.find(filterOrSlug);
 
   return (
     p && {
       ...pick(p, fields),
-      ...include(p, includes)
+      ...include(p, includes),
     }
-  )
+  );
 }
 
 export function getPostWithPager<
   F extends keyof Omit<Post, I>,
-  I extends keyof Taxonomy = never
+  I extends keyof Taxonomy = never,
 >(
   filter: Filter<Post>,
   fields?: F[],
-  includes?: I[]
+  includes?: I[],
 ): ({ [P in F]: Post[P] } & { [P in I]: Taxonomy[P] }) | undefined {
-  const pI = post.findIndex(filter)
-  const p = post[pI]
-  const previous = post[pI - 1]
-  const next = post[pI + 1]
+  const pI = post.findIndex(filter);
+  const p = post[pI];
+  const previous = post[pI - 1];
+  const next = post[pI + 1];
 
   return (
     p && {
@@ -294,22 +297,22 @@ export function getPostWithPager<
       pager: {
         previous:
           previous && pick(previous, ['title', 'permalink', 'excerptHtml']),
-        next: next && pick(next, ['title', 'permalink', 'excerptHtml'])
-      }
+        next: next && pick(next, ['title', 'permalink', 'excerptHtml']),
+      },
     }
-  )
+  );
 }
 
 export function getDocuments<
   F extends keyof Omit<Document, I>,
-  I extends keyof Taxonomy = never
+  I extends keyof Taxonomy = never,
 >(
   fields?: F[],
   includes?: I[],
   filter: Filter<Document> = filters.none,
   sorter: Sorter<Document> = sorters.publishedAtDesc,
-  limit = Infinity,
-  offset = 0
+  limit = Number.POSITIVE_INFINITY,
+  offset = 0,
 ): ({ [P in F]: Document[P] } & { [P in I]: Taxonomy[P] })[] {
   return documents
     .filter(available)
@@ -318,39 +321,39 @@ export function getDocuments<
     .slice(offset, offset + limit)
     .map((doc) => ({
       ...pick(doc, fields),
-      ...include(doc, includes)
-    }))
+      ...include(doc, includes),
+    }));
 }
 
 export function getDocumentsCount(
-  filter: Filter<Document> = filters.none
+  filter: Filter<Document> = filters.none,
 ): number {
-  return documents.filter(available).filter(filter).length
+  return documents.filter(available).filter(filter).length;
 }
 
 export function getRelatedCollection(
   doc: Pick<Document, 'permalink' | 'related' | '__type'> & Partial<Taxonomy>,
   collection: 'post' | 'page',
-  limit = 3
+  limit = 3,
 ) {
-  const categories = doc?.categories?.map((d) => d.name) ?? []
-  const tags = doc?.tags?.map((d) => d.name) ?? []
+  const categories = doc?.categories?.map((d) => d.name) ?? [];
+  const tags = doc?.tags?.map((d) => d.name) ?? [];
 
-  const related: Related['related'] = []
+  const related: Related['related'] = [];
 
   if (doc.related) {
     for (const permalink of doc.related) {
-      const relatedDoc = bySlug[collection].get(permalink)
+      const relatedDoc = bySlug[collection].get(permalink);
       if (relatedDoc) {
         related.push({
-          ...pick(relatedDoc, [...relatedFields])
-        })
+          ...pick(relatedDoc, [...relatedFields]),
+        });
       }
     }
   }
 
   if (related.length >= limit) {
-    return related.slice(0, limit)
+    return related.slice(0, limit);
   }
 
   related.push(
@@ -362,13 +365,13 @@ export function getRelatedCollection(
         !related.some((r) => r.permalink === d.permalink) &&
         Boolean(
           intersection(d.categories ?? [], categories).length ||
-            intersection(d.tags ?? [], tags).length
-        )
-    )
-  )
+            intersection(d.tags ?? [], tags).length,
+        ),
+    ),
+  );
 
   if (related.length >= limit) {
-    return related.slice(0, limit)
+    return related.slice(0, limit);
   }
 
   related.push(
@@ -378,16 +381,16 @@ export function getRelatedCollection(
       (d) =>
         d.__type === doc.__type &&
         d.permalink !== doc?.permalink &&
-        !related.some((r) => r.permalink === d.permalink)
-    )
-  )
+        !related.some((r) => r.permalink === d.permalink),
+    ),
+  );
 
-  return related.slice(0, limit)
+  return related.slice(0, limit);
 }
 
 export function getRelated(
   doc: Pick<Document, 'permalink' | 'related' | '__type'> & Partial<Taxonomy>,
-  limit = 3
+  limit = 3,
 ) {
-  return getRelatedCollection(doc, doc.__type, limit)
+  return getRelatedCollection(doc, doc.__type, limit);
 }

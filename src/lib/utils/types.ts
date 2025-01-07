@@ -1,10 +1,10 @@
-import { type ReactElement } from 'react'
-import { isElement } from 'react-is'
+import type { ReactElement } from 'react';
+import { isElement } from 'react-is';
 
 export function isReactElement(
-  maybeElement: unknown
+  maybeElement: unknown,
 ): maybeElement is ReactElement {
-  return isElement(maybeElement)
+  return isElement(maybeElement);
 }
 
 /**
@@ -12,14 +12,14 @@ export function isReactElement(
  */
 export function getSingle<T>(param?: T | T[]): T | undefined {
   if (Array.isArray(param)) {
-    return param[0]
+    return param[0];
   }
-  return param
+  return param;
 }
 
 /**
  * Test whether a provided string is numeric, e.g., '9' is numeric while 'nine' is not.
  */
 export function isNumericString(key: string | undefined): boolean {
-  return Boolean(key && !isNaN(Number(key)))
+  return Boolean(key && !Number.isNaN(Number(key)));
 }

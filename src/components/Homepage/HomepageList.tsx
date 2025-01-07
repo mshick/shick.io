@@ -1,20 +1,20 @@
-import { Link } from '#/components/Link'
-import slug from 'slug'
-import { DocumentList } from '../Document/DocumentList'
-import { DocumentListItem } from '../Document/DocumentListItem'
+import slug from 'slug';
+import { Link } from '#/components/Link';
+import { DocumentList } from '../Document/DocumentList';
+import { DocumentListItem } from '../Document/DocumentListItem';
 
 export type HomepageListProps = {
-  collectionName: string
-  heading: string
-  href: string
-  documents: DocumentListItem[]
-}
+  collectionName: string;
+  heading: string;
+  href: string;
+  documents: DocumentListItem[];
+};
 
 export function HomepageList({
   collectionName,
   heading,
   href,
-  documents
+  documents,
 }: HomepageListProps) {
   return (
     <section id={`list-${slug(heading)}`} className="not-prose py-3.5">
@@ -35,5 +35,5 @@ export function HomepageList({
         </div>
       </Link>
     </section>
-  )
+  );
 }

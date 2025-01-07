@@ -1,30 +1,30 @@
-import { DocumentList } from '#/components/Document/DocumentList'
-import { DocumentListItem } from '#/components/Document/DocumentListItem'
-import { Loading } from '#/components/Loading'
-import { type Document } from '#/content'
-import { type searchStoreFields } from '@/env'
+import type { searchStoreFields } from '@/env';
 import {
   DocumentMagnifyingGlassIcon,
-  ExclamationTriangleIcon
-} from '@heroicons/react/24/outline'
+  ExclamationTriangleIcon,
+} from '@heroicons/react/24/outline';
+import { DocumentList } from '#/components/Document/DocumentList';
+import { DocumentListItem } from '#/components/Document/DocumentListItem';
+import { Loading } from '#/components/Loading';
+import type { Document } from '#/content';
 
 export type SearchResultsItem = Pick<
   Document,
   (typeof searchStoreFields)[number]
->
+>;
 
 export type SearchResultsProps = {
-  isLoading: boolean
-  isInitial: boolean
-  items: SearchResultsItem[]
-  onClickLink: () => void
-}
+  isLoading: boolean;
+  isInitial: boolean;
+  items: SearchResultsItem[];
+  onClickLink: () => void;
+};
 
 export function SearchResults({
   isLoading,
   isInitial,
   items,
-  onClickLink
+  onClickLink,
 }: SearchResultsProps) {
   return (
     <div className="flex">
@@ -80,5 +80,5 @@ export function SearchResults({
         )}
       </div>
     </div>
-  )
+  );
 }

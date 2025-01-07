@@ -1,81 +1,81 @@
-import { TZDate } from '@date-fns/tz'
-import isEmpty from 'lodash/isEmpty.js'
-import { basename, dirname, join, relative, resolve } from 'node:path'
-import slug from 'slug'
-import { type ZodMeta, type z } from 'velite'
-import { devUrl, isProduction } from './env'
-import { excerptFn } from './excerpt'
-import { getGitFileInfo, type GitFileInfo } from './git'
-import { collections, repo, timezone, url } from './options'
-import { type BaseCategory, type BaseTag } from './schema'
+import { basename, dirname, join, relative, resolve } from 'node:path';
+import { TZDate } from '@date-fns/tz';
+import isEmpty from 'lodash/isEmpty.js';
+import slug from 'slug';
+import type { ZodMeta, z } from 'velite';
+import { devUrl, isProduction } from './env';
+import { excerptFn } from './excerpt';
+import { type GitFileInfo, getGitFileInfo } from './git';
+import { url, collections, repo, timezone } from './options';
+import type { BaseCategory, BaseTag } from './schema';
 
-const __dirname = import.meta.dirname
-const baseDir = resolve(__dirname, '..')
+const __dirname = import.meta.dirname;
+const baseDir = resolve(__dirname, '..');
 
 function getSiteUrl(): string {
-  return isProduction && url ? url : devUrl
+  return isProduction && url ? url : devUrl;
 }
 
 function getRepoPath(filePath: string): string {
-  return filePath.replace(`${baseDir}/`, '')
+  return filePath.replace(`${baseDir}/`, '');
 }
 
-const gitCache: Record<string, GitFileInfo | null> = {}
+const gitCache: Record<string, GitFileInfo | null> = {};
 
 export async function getUpdatedBy(
-  filePath: string
+  filePath: string,
 ): Promise<GitFileInfo | null> {
   if (gitCache[filePath] === undefined) {
-    gitCache[filePath] = (await getGitFileInfo(baseDir, filePath)) ?? null
+    gitCache[filePath] = (await getGitFileInfo(baseDir, filePath)) ?? null;
   }
 
-  return gitCache[filePath] ?? null
+  return gitCache[filePath] ?? null;
 }
 
 export function getZonedDate(date: string | Date): Date {
   // Some TS weirdness here
   if (typeof date === 'string') {
-    return new TZDate(date, timezone)
+    return new TZDate(date, timezone);
   }
 
-  return new TZDate(date, timezone)
+  return new TZDate(date, timezone);
 }
 
 export function getShareUrl(path: string): string {
-  return new URL(path, getSiteUrl()).href
+  return new URL(path, getSiteUrl()).href;
 }
 
 function formatRepoUrl(action: 'commits' | 'edit', filePath: string) {
-  return `https://github.com/${repo.name}/${action}/${repo.branch}/${filePath}`
+  return `https://github.com/${repo.name}/${action}/${repo.branch}/${filePath}`;
 }
 
 export function getHistoryUrl(filePath: string): string {
-  return formatRepoUrl('commits', getRepoPath(filePath))
+  return formatRepoUrl('commits', getRepoPath(filePath));
 }
 
 export function getEditUrl(filePath: string): string {
-  return formatRepoUrl('edit', getRepoPath(filePath))
+  return formatRepoUrl('edit', getRepoPath(filePath));
 }
 
 const collectionPaths: Record<string, string> | undefined = collections?.reduce(
-  (p, v) => ({ ...p, [v.name]: v.path }),
-  {}
-)
+  (p, v) => (v.path ? Object.assign(p, { [v.name]: v.path }) : p),
+  {},
+);
 
 function stripIndex(path: string) {
   if (path.endsWith('/index')) {
-    return dirname(path)
+    return dirname(path);
   }
 
   if (path === 'index') {
-    return ''
+    return '';
   }
 
-  return path
+  return path;
 }
 
 export function getCollectionBasePath(collectionName: string) {
-  return collectionPaths?.[collectionName] ?? `/${collectionName}`
+  return collectionPaths?.[collectionName] ?? `/${collectionName}`;
 }
 
 /**
@@ -84,16 +84,16 @@ export function getCollectionBasePath(collectionName: string) {
 export function getPermalink(
   collectionName: string,
   path: string,
-  customSlug?: string
+  customSlug?: string,
 ) {
-  const basePath = getCollectionBasePath(collectionName)
+  const basePath = getCollectionBasePath(collectionName);
   const slugPath = isEmpty(customSlug)
     ? getSlugFromPath(collectionName, path)
-    : customSlug!
-  const joinedPath = join(basePath, stripIndex(slugPath))
+    : customSlug!;
+  const joinedPath = join(basePath, stripIndex(slugPath));
   // Enforce trailing slash
   // TODO Match next config settings
-  return joinedPath.endsWith('/') ? joinedPath : joinedPath.concat('/')
+  return joinedPath.endsWith('/') ? joinedPath : joinedPath.concat('/');
 }
 
 /**
@@ -104,7 +104,7 @@ export function getPermalink(
 export function getContentPath(root: string, path: string) {
   return relative(root, path)
     .replace(/\.[^.]+$/, '')
-    .replace(/\\/g, '/')
+    .replace(/\\/g, '/');
 }
 
 /**
@@ -118,25 +118,25 @@ export function getContentPath(root: string, path: string) {
 export function getSlugFromPath(
   collectionName: string,
   contentPath: string,
-  userSlug?: string
+  userSlug?: string,
 ) {
   // post/foo -> foo
   // post/bar/index.md -> bar
   // post/baz/bam.md -> baz/bam
   const nakedPath = contentPath
     .replace(`${collectionName}/`, '')
-    .replace(/\/$/, '')
+    .replace(/\/$/, '');
 
   // foo -> foo
   // bar -> bar
   // baz/bam -> bam
-  let slugPath = nakedPath
+  let slugPath = nakedPath;
 
   if (!isEmpty(userSlug)) {
-    slugPath = nakedPath.replace(basename(nakedPath), userSlug!)
+    slugPath = nakedPath.replace(basename(nakedPath), userSlug!);
   }
 
-  return slugPath
+  return slugPath;
 }
 
 /**
@@ -144,32 +144,32 @@ export function getSlugFromPath(
  */
 export function getSlug(name: string) {
   if (name.search('/') !== -1) {
-    throw new Error('slug source cannot contain `/`')
+    throw new Error('slug source cannot contain `/`');
   }
 
-  return slug(name)
+  return slug(name);
 }
 
 export function getAvailable(item: { draft: boolean }) {
-  return process.env.NODE_ENV !== 'production' || !item.draft
+  return process.env.NODE_ENV !== 'production' || !item.draft;
 }
 
 type TransformCtx = {
-  addIssue?: z.RefinementCtx['addIssue']
-  path: (string | number)[]
+  addIssue?: z.RefinementCtx['addIssue'];
+  path: (string | number)[];
   meta: Pick<ZodMeta, 'content' | 'path'> & {
-    config: Pick<ZodMeta['config'], 'root'>
-  }
-}
+    config: Pick<ZodMeta['config'], 'root'>;
+  };
+};
 
 export function createTaxonomyTransform(taxonomyName: string) {
   return async (data: BaseTag | BaseCategory, ctx: TransformCtx) => {
-    const { meta } = ctx
-    const updatedBy = await getUpdatedBy(meta.path)
-    const path = getContentPath(meta.config.root, meta.path)
-    const slug = getSlugFromPath(taxonomyName, path)
-    const permalink = getPermalink(taxonomyName, path, slug)
-    const excerpt = data.excerpt ?? `${data.name} ${taxonomyName}.`
+    const { meta } = ctx;
+    const updatedBy = await getUpdatedBy(meta.path);
+    const path = getContentPath(meta.config.root, meta.path);
+    const slug = getSlugFromPath(taxonomyName, path);
+    const permalink = getPermalink(taxonomyName, path, slug);
+    const excerpt = data.excerpt ?? `${data.name} ${taxonomyName}.`;
     return {
       ...data,
       body: isEmpty(data.body)
@@ -180,23 +180,25 @@ export function createTaxonomyTransform(taxonomyName: string) {
       slug,
       permalink,
       publishedAt: getZonedDate(
-        data.date ?? updatedBy?.latestDate ?? new Date()
+        data.date ?? updatedBy?.latestDate ?? new Date(),
       ).toISOString(),
-      updatedAt: getZonedDate(updatedBy?.latestDate ?? new Date()).toISOString()
-    }
-  }
+      updatedAt: getZonedDate(
+        updatedBy?.latestDate ?? new Date(),
+      ).toISOString(),
+    };
+  };
 }
 
 export async function getTaxonomy(
   root: string,
   collectionName: string,
-  terms?: string[]
+  terms?: string[],
 ) {
   if (!terms) {
-    return
+    return;
   }
 
-  const transform = createTaxonomyTransform(collectionName)
+  const transform = createTaxonomyTransform(collectionName);
   return Promise.all(
     terms.map((term) => {
       return transform(
@@ -206,8 +208,8 @@ export async function getTaxonomy(
           count: {
             total: 0,
             post: 0,
-            page: 0
-          }
+            page: 0,
+          },
         },
         {
           path: [],
@@ -215,11 +217,11 @@ export async function getTaxonomy(
             content: '',
             path: `${root}/${collectionName}/${getSlug(term.replaceAll('/', '_'))}`,
             config: {
-              root
-            }
-          }
-        }
-      )
-    })
-  )
+              root,
+            },
+          },
+        },
+      );
+    }),
+  );
 }

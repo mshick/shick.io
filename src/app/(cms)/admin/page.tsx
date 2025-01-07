@@ -1,9 +1,9 @@
 /* eslint-disable no-useless-escape */
-'use client'
+'use client';
 
-import prettierConfig from '../../../../.prettierrc.json'
+import prettierConfig from '../../../../.prettierrc.json';
 
-const CMS = 'https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js'
+const CMS = 'https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js';
 
 export default function AdminPage() {
   return (
@@ -68,8 +68,8 @@ export default function AdminPage() {
       CMS.registerCustomFormat('frontmatter', 'mdx', {toFile: formatter});
     </script>
   </body>
-</html>`
+</html>`,
       }}
     />
-  )
+  );
 }

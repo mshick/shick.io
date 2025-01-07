@@ -1,20 +1,23 @@
 export type NavigationToggleProps = {
-  label: string
-  altText: string
-  isOpen: boolean
-  onClose: () => void
-  onOpen: () => void
-}
+  label: string;
+  altText: string;
+  isOpen: boolean;
+  onClose: () => void;
+  onOpen: () => void;
+};
 
 export function NavigationToggle({
   label,
   altText,
   isOpen,
   onClose,
-  onOpen
+  onOpen,
 }: NavigationToggleProps) {
   return (
-    <button className="inline-flex items-center justify-center m-2 p-0 hover:text-white hover:bg-blue-700 focus:outline-none">
+    <button
+      type="button"
+      className="inline-flex items-center justify-center m-2 p-0 hover:text-white hover:bg-blue-700 focus:outline-none"
+    >
       <span className="sr-only">{altText}</span>
       {isOpen ? (
         <span className="block" aria-hidden="true" onClick={onClose}>
@@ -26,5 +29,5 @@ export function NavigationToggle({
         </span>
       )}
     </button>
-  )
+  );
 }

@@ -1,5 +1,5 @@
-import NextLink from 'next/link'
-import { type AnchorHTMLAttributes, type DetailedHTMLProps } from 'react'
+import NextLink from 'next/link';
+import type { AnchorHTMLAttributes, DetailedHTMLProps } from 'react';
 
 export const Link = ({
   children,
@@ -11,12 +11,12 @@ export const Link = ({
 >) => {
   if (!href || href === '#') {
     // Don't try to create bad NextLinks
-    return <a {...props}>{children}</a>
+    return <a {...props}>{children}</a>;
   }
 
   return (
     <NextLink href={href} {...props}>
       {children}
     </NextLink>
-  )
-}
+  );
+};

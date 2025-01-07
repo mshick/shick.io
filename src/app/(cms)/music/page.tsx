@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-const developerToken = ''
+const developerToken = '';
 
 export default function MusicPage() {
   return (
@@ -43,8 +43,8 @@ export default function MusicPage() {
       });
     </script>
   </body>
-</html>`
+</html>`,
       }}
     />
-  )
+  );
 }

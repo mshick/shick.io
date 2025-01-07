@@ -1,30 +1,30 @@
-import { classNames } from '#/lib/utils/classNames'
-import { type PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react';
+import { classNames } from '#/lib/utils/classNames';
 
 export type DocumentListPaginationProps = {
-  path: string
-  currentPage: number
-  totalPages: number
-}
+  path: string;
+  currentPage: number;
+  totalPages: number;
+};
 
 function PageLink({
   children,
   page,
   path,
   label,
-  className
+  className,
 }: PropsWithChildren<{
-  page?: number
-  path: string
-  label: string
-  className: string
+  page?: number;
+  path: string;
+  label: string;
+  className: string;
 }>) {
   return page ? (
     <a
       href={`${path}?page=${page}`}
       className={classNames(
         'inline-block group hover:bg-blue-700 hover:text-white no-underline select-none mr-4',
-        className
+        className,
       )}
       aria-label={label}
     >
@@ -34,23 +34,23 @@ function PageLink({
     <span
       className={classNames(
         'disabled inline-block group no-underline select-none mr-4 opacity-50',
-        className
+        className,
       )}
       aria-label={label}
       aria-disabled="true"
     >
       {children}
     </span>
-  )
+  );
 }
 
 export function DocumentListPagination({
   path,
   currentPage,
-  totalPages
+  totalPages,
 }: DocumentListPaginationProps) {
-  const prevPage = currentPage - 1
-  const nextPage = currentPage + 1
+  const prevPage = currentPage - 1;
+  const nextPage = currentPage + 1;
 
   return (
     <nav
@@ -70,5 +70,5 @@ export function DocumentListPagination({
         Next -&gt;
       </PageLink>
     </nav>
-  )
+  );
 }

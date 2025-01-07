@@ -1,96 +1,96 @@
-'use client'
+'use client';
 
-import { ThemeToggle } from '#/components/Site/components/ThemeToggle'
-import { type Options } from '#/content'
-import { useFocus } from '#/lib/hooks/useFocus'
-import { useSearch } from '#/lib/hooks/useSearch'
-import { replaceState } from '#/lib/utils/history'
-import { usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation';
 import {
   type ChangeEventHandler,
   useCallback,
   useEffect,
   useMemo,
-  useState
-} from 'react'
-import { MobileMenu } from './components/MobileMenu'
-import { NavigationMenu } from './components/NavigationMenu'
-import { NavigationToggle } from './components/NavigationToggle'
-import { SearchInput } from './components/SearchInput'
-import { SearchResults } from './components/SearchResults'
+  useState,
+} from 'react';
+import { ThemeToggle } from '#/components/Site/components/ThemeToggle';
+import type { Options } from '#/content';
+import { useFocus } from '#/lib/hooks/useFocus';
+import { useSearch } from '#/lib/hooks/useSearch';
+import { replaceState } from '#/lib/utils/history';
+import { MobileMenu } from './components/MobileMenu';
+import { NavigationMenu } from './components/NavigationMenu';
+import { NavigationToggle } from './components/NavigationToggle';
+import { SearchInput } from './components/SearchInput';
+import { SearchResults } from './components/SearchResults';
 
 export type SiteHeaderProps = {
-  siteName: string
-  navigationItems: Options['links']
-}
+  siteName: string;
+  navigationItems: Options['links'];
+};
 
 export function SiteHeader({ siteName, navigationItems }: SiteHeaderProps) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   const items = useMemo(
     () =>
       navigationItems.map((item) => ({
         ...item,
-        current: Boolean(new RegExp(item.match).exec(pathname))
+        current: Boolean(new RegExp(item.match).exec(pathname)),
       })),
-    [pathname, navigationItems]
-  )
+    [pathname, navigationItems],
+  );
 
-  const [isOpen, setIsOpen] = useState(false)
-  const [isSearchFocused, setIsSearchFocused] = useState(false)
-  const [inputRef, setInputFocus] = useFocus()
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [inputRef, setInputFocus] = useFocus();
 
-  const [setQuery, { isLoading, query, results }] = useSearch()
+  const [setQuery, { isLoading, query, results }] = useSearch();
 
   const handleClose = useCallback(() => {
-    setIsOpen(false)
-    setIsSearchFocused(false)
-    setQuery('')
-    replaceState(window.location.pathname)
-  }, [setQuery])
+    setIsOpen(false);
+    setIsSearchFocused(false);
+    setQuery('');
+    replaceState(window.location.pathname);
+  }, [setQuery]);
 
   const handleOpenSearch = useCallback(() => {
-    setIsOpen(true)
-    setInputFocus()
-    setIsSearchFocused(true)
-  }, [setInputFocus])
+    setIsOpen(true);
+    setInputFocus();
+    setIsSearchFocused(true);
+  }, [setInputFocus]);
 
   const handleOpenMenu = useCallback(() => {
-    setIsOpen(true)
-  }, [])
+    setIsOpen(true);
+  }, []);
 
   const handleQueryChange: ChangeEventHandler<HTMLFormElement> = useCallback(
     (e) => {
-      const searchQuery = e.target['value']
-      setQuery(searchQuery)
-      replaceState(`?search=${encodeURIComponent(searchQuery)}`)
+      const searchQuery = e.target.value;
+      setQuery(searchQuery);
+      replaceState(`?search=${encodeURIComponent(searchQuery)}`);
     },
-    [setQuery]
-  )
+    [setQuery],
+  );
 
   const handleQueryFocus = useCallback(() => {
-    setIsSearchFocused(true)
-  }, [])
+    setIsSearchFocused(true);
+  }, []);
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(window.location.search)
-    const initialQuery = searchParams.get('search')
+    const searchParams = new URLSearchParams(window.location.search);
+    const initialQuery = searchParams.get('search');
 
     if (initialQuery) {
-      handleOpenSearch()
-      setQuery(initialQuery)
+      handleOpenSearch();
+      setQuery(initialQuery);
     }
-  }, [setQuery, handleOpenSearch])
+  }, [setQuery, handleOpenSearch]);
 
   useEffect(() => {
     const close = (e: KeyboardEvent) => {
       if (e.code === 'Escape') {
-        handleClose()
+        handleClose();
       }
-    }
-    window.addEventListener('keydown', close)
-    return () => window.removeEventListener('keydown', close)
-  }, [handleClose])
+    };
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
+  }, [handleClose]);
 
   return (
     <header className="flex flex-col py-4">
@@ -171,5 +171,5 @@ export function SiteHeader({ siteName, navigationItems }: SiteHeaderProps) {
         />
       )}
     </header>
-  )
+  );
 }

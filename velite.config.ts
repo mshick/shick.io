@@ -1,10 +1,10 @@
-import { generateCmsConfig } from '@/cms'
-import { searchIndexOutputPath } from '@/env'
-import { defineCollection, defineConfig } from 'velite'
-import * as schema from './lib/schema'
-import { generateSearchIndex } from './lib/search'
-import { prepareTaxonomy } from './lib/taxonomy'
-import { output, rehypePlugins, remarkPlugins } from './lib/velite'
+import { generateCmsConfig } from '@/cms';
+import { searchIndexOutputPath } from '@/env';
+import { defineCollection, defineConfig } from 'velite';
+import * as schema from './lib/schema';
+import { generateSearchIndex } from './lib/search';
+import { prepareTaxonomy } from './lib/taxonomy';
+import { output, rehypePlugins, remarkPlugins } from './lib/velite';
 
 export default defineConfig({
   root: 'content',
@@ -13,76 +13,76 @@ export default defineConfig({
     post: defineCollection({
       name: 'Post',
       pattern: 'post/**/*.md',
-      schema: schema.post
+      schema: schema.post,
     }),
     page: defineCollection({
       name: 'Page',
       pattern: 'page/**/*.mdx',
-      schema: schema.page
+      schema: schema.page,
     }),
     category: defineCollection({
       name: 'Category',
       pattern: 'category/*.md',
-      schema: schema.category
+      schema: schema.category,
     }),
     tag: defineCollection({
       name: 'Tag',
       pattern: 'tag/*.md',
-      schema: schema.tag
+      schema: schema.tag,
     }),
     author: defineCollection({
       name: 'Author',
       pattern: 'author/*.yml',
-      schema: schema.authors
+      schema: schema.authors,
     }),
     options: defineCollection({
       name: 'Options',
       pattern: 'options.yml',
       single: true,
-      schema: schema.options
-    })
+      schema: schema.options,
+    }),
   },
   mdx: {
     // TODO The MDX types incorrectly disallow these as input options to s.mdx()
     remarkPlugins,
-    rehypePlugins
+    rehypePlugins,
   },
   async prepare(collections) {
-    console.log('Preparing taxonomy...')
+    console.log('Preparing taxonomy...');
 
     const { tagCount: tagsCount, categoryCount: categoriesCount } =
-      await prepareTaxonomy(collections)
+      await prepareTaxonomy(collections);
 
     console.log(
-      `Taxonomy prepared with ${tagsCount} tags and ${categoriesCount} categories`
-    )
+      `Taxonomy prepared with ${tagsCount} tags and ${categoriesCount} categories`,
+    );
   },
 
   async complete(collections, ctx) {
-    const filePath = `./src/${searchIndexOutputPath}`
+    const filePath = `./src/${searchIndexOutputPath}`;
 
-    console.log(`Writing search index to '${filePath}' ...`)
+    console.log(`Writing search index to '${filePath}' ...`);
 
     const { documentCount, termCount } = await generateSearchIndex(
       [...collections.post, ...collections.page],
       {
-        filePath
-      }
-    )
+        filePath,
+      },
+    );
 
     console.log(
-      `Search index written with ${documentCount} documents and ${termCount} terms`
-    )
+      `Search index written with ${documentCount} documents and ${termCount} terms`,
+    );
 
-    const cmsConfigFilePath = `./src/generated/cms/config.json`
+    const cmsConfigFilePath = './src/generated/cms/config.json';
 
-    console.log(`Writing CMS config to '${cmsConfigFilePath}' ...`)
+    console.log(`Writing CMS config to '${cmsConfigFilePath}' ...`);
 
     // TODO Process schemas and turn into decap cms config, write to generated
     await generateCmsConfig(ctx.config, collections.options, {
-      filePath: cmsConfigFilePath
-    })
+      filePath: cmsConfigFilePath,
+    });
 
-    console.log(`CMS config written`)
-  }
-})
+    console.log('CMS config written');
+  },
+});

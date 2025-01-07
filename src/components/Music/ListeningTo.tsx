@@ -1,49 +1,49 @@
-'use client'
+'use client';
 
-import { Loading } from '#/components/Loading'
-import { FetchError } from '#/lib/errors'
-import { classNames } from '#/lib/utils/classNames'
-import { Popover } from '@headlessui/react'
-import { ChevronUpIcon, PlayPauseIcon } from '@heroicons/react/24/solid'
+import { Popover } from '@headlessui/react';
+import { ChevronUpIcon, PlayPauseIcon } from '@heroicons/react/24/solid';
 import {
   Fragment,
   type MutableRefObject,
   useCallback,
   useRef,
-  useState
-} from 'react'
-import useSWR, { type Fetcher } from 'swr'
+  useState,
+} from 'react';
+import useSWR, { type Fetcher } from 'swr';
+import { Loading } from '#/components/Loading';
+import { FetchError } from '#/lib/errors';
+import { classNames } from '#/lib/utils/classNames';
 
 type Track = {
-  id: string
-  href: string
+  id: string;
+  href: string;
   attributes: {
-    albumName: string
-    artistName: string
+    albumName: string;
+    artistName: string;
     artwork: {
-      width: number
-      height: number
-      url: string
-    }
-    composerName: string
-    durationInMillis: number
-    genreName: string[]
-    name: string
+      width: number;
+      height: number;
+      url: string;
+    };
+    composerName: string;
+    durationInMillis: number;
+    genreName: string[];
+    name: string;
     previews: {
-      url: string
-    }[]
-    releaseDate: string
-    trackNumber: number
-    url: string
-  }
-}
+      url: string;
+    }[];
+    releaseDate: string;
+    trackNumber: number;
+    url: string;
+  };
+};
 
 type ListeningToTrackProps = {
-  audio: MutableRefObject<HTMLAudioElement>
-  track: Track
-  isActiveTrack: boolean
-  onPlay: () => void
-}
+  audio: MutableRefObject<HTMLAudioElement>;
+  track: Track;
+  isActiveTrack: boolean;
+  onPlay: () => void;
+};
 
 const fetcher: Fetcher<Track[], string> = (limit) =>
   fetch(`/api/music/recent-tracks?limit=${limit}&types=songs`)
@@ -52,59 +52,60 @@ const fetcher: Fetcher<Track[], string> = (limit) =>
       if (!res.ok) {
         throw new FetchError('An error occurred while fetching the data.', {
           info: body,
-          status: res.status
-        })
+          status: res.status,
+        });
       }
 
-      return body.data
-    })
+      return body.data;
+    });
 
 function ListeningToTrack({
   audio,
   onPlay,
   isActiveTrack,
-  track: { attributes }
+  track: { attributes },
 }: ListeningToTrackProps) {
-  const { name, artistName, previews } = attributes
-  const [duration, setDuration] = useState(0)
-  const [elapsed, setElapsed] = useState(0)
-  const trackUrl = previews?.[0]?.url
+  const { name, artistName, previews } = attributes;
+  const [duration, setDuration] = useState(0);
+  const [elapsed, setElapsed] = useState(0);
+  const trackUrl = previews?.[0]?.url;
 
   const togglePlay = useCallback(() => {
     if (!trackUrl) {
-      return
+      return;
     }
 
     if (!audio.current?.currentSrc || audio.current.currentSrc !== trackUrl) {
       if (audio.current) {
-        audio.current.pause()
+        audio.current.pause();
       }
 
-      onPlay()
+      onPlay();
 
-      audio.current = new Audio(trackUrl)
+      audio.current = new Audio(trackUrl);
 
       audio.current.addEventListener('loadeddata', () => {
-        setDuration(Math.ceil(audio.current.duration))
-      })
+        setDuration(Math.ceil(audio.current.duration));
+      });
 
       audio.current.addEventListener('timeupdate', () => {
-        setElapsed(Math.floor(audio.current.currentTime))
-      })
+        setElapsed(Math.floor(audio.current.currentTime));
+      });
 
-      void audio.current.play()
-      return
+      void audio.current.play();
+      return;
     }
 
     if (audio.current?.duration > 0 && !audio.current.paused) {
-      audio.current.pause()
+      audio.current.pause();
     } else {
-      void audio.current.play()
+      void audio.current.play();
     }
-  }, [audio, onPlay, trackUrl])
+  }, [audio, onPlay, trackUrl]);
 
   return (
     <button
+      type="button"
       className="w-full flex hover:bg-blue-700 hover:text-white p-2"
       onClick={togglePlay}
     >
@@ -128,35 +129,35 @@ function ListeningToTrack({
         )}
       </div>
     </button>
-  )
+  );
 }
 
 export type ListeningToProps = {
-  limit?: number
-}
+  limit?: number;
+};
 
 export function ListeningToPopover({ limit }: ListeningToProps) {
   const { data: recentTracks, error: recentTracksError } = useSWR(
     String(limit ?? 10),
     fetcher,
     {
-      refreshInterval: 60000
-    }
-  )
+      refreshInterval: 60000,
+    },
+  );
 
-  const [activeTrackId, setActiveTrackId] = useState<string | null>(null)
-  const audio = useRef<HTMLAudioElement>(new Audio())
+  const [activeTrackId, setActiveTrackId] = useState<string | null>(null);
+  const audio = useRef<HTMLAudioElement>(new Audio());
 
   if (recentTracksError) {
-    return null
+    return null;
   }
 
   if (!recentTracks) {
-    return <Loading />
+    return <Loading />;
   }
 
-  const mostRecentTrack = recentTracks[0]
-  const { name, artistName } = mostRecentTrack?.attributes ?? {}
+  const mostRecentTrack = recentTracks[0];
+  const { name, artistName } = mostRecentTrack?.attributes ?? {};
 
   return (
     <Popover as={Fragment}>
@@ -176,7 +177,7 @@ export function ListeningToPopover({ limit }: ListeningToProps) {
             <ChevronUpIcon
               className={classNames(
                 open ? 'rotate-180 transform' : '',
-                'h-5 w-5 text-black dark:text-white group-hover:text-white'
+                'h-5 w-5 text-black dark:text-white group-hover:text-white',
               )}
             />
           </Popover.Button>
@@ -200,9 +201,9 @@ export function ListeningToPopover({ limit }: ListeningToProps) {
         </div>
       )}
     </Popover>
-  )
+  );
 }
 
 export function ListeningTo() {
-  return <ListeningToPopover />
+  return <ListeningToPopover />;
 }

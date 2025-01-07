@@ -1,14 +1,14 @@
-import { SignalMessengerIcon } from '#/components/SignalMessengerIcon'
-import { type Options } from '#/content'
-import { classNames } from '#/lib/utils/classNames'
-import { type IconType } from 'react-icons/lib'
+import type { IconType } from 'react-icons/lib';
 import {
   TbAt,
   TbBrandGithub,
   TbBrandLinkedin,
   TbBrandWhatsapp,
-  TbBrandX
-} from 'react-icons/tb'
+  TbBrandX,
+} from 'react-icons/tb';
+import { SignalMessengerIcon } from '#/components/SignalMessengerIcon';
+import type { Options } from '#/content';
+import { classNames } from '#/lib/utils/classNames';
 
 const socialIcons: Record<Options['socials'][0]['icon'], IconType> = {
   linkedin: TbBrandLinkedin,
@@ -16,14 +16,14 @@ const socialIcons: Record<Options['socials'][0]['icon'], IconType> = {
   x: TbBrandX,
   signal: SignalMessengerIcon,
   whatsapp: TbBrandWhatsapp,
-  email: TbAt
-}
+  email: TbAt,
+};
 
 export type SiteFooterProps = {
-  showListeningTo?: boolean
-  repoUrl?: string
-  socials?: Options['socials']
-}
+  showListeningTo?: boolean;
+  repoUrl?: string;
+  socials?: Options['socials'];
+};
 
 export function SiteFooter({ repoUrl, socials }: SiteFooterProps) {
   return (
@@ -34,13 +34,13 @@ export function SiteFooter({ repoUrl, socials }: SiteFooterProps) {
       <div className="flex flex-row items-center content-between py-1 text-slate-600 ">
         <div className="flex-1 flex flex-row text-2xl relative">
           {socials?.map((social, idx) => {
-            const Icon = socialIcons[social.icon]
+            const Icon = socialIcons[social.icon];
             return (
               <div
                 key={social.name}
                 className={classNames(
                   idx !== 0 ? 'ml-2' : '',
-                  'group py-5 overflow-visible'
+                  'group py-5 overflow-visible',
                 )}
               >
                 <a
@@ -54,7 +54,7 @@ export function SiteFooter({ repoUrl, socials }: SiteFooterProps) {
                   &gt; {social.description ?? social.name} &lt;
                 </span>
               </div>
-            )
+            );
           }) ?? null}
         </div>
         {repoUrl ? (
@@ -71,5 +71,5 @@ export function SiteFooter({ repoUrl, socials }: SiteFooterProps) {
         ) : null}
       </div>
     </footer>
-  )
+  );
 }

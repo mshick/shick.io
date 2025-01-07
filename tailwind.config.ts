@@ -1,32 +1,32 @@
-import aspectRatio from '@tailwindcss/aspect-ratio'
-import forms from '@tailwindcss/forms'
-import typography from '@tailwindcss/typography'
-import parser, { type Pseudo } from 'postcss-selector-parser'
-import plugin from 'tailwindcss/plugin'
-import { type Config, type PluginAPI } from 'tailwindcss/types/config'
+import aspectRatio from '@tailwindcss/aspect-ratio';
+import forms from '@tailwindcss/forms';
+import typography from '@tailwindcss/typography';
+import parser, { type Pseudo } from 'postcss-selector-parser';
+import plugin from 'tailwindcss/plugin';
+import type { Config, PluginAPI } from 'tailwindcss/types/config';
 
-const parseSelector = parser()
+const parseSelector = parser();
 
 function commonTrailingPseudos(selector: string) {
-  const ast = parseSelector.astSync(selector)
+  const ast = parseSelector.astSync(selector);
 
-  const matrix: Pseudo[][] = []
+  const matrix: Pseudo[][] = [];
 
   // Put the pseudo elements in reverse order in a sparse, column-major 2D array
   for (const [i, sel] of ast.nodes.entries()) {
     for (const [j, child] of [...sel.nodes].reverse().entries()) {
       // We only care about pseudo elements
       if (child.type !== 'pseudo' || !child.value.startsWith('::')) {
-        break
+        break;
       }
 
-      matrix[j] = matrix[j] ?? []
-      matrix[j][i] = child
+      matrix[j] = matrix[j] ?? [];
+      matrix[j][i] = child;
     }
   }
 
   // @ts-expect-error
-  const trailingPseudos = parser.selector()
+  const trailingPseudos = parser.selector();
 
   // At this point the pseudo elements are in a column-major 2D array
   // This means each row contains one "column" of pseudo elements from each selector
@@ -35,27 +35,29 @@ function commonTrailingPseudos(selector: string) {
     // It's a sparse 2D array so there are going to be holes in the rows
     // We skip those
     if (!pseudos) {
-      continue
+      continue;
     }
 
-    const values = new Set([...pseudos.map((p) => p.value)])
+    const values = new Set([...pseudos.map((p) => p.value)]);
 
     // The pseudo elements are not the same
     if (values.size > 1) {
-      break
+      break;
     }
 
-    pseudos.forEach((pseudo) => pseudo.remove())
+    for (const pseudo of pseudos) {
+      pseudo.remove();
+    }
 
     // @ts-expect-error
-    trailingPseudos.prepend(pseudos[0])
+    trailingPseudos.prepend(pseudos[0]);
   }
 
   if (trailingPseudos.nodes.length) {
-    return [trailingPseudos.toString(), ast.toString()]
+    return [trailingPseudos.toString(), ast.toString()];
   }
 
-  return [null, selector]
+  return [null, selector];
 }
 
 function inWhere(
@@ -63,33 +65,33 @@ function inWhere(
   {
     className,
     modifier,
-    prefix
-  }: { className: string; modifier: string; prefix: (name: string) => string }
+    prefix,
+  }: { className: string; modifier: string; prefix: (name: string) => string },
 ) {
-  const prefixedNot = prefix(`.not-${className}`).slice(1)
+  const prefixedNot = prefix(`.not-${className}`).slice(1);
   const selectorPrefix = selector.startsWith('>')
     ? `${modifier === 'DEFAULT' ? `.${className}` : `.${className}-${modifier}`} `
-    : ''
+    : '';
 
   // Parse the selector, if every component ends in the same pseudo element(s) then move it to the end
-  const [trailingPseudo, rebuiltSelector] = commonTrailingPseudos(selector)
+  const [trailingPseudo, rebuiltSelector] = commonTrailingPseudos(selector);
 
   if (trailingPseudo) {
-    return `:where(${selectorPrefix}${rebuiltSelector}):not(:where([class~="${prefixedNot}"],[class~="${prefixedNot}"] *))${trailingPseudo}`
+    return `:where(${selectorPrefix}${rebuiltSelector}):not(:where([class~="${prefixedNot}"],[class~="${prefixedNot}"] *))${trailingPseudo}`;
   }
 
-  return `:where(${selectorPrefix}${selector}):not(:where([class~="${prefixedNot}"],[class~="${prefixedNot}"] *))`
+  return `:where(${selectorPrefix}${selector}):not(:where([class~="${prefixedNot}"],[class~="${prefixedNot}"] *))`;
 }
 
 const round = (num: number) =>
   num
     .toFixed(7)
     .replace(/(\.[0-9]+?)0+$/, '$1')
-    .replace(/\.0$/, '')
+    .replace(/\.0$/, '');
 
 // const rem = (px: number) => `${round(px / 16)}rem`
 
-const em = (px: number, base: number) => `${round(px / base)}em`
+const em = (px: number, base: number) => `${round(px / base)}em`;
 
 // const hexToRgb = (hex: string) => {
 //   hex = hex.replace('#', '')
@@ -100,19 +102,19 @@ const em = (px: number, base: number) => `${round(px / base)}em`
 //   return `${r} ${g} ${b}`
 // }
 
-const sidenoteCounter = 'sidenote-counter'
+const sidenoteCounter = 'sidenote-counter';
 
 const styles = (theme: PluginAPI['theme']) => ({
   DEFAULT: {
     '&': {
-      counterReset: sidenoteCounter
+      counterReset: sidenoteCounter,
     },
     '[class~="lead"]': {
-      fontStyle: 'italic'
+      fontStyle: 'italic',
     },
     section: {
       paddingTop: em(16, 16),
-      paddingBottom: em(16, 16)
+      paddingBottom: em(16, 16),
     },
     a: {
       textUnderlineOffset: em(8, 16),
@@ -120,44 +122,44 @@ const styles = (theme: PluginAPI['theme']) => ({
         textDecorationColor: 'var(--tw-prose-links-hover-bg)',
         backgroundColor: 'var(--tw-prose-links-hover-bg)',
         color: 'var(--tw-prose-links-hover-text)',
-        textShadow: 'none'
+        textShadow: 'none',
       },
       '&::selection': {
         backgroundColor: theme('colors.gray.500'),
         color: 'var(--tw-prose-pre-bg)',
-        textShadow: 'none'
-      }
+        textShadow: 'none',
+      },
     },
     'a.anchor': {
-      textDecoration: 'none'
+      textDecoration: 'none',
     },
     h1: {
       fontWeight: 'normal',
       marginTop: em(20, 18),
-      marginBottom: em(14, 16)
+      marginBottom: em(14, 16),
     },
     h2: {
       fontWeight: 'normal',
       fontStyle: 'italic',
       marginTop: em(24, 18),
-      marginBottom: em(16, 16)
+      marginBottom: em(16, 16),
     },
     h3: {
       fontWeight: 'normal',
       fontStyle: 'italic',
       marginTop: em(24, 18),
-      marginBottom: em(16, 16)
+      marginBottom: em(16, 16),
     },
     // Auto-linked headings
     'h2 > a, h3 > a': {
-      fontWeight: 'normal'
+      fontWeight: 'normal',
     },
     pre: {
       borderColor: 'var(--tw-prose-borders)',
       borderWidth: '1px',
       borderStyle: 'dashed',
       overflow: 'auto',
-      backgroundColor: 'var(--tw-prose-pre-bg)'
+      backgroundColor: 'var(--tw-prose-pre-bg)',
       // padding: em(16, 16),
       // marginTop: em(16, 16),
       // marginBottom: em(16, 16),
@@ -180,23 +182,23 @@ const styles = (theme: PluginAPI['theme']) => ({
       marginRight: '0',
       paddingLeft: em(12, 16),
       p: {
-        width: '100%'
+        width: '100%',
       },
       'p:first-of-type::before': {
         content: '">"',
         display: 'block',
         position: 'absolute',
         left: em(-8, 16),
-        color: 'inherit'
-      }
+        color: 'inherit',
+      },
     },
     'blockquote footer': {
       fontSize: '0.75rem',
-      textAlign: 'right'
+      textAlign: 'right',
     },
     '.newthought': {
       fontSize: '1.2rem',
-      fontVariant: 'small-caps'
+      fontVariant: 'small-caps',
     },
     ol: {
       position: 'relative',
@@ -204,16 +206,16 @@ const styles = (theme: PluginAPI['theme']) => ({
       marginTop: '0',
       marginBottom: em(12, 16),
       padding: '0',
-      marginLeft: theme('spacing.7')
+      marginLeft: theme('spacing.7'),
     },
     'ol > li': {
-      counterIncrement: 'li'
+      counterIncrement: 'li',
     },
     'ol > li::before': {
       content: 'counter(li)',
       color: 'inherit',
       position: 'absolute',
-      left: '-20px'
+      left: '-20px',
     },
     ul: {
       position: 'relative',
@@ -221,56 +223,56 @@ const styles = (theme: PluginAPI['theme']) => ({
       marginTop: '0',
       marginBottom: em(12, 16),
       padding: '0',
-      marginLeft: theme('spacing.7')
+      marginLeft: theme('spacing.7'),
     },
     'ul > li': {
-      counterIncrement: 'li'
+      counterIncrement: 'li',
     },
     'ul > li::before': {
       content: '"*"',
       color: 'inherit',
       position: 'absolute',
-      left: '-20px'
+      left: '-20px',
     },
     li: {
-      marginBottom: theme('spacing.1')
+      marginBottom: theme('spacing.1'),
     },
     thead: {
-      borderBottomStyle: 'dashed'
+      borderBottomStyle: 'dashed',
     },
     tr: {
-      borderBottomStyle: 'dashed'
+      borderBottomStyle: 'dashed',
     },
     'tr:nth-of-type(even)': {
-      backgroundColor: 'var(--tw-prose-tr-even)'
+      backgroundColor: 'var(--tw-prose-tr-even)',
     },
     figure: {
       maxWidth: '100%',
       marginTop: theme('spacing.5'),
-      marginBottom: theme('spacing.5')
+      marginBottom: theme('spacing.5'),
     },
     'figure > figcaption': {
       marginTop: em(8, 16),
-      color: 'var(--tw-prose-body)'
+      color: 'var(--tw-prose-body)',
     },
     'figure.fullwidth': {
       display: 'block',
       gridTemplateColumns: 'initial',
       marginTop: em(20, 16),
-      marginBottom: em(20, 16)
+      marginBottom: em(20, 16),
     },
     '.video-wrapper': {
-      aspectRatio: '16 / 9'
+      aspectRatio: '16 / 9',
     },
     '.video-wrapper > iframe': {
       height: '100%',
-      width: '100%'
+      width: '100%',
     },
     // Inline marginnotes / sidenotes
     '.sidenote-number': {
       counterIncrement: sidenoteCounter,
       display: 'inline-block',
-      maxHeight: '2rem'
+      maxHeight: '2rem',
     },
     '.sidenote-number::after': {
       content: `counter(${sidenoteCounter})`,
@@ -278,7 +280,7 @@ const styles = (theme: PluginAPI['theme']) => ({
       top: '-0.4rem',
       left: '0.15rem',
       position: 'relative',
-      verticalAlign: 'baseline'
+      verticalAlign: 'baseline',
     },
     '.sidenote-definition, .marginnote-definition': {
       fontSize: '0.8rem',
@@ -289,7 +291,7 @@ const styles = (theme: PluginAPI['theme']) => ({
       float: 'left',
       left: '1rem',
       margin: '1rem 2.5%',
-      width: '95%'
+      width: '95%',
     },
     '.sidenote-definition::before': {
       content: `counter(${sidenoteCounter})`,
@@ -297,29 +299,29 @@ const styles = (theme: PluginAPI['theme']) => ({
       top: '-0.4rem',
       left: '-0.2rem',
       position: 'relative',
-      verticalAlign: 'baseline'
+      verticalAlign: 'baseline',
     },
     '.sidenote input.margin-toggle': {
-      display: 'none'
+      display: 'none',
     },
     '.sidenote .margin-toggle:checked + .sidenote-definition': {
-      display: 'block'
+      display: 'block',
     },
     '.marginnote .margin-toggle:checked + .marginnote-definition': {
-      display: 'block'
+      display: 'block',
     },
     '.sidenote label.margin-toggle': {
       cursor: 'pointer',
-      pointerEvents: 'initial'
+      pointerEvents: 'initial',
     },
     '.marginnote input.margin-toggle': {
-      display: 'none'
+      display: 'none',
     },
     '.marginnote label.margin-toggle': {
       display: 'inline',
       cursor: 'pointer',
-      pointerEvents: 'initial'
-    }
+      pointerEvents: 'initial',
+    },
   },
   sidenotes: {
     // Sidenotes to the side
@@ -331,19 +333,19 @@ const styles = (theme: PluginAPI['theme']) => ({
       float: 'right',
       left: 0,
       margin: '0.3rem -34% 0 0',
-      width: '26%'
+      width: '26%',
     },
     '.sidenote > label.margin-toggle': {
       cursor: 'default',
-      pointerEvents: 'none'
+      pointerEvents: 'none',
     },
     '.marginnote > label.margin-toggle': {
       display: 'none',
       cursor: 'default',
-      pointerEvents: 'none'
-    }
-  }
-})
+      pointerEvents: 'none',
+    },
+  },
+});
 
 export default {
   content: ['./src/**/*.{ts,tsx}'],
@@ -363,32 +365,32 @@ export default {
       xl: '1280px',
       // => @media (min-width: 1280px) { ... }
 
-      '2xl': '1536px'
+      '2xl': '1536px',
       // => @media (min-width: 1536px) { ... }
     },
     extend: {
       animation: {
         marquee: 'marquee 30s linear infinite',
-        marquee2: 'marquee2 30s linear infinite'
+        marquee2: 'marquee2 30s linear infinite',
       },
       keyframes: {
         marquee: {
           '0%': { transform: 'translateX(0%)' },
           '5%': { transform: 'translateX(0%)' },
-          '100%': { transform: 'translateX(-100%)' }
+          '100%': { transform: 'translateX(-100%)' },
         },
         marquee2: {
           '0%': { transform: 'translateX(100%)' },
           '5%': { transform: 'translateX(100%)' },
-          '100%': { transform: 'translateX(0%)' }
-        }
+          '100%': { transform: 'translateX(0%)' },
+        },
       },
       fontFamily: {
         primary: ['var(--font-plex-mono)', 'sans-serif'],
         sans: ['var(--font-plex-mono)', 'sans-serif'],
-        mono: ['var(--font-plex-mono)', 'monospace']
-      }
-    }
+        mono: ['var(--font-plex-mono)', 'monospace'],
+      },
+    },
   },
   // variants: {
   //   typography: ['dark']
@@ -397,98 +399,99 @@ export default {
     forms,
     typography,
     aspectRatio,
-    plugin.withOptions<{ className?: string; target?: 'modern' }>(function ({
-      className = 'prose'
-      // target = 'modern'
-    } = {}) {
-      return function (api) {
-        const { e, config, theme, ...rest } = api
-        const { prefix } = rest as any
-        const styleProfile = styles(theme)
+    plugin.withOptions<{ className?: string; target?: 'modern' }>(
+      ({
+        className = 'prose',
+        // target = 'modern'
+      } = {}) =>
+        (api) => {
+          const { e, config, theme, ...rest } = api;
+          const { prefix } = rest as any;
+          const styleProfile = styles(theme);
 
-        const prefixed = Object.keys(styleProfile).map((modifier) => {
-          return {
-            [modifier === 'DEFAULT'
-              ? `.${className}`
-              : `.${className}-${modifier}`]: Object.fromEntries(
-              // @ts-expect-error
-              Object.keys(styleProfile[modifier]).map((prop) => [
-                `${inWhere(prop, { className, modifier, prefix })}`,
+          const prefixed = Object.keys(styleProfile).map((modifier) => {
+            return {
+              [modifier === 'DEFAULT'
+                ? `.${className}`
+                : `.${className}-${modifier}`]: Object.fromEntries(
                 // @ts-expect-error
-                styleProfile[modifier][prop]
-              ])
-            )
-          }
-        })
+                Object.keys(styleProfile[modifier]).map((prop) => [
+                  `${inWhere(prop, { className, modifier, prefix })}`,
+                  // @ts-expect-error
+                  styleProfile[modifier][prop],
+                ]),
+              ),
+            };
+          });
 
-        api.addComponents([
-          ...prefixed,
-          {
-            [`.${className}-tufted`]: {
-              '--tw-prose-body': theme('colors.black'),
-              '--tw-prose-headings': theme('colors.black'),
-              '--tw-prose-lead': theme('colors.black'),
-              '--tw-prose-links': theme('colors.black'),
-              '--tw-prose-links-hover-bg': theme('colors.blue.700'),
-              '--tw-prose-links-hover-text': theme('colors.white'),
-              '--tw-prose-bold': theme('colors.black'),
-              '--tw-prose-counters': theme('colors.black'),
-              '--tw-prose-bullets': theme('colors.black'),
-              '--tw-prose-hr': theme('colors.black'),
-              '--tw-prose-quotes': theme('colors.black'),
-              '--tw-prose-quote-borders': theme('colors.black'),
-              '--tw-prose-captions': theme('colors.black'),
-              '--tw-prose-borders': theme('colors.gray.300'),
-              '--tw-prose-code': theme('colors.black'),
-              '--tw-prose-pre-code': '#977d49',
-              '--tw-prose-pre-code-keyword': '#728fcb',
-              '--tw-prose-pre-code-comment': '#9a949e',
-              '--tw-prose-pre-code-tag': '#a42375',
-              '--tw-prose-pre-code-function': '#a42375',
-              '--tw-prose-pre-code-selector': '#4b38dc',
-              '--tw-prose-pre-code-attr-name': '#4b38dc',
-              '--tw-prose-pre-code-variable': '#bd3a28',
-              '--tw-prose-pre-code-inserted': '#4b38dc',
-              '--tw-prose-pre-code-important': '#bd3a28',
-              '--tw-prose-pre-code-highlight': '#bd3a28',
-              '--tw-prose-pre-code-selection': '#f2ece4',
-              '--tw-prose-pre-bg': '#fafafa',
-              '--tw-prose-th-borders': theme('colors.gray.300'),
-              '--tw-prose-td-borders': theme('colors.gray.300'),
-              '--tw-prose-tr-even': theme('colors.gray.100'),
-              '--tw-prose-invert-body': theme('colors.white'),
-              '--tw-prose-invert-headings': theme('colors.white'),
-              '--tw-prose-invert-lead': theme('colors.white'),
-              '--tw-prose-invert-links': theme('colors.white'),
-              '--tw-prose-invert-bold': theme('colors.white'),
-              '--tw-prose-invert-counters': theme('colors.white'),
-              '--tw-prose-invert-bullets': theme('colors.white'),
-              '--tw-prose-invert-hr': theme('colors.white'),
-              '--tw-prose-invert-quotes': theme('colors.white'),
-              '--tw-prose-invert-quote-borders': theme('colors.white'),
-              '--tw-prose-invert-captions': theme('colors.white'),
-              '--tw-prose-invert-borders': theme('colors.gray.700'),
-              '--tw-prose-invert-code': theme('colors.white'),
-              '--tw-prose-invert-pre-code': '#b3ace8',
-              '--tw-prose-invert-pre-code-keyword': '#ffcc99',
-              '--tw-prose-invert-pre-code-comment': '#6c6783',
-              '--tw-prose-invert-pre-code-tag': '#e09142',
-              '--tw-prose-invert-pre-code-function': '#9a86fd',
-              '--tw-prose-invert-pre-code-selector': '#eeebff',
-              '--tw-prose-invert-pre-code-attr-name': '#c4b9fe',
-              '--tw-prose-invert-pre-code-variable': '#ffcc99',
-              '--tw-prose-invert-pre-code-inserted': '#eeebff',
-              '--tw-prose-invert-pre-code-important': '#c4b9fe',
-              '--tw-prose-invert-pre-code-highlight': '#8a75f5',
-              '--tw-prose-invert-pre-code-selection': '#6a51e6',
-              '--tw-prose-invert-pre-bg': theme('colors.black'),
-              '--tw-prose-invert-th-borders': theme('colors.gray.700'),
-              '--tw-prose-invert-td-borders': theme('colors.gray.700'),
-              '--tw-prose-invert-tr-even': theme('colors.gray.900')
-            }
-          }
-        ])
-      }
-    })
-  ]
-} satisfies Config
+          api.addComponents([
+            ...prefixed,
+            {
+              [`.${className}-tufted`]: {
+                '--tw-prose-body': theme('colors.black'),
+                '--tw-prose-headings': theme('colors.black'),
+                '--tw-prose-lead': theme('colors.black'),
+                '--tw-prose-links': theme('colors.black'),
+                '--tw-prose-links-hover-bg': theme('colors.blue.700'),
+                '--tw-prose-links-hover-text': theme('colors.white'),
+                '--tw-prose-bold': theme('colors.black'),
+                '--tw-prose-counters': theme('colors.black'),
+                '--tw-prose-bullets': theme('colors.black'),
+                '--tw-prose-hr': theme('colors.black'),
+                '--tw-prose-quotes': theme('colors.black'),
+                '--tw-prose-quote-borders': theme('colors.black'),
+                '--tw-prose-captions': theme('colors.black'),
+                '--tw-prose-borders': theme('colors.gray.300'),
+                '--tw-prose-code': theme('colors.black'),
+                '--tw-prose-pre-code': '#977d49',
+                '--tw-prose-pre-code-keyword': '#728fcb',
+                '--tw-prose-pre-code-comment': '#9a949e',
+                '--tw-prose-pre-code-tag': '#a42375',
+                '--tw-prose-pre-code-function': '#a42375',
+                '--tw-prose-pre-code-selector': '#4b38dc',
+                '--tw-prose-pre-code-attr-name': '#4b38dc',
+                '--tw-prose-pre-code-variable': '#bd3a28',
+                '--tw-prose-pre-code-inserted': '#4b38dc',
+                '--tw-prose-pre-code-important': '#bd3a28',
+                '--tw-prose-pre-code-highlight': '#bd3a28',
+                '--tw-prose-pre-code-selection': '#f2ece4',
+                '--tw-prose-pre-bg': '#fafafa',
+                '--tw-prose-th-borders': theme('colors.gray.300'),
+                '--tw-prose-td-borders': theme('colors.gray.300'),
+                '--tw-prose-tr-even': theme('colors.gray.100'),
+                '--tw-prose-invert-body': theme('colors.white'),
+                '--tw-prose-invert-headings': theme('colors.white'),
+                '--tw-prose-invert-lead': theme('colors.white'),
+                '--tw-prose-invert-links': theme('colors.white'),
+                '--tw-prose-invert-bold': theme('colors.white'),
+                '--tw-prose-invert-counters': theme('colors.white'),
+                '--tw-prose-invert-bullets': theme('colors.white'),
+                '--tw-prose-invert-hr': theme('colors.white'),
+                '--tw-prose-invert-quotes': theme('colors.white'),
+                '--tw-prose-invert-quote-borders': theme('colors.white'),
+                '--tw-prose-invert-captions': theme('colors.white'),
+                '--tw-prose-invert-borders': theme('colors.gray.700'),
+                '--tw-prose-invert-code': theme('colors.white'),
+                '--tw-prose-invert-pre-code': '#b3ace8',
+                '--tw-prose-invert-pre-code-keyword': '#ffcc99',
+                '--tw-prose-invert-pre-code-comment': '#6c6783',
+                '--tw-prose-invert-pre-code-tag': '#e09142',
+                '--tw-prose-invert-pre-code-function': '#9a86fd',
+                '--tw-prose-invert-pre-code-selector': '#eeebff',
+                '--tw-prose-invert-pre-code-attr-name': '#c4b9fe',
+                '--tw-prose-invert-pre-code-variable': '#ffcc99',
+                '--tw-prose-invert-pre-code-inserted': '#eeebff',
+                '--tw-prose-invert-pre-code-important': '#c4b9fe',
+                '--tw-prose-invert-pre-code-highlight': '#8a75f5',
+                '--tw-prose-invert-pre-code-selection': '#6a51e6',
+                '--tw-prose-invert-pre-bg': theme('colors.black'),
+                '--tw-prose-invert-th-borders': theme('colors.gray.700'),
+                '--tw-prose-invert-td-borders': theme('colors.gray.700'),
+                '--tw-prose-invert-tr-even': theme('colors.gray.900'),
+              },
+            },
+          ]);
+        },
+    ),
+  ],
+} satisfies Config;

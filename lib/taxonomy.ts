@@ -1,60 +1,60 @@
-import { getAvailable, getTaxonomy } from './fields'
-import { type Category, type Page, type Post, type Tag } from './schema'
+import { getAvailable, getTaxonomy } from './fields';
+import type { Category, Page, Post, Tag } from './schema';
 
 type Collections = {
-  category: Category[]
-  tag: Tag[]
-  post: Post[]
-  page: Page[]
-}
+  category: Category[];
+  tag: Tag[];
+  post: Post[];
+  page: Page[];
+};
 
 export async function prepareTaxonomy(collections: Collections) {
-  const { category, tag, post, page } = collections
+  const { category, tag, post, page } = collections;
 
-  const docs = [...post.filter(getAvailable), ...page.filter(getAvailable)]
+  const docs = [...post.filter(getAvailable), ...page.filter(getAvailable)];
 
   const categoriesInDocs = new Set(
-    docs.map((item) => item.categories ?? []).flat()
-  )
+    docs.flatMap((item) => item.categories ?? []),
+  );
 
   const categoriesFromDocs = await getTaxonomy(
     'content',
     'categories',
     Array.from(categoriesInDocs).filter(
-      (i) => category.find((j) => j.name === i) == null
-    )
-  )
+      (i) => category.find((j) => j.name === i) == null,
+    ),
+  );
 
   if (categoriesFromDocs) {
-    category.push(...categoriesFromDocs)
+    category.push(...categoriesFromDocs);
   }
 
-  category.forEach((i) => {
-    i.count.post = post.filter((j) => j.categories?.includes(i.name)).length
-    i.count.page = page.filter((j) => j.categories?.includes(i.name)).length
-    i.count.total = i.count.post + i.count.page
-  })
+  for (const i of category) {
+    i.count.post = post.filter((j) => j.categories?.includes(i.name)).length;
+    i.count.page = page.filter((j) => j.categories?.includes(i.name)).length;
+    i.count.total = i.count.post + i.count.page;
+  }
 
-  const tagsInDocs = new Set(docs.map((item) => item.tags ?? []).flat())
+  const tagsInDocs = new Set(docs.flatMap((item) => item.tags ?? []));
 
   const tagsFromDocs = await getTaxonomy(
     'content',
     'tags',
-    Array.from(tagsInDocs).filter((i) => tag.find((j) => j.name === i) == null)
-  )
+    Array.from(tagsInDocs).filter((i) => tag.find((j) => j.name === i) == null),
+  );
 
   if (tagsFromDocs) {
-    tag.push(...tagsFromDocs)
+    tag.push(...tagsFromDocs);
   }
 
-  tag.forEach((i) => {
-    i.count.post = post.filter((j) => j.tags?.includes(i.name)).length
-    i.count.page = page.filter((j) => j.tags?.includes(i.name)).length
-    i.count.total = i.count.post + i.count.page
-  })
+  for (const i of tag) {
+    i.count.post = post.filter((j) => j.tags?.includes(i.name)).length;
+    i.count.page = page.filter((j) => j.tags?.includes(i.name)).length;
+    i.count.total = i.count.post + i.count.page;
+  }
 
   return {
     tagCount: tag.length,
-    categoryCount: category.length
-  }
+    categoryCount: category.length,
+  };
 }

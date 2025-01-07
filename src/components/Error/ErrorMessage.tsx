@@ -1,16 +1,16 @@
-import { Link } from '#/components/Link'
-import { type PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react';
+import { Link } from '#/components/Link';
 
 export interface ErrorMessageProps {
-  headline: string
-  subhead: string
-  body: string
+  headline: string;
+  subhead: string;
+  body: string;
 }
 
 export const ErrorMessage = ({
   headline,
   subhead,
-  body
+  body,
 }: PropsWithChildren<ErrorMessageProps>) => {
   return (
     <>
@@ -38,5 +38,5 @@ export const ErrorMessage = ({
         </div>
       </div>
     </>
-  )
-}
+  );
+};

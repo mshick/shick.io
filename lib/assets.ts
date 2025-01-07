@@ -1,17 +1,17 @@
-import type { Element, Root as Hast } from 'hast'
-import { join } from 'node:path'
-import { visit } from 'unist-util-visit'
-import { type Image, isRelativePath, type Output, processAsset } from 'velite'
-import type { VFile } from 'vfile'
-import { UPLOADS_BASE } from './constants'
+import { join } from 'node:path';
+import type { Element, Root as Hast } from 'hast';
+import { visit } from 'unist-util-visit';
+import { type Image, type Output, isRelativePath, processAsset } from 'velite';
+import type { VFile } from 'vfile';
+import { UPLOADS_BASE } from './constants';
 
-const ABSOLUTE_ROOT = 'public'
+const ABSOLUTE_ROOT = 'public';
 
-export type CopyLinkedFilesOptions = Omit<Output, 'data' | 'clean'>
+export type CopyLinkedFilesOptions = Omit<Output, 'data' | 'clean'>;
 
 const isUploadsPath = (uploadsBase: string, url: string) => {
-  return url.startsWith(uploadsBase)
-}
+  return url.startsWith(uploadsBase);
+};
 
 /**
  * rehype (markdown) plugin to copy linked files to public path and replace their urls with public urls
@@ -23,69 +23,69 @@ const isUploadsPath = (uploadsBase: string, url: string) => {
 export const rehypeCopyLinkedFiles =
   (options: CopyLinkedFilesOptions) => async (tree: Hast, file: VFile) => {
     if (!UPLOADS_BASE.startsWith('/') || !UPLOADS_BASE.endsWith('/')) {
-      throw new Error('Uploads base must start and end with a /')
+      throw new Error('Uploads base must start and end with a /');
     }
 
-    const links = new Map<string, Element[]>()
-    const linkedPropertyNames = ['href', 'src', 'poster']
+    const links = new Map<string, Element[]>();
+    const linkedPropertyNames = ['href', 'src', 'poster'];
     visit(tree, 'element', (node) => {
-      linkedPropertyNames.forEach((name) => {
-        const value = node.properties[name]
+      for (const name of linkedPropertyNames) {
+        const value = node.properties[name];
 
         if (
           typeof value === 'string' &&
           (isRelativePath(value) ||
             (isUploadsPath(UPLOADS_BASE, value) && ABSOLUTE_ROOT))
         ) {
-          const elements = links.get(value) ?? []
-          elements.push(node)
-          links.set(value, elements)
+          const elements = links.get(value) ?? [];
+          elements.push(node);
+          links.set(value, elements);
         }
-      })
-    })
+      }
+    });
     await Promise.all(
       Array.from(links.entries()).map(async ([url, elements]) => {
-        const isImage = elements.some((element) => element.tagName === 'img')
-        const isUploads = isUploadsPath(UPLOADS_BASE, url)
+        const isImage = elements.some((element) => element.tagName === 'img');
+        const isUploads = isUploadsPath(UPLOADS_BASE, url);
 
         const urlOrImage: string | Image = await processAsset(
           isUploads ? join(ABSOLUTE_ROOT, url) : url,
           isUploads ? join(process.cwd(), ABSOLUTE_ROOT) : file.path,
           options.name,
           options.base,
-          isImage ? true : undefined
-        )
+          isImage ? true : undefined,
+        );
 
         if (!urlOrImage) {
-          return
+          return;
         }
 
-        let linkedUrl: string
-        let image: Image
+        let linkedUrl: string;
+        let image: Image | undefined;
 
         if (typeof urlOrImage === 'string') {
           if (urlOrImage === url) {
-            return
+            return;
           }
 
-          linkedUrl = urlOrImage
+          linkedUrl = urlOrImage;
         } else {
-          linkedUrl = urlOrImage.src
-          image = urlOrImage
+          linkedUrl = urlOrImage.src;
+          image = urlOrImage;
         }
 
-        elements.forEach((node) => {
-          linkedPropertyNames.forEach((name) => {
+        for (const node of elements) {
+          for (const name of linkedPropertyNames) {
             if (name in node.properties) {
-              node.properties[name] = linkedUrl
+              node.properties[name] = linkedUrl;
             }
-          })
+          }
 
           if (image && node.tagName === 'img') {
-            node.properties['height'] = String(image.height)
-            node.properties['width'] = String(image.width)
+            node.properties.height = String(image.height);
+            node.properties.width = String(image.width);
           }
-        })
-      })
-    )
-  }
+        }
+      }),
+    );
+  };

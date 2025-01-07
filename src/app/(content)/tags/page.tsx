@@ -1,23 +1,29 @@
-import { Link } from '#/components/Link'
-import { TagList } from '#/components/Tag/TagList'
-import { getTags } from '#/content'
-import { type Metadata } from 'next'
-import slug from 'slug'
+import type { Metadata } from 'next';
+import slug from 'slug';
+import { Link } from '#/components/Link';
+import { TagList } from '#/components/Tag/TagList';
+import { getTags } from '#/content';
 
-const HEADING = 'Tags'
+const HEADING = 'Tags';
 
-export const revalidate = 60
+export const revalidate = 60;
 
 export function generateMetadata(): Metadata {
   return {
-    title: HEADING
-  }
+    title: HEADING,
+  };
 }
 
 export default function TagsPage() {
-  const heading = HEADING
+  const heading = HEADING;
 
-  const tags = getTags(['permalink', 'name', 'excerpt', 'publishedAt', 'count'])
+  const tags = getTags([
+    'permalink',
+    'name',
+    'excerpt',
+    'publishedAt',
+    'count',
+  ]);
 
   return (
     <section id={`list-${slug(heading)}`} className="not-prose py-3.5">
@@ -33,5 +39,5 @@ export default function TagsPage() {
         )}
       </TagList>
     </section>
-  )
+  );
 }

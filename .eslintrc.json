@@ -1,92 +1,7 @@
 {
-  "plugins": [
-    "json-format"
-  ],
-  "extends": [
-    "eslint:recommended",
-    "next/core-web-vitals",
-    "plugin:prettier/recommended"
-  ],
-  "parserOptions": {
-    "ecmaVersion": 13,
-    "project": true,
-    "tsconfigRootDir": "./",
-    "sourceType": "module"
-  },
-  "settings": {
-    "import/resolver": {
-      "typescript": true,
-      "node": true
-    }
-  },
   "overrides": [
     {
-      "files": [
-        "**/*.ts",
-        "**/*.tsx"
-      ],
-      "extends": [
-        "eslint:recommended",
-        "next/core-web-vitals",
-        "plugin:@typescript-eslint/recommended-type-checked",
-        "plugin:@typescript-eslint/stylistic-type-checked",
-        "plugin:import/recommended",
-        "plugin:prettier/recommended",
-        "plugin:import/typescript"
-      ],
-      "rules": {
-        "@typescript-eslint/consistent-type-definitions": "off",
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/no-unsafe-return": "off",
-        "@typescript-eslint/no-unsafe-argument": "off",
-        "@typescript-eslint/no-unsafe-assignment": "off",
-        "@typescript-eslint/no-unsafe-member-access": "off",
-        "@typescript-eslint/no-unsafe-call": "off",
-        "@typescript-eslint/prefer-nullish-coalescing": [
-          "error",
-          {
-            "ignoreTernaryTests": false,
-            "ignoreConditionalTests": true,
-            "ignoreMixedLogicalExpressions": true
-          }
-        ],
-        "@typescript-eslint/ban-ts-comment": "off",
-        "@typescript-eslint/no-unused-vars": [
-          "error",
-          {
-            "vars": "all",
-            "args": "after-used",
-            "ignoreRestSiblings": true,
-            "argsIgnorePattern": "/^_/.source",
-            "caughtErrors": "all",
-            "caughtErrorsIgnorePattern": "/^_$/.source"
-          }
-        ],
-        "@typescript-eslint/dot-notation": [
-          "error",
-          {
-            "allowIndexSignaturePropertyAccess": true
-          }
-        ],
-        "@typescript-eslint/consistent-type-exports": [
-          "error",
-          {
-            "fixMixedExportsWithInlineTypeSpecifier": true
-          }
-        ],
-        "@typescript-eslint/consistent-type-imports": [
-          "error",
-          {
-            "fixStyle": "inline-type-imports"
-          }
-        ]
-      }
-    },
-    {
-      "files": [
-        "**/*.md",
-        "**/*.mdx"
-      ],
+      "files": ["**/*.md", "**/*.mdx"],
       "extends": [
         "eslint:recommended",
         "plugin:prettier/recommended",
@@ -101,17 +16,10 @@
       }
     },
     {
-      "files": [
-        "**/*.md/**"
-      ],
+      "files": ["**/*.md/**"],
       "parserOptions": {
         "project": null
       }
     }
-  ],
-  "ignorePatterns": [
-    "package-lock.json",
-    "tsconfig.json",
-    "**/generated/**/*"
   ]
 }

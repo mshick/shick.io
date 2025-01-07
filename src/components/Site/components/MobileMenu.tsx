@@ -1,10 +1,10 @@
-import { Link } from '#/components/Link'
-import { type Options } from '#/content'
-import { classNames } from '#/lib/utils/classNames'
+import { Link } from '#/components/Link';
+import type { Options } from '#/content';
+import { classNames } from '#/lib/utils/classNames';
 
 export type MobileMenuProps = {
-  items: Options['links']
-}
+  items: Options['links'];
+};
 
 export function MobileMenu({ items }: MobileMenuProps) {
   return (
@@ -25,7 +25,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
                 item.current
                   ? `before:content-[">"]`
                   : `before:content-["["] after:content-["]"]`,
-                'block no-underline before:p-0 after:p-0 hover:bg-blue-700 hover:text-white'
+                'block no-underline before:p-0 after:p-0 hover:bg-blue-700 hover:text-white',
               )}
             >
               {item.text}
@@ -34,5 +34,5 @@ export function MobileMenu({ items }: MobileMenuProps) {
         ))}
       </div>
     </div>
-  )
+  );
 }

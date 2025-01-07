@@ -1,5 +1,5 @@
-import { s, type z } from 'velite'
-import { DEFAULT_EXCERPT_LENGTH, excerptFn } from './excerpt'
+import { s, type z } from 'velite';
+import { DEFAULT_EXCERPT_LENGTH, excerptFn } from './excerpt';
 import {
   createTaxonomyTransform,
   getContentPath,
@@ -9,42 +9,42 @@ import {
   getShareUrl,
   getSlugFromPath,
   getUpdatedBy,
-  getZonedDate
-} from './fields'
-import { image } from './image'
-import { markdownOptions } from './velite'
+  getZonedDate,
+} from './fields';
+import { image } from './image';
+import { markdownOptions } from './velite';
 
-export const MARKDOWN = 'markdown'
-export const RELATION = 'relation'
-export const ISODATE = 'datetime'
+export const MARKDOWN = 'markdown';
+export const RELATION = 'relation';
+export const ISODATE = 'datetime';
 
-const icon = s.enum(['github', 'x', 'signal', 'linkedin', 'whatsapp', 'email'])
+const icon = s.enum(['github', 'x', 'signal', 'linkedin', 'whatsapp', 'email']);
 
 const cover = s.object({
   image: image({ absoluteRoot: 'public' }).optional(),
   video: s.string().optional(),
   title: s.string().optional(),
   alt: s.string().optional(),
-  caption: s.string().optional()
-})
+  caption: s.string().optional(),
+});
 
 const count = s
   .object({ total: s.number(), post: s.number(), page: s.number() })
-  .default({ total: 0, post: 0, page: 0 })
+  .default({ total: 0, post: 0, page: 0 });
 
 const meta = s.object({
   title: s.string().optional(),
   description: s.string().optional(),
-  keywords: s.array(s.string()).optional()
-})
+  keywords: s.array(s.string()).optional(),
+});
 
 export const authors = s.object({
   name: s.string(),
   email: s.string().email(),
-  url: s.string().url()
-})
+  url: s.string().url(),
+});
 
-export type Authors = z.infer<typeof authors>
+export type Authors = z.infer<typeof authors>;
 
 export const options = s.object({
   name: s.string().max(20),
@@ -57,12 +57,12 @@ export const options = s.object({
   repo: s.object({
     provider: s.enum(['github']),
     name: s.string(),
-    branch: s.string().default('main')
+    branch: s.string().default('main'),
   }),
   author: s.object({
     name: s.string(),
     email: s.string().email(),
-    url: s.string().url()
+    url: s.string().url(),
   }),
   links: s.array(
     s.object({
@@ -70,8 +70,8 @@ export const options = s.object({
       path: s.string(),
       match: s.string(),
       type: s.enum(['navigation', 'footer', 'copyright']),
-      current: s.boolean().default(false)
-    })
+      current: s.boolean().default(false),
+    }),
   ),
   socials: s.array(
     s.object({
@@ -79,8 +79,8 @@ export const options = s.object({
       description: s.string().optional(),
       icon,
       link: s.string(),
-      image: s.image().optional()
-    })
+      image: s.image().optional(),
+    }),
   ),
   cms: s
     .object({
@@ -89,7 +89,7 @@ export const options = s.object({
       locale: s.string().optional(),
       editor: s
         .object({
-          preview: s.boolean().default(true)
+          preview: s.boolean().default(true),
         })
         .nullable()
         .optional(),
@@ -97,7 +97,7 @@ export const options = s.object({
         .object({
           encoding: s.enum(['unicode', 'ascii']),
           clean_accents: s.boolean().default(true),
-          sanitize_replacement: s.string().optional()
+          sanitize_replacement: s.string().optional(),
         })
         .nullable()
         .optional(),
@@ -106,13 +106,13 @@ export const options = s.object({
           structure: s.enum([
             'multiple_folders',
             'multiple_files',
-            'single_file'
+            'single_file',
           ]),
           locales: s.array(s.string()).optional(),
-          default_locale: s.string().optional()
+          default_locale: s.string().optional(),
         })
         .nullable()
-        .optional()
+        .optional(),
     })
     .describe('Configuration overrides for the CMS')
     .nullable()
@@ -124,7 +124,7 @@ export const options = s.object({
         path: s.string().optional(),
         pagination: s
           .object({
-            per_page: s.number()
+            per_page: s.number(),
           })
           .nullable()
           .optional(),
@@ -143,21 +143,21 @@ export const options = s.object({
             delete: s.boolean().optional().default(true),
             editor: s
               .object({
-                preview: s.boolean().optional().default(true)
+                preview: s.boolean().optional().default(true),
               })
               .nullable()
               .optional(),
-            publish: s.boolean().optional().default(true)
+            publish: s.boolean().optional().default(true),
           })
           .nullable()
-          .optional()
-      })
+          .optional(),
+      }),
     )
     .nullable()
-    .optional()
-})
+    .optional(),
+});
 
-export type Options = z.infer<typeof options>
+export type Options = z.infer<typeof options>;
 
 const baseTag = s.object({
   name: s.string().max(20),
@@ -165,13 +165,13 @@ const baseTag = s.object({
   excerpt: s.markdown().optional().describe(MARKDOWN),
   date: s.isodate().describe(ISODATE).optional(),
   body: s.markdown(markdownOptions).describe(MARKDOWN),
-  count
-})
+  count,
+});
 
-export const tag = baseTag.transform(createTaxonomyTransform('tag'))
+export const tag = baseTag.transform(createTaxonomyTransform('tag'));
 
-export type BaseTag = z.infer<typeof baseTag>
-export type Tag = z.infer<typeof tag>
+export type BaseTag = z.infer<typeof baseTag>;
+export type Tag = z.infer<typeof tag>;
 
 export const baseCategory = s.object({
   name: s.string().max(20),
@@ -179,13 +179,13 @@ export const baseCategory = s.object({
   excerpt: s.markdown().optional().describe(MARKDOWN),
   date: s.isodate().describe(ISODATE).optional(),
   body: s.markdown(markdownOptions).describe(MARKDOWN),
-  count
-})
+  count,
+});
 
-export const category = baseTag.transform(createTaxonomyTransform('category'))
+export const category = baseTag.transform(createTaxonomyTransform('category'));
 
-export type BaseCategory = z.infer<typeof baseCategory>
-export type Category = z.infer<typeof category>
+export type BaseCategory = z.infer<typeof baseCategory>;
+export type Category = z.infer<typeof category>;
 
 export const post = s
   .object({
@@ -203,8 +203,8 @@ export const post = s
       .describe(
         JSON.stringify({
           widget: 'relation',
-          collection: 'author'
-        })
+          collection: 'author',
+        }),
       ),
     draft: s.boolean().optional().default(false),
     toc: s.toc(),
@@ -214,14 +214,14 @@ export const post = s
     related: s
       .array(s.string())
       .optional()
-      .describe(JSON.stringify({ widget: 'relation' }))
+      .describe(JSON.stringify({ widget: 'relation' })),
   })
   .transform(async (data, ctx) => {
-    const { meta } = ctx
-    const updatedBy = await getUpdatedBy(meta.path)
-    const path = getContentPath(meta.config.root, meta.path)
-    const slug = getSlugFromPath('post', path)
-    const permalink = getPermalink('post', path, slug)
+    const { meta } = ctx;
+    const updatedBy = await getUpdatedBy(meta.path);
+    const path = getContentPath(meta.config.root, meta.path);
+    const slug = getSlugFromPath('post', path);
+    const permalink = getPermalink('post', path, slug);
 
     return {
       ...data,
@@ -229,7 +229,7 @@ export const post = s
       excerptHtml: excerptFn(
         { format: 'html', length: DEFAULT_EXCERPT_LENGTH + 40 },
         data.excerpt,
-        ctx
+        ctx,
       ),
       slug,
       permalink,
@@ -240,13 +240,15 @@ export const post = s
       updatedBy: updatedBy?.latestAuthorName ?? '',
       updatedByEmail: updatedBy?.latestAuthorEmail ?? '',
       publishedAt: getZonedDate(
-        data.date ?? updatedBy?.latestDate ?? new Date()
+        data.date ?? updatedBy?.latestDate ?? new Date(),
       ).toISOString(),
-      updatedAt: getZonedDate(updatedBy?.latestDate ?? new Date()).toISOString()
-    }
-  })
+      updatedAt: getZonedDate(
+        updatedBy?.latestDate ?? new Date(),
+      ).toISOString(),
+    };
+  });
 
-export type Post = z.infer<typeof post>
+export type Post = z.infer<typeof post>;
 
 export const page = s
   .object({
@@ -259,21 +261,21 @@ export const page = s
     categories: s.array(s.string()).optional(),
     tags: s.array(s.string()).optional(),
     draft: s.boolean().default(false),
-    related: s.array(s.string()).optional()
+    related: s.array(s.string()).optional(),
   })
   .transform(async (data, ctx) => {
-    const { meta } = ctx
-    const updatedBy = await getUpdatedBy(meta.path)
-    const path = getContentPath(meta.config.root, meta.path)
-    const slug = getSlugFromPath('page', path)
-    const permalink = getPermalink('page', path, slug)
+    const { meta } = ctx;
+    const updatedBy = await getUpdatedBy(meta.path);
+    const path = getContentPath(meta.config.root, meta.path);
+    const slug = getSlugFromPath('page', path);
+    const permalink = getPermalink('page', path, slug);
     return {
       ...data,
       excerpt: excerptFn({ format: 'text' }, data.excerpt, ctx),
       excerptHtml: excerptFn(
         { format: 'html', length: DEFAULT_EXCERPT_LENGTH + 40 },
         data.excerpt,
-        ctx
+        ctx,
       ),
       slug,
       permalink,
@@ -281,10 +283,12 @@ export const page = s
       editUrl: getEditUrl(meta.path),
       historyUrl: getHistoryUrl(meta.path),
       publishedAt: getZonedDate(
-        updatedBy?.latestDate ?? new Date()
+        updatedBy?.latestDate ?? new Date(),
       ).toISOString(),
-      updatedAt: getZonedDate(updatedBy?.latestDate ?? new Date()).toISOString()
-    }
-  })
+      updatedAt: getZonedDate(
+        updatedBy?.latestDate ?? new Date(),
+      ).toISOString(),
+    };
+  });
 
-export type Page = z.infer<typeof page>
+export type Page = z.infer<typeof page>;

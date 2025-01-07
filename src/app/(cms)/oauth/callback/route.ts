@@ -1,39 +1,37 @@
-import { githubClientId, githubClientSecret, githubTokenUrl } from '@/env'
-import { NextResponse } from 'next/server'
+import { githubClientId, githubClientSecret, githubTokenUrl } from '@/env';
+import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url)
+  const { searchParams } = new URL(request.url);
 
   const data = {
     code: searchParams.get('code'),
     client_id: githubClientId,
-    client_secret: githubClientSecret
-  }
-
-  let script
+    client_secret: githubClientSecret,
+  };
 
   try {
     const response = await fetch(githubTokenUrl, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data)
-    })
+      body: JSON.stringify(data),
+    });
 
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`)
+      throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const body = await response.json()
+    const body = await response.json();
 
     const content = {
       token: body.access_token,
-      provider: 'github'
-    }
+      provider: 'github',
+    };
 
-    script = `
+    const script = `
       <script>
         const receiveMessage = (message) => {
           window.opener.postMessage(
@@ -47,13 +45,13 @@ export async function GET(request: Request) {
 
         window.opener.postMessage("authorizing:${content.provider}", "*");
       </script>
-    `
+    `;
 
     return new Response(script, {
-      headers: { 'Content-Type': 'text/html' }
-    })
+      headers: { 'Content-Type': 'text/html' },
+    });
   } catch (err) {
-    console.log(err)
-    return NextResponse.redirect('/?error=argg')
+    console.log(err);
+    return NextResponse.redirect('/?error=argg');
   }
 }

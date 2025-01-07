@@ -1,23 +1,23 @@
-import { getSiteUrl } from '#/content'
-import { isProduction } from '@/env'
-import { type MetadataRoute } from 'next'
+import { isProduction } from '@/env';
+import type { MetadataRoute } from 'next';
+import { getSiteUrl } from '#/content';
 
 export default function robots(): MetadataRoute.Robots {
-  const allow = []
-  const disallow = ['/admin/']
+  const allow = [];
+  const disallow = ['/admin/'];
 
   if (isProduction) {
-    allow.push('/')
+    allow.push('/');
   } else {
-    disallow.push('/')
+    disallow.push('/');
   }
 
   return {
     rules: {
       userAgent: '*',
       allow,
-      disallow
+      disallow,
     },
-    sitemap: `${getSiteUrl()}/sitemap.xml`
-  }
+    sitemap: `${getSiteUrl()}/sitemap.xml`,
+  };
 }

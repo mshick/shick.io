@@ -1,20 +1,20 @@
-import type { Post, Tag } from '#/content'
-import { standardDate } from '#/lib/utils/text'
-import Link from 'next/link'
+import Link from 'next/link';
+import type { Post, Tag } from '#/content';
+import { standardDate } from '#/lib/utils/text';
 
 export type PostHeaderProps = Pick<
   Post,
   'publishedAt' | 'updatedAt' | 'title' | 'author' | 'metadata'
 > & {
-  tags?: Pick<Tag, 'name' | 'slug' | 'permalink'>[]
-}
+  tags?: Pick<Tag, 'name' | 'slug' | 'permalink'>[];
+};
 
 export function PostHeader({ publishedAt, metadata, title }: PostHeaderProps) {
   return (
     <header id="post-header" className="space-y-3">
       <Link
         href={{
-          pathname: '/posts/'
+          pathname: '/posts/',
         }}
         className="group flex flex-row gap-1 whitespace-nowrap text-xs mt-4"
       >
@@ -37,5 +37,5 @@ export function PostHeader({ publishedAt, metadata, title }: PostHeaderProps) {
         ) : null}
       </div>
     </header>
-  )
+  );
 }

@@ -1,14 +1,14 @@
-'use client'
+'use client';
 
-import { type Document } from '#/content'
-import { type searchStoreFields } from '@/env'
-import { type SearchResult } from 'minisearch'
-import { type Dispatch, type SetStateAction, useState } from 'react'
-import useSWR, { type Fetcher } from 'swr'
-import { FetchError } from '../errors'
+import type { searchStoreFields } from '@/env';
+import type { SearchResult } from 'minisearch';
+import { type Dispatch, type SetStateAction, useState } from 'react';
+import useSWR, { type Fetcher } from 'swr';
+import type { Document } from '#/content';
+import { FetchError } from '../errors';
 
 type SearchDocument = Pick<Document, (typeof searchStoreFields)[number]> &
-  SearchResult
+  SearchResult;
 
 const fetcher: Fetcher<SearchDocument[], string> = (query) =>
   fetch(`/api/search?query=${query}`)
@@ -17,30 +17,30 @@ const fetcher: Fetcher<SearchDocument[], string> = (query) =>
       if (!res.ok) {
         throw new FetchError('An error occurred while fetching the data.', {
           info: body,
-          status: res.status
-        })
+          status: res.status,
+        });
       }
 
-      return body.data
-    })
+      return body.data;
+    });
 
 export type SearchHookResults<T> = {
-  isLoading: boolean
-  query: string
-  results: T[]
-}
+  isLoading: boolean;
+  query: string;
+  results: T[];
+};
 
 export function useSearch(): [
   Dispatch<SetStateAction<string>>,
-  SearchHookResults<SearchDocument>
+  SearchHookResults<SearchDocument>,
 ] {
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState('');
 
   const { data: results, isLoading } = useSWR(
     () => (query.length > 1 ? query : null),
     fetcher,
-    { fallbackData: [] }
-  )
+    { fallbackData: [] },
+  );
 
-  return [setQuery, { isLoading, query, results }]
+  return [setQuery, { isLoading, query, results }];
 }

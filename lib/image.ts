@@ -1,12 +1,12 @@
-import { join } from 'node:path'
-import { type Image, processAsset, z } from 'velite'
+import { join } from 'node:path';
+import { type Image, processAsset, z } from 'velite';
 
 export interface ImageOptions {
   /**
    * root path for absolute path, if provided, the value will be processed as an absolute path
    * @default undefined
    */
-  absoluteRoot?: string
+  absoluteRoot?: string;
   // /**
   //  * allow remote url
   //  * @default false
@@ -20,7 +20,7 @@ export interface ImageOptions {
 export const image = ({ absoluteRoot }: ImageOptions = {}) =>
   z.string().transform<Image>(async (value, { meta, addIssue }) => {
     try {
-      const { output } = meta.config
+      const { output } = meta.config;
 
       if (absoluteRoot && value.startsWith('/')) {
         return await processAsset(
@@ -28,8 +28,8 @@ export const image = ({ absoluteRoot }: ImageOptions = {}) =>
           join(process.cwd(), absoluteRoot),
           output.name,
           output.base,
-          true
-        )
+          true,
+        );
         // const metadata = await getImageMetadata(buffer)
         // if (metadata == null)
         //   throw new Error(`Failed to get image metadata: ${value}`)
@@ -52,11 +52,11 @@ export const image = ({ absoluteRoot }: ImageOptions = {}) =>
         meta.path,
         output.name,
         output.base,
-        true
-      )
+        true,
+      );
     } catch (err) {
-      const message = err instanceof Error ? err.message : String(err)
-      addIssue({ fatal: true, code: 'custom', message })
-      return null as never
+      const message = err instanceof Error ? err.message : String(err);
+      addIssue({ fatal: true, code: 'custom', message });
+      return null as never;
     }
-  })
+  });

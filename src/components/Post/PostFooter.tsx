@@ -1,18 +1,18 @@
-import type { Post, Related, Taxonomy } from '#/content'
-import { standardDate } from '#/lib/utils/text'
-import Link from 'next/link'
+import Link from 'next/link';
+import type { Post, Related, Taxonomy } from '#/content';
+import { standardDate } from '#/lib/utils/text';
 
 export type PostFooterProps = Pick<
   Post,
   'historyUrl' | 'shareUrl' | 'updatedAt'
 > &
   Related &
-  Taxonomy
+  Taxonomy;
 
 function PostFooterMeta({
   updatedAt,
   historyUrl,
-  tags
+  tags,
 }: Pick<PostFooterProps, 'updatedAt' | 'historyUrl' | 'tags'>) {
   return (
     <div className="flex flex-col items-start sm:items-center sm:flex-row-reverse justify-between gap-8 sm:gap-4">
@@ -44,7 +44,7 @@ function PostFooterMeta({
         </ul>
       ) : null}
     </div>
-  )
+  );
 }
 
 function PostFooterRelated({ related }: Related) {
@@ -67,7 +67,7 @@ function PostFooterRelated({ related }: Related) {
         ))}
       </ul>
     </div>
-  )
+  );
 }
 
 export function PostFooter(post: PostFooterProps) {
@@ -79,7 +79,7 @@ export function PostFooter(post: PostFooterProps) {
 
       {post.related ? <PostFooterRelated related={post.related} /> : null}
 
-      <div className="mb-10"></div>
+      <div className="mb-10" />
     </footer>
-  )
+  );
 }

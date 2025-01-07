@@ -1,11 +1,11 @@
-import { withSentryConfig } from '@sentry/nextjs'
-import type { NextConfig } from 'next'
+import { withSentryConfig } from '@sentry/nextjs';
+import type { NextConfig } from 'next';
 
 // https://securityheaders.com
 const ContentSecurityPolicy = `
   default-src * 'unsafe-inline' 'unsafe-eval' data: blob:;
   script-src * 'unsafe-inline' 'unsafe-eval' data:;
-`
+`;
 
 // @ts-expect-error
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -13,40 +13,40 @@ const securityHeaders: { key: string; value: string }[] = [
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP
   {
     key: 'Content-Security-Policy',
-    value: ContentSecurityPolicy.replace(/\n/g, '')
+    value: ContentSecurityPolicy.replace(/\n/g, ''),
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy
   {
     key: 'Referrer-Policy',
-    value: 'origin-when-cross-origin'
+    value: 'origin-when-cross-origin',
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
   {
     key: 'X-Frame-Options',
-    value: 'DENY'
+    value: 'DENY',
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
   {
     key: 'X-Content-Type-Options',
-    value: 'nosniff'
+    value: 'nosniff',
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-DNS-Prefetch-Control
   {
     key: 'X-DNS-Prefetch-Control',
-    value: 'on'
+    value: 'on',
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
   {
     key: 'Strict-Transport-Security',
-    value: 'max-age=31536000; includeSubDomains; preload'
+    value: 'max-age=31536000; includeSubDomains; preload',
   },
   // https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
   // Opt-out of Google FLoC: https://amifloced.org/
   {
     key: 'Permissions-Policy',
-    value: 'camera=(), microphone=(), geolocation=()'
-  }
-]
+    value: 'camera=(), microphone=(), geolocation=()',
+  },
+];
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -63,20 +63,20 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
-        ]
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
       },
       {
         source: '/_next/image(.*)',
         headers: [
           {
             key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable'
-          }
-        ]
-      }
-    ])
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ]);
   },
   // redirects prevents `next export`
   async redirects() {
@@ -84,28 +84,28 @@ const nextConfig: NextConfig = {
       {
         source: '/michael-shick-2022.pdf',
         destination: 'https://read.cv/mshick',
-        permanent: false
+        permanent: false,
       },
       {
         source: '/resume',
         destination: 'https://read.cv/mshick',
-        permanent: false
+        permanent: false,
       },
       {
         source: '/30',
         destination: 'https://calendly.com/michaelshick/30min',
-        permanent: false
+        permanent: false,
       },
       {
         source: '/15',
         destination: 'https://calendly.com/michaelshick/15min',
-        permanent: false
-      }
-    ])
+        permanent: false,
+      },
+    ]);
   },
   // output: 'export',
   eslint: {
-    dirs: ['src', 'lib']
+    dirs: ['src', 'lib'],
   },
   images: {
     minimumCacheTTL: 60,
@@ -115,41 +115,41 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'edwardtufte.github.io'
+        hostname: 'edwardtufte.github.io',
       },
       {
         protocol: 'https',
-        hostname: '**.github.io'
+        hostname: '**.github.io',
       },
       {
         protocol: 'https',
-        hostname: 'github.com'
-      }
-    ]
+        hostname: 'github.com',
+      },
+    ],
   },
   // Doesn't seem to work in Vercel builds
   experimental: {
     turbo: {
       rules: {
         '*.txt': {
-          loaders: ['raw-loader']
-        }
-      }
-    }
-  }
-}
+          loaders: ['raw-loader'],
+        },
+      },
+    },
+  },
+};
 
 function defineConfig(config: NextConfig) {
   return () => {
     if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
-      config = withSentryConfig(
-        { ...nextConfig, sentry: { hideSourceMaps: true } },
-        { silent: true }
-      )
+      return withSentryConfig(
+        { ...config, sentry: { hideSourceMaps: true } },
+        { silent: true },
+      );
     }
 
-    return config
-  }
+    return config;
+  };
 }
 
-export default defineConfig(nextConfig)
+export default defineConfig(nextConfig);

@@ -1,6 +1,6 @@
-import firstName from '#/components/Ascii/firstName.txt'
-import lastName from '#/components/Ascii/lastName.txt'
-import picture from '#/components/Ascii/portrait.txt'
+import firstName from '#/components/Ascii/firstName.txt';
+import lastName from '#/components/Ascii/lastName.txt';
+import picture from '#/components/Ascii/portrait.txt';
 
 export function HomepageHero() {
   return (
@@ -26,5 +26,5 @@ export function HomepageHero() {
         </pre>
       </div>
     </section>
-  )
+  );
 }

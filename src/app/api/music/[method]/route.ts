@@ -1,44 +1,44 @@
-import { createMusicKit } from '#/lib/musickit/musickit'
-import { type SegmentData } from '#/types/types'
-import { type NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server';
+import { createMusicKit } from '#/lib/musickit/musickit';
+import type { SegmentData } from '#/types/types';
 
-const _musickitPrivateKey = process.env.MUSICKIT_PRIVATE_KEY ?? ''
-const musickitPrivateKey = _musickitPrivateKey.replace(/\\n/g, '\n')
-const musickitKeyId = process.env.MUSICKIT_KEY_ID
-const musickitTeamId = process.env.MUSICKIT_TEAM_ID
-const musickitMusicUserToken = process.env.MUSICKIT_MUSIC_USER_TOKEN
-const apiSecret = process.env.API_SECRET
+const _musickitPrivateKey = process.env.MUSICKIT_PRIVATE_KEY ?? '';
+const musickitPrivateKey = _musickitPrivateKey.replace(/\\n/g, '\n');
+const musickitKeyId = process.env.MUSICKIT_KEY_ID;
+const musickitTeamId = process.env.MUSICKIT_TEAM_ID;
+const musickitMusicUserToken = process.env.MUSICKIT_MUSIC_USER_TOKEN;
+const apiSecret = process.env.API_SECRET;
 
 type Params = {
-  method: string
-}
+  method: string;
+};
 
-export const runtime = 'edge'
+export const runtime = 'edge';
 
 export async function GET(req: NextRequest, segmentData: SegmentData<Params>) {
-  const { searchParams } = req.nextUrl
-  const { method } = await segmentData.params
+  const { searchParams } = req.nextUrl;
+  const { method } = await segmentData.params;
 
   if (!musickitMusicUserToken || !musickitTeamId || !musickitKeyId) {
     return NextResponse.json(
       {
-        errors: [{ title: 'Not configured' }]
+        errors: [{ title: 'Not configured' }],
       },
       {
-        status: 500
-      }
-    )
+        status: 500,
+      },
+    );
   }
 
   const musicKit = await createMusicKit({
     musicUserToken: musickitMusicUserToken,
     privateKey: musickitPrivateKey,
     teamId: musickitTeamId,
-    keyId: musickitKeyId
-  })
+    keyId: musickitKeyId,
+  });
 
-  let results
-  let status = 200
+  let results: Record<string, unknown>;
+  let status = 200;
 
   switch (method) {
     case 'renew-token':
@@ -46,56 +46,56 @@ export async function GET(req: NextRequest, segmentData: SegmentData<Params>) {
         apiSecret &&
         req.headers.get('authorization') === `Bearer ${apiSecret}`
       ) {
-        results = await musicKit.renewMusicUserToken()
+        results = await musicKit.renewMusicUserToken();
         if (results.error) {
-          status = 500
+          status = 500;
           results = {
             errors: [
-              { title: results.error, message: results.error_description }
-            ]
-          }
+              { title: results.error, message: results.error_description },
+            ],
+          };
         }
       } else {
-        results = { errors: [{ title: 'Unauthorized' }] }
-        status = 401
+        results = { errors: [{ title: 'Unauthorized' }] };
+        status = 401;
       }
-      break
+      break;
 
     case 'recent-tracks':
       results = await musicKit.getRecentlyPlayedTracks(
-        Object.fromEntries(searchParams)
-      )
+        Object.fromEntries(searchParams),
+      );
       if (results.errors) {
-        status = 500
+        status = 500;
       }
-      break
+      break;
 
     case 'heavy-rotation':
       results = await musicKit.getHeavyRotationContent(
-        Object.fromEntries(searchParams)
-      )
+        Object.fromEntries(searchParams),
+      );
       if (results.errors) {
-        status = 500
+        status = 500;
       }
-      break
+      break;
 
     case 'recently-added':
       results = await musicKit.getRecentlyAddedResources(
-        Object.fromEntries(searchParams)
-      )
+        Object.fromEntries(searchParams),
+      );
       if (results.errors) {
-        status = 500
+        status = 500;
       }
-      break
+      break;
 
     default:
       results = {
-        errors: [{ title: 'Not found' }]
-      }
-      status = 404
+        errors: [{ title: 'Not found' }],
+      };
+      status = 404;
   }
 
   return NextResponse.json(results, {
-    status
-  })
+    status,
+  });
 }
