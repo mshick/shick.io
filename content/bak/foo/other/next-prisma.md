@@ -94,7 +94,7 @@ We have two models: `Song` and `Artist`. A `Song` includes some necessary
 information like the `name` as well as a relation to an `Artist`. For the sake
 of this example, a `Song` can only have one `Artist`.
 
-```js
+```graphql
 datasource db {
   provider = "sqlite"
   url      = "file:dev.db"
@@ -138,7 +138,7 @@ This file sets up the boilerplate for `getStaticProps` to allow us to query the
 database for our songs. Then, we iterate over our results and display them as a
 list.
 
-```js
+```jsx
 export async function getStaticProps() {
   return {
     props: {
@@ -168,7 +168,7 @@ can fetch all songs using `findMany`. One of the best features of Prisma is how
 simple it makes working with relations. We can retrieve the corresponding
 `Artist` for the `Song` using `include`.
 
-```js {1,4,5,6,7}:pages/index.js
+```jsx {1,4,5,6,7}:pages/index.js
 import { PrismaClient } from '@prisma/client'
 
 export async function getStaticProps() {
@@ -297,7 +297,7 @@ Once again, I've included the page boilerplate to use `getStaticPaths` and
 `getStaticProps`. Try navigating to `/songs/1` in your browser. You should see a
 YouTube video.
 
-```js
+```jsx
 export async function getStaticProps({ params }) {
   return {
     props: {
@@ -340,7 +340,7 @@ Now, let's hook this up to real data.
 - `getStaticProps` will query song data for the given `id`
 - `getStaticPaths` will generate a page for each song in the database
 
-```js {1,4,5,6,7,8,9,10,14,20,21,24,25,26,27}:pages/songs/[id].js
+```jsx {1,4,5,6,7,8,9,10,14,20,21,24,25,26,27}:pages/songs/[id].js
 import { PrismaClient } from '@prisma/client'
 
 export async function getStaticProps({ params }) {
