@@ -91,7 +91,6 @@ export const options = s.object({
         .object({
           preview: s.boolean().default(true),
         })
-        .nullable()
         .optional(),
       slug: s
         .object({
@@ -99,7 +98,6 @@ export const options = s.object({
           clean_accents: s.boolean().default(true),
           sanitize_replacement: s.string().optional(),
         })
-        .nullable()
         .optional(),
       i18n: s
         .object({
@@ -111,11 +109,25 @@ export const options = s.object({
           locales: s.array(s.string()).optional(),
           default_locale: s.string().optional(),
         })
-        .nullable()
         .optional(),
+      automatic_deployments: s.boolean().default(true),
+      output: s.object({
+        omit_empty_optional_fields: s.boolean().default(true),
+        json: s
+          .object({
+            indent_style: s.enum(['space', 'tab']),
+            indent_size: s.number(),
+          })
+          .optional(),
+        yaml: s
+          .object({
+            quote: s.enum(['single', 'double']),
+            indent_size: s.number(),
+          })
+          .optional(),
+      }),
     })
     .describe('Configuration overrides for the CMS')
-    .nullable()
     .optional(),
   collections: s
     .array(
@@ -126,11 +138,15 @@ export const options = s.object({
           .object({
             per_page: s.number(),
           })
-          .nullable()
           .optional(),
         cms: s
           .object({
-            name: s.string().optional(),
+            icon: s
+              .string()
+              .optional()
+              .describe(
+                '[Material Design icon name](https://fonts.google.com/icons?icon.set=Material+Symbols)',
+              ),
             label: s.string().optional(),
             label_singular: s.string().optional(),
             description: s.string().optional(),
@@ -141,19 +157,11 @@ export const options = s.object({
             preview_path_date_field: s.string().optional(),
             create: s.boolean().optional().default(true),
             delete: s.boolean().optional().default(true),
-            editor: s
-              .object({
-                preview: s.boolean().optional().default(true),
-              })
-              .nullable()
-              .optional(),
             publish: s.boolean().optional().default(true),
           })
-          .nullable()
           .optional(),
       }),
     )
-    .nullable()
     .optional(),
 });
 
@@ -191,8 +199,8 @@ export const post = s
   .object({
     __type: s.literal('post').default('post'),
     title: s.string().max(99),
-    cover: cover.nullable().optional(),
-    meta: meta.nullable().optional(),
+    cover: cover.optional(),
+    meta: meta.optional(),
     metadata: s.metadata(),
     body: s.markdown(markdownOptions).describe(MARKDOWN),
     excerpt: s.markdown().optional().describe(MARKDOWN),
@@ -255,8 +263,8 @@ export const page = s
     __type: s.literal('page').default('page'),
     title: s.string().max(99),
     excerpt: s.markdown().describe(MARKDOWN),
-    cover: cover.nullable().optional(),
-    meta: meta.nullable().optional(),
+    cover: cover.optional(),
+    meta: meta.optional(),
     body: s.mdx({ gfm: false, copyLinkedFiles: false }).describe(MARKDOWN),
     categories: s.array(s.string()).optional(),
     tags: s.array(s.string()).optional(),

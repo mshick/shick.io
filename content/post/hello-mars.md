@@ -1,11 +1,9 @@
 ---
 title: Hello Mars!!!
-cover: null
-meta: null
 excerpt: Mars!
 date: 2024-11-01T12:31:00
 author: michael-shick
-draft: true
+draft: false
 featured: false
 categories:
   - foo
@@ -15,6 +13,6 @@ related:
   - foo-bar
 ---
 
-Mars!!
+Mars!!!
 
 ![](/uploads/sample-castle.jpg)

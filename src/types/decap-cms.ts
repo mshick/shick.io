@@ -418,4 +418,15 @@ export interface CmsConfig {
   editor?: {
     preview?: boolean;
   };
+  // Sveltia-specific
+  automatic_deployments?: boolean;
+  omit_empty_optional_fields?: boolean;
+  json?: {
+    indent_style?: 'space' | 'tab';
+    indent_size?: number;
+  };
+  yaml?: {
+    quote?: 'single' | 'double';
+    indent_size?: number;
+  };
 }

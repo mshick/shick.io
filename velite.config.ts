@@ -78,7 +78,6 @@ export default defineConfig({
 
     console.log(`Writing CMS config to '${cmsConfigFilePath}' ...`);
 
-    // TODO Process schemas and turn into decap cms config, write to generated
     await generateCmsConfig(ctx.config, collections.options, {
       filePath: cmsConfigFilePath,
     });

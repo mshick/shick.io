@@ -27,9 +27,9 @@ export default function AdminPage() {
     <script type="importmap">
       {
         "imports": {
-          "yaml": "https://esm.sh/yaml@2.6.0",
-          "prettier": "https://esm.sh/prettier@3.3.3",
-          "prettierMarkdown": "https://esm.sh/prettier@3.3.3/plugins/markdown.mjs"
+          "yaml": "https://esm.sh/yaml@2.7.0",
+          "prettier": "https://esm.sh/prettier@3.4.2",
+          "prettierMarkdown": "https://esm.sh/prettier@3.4.2/plugins/markdown.mjs"
         }
       }
     </script>
@@ -46,7 +46,7 @@ export default function AdminPage() {
           lineWidth: 0,
           defaultKeyType: 'PLAIN',
           defaultStringType: 'PLAIN',
-          singleQuote: true
+          singleQuote: false
         }).trim();
       }
 

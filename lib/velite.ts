@@ -6,6 +6,7 @@ import remarkGemoji from 'remark-gemoji';
 import type { PluggableList } from 'unified';
 import type { MarkdownOptions, Output } from 'velite';
 import { rehypeCopyLinkedFiles } from './assets';
+import { UPLOADS_BASE, UPLOADS_PATH } from './constants';
 
 export const output: Output = {
   data: '.velite',
@@ -50,7 +51,10 @@ export const remarkPlugins: PluggableList = [
 ];
 
 export const rehypePlugins: PluggableList = [
-  [rehypeCopyLinkedFiles, output],
+  [
+    rehypeCopyLinkedFiles,
+    { ...output, uploads: { base: UPLOADS_BASE, path: UPLOADS_PATH } },
+  ],
   rehypeTufted,
 ];
 

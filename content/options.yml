@@ -69,10 +69,36 @@ collections:
     path: /
     pagination:
       per_page: 3
+    cms:
+      icon: pages
+      label: ""
+      label_singular: ""
+      description: ""
+      identifier_field: ""
+      summary: ""
+      slug: ""
+      preview_path: ""
+      preview_path_date_field: ""
+      create: true
+      delete: true
+      publish: true
   - name: post
     path: /posts
     pagination:
       per_page: 3
+    cms:
+      icon: newspaper
+      label: ""
+      label_singular: ""
+      description: ""
+      identifier_field: ""
+      summary: ""
+      slug: ""
+      preview_path: ""
+      preview_path_date_field: ""
+      create: true
+      delete: true
+      publish: true
   - name: tag
     path: /tags
     pagination:

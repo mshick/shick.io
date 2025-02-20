@@ -438,9 +438,9 @@ export function getCmsConfig(
       ? makeSparse(collectionOptions.cms)
       : undefined;
 
-    cmsCollections.push(
-      createCmsCollection(basePath, name, collection, overrides),
-    );
+    const coll = createCmsCollection(basePath, name, collection, overrides);
+
+    cmsCollections.push(coll);
   }
 
   for (const [name, collection] of Object.entries(config.collections)) {
@@ -472,6 +472,16 @@ export function getCmsConfig(
       preview: true,
     },
     collections: cmsCollections,
+    automatic_deployments: true,
+    omit_empty_optional_fields: true,
+    json: {
+      indent_style: 'space',
+      indent_size: 2,
+    },
+    yaml: {
+      quote: 'double',
+      indent_size: 2,
+    },
   };
 
   return merge(cmsConfig, options.cms ? makeSparse(options.cms) : undefined);

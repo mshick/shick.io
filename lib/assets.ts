@@ -3,13 +3,14 @@ import type { Element, Root as Hast } from 'hast';
 import { visit } from 'unist-util-visit';
 import { type Image, type Output, isRelativePath, processAsset } from 'velite';
 import type { VFile } from 'vfile';
-import { UPLOADS_BASE } from './constants';
 
 const ABSOLUTE_ROOT = 'public';
 
-export type CopyLinkedFilesOptions = Omit<Output, 'data' | 'clean'>;
+export type CopyLinkedFilesOptions = Omit<Output, 'data' | 'clean'> & {
+  uploads: { base: string; path: string };
+};
 
-const isUploadsPath = (uploadsBase: string, url: string) => {
+const createIsUploadsPath = (uploadsBase: string) => (url: string) => {
   return url.startsWith(uploadsBase);
 };
 
@@ -22,10 +23,14 @@ const isUploadsPath = (uploadsBase: string, url: string) => {
  */
 export const rehypeCopyLinkedFiles =
   (options: CopyLinkedFilesOptions) => async (tree: Hast, file: VFile) => {
-    if (!UPLOADS_BASE.startsWith('/') || !UPLOADS_BASE.endsWith('/')) {
+    if (
+      !options.uploads.base.startsWith('/') ||
+      !options.uploads.base.endsWith('/')
+    ) {
       throw new Error('Uploads base must start and end with a /');
     }
 
+    const isUploadsPath = createIsUploadsPath(options.uploads.base);
     const links = new Map<string, Element[]>();
     const linkedPropertyNames = ['href', 'src', 'poster'];
     visit(tree, 'element', (node) => {
@@ -34,8 +39,7 @@ export const rehypeCopyLinkedFiles =
 
         if (
           typeof value === 'string' &&
-          (isRelativePath(value) ||
-            (isUploadsPath(UPLOADS_BASE, value) && ABSOLUTE_ROOT))
+          (isRelativePath(value) || (isUploadsPath(value) && ABSOLUTE_ROOT))
         ) {
           const elements = links.get(value) ?? [];
           elements.push(node);
@@ -46,7 +50,7 @@ export const rehypeCopyLinkedFiles =
     await Promise.all(
       Array.from(links.entries()).map(async ([url, elements]) => {
         const isImage = elements.some((element) => element.tagName === 'img');
-        const isUploads = isUploadsPath(UPLOADS_BASE, url);
+        const isUploads = isUploadsPath(url);
 
         const urlOrImage: string | Image = await processAsset(
           isUploads ? join(ABSOLUTE_ROOT, url) : url,
