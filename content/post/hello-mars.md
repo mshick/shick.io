@@ -15,4 +15,4 @@ related:
 
 Mars!!!
 
-![](/uploads/sample-castle.jpg)
+![](/uploads/test-image.png)
