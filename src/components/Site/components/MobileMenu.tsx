@@ -17,7 +17,7 @@ export function MobileMenu({ items }: MobileMenuProps) {
         {items?.map((item) => (
           <div
             key={item.path}
-            className="py-2 px-4 text-lg  hover:text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-700"
+            className="py-2 px-4 text-lg  hover:text-white hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-inset focus:ring-blue-700"
           >
             <Link
               href={item.path}

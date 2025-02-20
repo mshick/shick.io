@@ -58,7 +58,7 @@ function PostFooterRelated({ related }: Related) {
               href={permalink}
               className="flex flex-col items-start sm:items-center sm:flex-row-reverse justify-between sm:gap-4 no-underline hover:bg-blue-700 hover:text-white"
             >
-              <time className="text-xs flex-shrink-0" dateTime={publishedAt}>
+              <time className="text-xs shrink-0" dateTime={publishedAt}>
                 {standardDate(publishedAt)}
               </time>
               <span>{title}</span>

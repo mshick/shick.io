@@ -8,7 +8,7 @@ export function ThemeToggle() {
   return (
     <button
       type="button"
-      className="inline-flex items-center justify-center m-2 p-0 hover:text-white hover:bg-blue-700 focus:outline-none"
+      className="inline-flex items-center justify-center m-2 p-0 hover:text-white hover:bg-blue-700 focus:outline-hidden"
     >
       <span className="sr-only">Dark / light theme toggle</span>
       {resolvedTheme === 'dark' ? (

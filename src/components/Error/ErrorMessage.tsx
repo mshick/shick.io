@@ -14,7 +14,7 @@ export const ErrorMessage = ({
 }: PropsWithChildren<ErrorMessageProps>) => {
   return (
     <>
-      <div className="flex-shrink-0 my-auto py-16 sm:py-32">
+      <div className="shrink-0 my-auto py-16 sm:py-32">
         <p className="text-sm font-semibold text-blue-700 uppercase tracking-wide">
           {headline}
         </p>
@@ -24,10 +24,10 @@ export const ErrorMessage = ({
         <p className="mt-2 text-base text-gray-700 dark:text-gray-300">
           {body}
         </p>
-        <div className="mt-10 flex space-x-3 sm:border-l sm:border-transparent">
+        <div className="mt-10 flex gap-3 sm:border-l sm:border-transparent">
           <Link
             href="/"
-            className="inline-flex items-center px-4 py-2 border border-dashed text-sm font-medium hover:text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="inline-flex items-center px-4 py-2 border border-dashed text-sm font-medium hover:text-white hover:bg-blue-700 focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Go back home
             <span aria-hidden="true" className="ml-2">
