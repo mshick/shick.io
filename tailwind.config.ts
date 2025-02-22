@@ -1,4 +1,5 @@
-import tufted from '@mshick/tufted/tailwind';
+import { styles } from '@mshick/tufted/tailwindcss';
+import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss/plugin';
 
 export default {
@@ -18,8 +19,8 @@ export default {
         sans: ['var(--font-plex-mono)', 'sans-serif'],
         mono: ['var(--font-plex-mono)', 'monospace'],
       },
-      typography: tufted.theme.extend.typography,
+      typography: styles,
     },
   },
-  plugins: [...tufted.plugins],
+  plugins: [typography],
 } satisfies Config;
