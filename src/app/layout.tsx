@@ -1,8 +1,7 @@
-import { getOptions } from '#/content';
-import '#/styles/globals.css';
 import { isDevelopment } from '@/env';
 import type { Metadata } from 'next';
 import type { PropsWithChildren } from 'react';
+import { getOptions } from '#/content';
 
 const { title, url, description, locale } = getOptions([
   'title',

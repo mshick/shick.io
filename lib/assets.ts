@@ -4,10 +4,9 @@ import { visit } from 'unist-util-visit';
 import { type Image, type Output, isRelativePath, processAsset } from 'velite';
 import type { VFile } from 'vfile';
 
-const ABSOLUTE_ROOT = 'public';
-
 export type CopyLinkedFilesOptions = Omit<Output, 'data' | 'clean'> & {
-  uploads: { base: string; path: string };
+  publicRootPath: string;
+  uploads: { baseUrl: string; folderPath: string };
 };
 
 const createIsUploadsPath = (uploadsBase: string) => (url: string) => {
@@ -24,13 +23,14 @@ const createIsUploadsPath = (uploadsBase: string) => (url: string) => {
 export const rehypeCopyLinkedFiles =
   (options: CopyLinkedFilesOptions) => async (tree: Hast, file: VFile) => {
     if (
-      !options.uploads.base.startsWith('/') ||
-      !options.uploads.base.endsWith('/')
+      !options.uploads.baseUrl.startsWith('/') ||
+      !options.uploads.baseUrl.endsWith('/')
     ) {
       throw new Error('Uploads base must start and end with a /');
     }
+    const { publicRootPath } = options;
 
-    const isUploadsPath = createIsUploadsPath(options.uploads.base);
+    const isUploadsPath = createIsUploadsPath(options.uploads.baseUrl);
     const links = new Map<string, Element[]>();
     const linkedPropertyNames = ['href', 'src', 'poster'];
     visit(tree, 'element', (node) => {
@@ -39,7 +39,7 @@ export const rehypeCopyLinkedFiles =
 
         if (
           typeof value === 'string' &&
-          (isRelativePath(value) || (isUploadsPath(value) && ABSOLUTE_ROOT))
+          (isRelativePath(value) || (isUploadsPath(value) && publicRootPath))
         ) {
           const elements = links.get(value) ?? [];
           elements.push(node);
@@ -49,12 +49,13 @@ export const rehypeCopyLinkedFiles =
     });
     await Promise.all(
       Array.from(links.entries()).map(async ([url, elements]) => {
+        const decoded = decodeURI(url);
         const isImage = elements.some((element) => element.tagName === 'img');
-        const isUploads = isUploadsPath(url);
+        const isUploads = isUploadsPath(decoded);
 
         const urlOrImage: string | Image = await processAsset(
-          isUploads ? join(ABSOLUTE_ROOT, url) : url,
-          isUploads ? join(process.cwd(), ABSOLUTE_ROOT) : file.path,
+          isUploads ? join(publicRootPath, decoded) : decoded,
+          isUploads ? join(process.cwd(), publicRootPath) : file.path,
           options.name,
           options.base,
           isImage ? true : undefined,

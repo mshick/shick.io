@@ -339,7 +339,12 @@ export interface CmsCollection {
   path?: string;
   media_folder?: string;
   public_folder?: string;
-  sortable_fields?: string[];
+  sortable_fields?:
+    | string[]
+    | {
+        fields: string[];
+        default: { field: string; direction: 'ascending' | 'descending' };
+      };
   view_filters?: ViewFilter[];
   view_groups?: ViewGroup[];
   i18n?: boolean | CmsI18nConfig;

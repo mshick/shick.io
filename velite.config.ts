@@ -1,10 +1,15 @@
 import { generateCmsConfig } from '@/cms';
-import { searchIndexOutputPath } from '@/env';
+import { CMS_CONFIG_FILE_PATH } from '@/constants';
+import {
+  searchIndexOutputPath,
+  uploadsBaseUrl,
+  uploadsFolderPath,
+} from '@/env';
+import * as schema from '@/schema';
+import { generateSearchIndex } from '@/search';
+import { prepareTaxonomy } from '@/taxonomy';
+import { output, rehypePlugins, remarkPlugins } from '@/velite';
 import { defineCollection, defineConfig } from 'velite';
-import * as schema from './lib/schema';
-import { generateSearchIndex } from './lib/search';
-import { prepareTaxonomy } from './lib/taxonomy';
-import { output, rehypePlugins, remarkPlugins } from './lib/velite';
 
 export default defineConfig({
   root: 'content',
@@ -74,12 +79,13 @@ export default defineConfig({
       `Search index written with ${documentCount} documents and ${termCount} terms`,
     );
 
-    const cmsConfigFilePath = './src/generated/cms/config.json';
+    console.log(`Writing CMS config to '${CMS_CONFIG_FILE_PATH}' ...`);
 
-    console.log(`Writing CMS config to '${cmsConfigFilePath}' ...`);
-
-    await generateCmsConfig(ctx.config, collections.options, {
-      filePath: cmsConfigFilePath,
+    await generateCmsConfig(ctx.config, {
+      ...collections.options,
+      outputFilePath: CMS_CONFIG_FILE_PATH,
+      uploadsFolderPath,
+      uploadsBaseUrl,
     });
 
     console.log('CMS config written');

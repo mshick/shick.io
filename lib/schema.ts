@@ -17,11 +17,18 @@ import { markdownOptions } from './velite';
 export const MARKDOWN = 'markdown';
 export const RELATION = 'relation';
 export const ISODATE = 'datetime';
+export const IMAGE = 'image';
 
 const icon = s.enum(['github', 'x', 'signal', 'linkedin', 'whatsapp', 'email']);
 
 const cover = s.object({
-  image: image({ absoluteRoot: 'public' }).optional(),
+  image: image({ absoluteRoot: 'public' })
+    .optional()
+    .describe(
+      JSON.stringify({
+        widget: IMAGE,
+      }),
+    ),
   video: s.string().optional(),
   title: s.string().optional(),
   alt: s.string().optional(),
@@ -158,6 +165,15 @@ export const options = s.object({
             create: s.boolean().optional().default(true),
             delete: s.boolean().optional().default(true),
             publish: s.boolean().optional().default(true),
+            sortable_fields: s
+              .object({
+                fields: s.array(s.string()),
+                default: s.object({
+                  field: s.string(),
+                  direction: s.enum(['ascending', 'descending']),
+                }),
+              })
+              .optional(),
           })
           .optional(),
       }),
@@ -210,7 +226,7 @@ export const post = s
       .optional()
       .describe(
         JSON.stringify({
-          widget: 'relation',
+          widget: RELATION,
           collection: 'author',
         }),
       ),
@@ -222,7 +238,7 @@ export const post = s
     related: s
       .array(s.string())
       .optional()
-      .describe(JSON.stringify({ widget: 'relation' })),
+      .describe(JSON.stringify({ widget: RELATION })),
   })
   .transform(async (data, ctx) => {
     const { meta } = ctx;

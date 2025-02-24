@@ -28,6 +28,10 @@ export const githubClientId = process.env.GITHUB_CLIENT_ID;
 export const githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
 export const githubAuthUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}`;
 export const githubTokenUrl = 'https://github.com/login/oauth/access_token';
+export const publicRootPath = process.env.PUBLIC_ROOT_PATH ?? 'public';
+export const uploadsBaseUrl = process.env.UPLOADS_BASE_URL ?? '/uploads/';
+export const uploadsFolderPath =
+  process.env.UPLOADS_FOLDER_PATH ?? 'public/uploads';
 
 /**
  * Search

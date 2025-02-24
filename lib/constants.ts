@@ -1,2 +1,1 @@
-export const UPLOADS_BASE = '/uploads/';
-export const UPLOADS_PATH = 'public/uploads';
+export const CMS_CONFIG_FILE_PATH = './src/generated/cms/config.json';

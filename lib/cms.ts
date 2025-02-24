@@ -1,3 +1,4 @@
+import { existsSync, mkdirSync } from 'node:fs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { dirname, extname, join, relative, sep } from 'node:path';
 import { cwd } from 'node:process';
@@ -13,6 +14,7 @@ import {
   type CmsFieldBase,
   type CmsFieldBoolean,
   type CmsFieldDateTime,
+  type CmsFieldFileOrImage,
   type CmsFieldList,
   type CmsFieldMarkdown,
   type CmsFieldNumber,
@@ -21,9 +23,8 @@ import {
   type CmsFieldSelect,
   type CmsFieldStringOrText,
 } from '#/types/decap-cms';
-import { UPLOADS_BASE, UPLOADS_PATH } from './constants';
 import { getCollectionBasePath } from './fields';
-import { ISODATE, MARKDOWN, type Options, RELATION } from './schema';
+import { IMAGE, ISODATE, MARKDOWN, type Options, RELATION } from './schema';
 import { makeSparse, safeParseJsonString } from './util';
 
 const veliteFields = ['metadata', 'toc'];
@@ -138,6 +139,18 @@ function schemaToFields(
 
     if (fieldCustom?.widget === ISODATE) {
       const field: CmsFieldBase & CmsFieldDateTime = {
+        ...fieldBase,
+        default:
+          typeof fieldBase.default === 'string' ? fieldBase.default : undefined,
+        ...fieldCustom,
+        widget: fieldCustom.widget,
+      };
+      fields.push(field);
+      continue;
+    }
+
+    if (fieldCustom?.widget === IMAGE) {
+      const field: CmsFieldBase & CmsFieldFileOrImage = {
         ...fieldBase,
         default:
           typeof fieldBase.default === 'string' ? fieldBase.default : undefined,
@@ -334,16 +347,36 @@ function sortSchemaFields(fields: CmsField[]) {
   return fields;
 }
 
-function getCollectionFolder(basePath: string, pattern: string) {
+function getCollectionPath(pattern: string) {
   const parts = pattern.split(sep);
   const globRe = /[*|[]/;
   const globStart = parts.findIndex((p) => globRe.exec(p));
-  const pathParts = globStart > -1 ? parts.slice(0, globStart) : parts;
-  return join(basePath, ...pathParts);
+  return globStart > -1 ? parts.slice(0, globStart) : parts;
 }
 
+function addFolderCollectionFolders(
+  cmsCollection: Partial<CmsCollection>,
+  options: CreateCmsCollectionOptions,
+  pattern: string,
+) {
+  const { contentBasePath, uploadsFolderPath, uploadsBaseUrl } = options;
+  const collectionPath = getCollectionPath(pattern);
+
+  cmsCollection.folder = join(contentBasePath, ...collectionPath);
+  cmsCollection.media_folder = join(uploadsFolderPath, ...collectionPath);
+  cmsCollection.public_folder = join(uploadsBaseUrl, ...collectionPath, '/');
+
+  if (!existsSync(cmsCollection.media_folder)) {
+    mkdirSync(cmsCollection.media_folder, { recursive: true });
+  }
+}
+
+type CreateCmsCollectionOptions = UploadsOptions & {
+  contentBasePath: string;
+};
+
 function createCmsCollection(
-  basePath: string,
+  options: CreateCmsCollectionOptions,
   name: string,
   collection: Collection,
   overrides?: Partial<CmsCollection>,
@@ -366,7 +399,7 @@ function createCmsCollection(
     cmsCollection.type = 'file_based_collection';
     cmsCollection.files = [
       {
-        file: getCollectionFolder(basePath, pattern),
+        file: join(options.contentBasePath, ...getCollectionPath(pattern)),
         name: pattern,
         label: pattern,
         fields: [],
@@ -374,7 +407,9 @@ function createCmsCollection(
     ];
   } else {
     cmsCollection.type = 'folder_based_collection';
-    cmsCollection.folder = getCollectionFolder(basePath, pattern);
+
+    addFolderCollectionFolders(cmsCollection, options, pattern);
+
     cmsCollection.create = true;
     cmsCollection.extension = trim(extname(pattern).toLowerCase(), '.');
 
@@ -424,11 +459,17 @@ function addCollectionFields(
   }
 }
 
+type UploadsOptions = {
+  uploadsFolderPath: string;
+  uploadsBaseUrl: string;
+};
+
 export function getCmsConfig(
   config: Config,
-  options: Pick<Options, 'url' | 'repo' | 'collections' | 'cms'>,
+  options: Pick<Options, 'url' | 'repo' | 'collections' | 'cms'> &
+    UploadsOptions,
 ) {
-  const basePath = relative(cwd(), config.root);
+  const contentBasePath = relative(cwd(), config.root);
 
   const cmsCollections: CmsCollection[] = [];
 
@@ -438,7 +479,12 @@ export function getCmsConfig(
       ? makeSparse(collectionOptions.cms)
       : undefined;
 
-    const coll = createCmsCollection(basePath, name, collection, overrides);
+    const coll = createCmsCollection(
+      { ...options, contentBasePath },
+      name,
+      collection,
+      overrides,
+    );
 
     cmsCollections.push(coll);
   }
@@ -465,8 +511,8 @@ export function getCmsConfig(
       auth_endpoint: 'oauth',
     },
     publish_mode: 'simple',
-    media_folder: UPLOADS_PATH,
-    public_folder: UPLOADS_BASE,
+    media_folder: options.uploadsFolderPath,
+    public_folder: options.uploadsBaseUrl,
     show_preview_links: true,
     editor: {
       preview: true,
@@ -487,12 +533,20 @@ export function getCmsConfig(
   return merge(cmsConfig, options.cms ? makeSparse(options.cms) : undefined);
 }
 
+type GenerateCmsConfigOptions = Pick<
+  Options,
+  'url' | 'repo' | 'collections' | 'cms'
+> &
+  UploadsOptions & {
+    outputFilePath: string;
+  };
+
 export async function generateCmsConfig(
   config: Config,
-  options: Pick<Options, 'url' | 'repo' | 'collections' | 'cms'>,
-  { filePath }: { filePath: string },
+  options: GenerateCmsConfigOptions,
 ) {
   const cmsConfig = getCmsConfig(config, options);
-  await mkdir(dirname(filePath), { recursive: true });
-  await writeFile(filePath, JSON.stringify(cmsConfig, null, 2));
+  const { outputFilePath } = options;
+  await mkdir(dirname(outputFilePath), { recursive: true });
+  await writeFile(outputFilePath, JSON.stringify(cmsConfig, null, 2));
 }
