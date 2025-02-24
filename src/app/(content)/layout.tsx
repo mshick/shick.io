@@ -39,7 +39,7 @@ export default function Layout({ children }: PropsWithChildren) {
 
   return (
     <body
-      className={`${plexMono.variable} font-primary h-svh mx-auto max-w-3xl px-8 flex flex-col`}
+      className={`${plexMono.variable} tufted font-primary h-svh mx-auto max-w-3xl px-8 flex flex-col`}
     >
       <ThemeProvider attribute="class">
         <SiteHeader siteName={name} navigationItems={navigationItems} />

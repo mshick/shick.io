@@ -1,6 +1,7 @@
-import { styles } from '@mshick/tufted/tailwindcss';
+import { plugin } from '@mshick/tufted/tailwindcss';
 import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss/plugin';
+import { prose } from './tailwind-plugin';
 
 export default {
   content: ['./src/**/*.{ts,tsx}'],
@@ -19,8 +20,10 @@ export default {
         sans: ['var(--font-plex-mono)', 'sans-serif'],
         mono: ['var(--font-plex-mono)', 'monospace'],
       },
-      typography: styles,
+      typography: (utils) => {
+        return prose(utils);
+      },
     },
   },
-  plugins: [typography],
+  plugins: [typography, plugin],
 } satisfies Config;

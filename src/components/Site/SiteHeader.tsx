@@ -13,6 +13,7 @@ import type { Options } from '#/content';
 import { useFocus } from '#/lib/hooks/useFocus';
 import { useSearch } from '#/lib/hooks/useSearch';
 import { replaceState } from '#/lib/utils/history';
+import { Divider } from '../Divider';
 import { MobileMenu } from './components/MobileMenu';
 import { NavigationMenu } from './components/NavigationMenu';
 import { NavigationToggle } from './components/NavigationToggle';
@@ -156,7 +157,7 @@ export function SiteHeader({ siteName, navigationItems }: SiteHeaderProps) {
         </div>
       </nav>
 
-      <hr className="z-30" />
+      <Divider className="z-30" />
 
       {/* Mobile Menu */}
       {isOpen && !isSearchFocused && <MobileMenu items={items} />}

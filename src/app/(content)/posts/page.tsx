@@ -47,7 +47,7 @@ export default async function PostsPage(props: ServerProps) {
 
   return (
     <>
-      <div className="prose prose-sidenotes dark:prose-invert max-w-none">
+      <div className="prose prose-sidenotes prose-stone dark:prose-invert max-w-none">
         <section id={`list-${slug(heading)}`} className="not-prose py-3.5">
           <DocumentListHeader heading={heading} />
           <DocumentList documents={posts}>

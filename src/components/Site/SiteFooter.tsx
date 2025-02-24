@@ -9,6 +9,7 @@ import {
 import { SignalMessengerIcon } from '#/components/SignalMessengerIcon';
 import type { Options } from '#/content';
 import { classNames } from '#/lib/utils/classNames';
+import { Divider } from '../Divider';
 
 const socialIcons: Record<Options['socials'][0]['icon'], IconType> = {
   linkedin: TbBrandLinkedin,
@@ -28,7 +29,7 @@ export type SiteFooterProps = {
 export function SiteFooter({ repoUrl, socials }: SiteFooterProps) {
   return (
     <footer className="w-full">
-      <hr className="z-30" />
+      <Divider className="z-30" />
       {/* <div>{showListeningTo && <ListeningTo />}</div> */}
 
       <div className="flex flex-row items-center content-between py-1 text-slate-600 ">

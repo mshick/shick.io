@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Post, Related, Taxonomy } from '#/content';
 import { standardDate } from '#/lib/utils/text';
+import { Divider } from '../Divider';
 
 export type PostFooterProps = Pick<
   Post,
@@ -75,7 +76,7 @@ export function PostFooter(post: PostFooterProps) {
     <footer id="post-footer" className="mt-8">
       {post.updatedAt || post.tags ? <PostFooterMeta {...post} /> : null}
 
-      <hr className="my-8" />
+      <Divider className="my-8" />
 
       {post.related ? <PostFooterRelated related={post.related} /> : null}
 

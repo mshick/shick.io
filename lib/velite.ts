@@ -17,33 +17,7 @@ export const output: Output = {
   format: 'esm',
 };
 
-export const rehypeTufted = rehypePresetTufted({
-  plugins: {
-    rehypeShiki: {
-      themes: {
-        light: 'one-light',
-        dark: 'one-dark-pro',
-      },
-    },
-    rehypeAutolinkHeadings: {
-      behavior: 'append',
-      content: fromHtmlIsomorphic('#', {
-        fragment: true,
-      }).children as ElementContent[],
-      headingProperties: {
-        className: ['group'],
-      },
-      properties: {
-        className: [
-          'heading-link',
-          'hidden',
-          'group-hover:inline-block',
-          'ml-2',
-        ],
-      },
-    },
-  },
-});
+export const rehypeTufted = rehypePresetTufted();
 
 export const remarkPlugins: PluggableList = [
   remarkGemoji,
