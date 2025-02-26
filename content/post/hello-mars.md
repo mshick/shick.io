@@ -17,4 +17,4 @@ related:
 
 Mars!!!!
 
-![](/uploads/post/PNG%20image.png)
+![](/uploads/post/PNG%20image-1.png)
