@@ -1,7 +1,7 @@
 ---
 title: Tufted Style System (New Site Part 1)
 date: 2024-06-01 12:00
-excerpt: 'Markdown enhancements, rich article styles and some bundling.'
+excerpt: "Markdown enhancements, rich article styles and some bundling."
 featured: true
 tags:
   - tufted
@@ -536,7 +536,7 @@ can also use inline Markdown.
 ```js
 function foo(bar) {
   var a = 42,
-    b = 'Prism'
+    b = "Prism"
   return a + bar(b)
 }
 

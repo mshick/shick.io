@@ -104,9 +104,6 @@ const nextConfig: NextConfig = {
     ]);
   },
   // output: 'export',
-  eslint: {
-    dirs: ['src', 'lib'],
-  },
   images: {
     minimumCacheTTL: 60,
     formats: ['image/avif', 'image/webp'],

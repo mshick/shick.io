@@ -145,7 +145,7 @@ export async function getStaticProps() {
       songs: [
         {
           id: 1,
-          name: 'Test Song'
+          name: "Test Song"
         }
       ]
     }
@@ -169,7 +169,7 @@ simple it makes working with relations. We can retrieve the corresponding
 `Artist` for the `Song` using `include`.
 
 ```jsx {1,4,5,6,7}:pages/index.js
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client"
 
 export async function getStaticProps() {
   const prisma = new PrismaClient()
@@ -302,7 +302,7 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       song: {
-        youtubeId: 'N6SQ9QoSjCI'
+        youtubeId: "N6SQ9QoSjCI"
       }
     }
   }
@@ -313,7 +313,7 @@ export async function getStaticPaths() {
     paths: [
       {
         params: {
-          id: '1'
+          id: "1"
         }
       }
     ],
@@ -341,7 +341,7 @@ Now, let's hook this up to real data.
 - `getStaticPaths` will generate a page for each song in the database
 
 ```jsx {1,4,5,6,7,8,9,10,14,20,21,24,25,26,27}:pages/songs/[id].js
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from "@prisma/client"
 
 export async function getStaticProps({ params }) {
   const prisma = new PrismaClient()

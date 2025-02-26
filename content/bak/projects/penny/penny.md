@@ -1,7 +1,7 @@
 ---
 title: Penny E-commerce
-publishedAt: '2022-09-24'
-excerpt: 'Penny is an e-commerce starter kit supporting subscriptions, built on Next.js and TakeShape.'
+publishedAt: "2022-09-24"
+excerpt: "Penny is an e-commerce starter kit supporting subscriptions, built on Next.js and TakeShape."
 featured: true
 tags:
   - e-commerce
