@@ -1,1 +1,1 @@
-export const CMS_CONFIG_FILE_PATH = './src/generated/cms/config.json';
+export const CMS_CONFIG_FOLDER_PATH = './public/admin/';

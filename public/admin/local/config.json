@@ -1,0 +1,979 @@
+{
+  "site_url": "http://localhost:1337/",
+  "backend": {
+    "name": "github",
+    "repo": "mshick/shick.io",
+    "branch": "main",
+    "site_domain": "localhost:1337",
+    "base_url": "http://localhost:1337",
+    "auth_endpoint": "oauth"
+  },
+  "local_backend": true,
+  "publish_mode": "simple",
+  "media_folder": "public/uploads",
+  "public_folder": "/uploads/",
+  "show_preview_links": true,
+  "editor": {
+    "preview": true
+  },
+  "collections": [
+    {
+      "label": "Post",
+      "name": "post",
+      "preview_path": "/posts/{{slug}}",
+      "type": "folder_based_collection",
+      "folder": "content/post",
+      "media_folder": "public/uploads/post",
+      "public_folder": "/uploads/post/",
+      "create": true,
+      "extension": "md",
+      "format": "yaml-frontmatter",
+      "icon": "newspaper",
+      "delete": true,
+      "publish": true,
+      "fields": [
+        {
+          "name": "title",
+          "required": true,
+          "widget": "string"
+        },
+        {
+          "name": "cover",
+          "required": false,
+          "fields": [
+            {
+              "name": "image",
+              "required": false,
+              "widget": "image"
+            },
+            {
+              "name": "title",
+              "required": false,
+              "widget": "string"
+            },
+            {
+              "name": "alt",
+              "required": false,
+              "widget": "string"
+            },
+            {
+              "name": "caption",
+              "required": false,
+              "widget": "string"
+            }
+          ],
+          "collapsed": true,
+          "widget": "object"
+        },
+        {
+          "name": "meta",
+          "required": false,
+          "fields": [
+            {
+              "name": "title",
+              "required": false,
+              "widget": "string"
+            },
+            {
+              "name": "description",
+              "required": false,
+              "widget": "string"
+            },
+            {
+              "name": "keywords",
+              "required": false,
+              "collapsed": true,
+              "widget": "list"
+            }
+          ],
+          "collapsed": true,
+          "widget": "object"
+        },
+        {
+          "name": "excerpt",
+          "required": false,
+          "widget": "markdown"
+        },
+        {
+          "name": "date",
+          "required": false,
+          "widget": "datetime"
+        },
+        {
+          "name": "author",
+          "required": false,
+          "multiple": false,
+          "collection": "author",
+          "value_field": "{{slug}}",
+          "display_fields": [
+            "name"
+          ],
+          "dropdown_threshold": 0,
+          "widget": "relation"
+        },
+        {
+          "name": "draft",
+          "required": false,
+          "default": false,
+          "widget": "boolean"
+        },
+        {
+          "name": "featured",
+          "required": false,
+          "default": false,
+          "widget": "boolean"
+        },
+        {
+          "name": "categories",
+          "required": false,
+          "collapsed": true,
+          "widget": "list"
+        },
+        {
+          "name": "tags",
+          "required": false,
+          "collapsed": true,
+          "widget": "list"
+        },
+        {
+          "name": "related",
+          "required": false,
+          "multiple": true,
+          "collection": "post",
+          "value_field": "{{slug}}",
+          "display_fields": [
+            "title"
+          ],
+          "dropdown_threshold": 0,
+          "widget": "relation"
+        },
+        {
+          "name": "body",
+          "required": true,
+          "widget": "markdown"
+        }
+      ]
+    },
+    {
+      "label": "Page",
+      "name": "page",
+      "preview_path": "/{{slug}}",
+      "type": "folder_based_collection",
+      "folder": "content/page",
+      "media_folder": "public/uploads/page",
+      "public_folder": "/uploads/page/",
+      "create": true,
+      "extension": "mdx",
+      "format": "frontmatter",
+      "icon": "pages",
+      "delete": true,
+      "publish": true,
+      "fields": [
+        {
+          "name": "title",
+          "required": true,
+          "widget": "string"
+        },
+        {
+          "name": "excerpt",
+          "required": true,
+          "widget": "markdown"
+        },
+        {
+          "name": "cover",
+          "required": false,
+          "fields": [
+            {
+              "name": "image",
+              "required": false,
+              "widget": "image"
+            },
+            {
+              "name": "title",
+              "required": false,
+              "widget": "string"
+            },
+            {
+              "name": "alt",
+              "required": false,
+              "widget": "string"
+            },
+            {
+              "name": "caption",
+              "required": false,
+              "widget": "string"
+            }
+          ],
+          "collapsed": true,
+          "widget": "object"
+        },
+        {
+          "name": "meta",
+          "required": false,
+          "fields": [
+            {
+              "name": "title",
+              "required": false,
+              "widget": "string"
+            },
+            {
+              "name": "description",
+              "required": false,
+              "widget": "string"
+            },
+            {
+              "name": "keywords",
+              "required": false,
+              "collapsed": true,
+              "widget": "list"
+            }
+          ],
+          "collapsed": true,
+          "widget": "object"
+        },
+        {
+          "name": "categories",
+          "required": false,
+          "collapsed": true,
+          "widget": "list"
+        },
+        {
+          "name": "tags",
+          "required": false,
+          "collapsed": true,
+          "widget": "list"
+        },
+        {
+          "name": "draft",
+          "required": true,
+          "default": false,
+          "widget": "boolean"
+        },
+        {
+          "name": "related",
+          "required": false,
+          "collapsed": true,
+          "widget": "list"
+        },
+        {
+          "name": "body",
+          "required": true,
+          "widget": "markdown"
+        }
+      ]
+    },
+    {
+      "label": "Category",
+      "name": "category",
+      "preview_path": "/categories/{{slug}}",
+      "type": "folder_based_collection",
+      "folder": "content/category",
+      "media_folder": "public/uploads/category",
+      "public_folder": "/uploads/category/",
+      "create": true,
+      "extension": "md",
+      "format": "yaml-frontmatter",
+      "fields": [
+        {
+          "name": "name",
+          "required": true,
+          "widget": "string"
+        },
+        {
+          "name": "cover",
+          "required": false,
+          "fields": [
+            {
+              "name": "image",
+              "required": false,
+              "widget": "image"
+            },
+            {
+              "name": "title",
+              "required": false,
+              "widget": "string"
+            },
+            {
+              "name": "alt",
+              "required": false,
+              "widget": "string"
+            },
+            {
+              "name": "caption",
+              "required": false,
+              "widget": "string"
+            }
+          ],
+          "collapsed": true,
+          "widget": "object"
+        },
+        {
+          "name": "excerpt",
+          "required": false,
+          "widget": "markdown"
+        },
+        {
+          "name": "date",
+          "required": false,
+          "widget": "datetime"
+        },
+        {
+          "name": "count",
+          "required": true,
+          "fields": [
+            {
+              "name": "total",
+              "required": true,
+              "widget": "number"
+            },
+            {
+              "name": "post",
+              "required": true,
+              "widget": "number"
+            },
+            {
+              "name": "page",
+              "required": true,
+              "widget": "number"
+            }
+          ],
+          "collapsed": true,
+          "widget": "object"
+        },
+        {
+          "name": "body",
+          "required": true,
+          "widget": "markdown"
+        }
+      ]
+    },
+    {
+      "label": "Tag",
+      "name": "tag",
+      "preview_path": "/tags/{{slug}}",
+      "type": "folder_based_collection",
+      "folder": "content/tag",
+      "media_folder": "public/uploads/tag",
+      "public_folder": "/uploads/tag/",
+      "create": true,
+      "extension": "md",
+      "format": "yaml-frontmatter",
+      "fields": [
+        {
+          "name": "name",
+          "required": true,
+          "widget": "string"
+        },
+        {
+          "name": "cover",
+          "required": false,
+          "fields": [
+            {
+              "name": "image",
+              "required": false,
+              "widget": "image"
+            },
+            {
+              "name": "title",
+              "required": false,
+              "widget": "string"
+            },
+            {
+              "name": "alt",
+              "required": false,
+              "widget": "string"
+            },
+            {
+              "name": "caption",
+              "required": false,
+              "widget": "string"
+            }
+          ],
+          "collapsed": true,
+          "widget": "object"
+        },
+        {
+          "name": "excerpt",
+          "required": false,
+          "widget": "markdown"
+        },
+        {
+          "name": "date",
+          "required": false,
+          "widget": "datetime"
+        },
+        {
+          "name": "count",
+          "required": true,
+          "fields": [
+            {
+              "name": "total",
+              "required": true,
+              "widget": "number"
+            },
+            {
+              "name": "post",
+              "required": true,
+              "widget": "number"
+            },
+            {
+              "name": "page",
+              "required": true,
+              "widget": "number"
+            }
+          ],
+          "collapsed": true,
+          "widget": "object"
+        },
+        {
+          "name": "body",
+          "required": true,
+          "widget": "markdown"
+        }
+      ]
+    },
+    {
+      "label": "Author",
+      "name": "author",
+      "preview_path": "/author/{{slug}}",
+      "type": "folder_based_collection",
+      "folder": "content/author",
+      "media_folder": "public/uploads/author",
+      "public_folder": "/uploads/author/",
+      "create": true,
+      "extension": "yml",
+      "format": "yaml",
+      "identifier_field": "name",
+      "delete": true,
+      "publish": true,
+      "fields": [
+        {
+          "name": "name",
+          "required": true,
+          "widget": "string"
+        },
+        {
+          "name": "email",
+          "required": true,
+          "widget": "string"
+        },
+        {
+          "name": "url",
+          "required": true,
+          "widget": "string"
+        }
+      ]
+    },
+    {
+      "label": "Options",
+      "name": "options",
+      "preview_path": "/options/{{slug}}",
+      "type": "file_based_collection",
+      "files": [
+        {
+          "file": "content/options.yml",
+          "name": "options.yml",
+          "label": "options.yml",
+          "fields": [
+            {
+              "name": "name",
+              "required": true,
+              "widget": "string"
+            },
+            {
+              "name": "title",
+              "required": true,
+              "widget": "string"
+            },
+            {
+              "name": "description",
+              "required": true,
+              "widget": "text"
+            },
+            {
+              "name": "locale",
+              "required": true,
+              "widget": "string"
+            },
+            {
+              "name": "url",
+              "required": true,
+              "widget": "string"
+            },
+            {
+              "name": "keywords",
+              "required": true,
+              "collapsed": true,
+              "widget": "list"
+            },
+            {
+              "name": "timezone",
+              "required": true,
+              "widget": "string"
+            },
+            {
+              "name": "repo",
+              "required": true,
+              "fields": [
+                {
+                  "name": "provider",
+                  "required": true,
+                  "options": [
+                    "github"
+                  ],
+                  "dropdown_threshold": 0,
+                  "widget": "select"
+                },
+                {
+                  "name": "name",
+                  "required": true,
+                  "widget": "string"
+                },
+                {
+                  "name": "branch",
+                  "required": true,
+                  "default": "main",
+                  "widget": "string"
+                }
+              ],
+              "collapsed": true,
+              "widget": "object"
+            },
+            {
+              "name": "author",
+              "required": true,
+              "fields": [
+                {
+                  "name": "name",
+                  "required": true,
+                  "widget": "string"
+                },
+                {
+                  "name": "email",
+                  "required": true,
+                  "widget": "string"
+                },
+                {
+                  "name": "url",
+                  "required": true,
+                  "widget": "string"
+                }
+              ],
+              "collapsed": true,
+              "widget": "object"
+            },
+            {
+              "name": "links",
+              "required": true,
+              "collapsed": true,
+              "widget": "list",
+              "fields": [
+                {
+                  "name": "text",
+                  "required": true,
+                  "widget": "string"
+                },
+                {
+                  "name": "path",
+                  "required": true,
+                  "widget": "string"
+                },
+                {
+                  "name": "match",
+                  "required": true,
+                  "widget": "string"
+                },
+                {
+                  "name": "type",
+                  "required": true,
+                  "options": [
+                    "navigation",
+                    "footer",
+                    "copyright"
+                  ],
+                  "dropdown_threshold": 0,
+                  "widget": "select"
+                },
+                {
+                  "name": "current",
+                  "required": true,
+                  "default": false,
+                  "widget": "boolean"
+                }
+              ]
+            },
+            {
+              "name": "socials",
+              "required": true,
+              "collapsed": true,
+              "widget": "list",
+              "fields": [
+                {
+                  "name": "name",
+                  "required": true,
+                  "widget": "string"
+                },
+                {
+                  "name": "description",
+                  "required": false,
+                  "widget": "string"
+                },
+                {
+                  "name": "icon",
+                  "required": true,
+                  "options": [
+                    "github",
+                    "x",
+                    "signal",
+                    "linkedin",
+                    "whatsapp",
+                    "email"
+                  ],
+                  "dropdown_threshold": 0,
+                  "widget": "select"
+                },
+                {
+                  "name": "link",
+                  "required": true,
+                  "widget": "string"
+                },
+                {
+                  "name": "image",
+                  "required": false,
+                  "widget": "string"
+                }
+              ]
+            },
+            {
+              "name": "cms",
+              "required": false,
+              "comment": "Configuration overrides for the CMS",
+              "fields": [
+                {
+                  "name": "publish_mode",
+                  "required": true,
+                  "options": [
+                    "simple",
+                    "editorial_workflow"
+                  ],
+                  "dropdown_threshold": 0,
+                  "widget": "select"
+                },
+                {
+                  "name": "show_preview_links",
+                  "required": true,
+                  "default": true,
+                  "widget": "boolean"
+                },
+                {
+                  "name": "locale",
+                  "required": false,
+                  "widget": "string"
+                },
+                {
+                  "name": "editor",
+                  "required": false,
+                  "fields": [
+                    {
+                      "name": "preview",
+                      "required": true,
+                      "default": true,
+                      "widget": "boolean"
+                    }
+                  ],
+                  "collapsed": true,
+                  "widget": "object"
+                },
+                {
+                  "name": "slug",
+                  "required": false,
+                  "fields": [
+                    {
+                      "name": "encoding",
+                      "required": true,
+                      "options": [
+                        "unicode",
+                        "ascii"
+                      ],
+                      "dropdown_threshold": 0,
+                      "widget": "select"
+                    },
+                    {
+                      "name": "clean_accents",
+                      "required": true,
+                      "default": true,
+                      "widget": "boolean"
+                    },
+                    {
+                      "name": "sanitize_replacement",
+                      "required": false,
+                      "widget": "string"
+                    }
+                  ],
+                  "collapsed": true,
+                  "widget": "object"
+                },
+                {
+                  "name": "i18n",
+                  "required": false,
+                  "fields": [
+                    {
+                      "name": "structure",
+                      "required": true,
+                      "options": [
+                        "multiple_folders",
+                        "multiple_files",
+                        "single_file"
+                      ],
+                      "dropdown_threshold": 0,
+                      "widget": "select"
+                    },
+                    {
+                      "name": "locales",
+                      "required": false,
+                      "collapsed": true,
+                      "widget": "list"
+                    },
+                    {
+                      "name": "default_locale",
+                      "required": false,
+                      "widget": "string"
+                    }
+                  ],
+                  "collapsed": true,
+                  "widget": "object"
+                },
+                {
+                  "name": "automatic_deployments",
+                  "required": true,
+                  "default": true,
+                  "widget": "boolean"
+                },
+                {
+                  "name": "output",
+                  "required": true,
+                  "fields": [
+                    {
+                      "name": "omit_empty_optional_fields",
+                      "required": true,
+                      "default": true,
+                      "widget": "boolean"
+                    },
+                    {
+                      "name": "json",
+                      "required": false,
+                      "fields": [
+                        {
+                          "name": "indent_style",
+                          "required": true,
+                          "options": [
+                            "space",
+                            "tab"
+                          ],
+                          "dropdown_threshold": 0,
+                          "widget": "select"
+                        },
+                        {
+                          "name": "indent_size",
+                          "required": true,
+                          "widget": "number"
+                        }
+                      ],
+                      "collapsed": true,
+                      "widget": "object"
+                    },
+                    {
+                      "name": "yaml",
+                      "required": false,
+                      "fields": [
+                        {
+                          "name": "quote",
+                          "required": true,
+                          "options": [
+                            "single",
+                            "double"
+                          ],
+                          "dropdown_threshold": 0,
+                          "widget": "select"
+                        },
+                        {
+                          "name": "indent_size",
+                          "required": true,
+                          "widget": "number"
+                        }
+                      ],
+                      "collapsed": true,
+                      "widget": "object"
+                    }
+                  ],
+                  "collapsed": true,
+                  "widget": "object"
+                }
+              ],
+              "collapsed": true,
+              "widget": "object"
+            },
+            {
+              "name": "collections",
+              "required": false,
+              "collapsed": true,
+              "widget": "list",
+              "fields": [
+                {
+                  "name": "name",
+                  "required": true,
+                  "options": [
+                    "page",
+                    "post",
+                    "tag",
+                    "category",
+                    "author"
+                  ],
+                  "dropdown_threshold": 0,
+                  "widget": "select"
+                },
+                {
+                  "name": "path",
+                  "required": false,
+                  "widget": "string"
+                },
+                {
+                  "name": "pagination",
+                  "required": false,
+                  "fields": [
+                    {
+                      "name": "per_page",
+                      "required": true,
+                      "widget": "number"
+                    }
+                  ],
+                  "collapsed": true,
+                  "widget": "object"
+                },
+                {
+                  "name": "cms",
+                  "required": false,
+                  "fields": [
+                    {
+                      "name": "icon",
+                      "required": false,
+                      "comment": "[Material Design icon name](https://fonts.google.com/icons?icon.set=Material+Symbols)",
+                      "widget": "string"
+                    },
+                    {
+                      "name": "label",
+                      "required": false,
+                      "widget": "string"
+                    },
+                    {
+                      "name": "label_singular",
+                      "required": false,
+                      "widget": "string"
+                    },
+                    {
+                      "name": "description",
+                      "required": false,
+                      "widget": "string"
+                    },
+                    {
+                      "name": "identifier_field",
+                      "required": false,
+                      "widget": "string"
+                    },
+                    {
+                      "name": "summary",
+                      "required": false,
+                      "widget": "string"
+                    },
+                    {
+                      "name": "slug",
+                      "required": false,
+                      "widget": "string"
+                    },
+                    {
+                      "name": "preview_path",
+                      "required": false,
+                      "widget": "string"
+                    },
+                    {
+                      "name": "preview_path_date_field",
+                      "required": false,
+                      "widget": "string"
+                    },
+                    {
+                      "name": "create",
+                      "required": false,
+                      "default": true,
+                      "widget": "boolean"
+                    },
+                    {
+                      "name": "delete",
+                      "required": false,
+                      "default": true,
+                      "widget": "boolean"
+                    },
+                    {
+                      "name": "publish",
+                      "required": false,
+                      "default": true,
+                      "widget": "boolean"
+                    },
+                    {
+                      "name": "sortable_fields",
+                      "required": false,
+                      "fields": [
+                        {
+                          "name": "fields",
+                          "required": true,
+                          "collapsed": true,
+                          "widget": "list"
+                        },
+                        {
+                          "name": "default",
+                          "required": true,
+                          "fields": [
+                            {
+                              "name": "field",
+                              "required": true,
+                              "widget": "string"
+                            },
+                            {
+                              "name": "direction",
+                              "required": true,
+                              "options": [
+                                "ascending",
+                                "descending"
+                              ],
+                              "dropdown_threshold": 0,
+                              "widget": "select"
+                            }
+                          ],
+                          "collapsed": true,
+                          "widget": "object"
+                        }
+                      ],
+                      "collapsed": true,
+                      "widget": "object"
+                    }
+                  ],
+                  "collapsed": true,
+                  "widget": "object"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "automatic_deployments": true,
+  "omit_empty_optional_fields": true,
+  "json": {
+    "indent_style": "space",
+    "indent_size": 2
+  },
+  "yaml": {
+    "quote": "double",
+    "indent_size": 2
+  }
+}

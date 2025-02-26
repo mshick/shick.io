@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: PropsWithChildren) {
   return (
     <html lang={locale} suppressHydrationWarning={isDevelopment}>
-      {children}
+      <body>{children}</body>
     </html>
   );
 }

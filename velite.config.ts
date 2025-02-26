@@ -1,6 +1,7 @@
 import { generateCmsConfig } from '@/cms';
-import { CMS_CONFIG_FILE_PATH } from '@/constants';
+import { CMS_CONFIG_FOLDER_PATH } from '@/constants';
 import {
+  devUrl,
   searchIndexOutputPath,
   uploadsBaseUrl,
   uploadsFolderPath,
@@ -79,13 +80,18 @@ export default defineConfig({
       `Search index written with ${documentCount} documents and ${termCount} terms`,
     );
 
-    console.log(`Writing CMS config to '${CMS_CONFIG_FILE_PATH}' ...`);
+    console.log(`Writing CMS config to '${CMS_CONFIG_FOLDER_PATH}' ...`);
 
     await generateCmsConfig(ctx.config, {
       ...collections.options,
-      outputFilePath: CMS_CONFIG_FILE_PATH,
-      uploadsFolderPath,
-      uploadsBaseUrl,
+      build: {
+        folderPath: CMS_CONFIG_FOLDER_PATH,
+        devUrl,
+      },
+      uploads: {
+        folderPath: uploadsFolderPath,
+        baseUrl: uploadsBaseUrl,
+      },
     });
 
     console.log('CMS config written');

@@ -38,7 +38,7 @@ export default function Layout({ children }: PropsWithChildren) {
   const navigationItems = links.filter((link) => link.type === 'navigation');
 
   return (
-    <body
+    <div
       className={`${plexMono.variable} tufted font-primary h-svh mx-auto max-w-3xl px-8 flex flex-col`}
     >
       <ThemeProvider attribute="class">
@@ -52,6 +52,6 @@ export default function Layout({ children }: PropsWithChildren) {
         />
       </ThemeProvider>
       <SpeedInsights />
-    </body>
+    </div>
   );
 }

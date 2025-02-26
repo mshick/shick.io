@@ -57,11 +57,6 @@ export function getEditUrl(filePath: string): string {
   return formatRepoUrl('edit', getRepoPath(filePath));
 }
 
-const collectionPaths: Record<string, string> | undefined = collections?.reduce(
-  (p, v) => (v.path ? Object.assign(p, { [v.name]: v.path }) : p),
-  {},
-);
-
 function stripIndex(path: string) {
   if (path.endsWith('/index')) {
     return dirname(path);
@@ -73,6 +68,11 @@ function stripIndex(path: string) {
 
   return path;
 }
+
+const collectionPaths: Record<string, string> | undefined = collections?.reduce(
+  (p, v) => (v.path ? Object.assign(p, { [v.name]: v.path }) : p),
+  {},
+);
 
 export function getCollectionBasePath(collectionName: string) {
   return collectionPaths?.[collectionName] ?? `/${collectionName}`;
