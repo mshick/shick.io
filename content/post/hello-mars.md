@@ -15,6 +15,6 @@ related:
   - foo-bar
 ---
 
-Mars!!!!
+Yo!
 
 ![](/uploads/post/PNG%20image-1.png)
