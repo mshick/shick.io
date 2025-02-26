@@ -1,7 +1,6 @@
-import { plugin } from '@mshick/tufted/tailwindcss';
+import { plugin, prose } from '@mshick/tufted/tailwindcss';
 import typography from '@tailwindcss/typography';
 import type { Config } from 'tailwindcss/plugin';
-import { prose } from './tailwind-plugin';
 
 export default {
   content: ['./src/**/*.{ts,tsx}'],
@@ -21,7 +20,7 @@ export default {
         mono: ['var(--font-plex-mono)', 'monospace'],
       },
       typography: (utils) => {
-        return prose(utils);
+        return prose(utils, { themeName: 'stone' });
       },
     },
   },
