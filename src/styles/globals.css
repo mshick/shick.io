@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/forms";
-@source './safelist.txt';
-@config '../../tailwind.config.ts';
+@source "./safelist.txt";
+@config "../../tailwind.config.ts";
 
 @layer components {
   html.dark .shiki,
