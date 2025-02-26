@@ -1,6 +1,5 @@
 'use client';
 
-import { searchFields } from '@/env';
 import MiniSearch, { type SearchOptions, type SearchResult } from 'minisearch';
 import {
   type Dispatch,
@@ -9,6 +8,7 @@ import {
   useRef,
   useState,
 } from 'react';
+import { searchFields } from '~/lib/env';
 import type { Document } from '#/content';
 
 export type MiniSearchResult = SearchResult;

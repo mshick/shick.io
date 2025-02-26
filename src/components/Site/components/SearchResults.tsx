@@ -1,8 +1,8 @@
-import type { searchStoreFields } from '@/env';
 import {
   DocumentMagnifyingGlassIcon,
   ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
+import type { searchStoreFields } from '~/lib/env';
 import { DocumentList } from '#/components/Document/DocumentList';
 import { DocumentListItem } from '#/components/Document/DocumentListItem';
 import { Loading } from '#/components/Loading';

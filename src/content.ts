@@ -1,6 +1,6 @@
-import { devUrl, isProduction } from '@/env';
-import type { Category, Options, Page, Post, Tag } from '_/.velite';
-import { category, options, page, post, tag } from '_/.velite';
+import type { Category, Options, Page, Post, Tag } from '~/.velite';
+import { category, options, page, post, tag } from '~/.velite';
+import { devUrl, isProduction } from '~/lib/env';
 import { intersection, keyBy, pick } from './lib/utils/nodash';
 
 type Document = Page | Post;

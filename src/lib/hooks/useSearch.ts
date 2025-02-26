@@ -1,9 +1,9 @@
 'use client';
 
-import type { searchStoreFields } from '@/env';
 import type { SearchResult } from 'minisearch';
 import { type Dispatch, type SetStateAction, useState } from 'react';
 import useSWR, { type Fetcher } from 'swr';
+import type { searchStoreFields } from '~/lib/env';
 import type { Document } from '#/content';
 import { FetchError } from '../errors';
 

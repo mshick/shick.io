@@ -1,6 +1,6 @@
-import { isDevelopment } from '@/env';
 import type { Metadata } from 'next';
 import type { PropsWithChildren } from 'react';
+import { isDevelopment } from '~/lib/env';
 import { getOptions } from '#/content';
 
 const { title, url, description, locale } = getOptions([

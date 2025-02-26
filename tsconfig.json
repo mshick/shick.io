@@ -11,11 +11,8 @@
     "pretty": true,
     "baseUrl": ".",
     "paths": {
-      "_/.velite": [
-        "./.velite"
-      ],
-      "@/*": [
-        "./lib/*"
+      "~/*": [
+        "./*"
       ],
       "#/*": [
         "./src/*"

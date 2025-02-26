@@ -1,5 +1,5 @@
-import { githubClientId, githubClientSecret, githubTokenUrl } from '@/env';
 import { NextResponse } from 'next/server';
+import { githubClientId, githubClientSecret, githubTokenUrl } from '~/lib/env';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);

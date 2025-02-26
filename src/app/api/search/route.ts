@@ -1,6 +1,6 @@
-import { searchFields, searchStoreBoost, searchStoreFields } from '@/env';
 import MiniSearch, { type SearchResult } from 'minisearch';
 import { type NextRequest, NextResponse } from 'next/server';
+import { searchFields, searchStoreBoost, searchStoreFields } from '~/lib/env';
 import type { Document } from '#/content';
 import searchIndexData from '#/generated/search/index.json';
 

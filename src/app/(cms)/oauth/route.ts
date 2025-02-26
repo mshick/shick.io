@@ -1,5 +1,5 @@
-import { devUrl, githubAuthUrl, isProduction } from '@/env';
 import { NextResponse } from 'next/server';
+import { devUrl, githubAuthUrl, isProduction } from '~/lib/env';
 import { getOptions } from '#/content';
 
 export function GET() {

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Script from 'next/script';
-import prettierConfig from '../../../../.prettierrc.json';
+import prettierConfig from '~/.prettierrc.json';
 
 export const metadata: Metadata = {
   robots: 'noindex',
@@ -84,7 +84,6 @@ export default function AdminPage() {
         script.onload = registerCustomFormats;
         document.head.appendChild(script);
       `}</Script>
-      <div id="nc-root" suppressHydrationWarning />
     </>
   );
 }

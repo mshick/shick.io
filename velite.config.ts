@@ -1,16 +1,16 @@
-import { generateCmsConfig } from '@/cms';
-import { CMS_CONFIG_FOLDER_PATH } from '@/constants';
+import { defineCollection, defineConfig } from 'velite';
+import { generateCmsConfig } from '~/lib/cms';
+import { CMS_CONFIG_FOLDER_PATH } from '~/lib/constants';
 import {
   devUrl,
   searchIndexOutputPath,
   uploadsBaseUrl,
   uploadsFolderPath,
-} from '@/env';
-import * as schema from '@/schema';
-import { generateSearchIndex } from '@/search';
-import { prepareTaxonomy } from '@/taxonomy';
-import { output, rehypePlugins, remarkPlugins } from '@/velite';
-import { defineCollection, defineConfig } from 'velite';
+} from '~/lib/env';
+import * as schema from '~/lib/schema';
+import { generateSearchIndex } from '~/lib/search';
+import { prepareTaxonomy } from '~/lib/taxonomy';
+import { output, rehypePlugins, remarkPlugins } from '~/lib/velite';
 
 export default defineConfig({
   root: 'content',
