@@ -1,4 +1,5 @@
 import { s, type z } from 'velite';
+import { publicRootPath } from './env';
 import { DEFAULT_EXCERPT_LENGTH, excerptFn } from './excerpt';
 import {
   createTaxonomyTransform,
@@ -22,14 +23,13 @@ export const IMAGE = 'image';
 const icon = s.enum(['github', 'x', 'signal', 'linkedin', 'whatsapp', 'email']);
 
 const cover = s.object({
-  image: image({ absoluteRoot: 'public' })
+  image: image({ publicRootPath, allowRemoteUrl: true })
     .optional()
     .describe(
       JSON.stringify({
         widget: IMAGE,
       }),
     ),
-  video: s.string().optional(),
   title: s.string().optional(),
   alt: s.string().optional(),
   caption: s.string().optional(),

@@ -2,6 +2,7 @@
 title: Tufted Style System (New Site Part 1)
 date: 2024-06-01 12:00
 excerpt: "Markdown enhancements, rich article styles and some bundling."
+author: michael-shick
 draft: false
 featured: true
 tags:

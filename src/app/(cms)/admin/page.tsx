@@ -41,8 +41,16 @@ export default function AdminPage() {
       const prettierConfig = ${JSON.stringify(prettierConfig)}
       const delimiter = '---';
 
+      const makeSparse = (obj) => {
+        return JSON.parse(
+          JSON.stringify(obj, (_key, value) => {
+            return value === null || value === '' ? undefined : value;
+          }),
+        );
+      }
+
       const formatYAML = (frontmatter) => {
-        return YAML.stringify(frontmatter, null, {
+        return YAML.stringify(makeSparse(frontmatter), null, {
           lineWidth: 0,
           defaultKeyType: 'PLAIN',
           defaultStringType: 'PLAIN',

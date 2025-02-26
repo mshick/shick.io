@@ -1,7 +1,5 @@
 import rehypePresetTufted from '@mshick/tufted/rehype';
 import remarkPresetTufted from '@mshick/tufted/remark';
-import type { ElementContent } from 'hast';
-import { fromHtmlIsomorphic } from 'hast-util-from-html-isomorphic';
 import remarkGemoji from 'remark-gemoji';
 import type { PluggableList } from 'unified';
 import type { MarkdownOptions, Output } from 'velite';

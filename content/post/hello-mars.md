@@ -1,11 +1,7 @@
 ---
 title: Hello Mars!!!
 cover:
-  image: /uploads/post/PNG image.png
-  video: ""
-  title: ""
-  alt: ""
-  caption: ""
+  image: /uploads/post/PNG%20image.png
 excerpt: Mars!
 date: 2024-11-01T12:31:00
 author: michael-shick

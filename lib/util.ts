@@ -25,3 +25,9 @@ export function safeParseJsonString(str: string) {
     return str;
   }
 }
+
+export function createIsUploadsPath(uploadsBase: string) {
+  return (url: string) => {
+    return url.startsWith(uploadsBase);
+  };
+}
