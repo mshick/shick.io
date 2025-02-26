@@ -39,8 +39,8 @@ npm-debug.log*
 # images
 /public/static/**/*
 
+# generated cms config
+/public/admin/**/*
+
 # vscode
 /.vscode/**/*
-
-# images
-/.scratch/**/*

@@ -1,5 +1,5 @@
 import { defineCollection, defineConfig } from 'velite';
-import { generateCmsConfig } from '~/lib/cms';
+import { generateCmsConfig } from '~/lib/cms/config';
 import { CMS_CONFIG_FOLDER_PATH } from '~/lib/constants';
 import {
   devUrl,

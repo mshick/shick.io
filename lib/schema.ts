@@ -1,4 +1,10 @@
 import { s, type z } from 'velite';
+import {
+  DATETIME_WIDGET,
+  IMAGE_WIDGET,
+  MARKDOWN_WIDGET,
+  RELATION_WIDGET,
+} from './cms/constants';
 import { publicRootPath } from './env';
 import { DEFAULT_EXCERPT_LENGTH, excerptFn } from './excerpt';
 import {
@@ -15,11 +21,6 @@ import {
 import { image } from './image';
 import { markdownOptions } from './velite';
 
-export const MARKDOWN = 'markdown';
-export const RELATION = 'relation';
-export const ISODATE = 'datetime';
-export const IMAGE = 'image';
-
 const icon = s.enum(['github', 'x', 'signal', 'linkedin', 'whatsapp', 'email']);
 
 const cover = s.object({
@@ -27,7 +28,7 @@ const cover = s.object({
     .optional()
     .describe(
       JSON.stringify({
-        widget: IMAGE,
+        widget: IMAGE_WIDGET,
       }),
     ),
   title: s.string().optional(),
@@ -186,9 +187,9 @@ export type Options = z.infer<typeof options>;
 const baseTag = s.object({
   name: s.string().max(20),
   cover: cover.optional(),
-  excerpt: s.markdown().optional().describe(MARKDOWN),
-  date: s.isodate().describe(ISODATE).optional(),
-  body: s.markdown(markdownOptions).describe(MARKDOWN),
+  excerpt: s.markdown().optional().describe(MARKDOWN_WIDGET),
+  date: s.isodate().describe(DATETIME_WIDGET).optional(),
+  body: s.markdown(markdownOptions).describe(MARKDOWN_WIDGET),
   count,
 });
 
@@ -200,9 +201,9 @@ export type Tag = z.infer<typeof tag>;
 export const baseCategory = s.object({
   name: s.string().max(20),
   cover: cover.optional(),
-  excerpt: s.markdown().optional().describe(MARKDOWN),
-  date: s.isodate().describe(ISODATE).optional(),
-  body: s.markdown(markdownOptions).describe(MARKDOWN),
+  excerpt: s.markdown().optional().describe(MARKDOWN_WIDGET),
+  date: s.isodate().describe(DATETIME_WIDGET).optional(),
+  body: s.markdown(markdownOptions).describe(MARKDOWN_WIDGET),
   count,
 });
 
@@ -218,15 +219,15 @@ export const post = s
     cover: cover.optional(),
     meta: meta.optional(),
     metadata: s.metadata(),
-    body: s.markdown(markdownOptions).describe(MARKDOWN),
-    excerpt: s.markdown().optional().describe(MARKDOWN),
-    date: s.isodate().optional().describe(ISODATE),
+    body: s.markdown(markdownOptions).describe(MARKDOWN_WIDGET),
+    excerpt: s.markdown().optional().describe(MARKDOWN_WIDGET),
+    date: s.isodate().optional().describe(DATETIME_WIDGET),
     author: s
       .string()
       .optional()
       .describe(
         JSON.stringify({
-          widget: RELATION,
+          widget: RELATION_WIDGET,
           collection: 'author',
         }),
       ),
@@ -238,7 +239,7 @@ export const post = s
     related: s
       .array(s.string())
       .optional()
-      .describe(JSON.stringify({ widget: RELATION })),
+      .describe(JSON.stringify({ widget: RELATION_WIDGET })),
   })
   .transform(async (data, ctx) => {
     const { meta } = ctx;
@@ -278,10 +279,12 @@ export const page = s
   .object({
     __type: s.literal('page').default('page'),
     title: s.string().max(99),
-    excerpt: s.markdown().describe(MARKDOWN),
+    excerpt: s.markdown().describe(MARKDOWN_WIDGET),
     cover: cover.optional(),
     meta: meta.optional(),
-    body: s.mdx({ gfm: false, copyLinkedFiles: false }).describe(MARKDOWN),
+    body: s
+      .mdx({ gfm: false, copyLinkedFiles: false })
+      .describe(MARKDOWN_WIDGET),
     categories: s.array(s.string()).optional(),
     tags: s.array(s.string()).optional(),
     draft: s.boolean().default(false),
