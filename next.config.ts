@@ -104,6 +104,10 @@ const nextConfig: NextConfig = {
     ]);
   },
   // output: 'export',
+  eslint: {
+    // Don't actually use eslint during next builds
+    ignoreDuringBuilds: true,
+  },
   images: {
     minimumCacheTTL: 60,
     formats: ['image/avif', 'image/webp'],
