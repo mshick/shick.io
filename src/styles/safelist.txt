@@ -1,3 +1,0 @@
-aspect-video
-inline-block
-group-hover:inline-block
