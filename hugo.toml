@@ -90,7 +90,7 @@ words                  = "words"
 
 [languages.en.params.logo]
 logoHomeLink = "/"
-logoText     = "shick.dev"
+logoText     = "shick.us"
 
 [languages.en.menu]
 [[languages.en.menu.main]]
