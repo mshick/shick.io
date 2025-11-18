@@ -71,7 +71,7 @@ showLastUpdated = false
 [languages]
 [languages.en]
 languageName = "English"
-title        = "Michael Shick"
+title        = "shick.us"
 
 [languages.en.params]
 copyright              = ""
