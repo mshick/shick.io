@@ -1,0 +1,13 @@
+# Hugo directories to ignore
+/public/
+/resources/
+.hugo_build.lock
+
+# Optional: Ignore local build artifacts and dependency folders
+/node_modules/
+/dist/
+/tmp/
+
+# Optional: Ignore OS/Editor specific files
+.DS_Store
+Thumbs.db
